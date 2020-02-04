@@ -1,0 +1,7 @@
+{
+  "name": "RepClient",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
