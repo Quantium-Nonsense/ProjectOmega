@@ -1,0 +1,8 @@
+# Backend Codeowners
+/Backend/ @Xander9
+
+# Admin Client Codeowners
+/AdminClient/ @markscamilleri
+
+# Rep Client Codeowners
+/RepClient/ @HarryPi
