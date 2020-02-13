@@ -74,7 +74,7 @@
       true,
       "multiline"
     ],
-    "no-unnecessary-callback-wrapper": true,
+    "no-unnecessary-callback-wrapper": false,
     "unnecessary-bind": true,
     "promise-function-async": true,
     "await-promise": true,

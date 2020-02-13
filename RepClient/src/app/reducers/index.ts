@@ -6,10 +6,15 @@ import {
   MetaReducer
 } from '@ngrx/store';
 import { environment } from '../../environments/environment';
+import * as fromAuth from '../auth/store/auth.reducer';
 
 export interface State {
-
+  auth: fromAuth.AuthState;
 }
+
+export const appReducer: ActionReducerMap<State> = {
+  auth: fromAuth.authReducer
+};
 
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
   (state, action) => {
@@ -18,7 +23,5 @@ export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
 
     return reducer(state, action);
   };
-
-export const reducers: ActionReducerMap<State> = {};
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [debug] : [];
