@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-auth',
@@ -7,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthPage implements OnInit {
 
-  constructor() {
+  constructor(
+    public menuController: MenuController
+  ) {
   }
 
-  ngOnInit() {
+  async ionViewWillEnter(): Promise<void> {
+    await this.menuController.enable(false);
+  }
+
+  ngOnInit(): void {
   }
 
 }

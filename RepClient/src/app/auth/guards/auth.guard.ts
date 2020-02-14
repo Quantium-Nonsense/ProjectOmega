@@ -26,7 +26,6 @@ export class AuthGuard implements CanActivate {
     | UrlTree {
 
     const canRedirect = this.isAuthenticated();
-    console.log(canRedirect);
     if (!canRedirect) {
       this.store.dispatch(AuthActions.loginRejected({errorMessage: 'Session expired please log-in again.'}));
 
