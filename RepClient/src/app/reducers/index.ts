@@ -8,11 +8,11 @@ import {
 import { environment } from '../../environments/environment';
 import * as fromAuth from '../auth/store/auth.reducer';
 
-export interface State {
+export interface AppState {
   auth: fromAuth.AuthState;
 }
 
-export const appReducer: ActionReducerMap<State> = {
+export const appReducer: ActionReducerMap<AppState> = {
   auth: fromAuth.authReducer
 };
 
@@ -24,4 +24,4 @@ export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
     return reducer(state, action);
   };
 
-export const metaReducers: MetaReducer<State>[] = !environment.production ? [debug] : [];
+export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [debug] : [];

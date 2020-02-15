@@ -13,7 +13,7 @@ import * as AuthActions from '../store/auth.actions';
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtHelperService: JwtHelperService,
-    private store: Store<fromApp.State>
+    private store: Store<fromApp.AppState>
   ) {
   }
 
@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
 
     const canRedirect = this.isAuthenticated();
     if (!canRedirect) {
-      this.store.dispatch(AuthActions.loginRejected({errorMessage: 'Session expired please log-in again.'}));
+      this.store.dispatch(AuthActions.loginRejected({errorMessage: 'Session expired or not logged in. Please log-in again.'}));
 
       return false;
     }
