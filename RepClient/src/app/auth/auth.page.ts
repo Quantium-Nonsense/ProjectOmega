@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { MenuController } from '@ionic/angular';
+import { LoadingController, MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from '../reducers';
+import * as AuthActions from './store/auth.actions';
 import { AuthState } from './store/auth.reducer';
 
 @Component({
@@ -25,11 +26,19 @@ export class AuthPage implements OnInit {
    */
   private subscriptions = new Subscription();
 
+  /**
+   * This is the loader that was created and currently exists on the page
+   * This variable will be used to dismiss that existing loader
+   */
+  private pageLoader: HTMLIonLoadingElement;
+
   constructor(
     public menuController: MenuController,
+    public loadingController: LoadingController,
     private store: Store<AppState>,
     private snackBar: MatSnackBar
   ) {
+
   }
 
   async ionViewWillEnter(): Promise<void> {
@@ -40,6 +49,7 @@ export class AuthPage implements OnInit {
         if (state.errorMessage) {
           this.showMessage(state.errorMessage);
         }
+        this.handleLoaderDisplay(state.loading);
       })
     );
   }
@@ -47,10 +57,23 @@ export class AuthPage implements OnInit {
   ionViewWillLeave(): void {
     // Clean up all subs to avoid memory leak
     this.subscriptions.unsubscribe();
+
+    // Ensure the loader is no longer visible as we are being redirected and that page will display if needed
+    this.pageLoader.dismiss();
   }
 
   ngOnInit(): void {
     this.authForm = this.formInitialization();
+  }
+
+  /**
+   * Submit form
+   */
+  protected onSubmit(): void {
+    this.store.dispatch(AuthActions.loginAttempt({
+      email: this.authForm.get('email').value as string,
+      password: this.authForm.get('password').value as string
+    }));
   }
 
   /**
@@ -107,6 +130,26 @@ export class AuthPage implements OnInit {
     this.snackBar.open(message, undefined, {
       duration: 2000
     });
+  };
+
+  /**
+   * Decides if page should display the loading spinner
+   * @param shouldBeDisplayed If loader should be displayed
+   */
+  private handleLoaderDisplay = (shouldBeDisplayed: boolean): void => {
+    if (!shouldBeDisplayed && this.pageLoader) {
+      this.pageLoader.dismiss();
+
+      return;
+    }
+    if (shouldBeDisplayed) {
+      this.loadingController.create({
+        message: 'Loading...'
+      }).then(loader => {
+        this.pageLoader = loader;
+        this.pageLoader.present();
+      });
+    }
   };
 
   /**

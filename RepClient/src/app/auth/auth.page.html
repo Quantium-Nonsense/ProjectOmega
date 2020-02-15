@@ -38,7 +38,7 @@
 			</ion-col>
 			<ion-row class="ion-justify-content-center ion-align-items-center">
 				<ion-col size="6">
-					<button [disabled]="!isFormValid()" mat-raised-button>Log in</button>
+					<button (click)="onSubmit()" [disabled]="!isFormValid()" mat-raised-button>Log in</button>
 				</ion-col>
 			</ion-row>
 		</ion-row>
