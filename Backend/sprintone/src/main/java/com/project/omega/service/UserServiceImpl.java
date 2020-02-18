@@ -22,4 +22,14 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    public List<User> getAllUsers() throws NoRecordsFoundException {
+        List<User> users = (List) userRepository.findAll();
+        if(users.isEmpty()) {
+            throw new NoRecordsFoundException(Constant.ERROR_NO_RECORDS);
+        }
+        return users;
+    }
+
+
 }
