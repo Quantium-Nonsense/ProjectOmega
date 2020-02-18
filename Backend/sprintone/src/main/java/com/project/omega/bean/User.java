@@ -1,32 +1,36 @@
-/*
 package com.project.omega.bean;
 
 import lombok.Builder;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
 
-@Document(collection = "User")
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+
 @Builder
-public class User extends BaseEntity {
+@Entity
+public class User {
 
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String id;
     private String email;
-    private String country;
-    private String city;
+    private String password;
+    private Enum role;
 
-    public User(String id, String name, String email, String country, String city) {
-        super.id = id;
-        this.name = name;
+    public User(String id, String email, String password, Enum role) {
+        this.id = id;
         this.email = email;
-        this.country = country;
-        this.city = city;
+        this.password = password;
+        this.role = role;
     }
 
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -37,30 +41,28 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public String getCountry() {
-        return country;
+    public String getPassword() {
+        return password;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getCity() {
-        return city;
+    public Enum getRole() {
+        return role;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setRole(Enum role) {
+        this.role = role;
     }
 
     public static class UserBuilder {
 
         private String id;
-        private String name;
         private String email;
-        private String country;
-        private String city;
-
+        private String password;
+        private Enum role;
 
         public UserBuilder() {
         }
@@ -70,30 +72,23 @@ public class User extends BaseEntity {
             return this;
         }
 
-        public UserBuilder setName(String name) {
-            this.name = name;
-            return this;
-        }
-
         public UserBuilder setEmail(String email) {
             this.email = email;
             return this;
         }
 
-        public UserBuilder setCountry(String country) {
-            this.country = country;
+        public UserBuilder setPassword(String password) {
+            this.password = password;
             return this;
         }
 
-        public UserBuilder setCity(String city) {
-            this.city = city;
+        public UserBuilder setRole(Enum role) {
+            this.role = role;
             return this;
         }
 
         public User build() {
-            return new User(id, name, email, country, city);
+            return new User(id, email, password, role);
         }
     }
-
 }
-*/
