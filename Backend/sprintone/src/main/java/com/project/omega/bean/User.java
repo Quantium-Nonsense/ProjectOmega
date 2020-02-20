@@ -1,35 +1,44 @@
 package com.project.omega.bean;
 
+import com.project.omega.enums.RoleEnum;
 import lombok.Builder;
-import org.springframework.data.annotation.Id;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
-@Builder
 @Entity
-public class User {
-
+@Builder
+public class User implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
-    private String email;
-    private String password;
-    private Enum role;
+    @GeneratedValue
+    private Long id;
 
-    public User(String id, String email, String password, Enum role) {
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private RoleEnum role;
+
+    public User() {
+
+    }
+
+    public User(Long id, String email, String password, RoleEnum role) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -49,25 +58,25 @@ public class User {
         this.password = password;
     }
 
-    public Enum getRole() {
+    public RoleEnum getRole() {
         return role;
     }
 
-    public void setRole(Enum role) {
+    public void setRole(RoleEnum role) {
         this.role = role;
     }
 
     public static class UserBuilder {
 
-        private String id;
+        private Long id;
         private String email;
         private String password;
-        private Enum role;
+        private RoleEnum role;
 
         public UserBuilder() {
         }
 
-        public UserBuilder setId(String id) {
+        public UserBuilder setId(Long id) {
             this.id = id;
             return this;
         }
@@ -82,7 +91,7 @@ public class User {
             return this;
         }
 
-        public UserBuilder setRole(Enum role) {
+        public UserBuilder setRole(RoleEnum role) {
             this.role = role;
             return this;
         }

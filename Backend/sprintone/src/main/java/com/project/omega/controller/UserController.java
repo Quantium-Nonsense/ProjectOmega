@@ -1,5 +1,6 @@
 package com.project.omega.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.User;
 import com.project.omega.exceptions.DuplicateUserException;
 import com.project.omega.exceptions.NoRecordsFoundException;
@@ -12,21 +13,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value = "/user")
 public class UserController {
-
     @Autowired
     UserService userService;
 
-    @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody User user) throws DuplicateUserException {
-        userService.createUser(user);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    private ObjectMapper mapper = new ObjectMapper();
+
+    @PostMapping(value = "/create", headers = "Accept=application/json")
+    public ResponseEntity createUser(@RequestBody User user) throws DuplicateUserException {
+        User newUser = userService.createUser(user);
+        return new ResponseEntity(newUser, HttpStatus.OK);
     }
 
-    @GetMapping("/get")
+    @GetMapping(value = "/get")
     public ResponseEntity getUsers() throws NoRecordsFoundException {
         List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 }
