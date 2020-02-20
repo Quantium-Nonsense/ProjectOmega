@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.User;
 import com.project.omega.exceptions.DuplicateUserException;
 import com.project.omega.exceptions.NoRecordsFoundException;
+import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,5 +31,11 @@ public class UserController {
     public ResponseEntity getUsers() throws NoRecordsFoundException {
         List<User> users = userService.getAllUsers();
         return new ResponseEntity(users, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity getById(@PathVariable(value = "id") Long id) throws UserNotFoundException {
+        User user = userService.getUserById(id);
+        return new ResponseEntity(user, HttpStatus.OK);
     }
 }
