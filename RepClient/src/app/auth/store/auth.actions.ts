@@ -11,5 +11,5 @@ export const loginAttempt = createAction(
 );
 
 export const loginSuccessful = createAction(
-  '[Authentication - Page] Successful Authentication',
+  '[Authentication - Page] Successful Authentication'
 );
