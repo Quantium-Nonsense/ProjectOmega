@@ -116,7 +116,7 @@ describe('AuthPage', () => {
 
   }));
 
-  it('should display errors if inputs are invalid', () => {
+  it('should display errors if inputs are invalid', async(() => {
     component.ngOnInit();
     component.ionViewWillEnter();
 
@@ -138,5 +138,5 @@ describe('AuthPage', () => {
       expect(component.emailHasError).toBe(true);
       expect(component.passwordHasError).toBe(true);
     });
-  });
+  }));
 });
