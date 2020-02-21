@@ -41,9 +41,9 @@ export class AuthPage implements OnInit {
 
   }
 
-  async ionViewWillEnter(): Promise<void> {
+  ionViewWillEnter(): void {
     // Disable sideway scroll on log in page
-    await this.menuController.enable(false);
+    this.menuController.enable(false);
     this.subscriptions.add(
       this.store.select('auth').subscribe((state: AuthState) => {
         if (state.errorMessage) {
@@ -79,28 +79,8 @@ export class AuthPage implements OnInit {
   /**
    * Check if email is in the correct format
    */
-  protected get emailHasError(): boolean {
+  get emailHasError(): boolean {
     return this.authForm.get('email').invalid;
-  }
-
-  /**
-   * Returns appropriate error message for email validation
-   */
-  protected get emailErrorMessage(): string {
-    const emailCtrl = this.authForm.get('email');
-
-    return emailCtrl.hasError('required') // Check if email has been filled
-      ? 'Email is required!'
-      : emailCtrl.hasError('email') // If yes check if valid email
-        ? 'Not a valid email'
-        : '';
-  }
-
-  /**
-   * Check if password is in correct format
-   */
-  protected get passwordHasError(): boolean {
-    return this.authForm.get('password').invalid;
   }
 
   /**
@@ -126,17 +106,37 @@ export class AuthPage implements OnInit {
    * @param message The message to display
    * @param duration The duration for the message
    */
-  private showMessage = (message: string, duration = 2000): void => {
+  showMessage = (message: string, duration = 2000): void => {
     this.snackBar.open(message, undefined, {
       duration: 2000
     });
   };
 
   /**
+   * Returns appropriate error message for email validation
+   */
+  get emailErrorMessage(): string {
+    const emailCtrl = this.authForm.get('email');
+
+    return emailCtrl.hasError('required') // Check if email has been filled
+      ? 'Email is required!'
+      : emailCtrl.hasError('email') // If yes check if valid email
+        ? 'Not a valid email'
+        : '';
+  }
+
+  /**
+   * Check if password is in correct format
+   */
+  get passwordHasError(): boolean {
+    return this.authForm.get('password').invalid;
+  }
+
+  /**
    * Decides if page should display the loading spinner
    * @param shouldBeDisplayed If loader should be displayed
    */
-  private handleLoaderDisplay = (shouldBeDisplayed: boolean): void => {
+  handleLoaderDisplay = (shouldBeDisplayed: boolean): void => {
     if (!shouldBeDisplayed && this.pageLoader) {
       this.pageLoader.dismiss();
 
