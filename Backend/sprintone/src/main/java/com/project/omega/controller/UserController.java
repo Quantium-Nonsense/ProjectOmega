@@ -24,7 +24,7 @@ public class UserController {
     @PostMapping(value = "/create", headers = "Accept=application/json")
     public ResponseEntity createUser(@RequestBody User user) throws DuplicateUserException {
         User newUser = userService.createUser(user);
-        return new ResponseEntity(newUser, HttpStatus.OK);
+        return new ResponseEntity(newUser, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/get")
@@ -38,4 +38,16 @@ public class UserController {
         User user = userService.getUserById(id);
         return new ResponseEntity(user, HttpStatus.OK);
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity deleteById(@PathVariable(value = "id") Long id) throws UserNotFoundException {
+        User user = userService.deleteUserById(id);
+        return new ResponseEntity(user, HttpStatus.I_AM_A_TEAPOT);
+    }
+
+//    @PutMapping(value = "/update/{id}")
+//    public ResponseEntity updateById(@PathVariable(value = "id") Long id, @RequestBody User update) throws UserNotFoundException {
+//        User user = userService.updateUserById(id, update);
+//        return new ResponseEntity(user, HttpStatus.OK);
+//    }
 }

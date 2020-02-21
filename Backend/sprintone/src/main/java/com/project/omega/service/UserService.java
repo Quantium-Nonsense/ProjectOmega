@@ -13,4 +13,6 @@ public interface UserService {
     List<User> getAllUsers() throws NoRecordsFoundException;
 
     User getUserById(Long id) throws UserNotFoundException;
+
+    User deleteUserById(Long id) throws UserNotFoundException;
 }

@@ -46,4 +46,13 @@ public class UserServiceImpl implements UserService {
         }
         return user.get();
     }
+
+    public User deleteUserById(Long id) throws UserNotFoundException {
+        Optional<User> user = userRepository.findById(id);
+        if(!user.isPresent()) {
+            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + id);
+        }
+        userRepository.deleteById(id);
+        return user.get();
+    }
 }

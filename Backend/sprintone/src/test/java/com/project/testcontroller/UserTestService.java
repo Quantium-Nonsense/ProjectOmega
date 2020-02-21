@@ -114,7 +114,7 @@ public class UserTestService extends OmegaApplicationTests {
     }
 
     @Test
-    @DisplayName("Test for retrieving a user by id")
+    @DisplayName("Test for retrieving a user by id.")
     public void getUserById_PositiveTest() throws Exception {
         User user_one = new User.UserBuilder()
                 .setId(id_1)
@@ -129,7 +129,7 @@ public class UserTestService extends OmegaApplicationTests {
     }
 
     @Test
-    @DisplayName("Test for retrieving a user by an invalid id")
+    @DisplayName("Test for retrieving a user by an invalid id.")
     public void getUserById_NegativeTest() throws Exception {
         User user_one = new User.UserBuilder()
                 .setId(id_1)
@@ -147,5 +147,25 @@ public class UserTestService extends OmegaApplicationTests {
             Assert.assertEquals(1, userRepository.findAll().size());
             Assert.assertEquals(user_one.getId(), userRepository.findById(id_1).get().getId());
         }
+    }
+
+    @Test
+    @DisplayName("Test for deleting a user.")
+    public void deleteUser_PositiveTest() throws Exception {
+        User user_one = new User.UserBuilder()
+                .setId(id_1)
+                .setEmail("a@a.com")
+                .setPassword("password")
+                .setRole(RoleEnum.TEST_ROLE)
+                .build();
+        User user_two = new User.UserBuilder()
+                .setId(id_2)
+                .setEmail("a@b.com")
+                .setPassword("password")
+                .setRole(RoleEnum.TEST_ROLE)
+                .build();
+        Mockito.when(userRepository.findById(id_1)).thenReturn(Optional.of(user_one));
+        userService.deleteUserById(id_1);
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(id_1);
     }
 }
