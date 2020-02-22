@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "untitled3": {
+    "project-omega-admin-client": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/untitled3",
+            "outputPath": "dist/project-omega-admin-client",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "untitled3:build"
+            "browserTarget": "project-omega-admin-client:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "untitled3:build:production"
+              "browserTarget": "project-omega-admin-client:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "untitled3:build"
+            "browserTarget": "project-omega-admin-client:build"
           }
         },
         "test": {
@@ -99,8 +99,9 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
+            "eslintConfig": "./.eslintrc.js",
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
@@ -115,15 +116,19 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "untitled3:serve"
+            "devServerTarget": "project-omega-admin-client:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "untitled3:serve:production"
+              "devServerTarget": "project-omega-admin-client:serve:production"
             }
           }
         }
       }
-    }},
-  "defaultProject": "untitled3"
+    }
+  },
+  "defaultProject": "project-omega-admin-client",
+  "cli": {
+    "analytics": false
+  }
 }
