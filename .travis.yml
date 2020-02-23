@@ -16,6 +16,7 @@ cache:
 before_script:
   - cd ./RepClient
 before_install:
+  - ls -a
   - cd ./RepClient
 install:
   - npm install
