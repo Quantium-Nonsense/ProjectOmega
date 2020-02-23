@@ -14,9 +14,8 @@ cache:
     - ./node_modules
 
 before_install:
-  - ls -a
   - cd RepClient/
-  - ls -a
+
 install:
   - npm install
 
