@@ -13,9 +13,10 @@ cache:
   directories:
     - ./node_modules
 
+before_script: cd ./RepClient
+
 install:
   - npm install
 
 script:
-  - cd RepClient
   - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
