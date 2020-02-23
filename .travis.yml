@@ -13,10 +13,10 @@ cache:
   directories:
     - ./node_modules
 
-before_script: cd ./RepClient
+before_script: cd RepClient
 
 install:
-  - cd ./RepClient
+  - cd RepClient
   - npm install
 
 script:
