@@ -1,9 +1,9 @@
 dist: trusty
-sudo: false
+sudo: true
 
 language: node_js
 node_js:
-  - "10"
+  - "10.9"
 
 addons:
   chrome:
@@ -16,6 +16,7 @@ cache:
 before_script: cd ./RepClient
 
 install:
+  - cd ./RepClient
   - npm install
 
 script:
