@@ -17,7 +17,8 @@ before_script:
   - cd RepClient
 before_install:
   - ls -a
-  - cd RepClient
+  - cd RepClient/
+  - ls -a
 install:
   - npm install
 
