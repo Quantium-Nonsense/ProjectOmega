@@ -14,7 +14,7 @@ cache:
     - ./node_modules
 
 before_script:
-  - cd RepClient
+  - cd RepClient/
 before_install:
   - ls -a
   - cd RepClient/
