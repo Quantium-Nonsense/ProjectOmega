@@ -1,0 +1,23 @@
+dist: trusty
+sudo: true
+
+language: node_js
+node_js:
+  - "10.9"
+
+addons:
+  chrome:
+    stable
+
+cache:
+  directories:
+    - ./node_modules
+
+before_install:
+  - cd RepClient/
+
+install:
+  - npm install
+
+script:
+  - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
