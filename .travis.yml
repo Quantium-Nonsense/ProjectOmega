@@ -21,4 +21,4 @@ install:
 
 script:
   - cd RepClient
-  - npm run test -- --no-watch --no-progress --code-coverage --browsers=ChromeHeadlessCI
+  - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
