@@ -8,14 +8,14 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, Mat
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatSnackBarModule,
+    MatSnackBarModule
   ],
   imports: [
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatSnackBarModule,
+    MatSnackBarModule
   ]
 })
 export class MatModule {
