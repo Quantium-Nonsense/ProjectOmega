@@ -45,9 +45,10 @@ public class UserController {
         return new ResponseEntity(user, HttpStatus.I_AM_A_TEAPOT);
     }
 
-//    @PutMapping(value = "/update/{id}")
-//    public ResponseEntity updateById(@PathVariable(value = "id") Long id, @RequestBody User update) throws UserNotFoundException {
-//        User user = userService.updateUserById(id, update);
-//        return new ResponseEntity(user, HttpStatus.OK);
-//    }
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity updateById(@PathVariable(value = "id") Long id,
+                                     @RequestBody User update) throws Exception {
+        User user = userService.updateUserById(id, update);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
 }

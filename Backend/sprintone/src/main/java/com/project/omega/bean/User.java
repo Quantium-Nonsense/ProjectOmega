@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Builder
 public class User implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -22,6 +22,12 @@ public class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
+
+//    private Long industry;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+//    private Role role;
 
     public User() {
 
