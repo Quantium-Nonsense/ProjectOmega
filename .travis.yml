@@ -19,11 +19,6 @@ env:
   - FRONTEND=AdminClient/
   - FRONTEND=RepClient/
 
-#stages:
-#  - test
-##  - name: deploy
-##    if: branch = master
-
 #Test stage
 # This needs to be the default stage due to build Matrix
 before_install: cd $FRONTEND
