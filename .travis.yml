@@ -1,9 +1,15 @@
 dist: trusty
 sudo: true
+env:
+  - FRONTEND=AdminClient/
+  - FRONTEND=RepClient/
 
 language: node_js
 node_js:
   - "10.9"
+
+services:
+  - docker
 
 addons:
   chrome:
@@ -11,13 +17,23 @@ addons:
 
 cache:
   directories:
-    - ./node_modules
+    - "./node_modules"
+    - "~/.npm"
+    - ".jest"
 
-before_install:
-  - cd RepClient/
+before_install: cd $FRONTEND
 
-install:
-  - npm install
+before_script: cd $FRONTEND
 
-script:
-  - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
+stages:
+  - test
+  - coverage
+#  - name: deploy
+#    if: branch = master
+
+test:
+    script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
+
+coverage:
+  before_script:
+  script: npx codecov
