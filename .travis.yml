@@ -6,15 +6,12 @@ env:
   - FRONTEND=RepClient/
 
 language: node_js
+
 node_js:
   - "10.9"
 
-services:
-  - docker
-
 addons:
-  chrome:
-    stable
+  chrome: stable
 
 cache:
   directories:
@@ -30,9 +27,10 @@ stages:
 #  - name: deploy
 #    if: branch = master
 
-test:
-    script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
-
-coverage:
-  before_script:
-  script: npx codecov
+jobs:
+  include:
+    - stage: test
+      script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
+    - stage: coverage
+      before_script: skip
+      script: npx codecov
