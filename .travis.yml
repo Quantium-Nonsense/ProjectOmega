@@ -15,6 +15,10 @@ cache:
     - "~/.npm"
     - ".jest"
 
+env:
+  - FRONTEND=AdminClient/
+  - FRONTEND=RepClient/
+
 stages:
   - test
   - coverage
@@ -24,9 +28,6 @@ stages:
 jobs:
   include:
     - stage: test
-      env:
-        - FRONTEND=AdminClient/
-        - FRONTEND=RepClient/
       before_install: cd $FRONTEND
       script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
     - stage: coverage
