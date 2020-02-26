@@ -19,21 +19,13 @@ env:
   - FRONTEND=AdminClient/
   - FRONTEND=RepClient/
 
-stages:
-  - test
-  - coverage
-#  - name: deploy
-#    if: branch = master
+#stages:
+#  - test
+##  - name: deploy
+##    if: branch = master
 
 #Test stage
 # This needs to be the default stage due to build Matrix
 before_install: cd $FRONTEND
 script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
-
-# Other jobs in other stages
-jobs:
-  include:
-    - stage: coverage
-      before_install: skip
-      install: skip
-      script: npx codecov
+after_success: npx codecov
