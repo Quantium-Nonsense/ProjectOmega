@@ -1,6 +1,6 @@
 # ProjectOmega
-[![Build Status](https://img.shields.io/travis/com/Quantium-Nonsense/ProjectOmega?style=flat-square )](https://travis-ci.com/Quantium-Nonsense/ProjectOmega ) 
-[Code Coverage badge]
+[![Build Status](https://img.shields.io/travis/com/Quantium-Nonsense/ProjectOmega/master?style=flat-square )](https://travis-ci.com/Quantium-Nonsense/ProjectOmega ) 
+[![codecov](https://codecov.io/gh/Quantium-Nonsense/ProjectOmega/branch/master/graph/badge.svg?style=flat-square )](https://codecov.io/gh/Quantium-Nonsense/ProjectOmega)
 [![CodeFactor](https://www.codefactor.io/repository/github/quantium-nonsense/projectomega/badge?style=flat-square )](https://www.codefactor.io/repository/github/quantium-nonsense/projectomega)
 
 ## Dependencies
