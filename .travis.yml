@@ -23,8 +23,6 @@ cache:
 
 before_install: cd $FRONTEND
 
-before_script: cd $FRONTEND
-
 stages:
   - test
   - coverage
