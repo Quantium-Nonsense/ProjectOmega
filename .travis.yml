@@ -1,5 +1,6 @@
 dist: trusty
-sudo: true
+os: linux
+
 env:
   - FRONTEND=AdminClient/
   - FRONTEND=RepClient/
