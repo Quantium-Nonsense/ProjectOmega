@@ -1,10 +1,6 @@
 dist: trusty
 os: linux
 
-env:
-  - FRONTEND=AdminClient/
-  - FRONTEND=RepClient/
-
 language: node_js
 
 node_js:
@@ -19,8 +15,6 @@ cache:
     - "~/.npm"
     - ".jest"
 
-before_install: cd $FRONTEND
-
 stages:
   - test
   - coverage
@@ -30,7 +24,12 @@ stages:
 jobs:
   include:
     - stage: test
+      env:
+        - FRONTEND=AdminClient/
+        - FRONTEND=RepClient/
+      before_install: cd $FRONTEND
       script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
     - stage: coverage
-      before_script: skip
+      before_install: skip
+      install: skip
       script: npx codecov
