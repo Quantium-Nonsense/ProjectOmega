@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
-// import { LoadingController, MenuController } from '@ionic/angular';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoadingController, MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from '../reducers';
 import * as AuthActions from './store/auth.actions';
 import { AuthState } from './store/auth.reducer';
 
-const USERNAME_ALLOWED_REGEXP = /^[a-zA-Z0-9]+([._]?[a-zA-Z0-9]+)*$/;
-
 @Component({
   selector: 'app-auth',
   styleUrls: ['./auth.page.scss'],
   templateUrl: './auth.page.html'
 })
+
 export class AuthPage implements OnInit {
 
   /**
@@ -26,25 +25,25 @@ export class AuthPage implements OnInit {
    * Holds all the subscriptions that will need to be cleaned up when a view swaps
    */
   private subscriptions = new Subscription();
-  //
-  // /**
-  //  * This is the loader that was created and currently exists on the page
-  //  * This variable will be used to dismiss that existing loader
-  //  */
-  // private pageLoader: HTMLIonLoadingElement;
+
+  /**
+   * This is the loader that was created and currently exists on the page
+   * This variable will be used to dismiss that existing loader
+   */
+  private pageLoader: HTMLIonLoadingElement;
 
   constructor(
     public menuController: MenuController,
     public loadingController: LoadingController,
     private store: Store<AppState>,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
 
   }
 
-  async ionViewWillEnter(): Promise<void> {
+  ionViewWillEnter(): void {
     // Disable sideway scroll on log in page
-    await this.menuController.enable(false);
+    this.menuController.enable(false);
     this.subscriptions.add(
       this.store.select('auth').subscribe((state: AuthState) => {
         if (state.errorMessage) {
@@ -72,37 +71,16 @@ export class AuthPage implements OnInit {
    */
   protected onSubmit(): void {
     this.store.dispatch(AuthActions.loginAttempt({
-      username: this.authForm.get('username').value as string,
+      email: this.authForm.get('email').value as string,
       password: this.authForm.get('password').value as string
     }));
   }
 
   /**
-   * Check if username is in the correct format
+   * Check if email is in the correct format
    */
-  protected get usernameHasError(): boolean {
-    return this.authForm.get('usernmae').invalid;
-  }
-
-  /**
-   * Returns appropriate error message for username validation
-   */
-  protected get usernameErrorMessage(): string {
-    const usernameCtrl = this.authForm.get('username');
-
-    // Check if the username has been filled
-    if(usernameCtrl.hasError('required')){
-      return 'Username is required';
-    }
-
-    return '';
-  }
-
-  /**
-   * Check if password is in correct format
-   */
-  protected get passwordHasError(): boolean {
-    return this.authForm.get('password').invalid;
+  get emailHasError(): boolean {
+    return this.authForm.get('email').invalid;
   }
 
   /**
@@ -111,11 +89,12 @@ export class AuthPage implements OnInit {
   protected get passwordErrorMessage(): string {
     const passwordCtrl = this.authForm.get('password');
 
-    if(passwordCtrl.hasError('required')){
-      return 'Password is required!';
-    }
+    return passwordCtrl.hasError('required')
+      ? 'Password is required!'
+      : passwordCtrl.hasError('minlength')
+        ? 'Password should be at least 7 characters long!'
+        : '';
 
-    return '';
   }
 
   protected isFormValid(): boolean {
@@ -127,29 +106,50 @@ export class AuthPage implements OnInit {
    * @param message The message to display
    * @param duration The duration for the message
    */
-  private showMessage = (message: string, duration = 2000): void => {
+  showMessage = (message: string, duration = 2000): void => {
     this.snackBar.open(message, undefined, {
       duration: 2000
     });
-  };
+  }
+
+  /**
+   * Returns appropriate error message for email validation
+   */
+  get emailErrorMessage(): string {
+    const emailCtrl = this.authForm.get('email');
+
+    return emailCtrl.hasError('required') // Check if email has been filled
+      ? 'Email is required!'
+      : emailCtrl.hasError('email') // If yes check if valid email
+        ? 'Not a valid email'
+        : '';
+  }
+
+  /**
+   * Check if password is in correct format
+   */
+  get passwordHasError(): boolean {
+    return this.authForm.get('password').invalid;
+  }
 
   /**
    * Decides if page should display the loading spinner
    * @param shouldBeDisplayed If loader should be displayed
    */
-  private handleLoaderDisplay = (shouldBeDisplayed: boolean): void => {
-    if (!shouldBeDisplayed && this.pageLoader) {
+  handleLoaderDisplay = (shouldBeDisplayed: boolean): void => {
+    if (!(!shouldBeDisplayed && this.pageLoader)) {
+      if (shouldBeDisplayed) {
+        this.loadingController.create({
+          message: 'Loading...'
+        }).then(loader => {
+          this.pageLoader = loader;
+          this.pageLoader.present();
+        });
+      }
+    } else {
       this.pageLoader.dismiss();
 
       return;
-    }
-    if (shouldBeDisplayed) {
-      this.loadingController.create({
-        message: 'Loading...'
-      }).then(loader => {
-        this.pageLoader = loader;
-        this.pageLoader.present();
-      });
     }
   };
 
@@ -162,7 +162,7 @@ export class AuthPage implements OnInit {
    */
   private formInitialization = (): FormGroup =>
     new FormGroup({
-      username: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required])
+      email: new FormControl('', [Validators.email, Validators.required]),
+      password: new FormControl('', [Validators.required, Validators.minLength(7)])
     });
 }

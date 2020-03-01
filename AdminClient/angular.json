@@ -124,6 +124,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "untitled3"
+    }
+  },
+  "defaultProject": "untitled3",
+  "cli": {
+    "analytics": false
+  }
 }
