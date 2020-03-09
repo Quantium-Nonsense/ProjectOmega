@@ -1,20 +1,29 @@
-import { NgModule } from '@angular/core';
+// Modules imported
 import { BrowserModule } from '@angular/platform-browser';
-import { MatToolbar } from '@angular/material/toolbar';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { AppRoutingModule } from './app-routing.module';
 
+
+// Components imported
 import { AppComponent } from './app.component';
-import { LoginComponent } from './auth/login/login.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { CustomersComponent } from './customers/customers.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    DashboardComponent,
+    CustomersComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
-    MatToolbar,
+    FormsModule,
+    MatToolbarModule,
+    AppRoutingModule,
+    MatGridListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
