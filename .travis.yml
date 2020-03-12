@@ -26,10 +26,10 @@ jobs:
       before_install: cd RepClient/
       script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
       after_success: npx codecov
-    - name: Backend Tests
-      language: java
-      jdk:
-        - openjdk8
-      before_install: cd Backend/
+#    - name: Backend Tests
+#      language: java
+#      jdk:
+#        - openjdk8
+#      before_install: cd Backend/
 
 
