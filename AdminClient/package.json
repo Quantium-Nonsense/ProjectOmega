@@ -25,7 +25,8 @@
     "json-server": "^0.16.1",
     "rxjs": "^6.5.4",
     "tslib": "^1.11.1",
-    "zone.js": "^0.10.2"
+    "zone.js": "^0.10.2",
+    "@ionic/angular": "^5.0.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.900.5",
