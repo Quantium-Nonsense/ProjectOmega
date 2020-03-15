@@ -17,9 +17,7 @@ import { AppComponent } from './app.component';
 import { AuthEffects } from './auth/store/auth.effects';
 import { appReducer, metaReducers } from './reducers';
 
-export const getToken = function() {
-  localStorage.getItem(environment.ACCESS_TOKEN);
-};
+export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -48,8 +46,7 @@ export const getToken = function() {
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ]
 })
-export class AppModule {
-}
+export class AppModule {}
