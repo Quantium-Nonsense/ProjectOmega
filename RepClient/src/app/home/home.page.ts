@@ -24,7 +24,7 @@ export class HomePage {
    * Create a list of 4 dummy companies for placeholders
    */
   private createDummyCompanies = (): CompanyModel[] => {
-    const imageUrl = '/RepClient/src/assets/shapes.svg';
+    const imageUrl = 'assets/shapes.svg';
     const companies: CompanyModel[] = [];
 
     for (let i = 0; i < 4; i++) {
