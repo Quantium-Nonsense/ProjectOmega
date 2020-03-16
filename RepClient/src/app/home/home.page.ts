@@ -9,15 +9,15 @@ import { CompanyModel } from '../models/home/company.model';
   templateUrl: 'home.page.html'
 })
 export class HomePage {
-  private dummyCompanies: Observable<CompanyModel[]>;
+  private dummyCompanies$: Observable<CompanyModel[]>;
 
   constructor() {
-    this.dummyCompanies = new Observable<CompanyModel[]>();
+    this.dummyCompanies$ = new Observable<CompanyModel[]>();
   }
 
   ionViewWillEnter(): void {
     // Until API is ready create dummy companies with 3s delay
-    this.dummyCompanies = of(this.createDummyCompanies()).pipe(delay(3000));
+    this.dummyCompanies$ = of(this.createDummyCompanies()).pipe(delay(3000));
   }
 
   /**

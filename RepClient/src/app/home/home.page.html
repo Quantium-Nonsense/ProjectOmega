@@ -11,21 +11,30 @@
 
 <ion-content>
 	<ion-grid>
-		<ion-row>
-			<ion-col size="6" *ngFor="let company of dummyCompanies | async">
-              <ion-card>
-                <img [src]="company.imageUrl" alt=""/>
-                <ion-card-header>
-                  <ion-card-subtitle></ion-card-subtitle>
-                  <ion-card-title>{{company.name}}</ion-card-title>
-                </ion-card-header>
-                <ion-card-content>
-                  <p>{{company.description}}</p>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+		<ion-row *ngIf="dummyCompanies$ | async as companies; else loading">
+			<ion-col size="6" *ngFor="let company of companies">
+				<ion-card>
+					<img [src]="company.imageUrl" alt=""/>
+					<ion-card-header>
+						<ion-card-subtitle></ion-card-subtitle>
+						<ion-card-title>{{company.name}}</ion-card-title>
+					</ion-card-header>
+					<ion-card-content>
+						<p>{{company.description}}</p>
+					</ion-card-content>
+					<hr>
+					<ion-item href="#" class="ion-activated">
+						<ion-icon name="wifi" slot="start"></ion-icon>
+						<ion-label>Click me!</ion-label>
+					</ion-item>
+				</ion-card>
+			</ion-col>
+		</ion-row>
+		<ng-template #loading>
+			<!--Dummy loading diplsay to show the user something is loading-->
+			<ion-col size="6" *ngFor=""></ion-col>
+		</ng-template>
+	</ion-grid>
 
 
 </ion-content>
