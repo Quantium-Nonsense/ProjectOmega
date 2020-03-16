@@ -25,10 +25,10 @@ public class UserServiceImpl implements UserService {
         if(userRepository.existsByEmail(email)) {
             throw new DuplicateUserException(Constant.ERROR_USER_EXISTS + email);
         }
+
         userRepository.save(user);
         return user;
     }
-
 
     public List<User> getAllUsers() throws NoRecordsFoundException {
         List<User> users = (List) userRepository.findAll();

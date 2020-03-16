@@ -8,7 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-//@ContextConfiguration(classes = Application.class)
 public class OmegaApplicationTests {
 
     @Test

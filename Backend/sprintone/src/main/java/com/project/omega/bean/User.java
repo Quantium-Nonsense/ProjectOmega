@@ -5,11 +5,10 @@ import lombok.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 @Entity
 @Builder
-public class User implements Serializable {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,12 +21,6 @@ public class User implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
-
-//    private Long industry;
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-//    private Role role;
 
     public User() {
 
