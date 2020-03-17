@@ -25,7 +25,6 @@ public class UserServiceImpl implements UserService {
         if(userRepository.existsByEmail(email)) {
             throw new DuplicateUserException(Constant.ERROR_USER_EXISTS + email);
         }
-
         userRepository.save(user);
         return user;
     }
@@ -41,7 +40,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long id) throws UserNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if(!user.isPresent()) {
-            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + id);
+            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + "id: " + id);
         }
         return user.get();
     }
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserService {
     public User deleteUserById(Long id) throws UserNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if(!user.isPresent()) {
-            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + id);
+            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + "id: " + id);
         }
         userRepository.deleteById(id);
         return user.get();
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     public User updateUserById(Long id, User userDetails) throws Exception {
         if(!userRepository.existsById(id)) {
-            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + id);
+            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + "id: " + id);
         }
         if(userDetails.getEmail() != null && userDetails.getRole() != null && userDetails.getPassword() != null) {
             userDetails.setId(id);
@@ -66,5 +65,13 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("Null values detected.");
         }
         return userDetails;
+    }
+
+    public User getUserByEmail(String email) throws UserNotFoundException {
+        Optional<User> user = userRepository.findByEmail(email);
+        if(!user.isPresent()) {
+            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + "email:" + email);
+        }
+        return user.get();
     }
 }

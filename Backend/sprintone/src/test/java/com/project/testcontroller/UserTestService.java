@@ -68,12 +68,12 @@ public class UserTestService extends OmegaApplicationTests {
         String expected = Constant.ERROR_USER_EXISTS + user_one.getEmail();
         Mockito.when(userRepository.findAll()).thenReturn(Stream.of(user_one).collect(Collectors.toList()));
         Mockito.when(userRepository.existsByEmail(email)).thenReturn(true);
-        Mockito.when(userRepository.findByEmail(email)).thenReturn(user_one);
+        Mockito.when(userRepository.findByEmail(email)).thenReturn(Optional.of(user_one));
         try {
             userService.createUser(user_two);
         } catch (Exception e) {
             Assert.assertEquals(1, userRepository.findAll().size());
-            Assert.assertTrue(user_two.getEmail().equals(userRepository.findByEmail(email).getEmail()));
+            Assert.assertTrue(user_two.getEmail().equals(userRepository.findByEmail(email).get().getEmail()));
             Assert.assertTrue(e.getMessage().contains(expected));
         }
     }
@@ -143,7 +143,7 @@ public class UserTestService extends OmegaApplicationTests {
         try {
             userService.getUserById(id_2);
         } catch (Exception e) {
-            Assert.assertTrue(e.getMessage().contains(Constant.ERROR_USER_NOT_FOUND + id_2));
+            Assert.assertTrue(e.getMessage().contains(Constant.ERROR_USER_NOT_FOUND + "id: " + id_2));
             Assert.assertEquals(1, userRepository.findAll().size());
             Assert.assertEquals(user_one.getId(), userRepository.findById(id_1).get().getId());
         }
@@ -182,5 +182,37 @@ public class UserTestService extends OmegaApplicationTests {
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user_detail);
         user_detail.setId(null);
         Assert.assertEquals(id_1, userService.updateUserById(id_1, user_detail).getId());
+    }
+
+    @Test
+    @DisplayName("Test for retrieving user by email.")
+    public void getUserByEmail_PositiveTest() throws Exception {
+        User user_one = new User.UserBuilder()
+                .setId(id_1)
+                .setEmail("a@a.com")
+                .setPassword("password")
+                .setRole(RoleEnum.TEST_ROLE)
+                .build();
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(user_one));
+        Assert.assertEquals(user_one.getEmail(), userService.getUserByEmail("a@a.com").getEmail());
+    }
+
+    @Test
+    @DisplayName("Test for retrieving user by email.")
+    public void getUserByEmail_NegativeTest() throws Exception {
+        User user_one = new User.UserBuilder()
+                .setId(id_1)
+                .setEmail("a@a.com")
+                .setPassword("password")
+                .setRole(RoleEnum.TEST_ROLE)
+                .build();
+        Mockito.when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(user_one));
+        try {
+            userService.getUserByEmail("a@b.com");
+        } catch (Exception e) {
+            Assert.assertEquals(user_one.getEmail(), userService.getUserByEmail("a@b.com").getEmail());
+            Assert.assertTrue(e.getMessage().contains(Constant.ERROR_USER_NOT_FOUND + "email: a@b.com"));
+            Assert.assertEquals(user_one.getEmail(), userRepository.findByEmail("a@a.com").get().getEmail());
+        }
     }
 }

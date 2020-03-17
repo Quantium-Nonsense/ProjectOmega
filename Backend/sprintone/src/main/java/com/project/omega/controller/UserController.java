@@ -39,6 +39,12 @@ public class UserController {
         return new ResponseEntity(user, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/{email}")
+    public ResponseEntity getByEmail(@PathVariable(value = "email") String email) throws UserNotFoundException {
+        User user = userService.getUserByEmail(email);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteById(@PathVariable(value = "id") Long id) throws UserNotFoundException {
         User user = userService.deleteUserById(id);
