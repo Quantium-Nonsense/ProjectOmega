@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { State, Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { CompanyModel } from '../models/home/company.model';
+import { AppState } from '../reducers';
+import * as HomeActions from './store/home.actions';
+import * as fromHome from './store/home.reducer';
 
 @Component({
   selector: 'app-home',
@@ -9,29 +12,24 @@ import { CompanyModel } from '../models/home/company.model';
   templateUrl: 'home.page.html'
 })
 export class HomePage {
-  private dummyCompanies$: Observable<CompanyModel[]>;
+  companies: CompanyModel[];
 
-  constructor() {
-    this.dummyCompanies$ = new Observable<CompanyModel[]>();
+  private subscriptions: Subscription;
+
+  constructor(private store: Store<AppState>) {
+    this.companies = [];
+    this.subscriptions = new Subscription();
   }
 
   ionViewWillEnter(): void {
-    // Until API is ready create dummy companies with 3s delay
-    this.dummyCompanies$ = of(this.createDummyCompanies()).pipe(delay(3000));
+    const homeState$ = this.store.select('home');
+    this.subscriptions.add(
+      homeState$.subscribe(state => {
+        this.companies = state.companies;
+      })
+    );
+
+    this.store.dispatch(HomeActions.beginLoadingDashboard());
   }
-
-  /**
-   * Create a list of 4 dummy companies for placeholders
-   */
-  private createDummyCompanies = (): CompanyModel[] => {
-    const imageUrl = 'assets/shapes.svg';
-    const companies: CompanyModel[] = [];
-
-    for (let i = 0; i < 4; i++) {
-      companies.push(new CompanyModel(`Company ${i}`, imageUrl, `Some fantastic company called ${i}!`));
-    }
-
-    return companies;
-  };
 
 }

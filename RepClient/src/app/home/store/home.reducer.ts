@@ -1,6 +1,6 @@
-import { createReducer, on } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 import { CompanyModel } from '../../models/home/company.model';
-import * as AuthActions from './home.actions';
+import * as HomeActions from './home.actions';
 
 export interface HomeState {
   companies: CompanyModel[];
@@ -14,8 +14,15 @@ const initialState: HomeState = {
 
 const _homeReducer = createReducer(
   initialState,
-  on(AuthActions.beginLoadingDashboard, prevState => ({
+  on(HomeActions.beginLoadingDashboard, prevState => ({
     ...prevState,
     loading: true
-  }))
-);
+  })),
+  on(HomeActions.dashboardLoaded, (prevState, {companies}) => ({
+      ...prevState,
+      loading: false,
+      companies,
+    })
+  ));
+
+export const homeReducer = (state: HomeState | undefined, action: Action): HomeState => _homeReducer(state, action);
