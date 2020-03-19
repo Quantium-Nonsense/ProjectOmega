@@ -19,7 +19,7 @@ export class HomeEffects {
   );
 
   constructor(
-    private actions$: Actions,
+    private actions$: Actions
   ) {
   }
 

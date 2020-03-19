@@ -9,7 +9,6 @@ import { environment } from '../../environments/environment';
 import * as fromAuth from '../auth/store/auth.reducer';
 import * as fromHome from '../home/store/home.reducer';
 
-
 export interface AppState {
   auth: fromAuth.AuthState;
   home: fromHome.HomeState;
