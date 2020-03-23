@@ -1,0 +1,43 @@
+<div id="table">
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Telephone</th>
+      <th>Email</th>
+      <th>Website</th>
+      <th>Contact</th>
+      <th>Address</th>
+      <th>Town/City</th>
+      <th>County</th>
+      <th>Country</th>
+      <th>Postcode</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let customer of customers">
+      <td>{{ customer.id }}</td>
+      <td>{{ customer.name }}</td>
+      <td>{{ customer.category }}</td>
+      <td>{{ customer.telephone }}</td>
+      <td>{{ customer.email }}</td>
+      <td>{{ customer.website }}</td>
+      <td>{{ customer.contact }}</td>
+      <td>{{ customer.address }}</td>
+      <td>{{ customer.townOrCity }}</td>
+      <td>{{ customer.county }}</td>
+      <td>{{ customer.country }}</td>
+      <td>{{ customer.postcode }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="buttons">
+  <md-button class="md-raised md-primary" style="margin-right: 5%">LOAD RECORDS</md-button>
+  <md-button class="md-raised md-primary" style="margin-right: 5%">CREATE RECORDS</md-button>
+  <md-button class="md-raised md-primary" style="margin-right: 5%">UPDATE RECORDS</md-button>
+  <md-button class="md-raised md-primary" style="margin-right: 5%">DELETE RECORDS</md-button>
+</div>

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { HttpClient} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Admin Client';
+  title = 'OmegaSys';
+  customers$: Observable<any> = this.http.get('/api/customers');
+​
+  constructor(private http: HttpClient) {}
 }
