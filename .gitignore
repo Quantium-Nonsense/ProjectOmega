@@ -102,3 +102,11 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Files for separate repo to ignore 
+.idea/
+Backend/sprintone/.git
+Backend/sprintone/.gitignore
+Backend/sprintone/.idea
+Backend/sprintone/README.md
+Backend/sprintone/target
