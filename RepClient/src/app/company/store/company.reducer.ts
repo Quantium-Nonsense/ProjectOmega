@@ -17,6 +17,6 @@ const _companyReducer = createReducer(
   initialState,
   on(CompanyActions.companySelected, (prevState, {selectedCompany}) => ({
     ...prevState,
-    company: selectedCompany,
+    company: selectedCompany
   }))
 );
