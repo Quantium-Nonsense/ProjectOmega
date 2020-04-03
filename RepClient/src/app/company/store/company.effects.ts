@@ -29,8 +29,6 @@ export class CompanyEffects {
         .pipe(tap(() => this.redirectToDisplayItems())))
     ), this.noDispatchConfig);
 
-
-
     private loadItems(company: string) {
       // Fake http request
       const fakeItems: ItemModel[] = [];

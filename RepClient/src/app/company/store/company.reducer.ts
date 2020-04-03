@@ -18,6 +18,11 @@ const _companyReducer = createReducer(
   on(CompanyActions.companySelected, (prevState, {selectedCompany}) => ({
     ...prevState,
     company: selectedCompany
+  })),
+  on(CompanyActions.loadItemsOfCompany, (prevState, {company}) => ({
+    ...prevState,
+    company,
+    loading: true
   }))
 );
 
