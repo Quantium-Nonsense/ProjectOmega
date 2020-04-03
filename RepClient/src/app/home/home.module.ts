@@ -20,4 +20,5 @@ import { HomePage } from './home.page';
     ])
   ]
 })
-export class HomePageModule {}
+export class HomePageModule {
+}
