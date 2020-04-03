@@ -9,3 +9,4 @@ export const dashboardLoaded = createAction(
   '[Home - Page] Dashboard Has Loaded',
   props<{ companies: CompanyModel[] }>()
 );
+
