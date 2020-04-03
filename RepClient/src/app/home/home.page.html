@@ -23,7 +23,7 @@
 						<p>{{company.description}}</p>
 					</ion-card-content>
 					<hr>
-					<ion-item href="#" class="ion-activated">
+					<ion-item (click)="loadCompaniesItems(company.name)">
 						<ion-icon name="wifi" slot="start"></ion-icon>
 						<ion-label>Click me!</ion-label>
 					</ion-item>
@@ -35,7 +35,7 @@
 			<ion-row>
 				<ion-col size="6" *ngFor="let i of [1,2,3,4,5,6,7,8]">
 					<ion-card>
-						<div class="spinnerContainer">
+						<div>
 							<ion-spinner name="dots"></ion-spinner>
 						</div>
 						<ion-card-header>
@@ -46,7 +46,7 @@
 							<p></p>
 						</ion-card-content>
 						<hr>
-						<ion-item class="ion-activated">
+						<ion-item>
 						</ion-item>
 					</ion-card>
 				</ion-col>

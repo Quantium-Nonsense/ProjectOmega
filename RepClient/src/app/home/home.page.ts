@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { CompanyModel } from '../models/home/company.model';
 import { AppState } from '../reducers';
 import * as HomeActions from './store/home.actions';
-import * as fromHome from './store/home.reducer';
+import * as CompanyActions from './../company/store/company.actions';
 
 @Component({
   selector: 'app-home',
@@ -32,4 +32,7 @@ export class HomePage {
     this.store.dispatch(HomeActions.beginLoadingDashboard());
   }
 
+  loadCompaniesItems(name: string): void {
+    this.store.dispatch(CompanyActions.companySelected({selectedCompany: name}));
+  }
 }
