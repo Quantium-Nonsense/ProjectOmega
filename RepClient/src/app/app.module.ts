@@ -15,6 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
 import { AuthEffects } from './auth/store/auth.effects';
+import { CompanyEffects } from './company/store/company.effects';
 import { HomeEffects } from './home/store/home.effects';
 import { appReducer, metaReducers } from './reducers';
 
@@ -41,7 +42,11 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
       }
     }),
     BrowserAnimationsModule,
-    EffectsModule.forRoot([AuthEffects, HomeEffects]),
+    EffectsModule.forRoot([
+      AuthEffects,
+      HomeEffects,
+      CompanyEffects
+    ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [

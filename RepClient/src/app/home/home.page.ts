@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { State, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { CompanyModel } from '../models/home/company.model';
 import { AppState } from '../reducers';
-import * as HomeActions from './store/home.actions';
 import * as CompanyActions from './../company/store/company.actions';
+import * as HomeActions from './store/home.actions';
 
 @Component({
   selector: 'app-home',

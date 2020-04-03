@@ -1,4 +1,4 @@
-import { createReducer, on } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 import * as CompanyActions from './company.actions.js';
 
 export interface State {
@@ -20,3 +20,5 @@ const _companyReducer = createReducer(
     company: selectedCompany
   }))
 );
+
+export const companyReducer = (state: State | undefined, action: Action): State => _companyReducer(state, action);
