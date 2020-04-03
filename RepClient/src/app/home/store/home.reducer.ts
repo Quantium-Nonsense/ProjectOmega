@@ -21,7 +21,7 @@ const _homeReducer = createReducer(
   on(HomeActions.dashboardLoaded, (prevState, {companies}) => ({
       ...prevState,
       loading: false,
-      companies,
+      companies
     })
   ));
 
