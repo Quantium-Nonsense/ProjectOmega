@@ -24,6 +24,10 @@ export class CompanyPage implements OnInit {
    * Just needs a set length
    */
   dummyItems = [];
+  /**
+   * Company name to display at top of nav bar
+   */
+  currentCompany = '';
   private state$ = this.store.select('company');
   private subscription: Subscription = new Subscription();
 
@@ -44,10 +48,17 @@ export class CompanyPage implements OnInit {
         // Force to run synchronously as company is already loaded from dashboard
         take(1)
       )
-      .subscribe(s => this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company})));
+      .subscribe(s => {
+        this.currentCompany = s.company;
+        this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company}));
+      });
     this.subscription.add(this.state$.subscribe((currentState: fromCompany.State) => {
       this.items = currentState.companyItems;
     }));
+  }
+
+  ionViewWillLeave(): void {
+    this.subscription.unsubscribe();
   }
 
 }

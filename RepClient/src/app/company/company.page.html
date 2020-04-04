@@ -4,13 +4,13 @@
 			<ion-menu-button></ion-menu-button>
 		</ion-buttons>
 		<ion-title>
-			Company Items
+			{{ currentCompany }}
 		</ion-title>
 	</ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div *ngIf="items.length > 0; else loading">
+  <div *ngIf="items; else loading">
     <ion-virtual-scroll [items]="items" approxItemHeight="320px">
       <ion-card *virtualItem="let item; let itemBounds = bounds;">
         <div>

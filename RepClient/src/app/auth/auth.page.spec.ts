@@ -52,7 +52,9 @@ describe('AuthPage', () => {
         errorMessage: undefined,
         loading: false,
         user: undefined
-      }
+      },
+      company: undefined,
+      home: undefined
     });
     mockStore.refreshState();
     fixture.detectChanges();
@@ -74,7 +76,9 @@ describe('AuthPage', () => {
         errorMessage: 'Some Error message',
         loading: false,
         user: undefined
-      }
+      },
+      company: undefined,
+      home: undefined
     });
 
     mockStore.refreshState();
@@ -105,7 +109,9 @@ describe('AuthPage', () => {
         errorMessage: undefined,
         loading: true,
         user: undefined
-      }
+      },
+      company: undefined,
+      home: undefined
     });
 
     mockStore.refreshState();
