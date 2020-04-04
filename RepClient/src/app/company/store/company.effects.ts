@@ -58,18 +58,25 @@ export class CompanyEffects {
   private loadItems = (company: string): Action => {
     // Fake http request
     const fakeItems: ItemModel[] = [];
+
+    /**
+     * Used to check sorting
+     */
     const randomLetters = ['A', 'B', 'C', 'D', 'E'];
+
+    // A simple inner function to get a random letter from the array
+    const getRandomLetter = () =>
+      randomLetters[Math.floor(Math.random() * randomLetters.length)];
 
     for (let i = 0; i < 50; i++) {
       fakeItems.push(new ItemModel(
         (Math.random() * 153000).toFixed(0),
-        `Magic Item ${randomLetters[Math.floor(Math.random() * randomLetters.length)]} ${i}`,
+        `Magic Item ${getRandomLetter()}${getRandomLetter()}${getRandomLetter()} ${i} `,
         `You are now looking at this fantastic piece of magic item ${i}`,
         i * Math.exp(i))
       );
     }
 
-    // Pretend there is a delay to mimic HTTP call before returning complete
     return CompanyActions.itemsOfCompanyLoaded({items: fakeItems});
   };
 

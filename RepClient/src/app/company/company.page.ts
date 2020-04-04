@@ -67,4 +67,30 @@ export class CompanyPage implements OnInit {
   sortBy(sortBy: SortOptions): void {
     this.store.dispatch(CompanyActions.sortItems({by: sortBy, items: this.items}));
   }
+
+  /**
+   * Checks if any items description or name contains the values used in search bar
+   * @param value The values to search for in the items
+   */
+  itemLookup(value: string): void {
+    if (!value) {
+      // If value is an empty string reset array
+      this.cancelLookup();
+    }
+    this.items = [...this.items.filter(item => {
+      if (
+        item.description.toLocaleUpperCase().includes(value.toLocaleUpperCase()) ||
+        item.name.toLocaleUpperCase().includes(value.toLocaleUpperCase())) {
+        return item;
+      }
+    })];
+  }
+
+  /**
+   * Reset item list to the original state stored in store
+   */
+  cancelLookup(): void {
+    // Take 1 forces ngrx store to return current value synchronously
+    this.state$.pipe(take(1)).subscribe(state => this.items = state.companyItems);
+  }
 }
