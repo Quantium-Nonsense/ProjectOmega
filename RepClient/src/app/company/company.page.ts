@@ -15,13 +15,19 @@ import * as fromCompany from './store/company.reducer';
 })
 export class CompanyPage implements OnInit {
 
+  /**
+   * Holds all items of said company
+   */
   items: ItemModel[] = [];
-  dummyItems = []; // Create a list of 10 items for loading indicator
+  /**
+   * List of 10 items for loading indicator
+   * Just needs a set length
+   */
+  dummyItems = [];
   private state$ = this.store.select('company');
   private subscription: Subscription = new Subscription();
 
   constructor(
-    public activatedRoute: ActivatedRoute,
     public store: Store<fromApp.AppState>
   ) {
     for (let i = 0; i < 10; i++) {
@@ -40,7 +46,7 @@ export class CompanyPage implements OnInit {
       )
       .subscribe(s => this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company})));
     this.subscription.add(this.state$.subscribe((currentState: fromCompany.State) => {
-
+      this.items = currentState.companyItems;
     }));
   }
 
