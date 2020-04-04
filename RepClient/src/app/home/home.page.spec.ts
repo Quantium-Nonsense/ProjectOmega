@@ -2,10 +2,12 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { IonicModule, IonSpinner } from '@ionic/angular';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { CompanyModel } from '../models/home/company.model';
 import * as fromApp from './../reducers/index';
 import { HomePage } from './home.page';
+import * as HomeActions from './store/home.actions';
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -62,5 +64,39 @@ describe('HomePage', () => {
 
     expect(loadingBuffer).toBeTruthy();
     expect(mainContent).toBeFalsy();
+  });
+
+  it('should display companies on dashboard', () => {
+
+    // Create dummy companies
+    const imageUrl = 'assets/shapes.svg';
+    const companies: CompanyModel[] = [];
+
+    for (let i = 0; i < 4; i++) {
+      companies.push(new CompanyModel(`Company ${i}`, imageUrl, `Some fantastic company called ${i}!`));
+    }
+
+    // Set state with dummy companies
+    mockStore.setState({
+      auth: undefined,
+      company: undefined,
+      home: {
+        companies,
+        loading: true
+      }
+    });
+
+    // Ensure store reflects new state
+    mockStore.refreshState();
+
+    // Ensure loading elements are null
+    const loadingBuffer = fixture.debugElement.query(By.css('#loadingElements'));
+
+    // ensure main content is displaying
+    const mainContent = fixture.debugElement.query(By.css('#mainContent'));
+
+    expect(loadingBuffer).toBeFalsy();
+    expect(mainContent).toBeTruthy();
+
   });
 });
