@@ -33,6 +33,7 @@ export class HomePage {
   }
 
   loadCompaniesItems(name: string): void {
+    this.store.dispatch(HomeActions.dashboardCleanUp());
     this.store.dispatch(CompanyActions.companySelected({selectedCompany: name}));
   }
 }

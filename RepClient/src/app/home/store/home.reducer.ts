@@ -20,9 +20,13 @@ const _homeReducer = createReducer(
   })),
   on(HomeActions.dashboardLoaded, (prevState, {companies}) => ({
       ...prevState,
-      loading: false,
-      companies
+      companies,
+      loading: false
     })
-  ));
+  ),
+  on(HomeActions.dashboardCleanUp, prevState => ({
+    companies: undefined,
+    loading: false
+  })));
 
 export const homeReducer = (state: HomeState | undefined, action: Action): HomeState => _homeReducer(state, action);

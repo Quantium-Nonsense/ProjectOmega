@@ -9,3 +9,7 @@ export const dashboardLoaded = createAction(
   '[Home - Page] Dashboard Has Loaded',
   props<{ companies: CompanyModel[] }>()
 );
+
+export const dashboardCleanUp = createAction(
+  '[Dashboard - Page] Dashboard Clean up requested'
+);
