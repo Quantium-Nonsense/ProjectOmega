@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { SortOptions } from '../../shared/model/sort-options';
 import { ItemModel } from '../model/item.model';
 
 export const loadItemsOfCompany = createAction(
@@ -13,5 +14,15 @@ export const companySelected = createAction(
 
 export const itemsOfCompanyLoaded = createAction(
   '[Company - Effects] Loaded of items finished successfully',
-  props<{items: ItemModel[]}>()
+  props<{ items: ItemModel[] }>()
+);
+
+export const sortItems = createAction(
+  '[Company - Page - Action with Effect] Sort items',
+  props<{ by: SortOptions, items: ItemModel[] }>()
+);
+
+export const updateItems = createAction(
+  '[Company - Effects] Items updated',
+  props<{ items: ItemModel[] }>()
 );

@@ -33,6 +33,10 @@ const _companyReducer = createReducer(
     companyItems: items,
     errorMessage: undefined,
     loading: false
+  })),
+  on(CompanyActions.updateItems, (prevState, {items}) => ({
+    ...prevState,
+    companyItems: items
   }))
 );
 

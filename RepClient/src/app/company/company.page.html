@@ -10,27 +10,37 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="items; else loading">
-    <ion-virtual-scroll [items]="items" approxItemHeight="320px">
-      <ion-card *virtualItem="let item; let itemBounds = bounds;">
-        <div>
-          <ion-img [src]="'assets/icon/favicon'" [height]="64" [alt]="item.name"></ion-img>
-        </div>
-        <ion-card-header>
-          <ion-card-title>{{ item.name }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>{{ item.description }}</ion-card-content>
-      </ion-card>
-    </ion-virtual-scroll>
+	<div *ngIf="items; else loading">
+		<ion-list-header>
+			<ion-select (ionChange)="sortBy($event.detail.value)" class="ion-margin-end" placeholder="Sort By">
+				<ion-select-option [value]="ASCENDING">Ascending</ion-select-option>
+				<ion-select-option [value]="DESCENDING">Descending</ion-select-option>
+			</ion-select>
+		</ion-list-header>
+		<ion-virtual-scroll  [items]="items" approxItemHeight="320px">
+			<ion-item class="ion-margin-bottom" *virtualItem="let item; let itemBounds = bounds;">
+				<ion-thumbnail slot="start">
+					<ion-img [src]="'assets/shapes.svg'"
+					         [alt]="item.name"></ion-img>
+				</ion-thumbnail>
+				<ion-label>
+					<h3>{{ item.name }}</h3>
+					<p>{{ item.description }}</p>
+					<p>{{ item.price | currency: 'GBP':'symbol':'1.2'}}</p>
+				</ion-label>
+			</ion-item>
+		</ion-virtual-scroll>
 
-  </div>
+	</div>
 	<ng-template #loading>
-		<ion-list >
+		<ion-list>
 			<ion-item *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
 				<ion-card style="width: 100%">
 					<ion-card-header>
 					</ion-card-header>
-					<ion-card-content><ion-spinner name="dots"></ion-spinner></ion-card-content>
+					<ion-card-content>
+						<ion-spinner name="dots"></ion-spinner>
+					</ion-card-content>
 				</ion-card>
 			</ion-item>
 		</ion-list>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { pipe, Subscription } from 'rxjs';
-import { take, withLatestFrom } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { SortOptions } from '../shared/model/sort-options';
 import * as fromApp from './../reducers/index';
 import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
@@ -14,6 +14,9 @@ import * as fromCompany from './store/company.reducer';
   styleUrls: ['./company.page.scss']
 })
 export class CompanyPage implements OnInit {
+
+  readonly ASCENDING: SortOptions = SortOptions.ASCENDING;
+  readonly DESCENDING: SortOptions = SortOptions.DESCENDING;
 
   /**
    * Holds all items of said company
@@ -61,4 +64,7 @@ export class CompanyPage implements OnInit {
     this.subscription.unsubscribe();
   }
 
+  sortBy(sortBy: SortOptions): void {
+    this.store.dispatch(CompanyActions.sortItems({by: sortBy, items: this.items}));
+  }
 }

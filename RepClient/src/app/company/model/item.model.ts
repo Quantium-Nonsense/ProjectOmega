@@ -1,7 +1,9 @@
 export class ItemModel {
+
   private _id: string;
   private _name: string;
   private _description: string;
+
   private _price: number;
 
   constructor(id: string, name: string, description: string, price: number) {
