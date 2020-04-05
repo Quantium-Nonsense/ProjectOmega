@@ -1,0 +1,182 @@
+package com.project.testcontroller;
+
+import com.project.OmegaApplicationTests;
+import com.project.omega.bean.Industry;
+import com.project.omega.enums.RoleEnum;
+import com.project.omega.helper.Constant;
+import com.project.omega.repository.IndustryRepository;
+import com.project.omega.service.IndustryService;
+import com.project.omega.service.IndustryServiceImpl;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class IndustryTestService extends OmegaApplicationTests{
+
+    @Mock
+    private IndustryRepository industryRepository;
+
+    @InjectMocks
+    private IndustryService industryservice = new IndustryServiceImpl();
+
+    private Long id_1 = 1L;
+    private Long id_2 = 1L;
+
+    @Test
+    @DisplayName("create new industry test")
+    public void createIndustry_PositiveTest() throws Exception {
+        Industry industry = new Industry.IndustryBuilder()
+                .setId(id_1)
+                .setIndustryName("Pharma")
+                .setDescription("medication, equipment for medical purposes")
+                .build();
+        Mockito.when(industryRepository.save(Mockito.any(Industry.class))).thenReturn(indsutry);
+        Assert.assertEquals("Pharma", industryservice.createIndustry(industry).getIndustryName());
+    }
+
+    @Test
+    @DisplayName("Test for adding existing industry")
+    public void createIndustry_NegativeTest() throws Exception {
+        String name = "Pharma";
+        Industry industry_one = new Industry.IndustryBuilder()
+                .setId(id_1)
+                .setIndustryName(name)
+                .setDescription("medication, equipment for medical purposes")
+                .build();
+        Industry industry_two = new Industry.IndustryBuilder()
+                .setId(id_2)
+                .setEmail(name)
+                .setDescription("syranges")
+                .setRole(RoleEnum.TEST_ROLE)
+                .build();
+        String expected = (HttpStatus.BAD_REQUEST).body("Industry Name Already Exists in DB");
+        Mockito.when(industryRepository.findAll()).thenReturn(Stream.of(industry_one).collect(Collectors.toList()));
+        Mockito.when(industryRepository.existsByName(name)).thenReturn(true);
+        Mockito.when(industryRepository.findByName(name)).thenReturn(industry_one);
+        try {
+            industryService.createIndustry(industry_two);
+        } catch (Exception e) {
+            Assert.assertEquals(1, industryRepository.findAll().size());
+            Assert.assertTrue(industry_two.getIndustryName().equals(industryRepository.findByName(name).getIndustryName()));
+            Assert.assertTrue(e.getMessage().contains(expected));
+        }
+    }
+
+    @Test
+    @DisplayName("Test for retrieving all industries.")
+    public void getAllIndusries_PositiveTest() throws Exception {
+        Industry industry_one = new Industry.IndustryBuilder()
+                .setId(id_1)
+                .setIndsutryName("pharma")
+                .setDescription("medicine")
+                .build();
+        Indsutry industry_two = new Inustry.IndustryBuilder()
+                .setId(id_2)
+                .setIndsutryName("food")
+                .setDescription("food industry description")
+                .build();
+        Mockito.when(industryRepository.findAll()).thenReturn(Stream.of(industry_one, industry_two).collect(Collectors.toList()));
+        Mockito.when(industryRepository.existsByName(Mockito.anyString())).thenReturn(true);
+        Assert.assertEquals(2, industryService.getAllIndustry().size());
+        Assert.assertTrue(industryRepository.existsByName(industry_one.getName()));
+        Assert.assertTrue(ind ustryRepository.existsByName(industry_two.getName()));
+    }
+
+    @Test
+    @DisplayName("Test for retrieving all industries from an empty database.")
+    public void getAllIndustry_NegativeTest() throws Exception {
+        List<Industry> empty = new ArrayList<>();
+        Mockito.when(indsutryRepository.findAll()).thenReturn(empty);
+        try {
+            IndustryService.getAllIndustry();
+        } catch (Exception e) {
+            Assert.assertEquals(0, industryRepository.findAll().size());
+            Assert.assertTrue(e.getMessage().contains(Constant.ERROR_NO_RECORDS));
+        }
+    }
+
+    @Test
+    @DisplayName("Test for retrieving an industry by id.")
+    public void getIndustryById_PositiveTest()  {
+
+        Industry industry_one = new Industry.IndustryBuilder()
+                .setId(id_1)
+                .setIndsutryName("pharma")
+                .setDescription("medicine")
+                .build();
+        Mockito.when(industryRepository.findById(id_1)).thenReturn(Optional.of(Industry_one));
+        Assert.assertEquals(industry_one.getId(), industryService.getIndustryById(id_1).getId());
+        Assert.assertEquals(industry_one.getName(), industryService.getIndustryById(id_1).getName());
+        Assert.assertEquals(industry_one.getDescription(), industryService.getIndustryById(id_1).getDescription());
+    }
+
+    @Test
+    @DisplayName("Test for retrieving an indsutry by an invalid id.")
+    public void getIndustryById_NegativeTest()  {
+        Industry industry_one = new Industry.IndustryBuilder()
+                .setId(id_1)
+                .setIndsutryName("pharma")
+                .setDescription("medicine")
+                .build();
+        Mockito.when(industryRepository.findById(id_1)).thenReturn(Optional.of(industry_one));
+        Mockito.when(industryRepository.findById(id_2)).thenReturn(Optional.empty());
+        Mockito.when(industryRepository.findAll()).thenReturn(Stream.of(industry_one).collect(Collectors.toList()));
+        try {
+            industryService.getIndustryById(id_2);
+        } catch (Exception e) {
+            Assert.assertTrue(e.getMessage().contains(Constant.ERROR_Industry_NOT_FOUND + id_2));
+            Assert.assertEquals(1, industryRepository.findAll().size());
+            Assert.assertEquals(Industry_one.getId(), industryRepository.findById(id_1).get().getId());
+        }
+    }
+
+    @Test
+    @DisplayName("Test for deleting an industry.")
+    public void deleteIndustry_Test() {
+        Industry industry_one = new Industry.IndustryBuilder()
+                .setId(id_1)
+                .setIndsutryName("pharma")
+                .setDescription("medicine")
+                .build();
+        Mockito.when(industryRepository.findById(id_1)).thenReturn(Optional.of(industry_one));
+        industryService.deleteIndustryById(id_1);
+        Mockito.verify(indusdtryRepository, Mockito.times(1)).deleteById(id_1);
+    }
+
+    @Test
+    @DisplayName("Test for updating an industry")
+    public void updateIndustry_Test() {
+        Industry industry_one = new Industry.IndustryBuilder()
+                .setId(id_1)
+                .setIndsutryName("pharma")
+                .setDescription("medicine")
+                .build();
+        Industry industry_detail = new Industry.IndustryBuilder()
+                .setId(id_1)
+                .setIndsutryName("food")
+                .setDescription("food")
+                .build();
+        Mockito.when(industryRepository.existsById(Mockito.anyLong())).thenReturn(true);
+        Mockito.when(industryRepository.save(Mockito.any(Industry.class))).thenReturn(industry_detail);
+        industry_detail.setId(null);
+        Assert.assertEquals(id_1, industryService.updateIndustryById(id_1, industry_detail).getId());
+    }
+}
+
+
+
+}
