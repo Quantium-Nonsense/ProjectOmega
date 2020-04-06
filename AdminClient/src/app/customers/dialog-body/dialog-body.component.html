@@ -1,0 +1,100 @@
+<div class="container" fxLayout
+     fxLayout.xs="column"
+     fxLayoutAlign="none"
+     fxLayoutGap="10px"
+     fxLayoutGap.xs="0">
+
+  <div id="create" fxFlex fxFlexOffset="50px" *ngIf="displayCreate()">
+    <form [formGroup]="dialogGroup">
+      <br>
+      <div id="headerText">Create Record</div>
+      <br>
+      <label>
+        Name:
+        <br>
+        <input type="text" formControlName="dialogControl1">
+      </label>
+      <br>
+      <label>
+        Category:
+        <br>
+        <input type="text" formControlName="dialogControl2">
+      </label>
+      <br>
+      <label>
+        Telephone:
+        <br>
+        <input type="text" formControlName="dialogControl3">
+      </label>
+      <br>
+      <label>
+        Email:
+        <br>
+        <input type="text" formControlName="dialogControl4">
+      </label>
+      <br>
+      <label>
+        Website:
+        <br>
+        <input type="text" formControlName="dialogControl5">
+      </label>
+      <br>
+      <label>
+        Contact:
+        <br>
+        <input type="text" formControlName="dialogControl6">
+      </label>
+      <br>
+      <label>
+        Address:
+        <br>
+        <input type="text" formControlName="dialogControl7">
+      </label>
+      <br>
+      <label>
+        Town/City:
+        <br>
+        <input type="text" formControlName="dialogControl8">
+      </label>
+      <br>
+      <label>
+        County:
+        <br>
+        <input type="text" formControlName="dialogControl9">
+      </label>
+      <br>
+      <label>
+        Country:
+        <br>
+        <input type="text" formControlName="dialogControl10">
+      </label>
+      <br>
+      <label>
+        Postcode:
+        <br>
+        <input type="text" formControlName="dialogControl11">
+      </label>
+
+      <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">X</span>
+      </button>
+      <br><br>
+
+      <md-button class="md-raised md-primary" style="margin-right: 5%">SUBMIT</md-button>
+    </form>
+  </div>
+
+</div>
+
+<div id="load" fxFlex="15%" *ngIf="displayLoad()">
+  <h2>'Create' is on.</h2>
+</div>
+<!--
+<div id="update" *ngIf="displayUpdate()">
+
+</div>
+
+<div id="delete" *ngIf="displayDelete()">
+
+</div>
+-->

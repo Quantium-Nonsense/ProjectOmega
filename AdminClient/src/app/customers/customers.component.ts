@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit, Output} from '@angular/core';
 import { Customer } from '../customer';
-import { Observable, of} from 'rxjs';
-import { CustomersService} from '../customers.service';
+import { Observable, of } from 'rxjs';
+import { CustomersService } from '../customers.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { delay } from 'rxjs/operators';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material/dialog';
+import { DialogBodyComponent} from './dialog-body/dialog-body.component';
 
 @Component({
   selector: 'app-customers',
@@ -14,8 +16,11 @@ import { delay } from 'rxjs/operators';
 export class CustomersComponent implements OnInit {
 
   customers: Customer[];
+  inputName: string;
+  @Output() data;
 
-  constructor(private customerService: CustomersService) { }
+  constructor(private customerService: CustomersService) {
+  }
 
   ngOnInit(): void {
     this.getData();
@@ -31,4 +36,7 @@ export class CustomersComponent implements OnInit {
       .subscribe();
   }
 
+  private openCreateRecordDialog(): void {
+    this.data = 'create';
+  }
 }
