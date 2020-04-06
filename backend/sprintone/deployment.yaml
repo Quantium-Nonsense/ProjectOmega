@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: demo4
+  name: demo4
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: demo4
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: demo4
+    spec:
+      containers:
+      - image: omegacontainerregister.azurecr.io/trial5:test1
+        name: test5
+        resources: {}
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: demo4
+  name: demo4
+spec:
+  ports:
+  - name: 5000-5000
+    port: 5001
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: demo4
+  type: ClusterIP
+status:
+  loadBalancer: {}
