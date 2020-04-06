@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: katrial 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: katrial 
+    spec:
+      containers:
+        - name: katrial 
+          image: omegacontainerregister.azurecr.io/katrial
+          ports:
+          - containerPort: 80
