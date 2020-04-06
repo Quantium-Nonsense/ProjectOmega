@@ -16,16 +16,16 @@ public class Industry {
     private Long id;
 
     @NotBlank
-    private String industryName;
+    private String name;
 
     @NotBlank
     private String description;
 
     public Industry(){}
 
-    public Industry(Long id, String industryName, String description) {
+    public Industry(Long id, String name, String description) {
         this.id = id;
-        this.industryName = industryName;
+        this.name = name;
         this.description = description;
     }
 
@@ -38,11 +38,11 @@ public class Industry {
     }
 
     public String getIndustryName() {
-        return industryName;
+        return name;
     }
 
-    public void setIndustryName(String industryName) {
-        this.industryName = industryName;
+    public void setIndustryName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -55,7 +55,7 @@ public class Industry {
 
     public static class IndustryBuilder {
         private Long id;
-        private String industryName;
+        private String name;
         private String description;
 
         public IndustryBuilder setId(Long id) {
@@ -63,8 +63,8 @@ public class Industry {
             return this;
         }
 
-        public IndustryBuilder setIndustryName(String industryName) {
-            this.industryName = industryName;
+        public IndustryBuilder setIndustryName(String name) {
+            this.name = name;
             return this;
         }
 
@@ -74,7 +74,7 @@ public class Industry {
         }
 
         public Industry build() {
-            return new Industry(id, industryName, description);
+            return new Industry(id, name, description);
         }
     }
 }
