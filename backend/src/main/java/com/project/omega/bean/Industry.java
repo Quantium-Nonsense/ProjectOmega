@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Builder
-public class Industry implements Serializable {
+public class Industry {
     @Id
     @GeneratedValue
     private Long id;
