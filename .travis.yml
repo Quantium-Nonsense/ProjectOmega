@@ -1,23 +1,35 @@
 dist: trusty
-sudo: true
-
-language: node_js
-node_js:
-  - "10.13"
+os: linux
 
 addons:
-  chrome:
-    stable
+  chrome: stable
 
 cache:
   directories:
-    - ./node_modules
+    - "./node_modules"
+    - "$HOME/.npm"
+    - ".jest"
+    - "$HOME/.m2"
+jobs:
+  include:
+    - name: Admin Client Frontend Tests
+      language: node_js
+      node_js:
+        - "12.16"
+      before_install: cd AdminClient/
+      script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
+      after_success: npx codecov
+    - name: Rep Client Frontend Tests
+      language: node_js
+      node_js:
+        - "12.16"
+      before_install: cd RepClient/
+      script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
+      after_success: npx codecov
+#    - name: Backend Tests
+#      language: java
+#      jdk:
+#        - openjdk8
+#      before_install: cd Backend/
 
-before_install:
-  - cd RepClient/
 
-install:
-  - npm install
-
-script:
-  - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI

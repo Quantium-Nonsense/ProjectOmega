@@ -1,0 +1,19 @@
+'Admin Frontend':
+  - AdminClient/**
+
+Backend:
+  - Backend/**
+
+Database:
+  - Database/**
+
+DevOps:
+  - .eslintrc.js
+  - .gitignore
+  - .stylelintrc.json
+  - .travis.yml
+  - CODEOWNERS
+  - .github/**
+
+'Rep Frontend':
+  - RepClient/**
