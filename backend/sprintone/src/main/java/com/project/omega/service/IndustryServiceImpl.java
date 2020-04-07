@@ -1,6 +1,8 @@
 package com.project.omega.service;
 
 import com.project.omega.bean.Industry;
+import com.project.omega.exceptions.DuplicateIndustryException;
+import com.project.omega.exceptions.IndustryNotFoundException;
 import com.project.omega.exceptions.NoRecordsFoundException;
 
 import com.project.omega.helper.Constant;
@@ -20,18 +22,22 @@ public class IndustryServiceImpl implements IndustryService {
     @Autowired
     IndustryRepository industryRepository;
 
-    public boolean createIndustry (Industry industry)
+    public Industry createIndustry (Industry industry) throws DuplicateIndustryException
     {
         if (industryRepository.existsByIndustryName(industry.getIndustryName()))
         {
-            return false;
+            throw new DuplicateIndustryException(Constant.ERROR_INDUSTRY_EXISTS + industry.getId());
         }
+
         industryRepository.save(industry);
-            return true;
+        return industry;
     }
-    public List<Industry> getAllIndustry()
+    public List<Industry> getAllIndustry() throws NoRecordsFoundException
     {
         List<Industry> industries = (List) industryRepository.findAll();
+        if(industries.isEmpty()) {
+            throw new NoRecordsFoundException(Constant.ERROR_NO_RECORDS);
+        }
         return industries;
     }
     public Industry getIndustryById(Long id) throws NoRecordsFoundException {
@@ -43,28 +49,28 @@ public class IndustryServiceImpl implements IndustryService {
         }
         return industry.get();
     }
-    public boolean deleteIndustryById(Long id)
+    public Industry deleteIndustryById(Long id) throws IndustryNotFoundException
     {
         Optional<Industry> industry = industryRepository.findById(id);
         if(!industry.isPresent())
         {
-            return false;
+            throw new IndustryNotFoundException(Constant.ERROR_INDUSTRY_NOT_FOUND + id);
         }
         industryRepository.deleteById(id);
-            return true;
+        return industry.get();
     }
-    public boolean updateIndustry(Long id, Industry newIndustry)
+    public Industry updateIndustry(Long id, Industry newIndustry) throws Exception
     {
         Optional<Industry> industry = industryRepository.findById(id);
         if(!industry.isPresent())
         {
-            return false;
+            throw new IndustryNotFoundException(Constant.ERROR_INDUSTRY_NOT_FOUND + id);
         }
         if(newIndustry.getIndustryName() != null && newIndustry.getDescription() != null)
         {
             newIndustry.setId(id);
             industryRepository.save(newIndustry);
-            return true;
+            return newIndustry;
         }
         else
             throw new RuntimeException("Null values detected.");
