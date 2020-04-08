@@ -7,7 +7,7 @@
   <div id="create" fxFlex fxFlexOffset="50px" *ngIf="displayCreate()">
     <form [formGroup]="dialogForm">
       <br>
-      <div id="headerText">Create Record</div>
+      <h2>Create Record</h2>
       <br>
       <label>
         Name:
@@ -88,14 +88,14 @@
 
 <div id="load" fxFlex="15%" *ngIf="displayLoad()">
   <br>
-  <div id="headerText">Customers loaded!</div>
+  <h2>Customers loaded!</h2>
   <br>
 </div>
 
 <div id="update" *ngIf="displayUpdate()">
   <form [formGroup]="dialogForm">
     <br>
-    <div id="headerText">Update Record</div>
+    <h2>Update Record</h2>
     <br>
     <label>
       Company Name/ID: (For an ID, please add a '*' character after the numerical ID input like so 'ID*')
@@ -122,10 +122,10 @@
   </form>
 </div>
 
-<div id="delete" *ngIf="displayDelete()">
+<h2 id="delete" *ngIf="displayDelete()">
   <form [formGroup]="dialogForm">
     <br>
-    <div id="headerText">Delete Record</div>
+    <h2>Delete Record</h2>
     <br>
     <label>
       Company Name/ID: (For an ID, please add a '*' character after the numerical ID input like so 'ID*')
