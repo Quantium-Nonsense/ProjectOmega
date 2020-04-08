@@ -1,6 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatError, MatSnackBar } from '@angular/material';
+import { MatError } from '@angular/material/form-field';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
 import { LoadingController, MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
@@ -51,7 +52,9 @@ describe('AuthPage', () => {
         errorMessage: undefined,
         loading: false,
         user: undefined
-      }
+      },
+      company: undefined,
+      home: undefined
     });
     mockStore.refreshState();
     fixture.detectChanges();
@@ -73,7 +76,9 @@ describe('AuthPage', () => {
         errorMessage: 'Some Error message',
         loading: false,
         user: undefined
-      }
+      },
+      company: undefined,
+      home: undefined
     });
 
     mockStore.refreshState();
@@ -104,7 +109,9 @@ describe('AuthPage', () => {
         errorMessage: undefined,
         loading: true,
         user: undefined
-      }
+      },
+      company: undefined,
+      home: undefined
     });
 
     mockStore.refreshState();
