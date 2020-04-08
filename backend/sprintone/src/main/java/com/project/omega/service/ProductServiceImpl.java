@@ -79,11 +79,19 @@ public class ProductServiceImpl implements ProductService{
         return products;
     }
 
+    public List<Product> getProductsByCategory(String category) throws NoRecordsFoundException {
+        List<Product> products = productRepository.findByCategoryContaining(category);
+        if(products.isEmpty()) {
+            throw new NoRecordsFoundException(Constant.ERROR_NO_PRODUCTS);
+        }
+        return products;
+    }
+
     public Product updateProductById(Long id, Product newProduct) throws Exception {
         if(!productRepository.existsById(id)) {
             throw new ProductNotFoundException(Constant.ERROR_PRODUCT_NOT_FOUND + id);
         }
-        if(newProduct.getName() != null && newProduct.getDescription() != null && newProduct.getPrice() >= 0) {
+        if(newProduct.getName() != null && newProduct.getDescription() != null && newProduct.getCategory() != null && newProduct.getPrice() >= 0) {
             newProduct.setId(id);
             productRepository.save(newProduct);
         } else {

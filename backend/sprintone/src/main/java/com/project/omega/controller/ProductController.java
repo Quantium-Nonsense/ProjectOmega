@@ -64,6 +64,12 @@ public class ProductController {
         return new ResponseEntity(products, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/category/{category}")
+    public ResponseEntity getByCategory(@PathVariable(value = "category") String category) throws NoRecordsFoundException {
+        List<Product> products = productService.getProductsByCategory(category);
+        return new ResponseEntity(products), HttpStatus.OK);
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteById(@PathVariable(value = "id") Long id) throws ProductNotFoundException {
         Product products = productService.deleteProductById(id);

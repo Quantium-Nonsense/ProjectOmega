@@ -20,6 +20,9 @@ public class Product implements Serializable {
     @NotBlank
     private String description;
 
+    @NotBlank
+    private String category;
+
     @PositiveOrZero
     private int price;
 
@@ -31,10 +34,11 @@ public class Product implements Serializable {
 
     }
 
-    public Product(Long id, String name, String description, int price, User user) {
+    public Product(Long id, String name, String description, String category, int price, User user) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.category = category;
         this.price = price;
         this.user = user;
     }
@@ -63,6 +67,14 @@ public class Product implements Serializable {
         this.description = description;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public int getPrice() {
         return price;
     }
@@ -84,6 +96,7 @@ public class Product implements Serializable {
         private Long id;
         private String name;
         private String description;
+        private String category;
         private int price;
         private User user;
 
@@ -105,6 +118,11 @@ public class Product implements Serializable {
             return this;
         }
 
+        public Product.ProductBuilder setCategory(String category) {
+            this.category = category;
+            return this;
+        }
+
         public Product.ProductBuilder setPrice(int price) {
             this.price = price;
             return this;
@@ -116,7 +134,7 @@ public class Product implements Serializable {
         }
 
         public Product build() {
-            return new Product(id, name, description, price, user);
+            return new Product(id, name, description, category, price, user);
         }
     }
 }
