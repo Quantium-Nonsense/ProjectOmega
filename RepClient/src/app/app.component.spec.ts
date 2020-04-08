@@ -10,23 +10,26 @@ import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
 
-  let statusBarSpy, splashScreenSpy, platformReadySpy, platformSpy;
+  let statusBarSpy;
+  let splashScreenSpy;
+  let platformReadySpy;
+  let platformSpy;
 
   beforeEach(async(() => {
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
     splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
     platformReadySpy = Promise.resolve();
-    platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
+    platformSpy = jasmine.createSpyObj('Platform', {ready: platformReadySpy});
 
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        { provide: StatusBar, useValue: statusBarSpy },
-        { provide: SplashScreen, useValue: splashScreenSpy },
-        { provide: Platform, useValue: platformSpy }
+        {provide: StatusBar, useValue: statusBarSpy},
+        {provide: SplashScreen, useValue: splashScreenSpy},
+        {provide: Platform, useValue: platformSpy}
       ],
-      imports: [ RouterTestingModule.withRoutes([])]
+      imports: [RouterTestingModule.withRoutes([])]
     }).compileComponents();
   }));
 
