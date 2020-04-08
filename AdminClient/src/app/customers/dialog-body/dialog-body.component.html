@@ -5,7 +5,7 @@
      fxLayoutGap.xs="0">
 
   <div id="create" fxFlex fxFlexOffset="50px" *ngIf="displayCreate()">
-    <form [formGroup]="dialogGroup">
+    <form [formGroup]="dialogForm">
       <br>
       <div id="headerText">Create Record</div>
       <br>
@@ -75,26 +75,70 @@
         <input type="text" formControlName="dialogControl11">
       </label>
 
-      <button type="button" class="close" aria-label="Close">
+      <button (click)="close()" type="button" class="close" aria-label="Close">
         <span aria-hidden="true">X</span>
       </button>
       <br><br>
 
-      <md-button class="md-raised md-primary" style="margin-right: 5%">SUBMIT</md-button>
+      <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
     </form>
   </div>
 
 </div>
 
 <div id="load" fxFlex="15%" *ngIf="displayLoad()">
-  <h2>'Create' is on.</h2>
+  <br>
+  <div id="headerText">Customers loaded!</div>
+  <br>
 </div>
-<!--
-<div id="update" *ngIf="displayUpdate()">
 
+<div id="update" *ngIf="displayUpdate()">
+  <form [formGroup]="dialogForm">
+    <br>
+    <div id="headerText">Update Record</div>
+    <br>
+    <label>
+      Company Name/ID: (For an ID, please add a '*' character after the numerical ID input like so 'ID*')
+      <br>
+      <input type="text" formControlName="dialogControl1">
+    </label>
+    <label>
+      Field to Update:
+      <br>
+      <input type="text" formControlName="dialogControl2">
+    </label>
+    <label>
+      New Entry:
+      <br>
+      <input type="text" formControlName="dialogControl3">
+    </label>
+
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">X</span>
+    </button>
+    <br><br>
+
+    <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
+  </form>
 </div>
 
 <div id="delete" *ngIf="displayDelete()">
+  <form [formGroup]="dialogForm">
+    <br>
+    <div id="headerText">Delete Record</div>
+    <br>
+    <label>
+      Company Name/ID: (For an ID, please add a '*' character after the numerical ID input like so 'ID*')
+      <br>
+      <input type="text" formControlName="dialogControl1">
+    </label>
 
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">X</span>
+    </button>
+    <br><br>
+
+    <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
+  </form>
 </div>
--->
+

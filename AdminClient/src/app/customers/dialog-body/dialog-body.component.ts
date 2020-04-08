@@ -1,5 +1,9 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
+import {Customer} from '../../customer';
+import {CUSTOMERS} from "../../mock-customers";
+import {CustomersService} from '../../customers.service';
+import {CustomersComponent} from '../customers.component';
 
 @Component({
   selector: 'app-dialog-body',
@@ -8,8 +12,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 })
 export class DialogBodyComponent implements OnInit {
 
-  dialogSelected: string;
-  dialogGroup = new FormGroup({
+  dialogForm = new FormGroup({
     dialogControl1: new FormControl(''),
     dialogControl2: new FormControl(''),
     dialogControl3: new FormControl(''),
@@ -23,24 +26,21 @@ export class DialogBodyComponent implements OnInit {
     dialogControl11: new FormControl('')
   });
 
-  @Input() data;
+  @Input() data; // dialog selected
 
-  constructor() {
-    console.log('Default dialog selected: ' + this.dialogSelected);
+  constructor(private customerService: CustomersService) {
+
   }
 
   ngOnInit() {
   }
 
-  generate() {
-  }
-
-  save() {
-  }
-
+  // Closes the dialog
   close() {
+    this.data = 'none';
   }
 
+  // Check dialog that is displayed with data string (load, create etc.)
   displayLoad(): boolean {
     return this.data === 'load';
   }
@@ -55,5 +55,46 @@ export class DialogBodyComponent implements OnInit {
 
   displayDelete(): boolean {
     return this.data === 'delete';
+  }
+
+  // Post-submission button event
+  submit() {
+    if (this.dialogForm.valid) {
+    console.log('Form Submitted!');
+    console.warn(this.dialogForm.value);
+
+      if (this.data === 'create') { // create customer
+        console.log('Checkpoint 1');
+        const customer: Customer =
+          {
+            id: this.customerService.newID(),
+            name: this.dialogForm.get('dialogControl1').value.toString(),
+            category: this.dialogForm.get('dialogControl2').value.toString(),
+            telephone: this.dialogForm.get('dialogControl3').value,
+            email: this.dialogForm.get('dialogControl4').value.toString(),
+            website: this.dialogForm.get('dialogControl5').value.toString(),
+            contact: this.dialogForm.get('dialogControl6').value.toString(),
+            address: this.dialogForm.get('dialogControl7').value.toString(),
+            townOrCity: this.dialogForm.get('dialogControl8').value.toString(),
+            county: this.dialogForm.get('dialogControl9').value.toString(),
+            country: this.dialogForm.get('dialogControl10').value.toString(),
+            postcode: this.dialogForm.get('dialogControl11').value.toString()
+          };
+        this.customerService.createCustomerRecord(customer)
+          .subscribe();
+      }
+
+      if (this.data === 'update') { // update customer
+        this.customerService.updateCustomerRecord(this.dialogForm.get('dialogControl1').value.toString(),
+          this.dialogForm.get('dialogControl2').value.toString(),
+          this.dialogForm.get('dialogControl3').value.toString())
+          .subscribe();
+      }
+
+      if (this.data === 'delete') { // update customer
+        this.customerService.deleteCustomerRecord(this.dialogForm.get('dialogControl1').value.toString())
+          .subscribe();
+      }
+    }
   }
 }

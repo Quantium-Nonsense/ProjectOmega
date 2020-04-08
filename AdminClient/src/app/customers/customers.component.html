@@ -52,16 +52,16 @@
      fxLayoutGap.xs="0">
 
     <div id="buttonLoad">
-      <md-button class="md-raised md-primary">LOAD RECORDS</md-button>
+      <md-button (click)="openLoadRecordDialog()" class="md-raised md-primary">LOAD RECORDS</md-button>
     </div>
     <div id="buttonCreate">
       <md-button (click)="openCreateRecordDialog()" class="md-raised md-primary">CREATE RECORD</md-button>
     </div>
     <div id="buttonUpdate">
-      <md-button class="md-raised md-primary">UPDATE RECORD</md-button>
+      <md-button (click)="openUpdateRecordDialog()" class="md-raised md-primary">UPDATE RECORD</md-button>
     </div>
     <div id="buttonDelete">
-    <md-button class="md-raised md-primary">DELETE RECORD</md-button>
+    <md-button (click)="openDeleteRecordDialog()" class="md-raised md-primary">DELETE RECORD</md-button>
     </div>
 
 </div>

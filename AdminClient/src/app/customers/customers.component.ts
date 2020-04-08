@@ -36,7 +36,20 @@ export class CustomersComponent implements OnInit {
       .subscribe();
   }
 
+  private openLoadRecordDialog(): void {
+    this.getData(); // no input dialog here, therefore instant data call (no input needed)
+    this.data = 'load';
+  }
+
   private openCreateRecordDialog(): void {
     this.data = 'create';
+  }
+
+  private openUpdateRecordDialog(): void {
+    this.data = 'update';
+  }
+
+  private openDeleteRecordDialog(): void {
+    this.data = 'delete';
   }
 }

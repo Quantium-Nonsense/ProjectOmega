@@ -28,6 +28,7 @@
     "json-server": "^0.16.1",
     "rxjs": "^6.5.4",
     "tslib": "^1.11.1",
+    "uuid": "^7.0.3",
     "zone.js": "^0.10.2"
   },
   "devDependencies": {
@@ -39,9 +40,9 @@
     "@angular/cli": "^9.0.4",
     "@angular/compiler-cli": "^9.0.4",
     "@angular/language-service": "^9.0.4",
-    "@types/node": "^13.7.7",
     "@types/jasmine": "^3.5.7",
     "@types/jasminewd2": "^2.0.8",
+    "@types/node": "^13.7.7",
     "@typescript-eslint/eslint-plugin": "^2.21.0",
     "@typescript-eslint/eslint-plugin-tslint": "^2.21.0",
     "@typescript-eslint/parser": "^2.21.0",
@@ -63,6 +64,6 @@
     "stylelint-config-standard": "^20.0.0",
     "ts-node": "^8.6.2",
     "tslint": "^6.0.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.7.5"
   }
 }
