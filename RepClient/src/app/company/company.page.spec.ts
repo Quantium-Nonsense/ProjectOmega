@@ -62,7 +62,7 @@ describe('CompanyPage', () => {
     const mockItems: ItemModel[] = [
       new ItemModel('1', 'A', 'Mock item A', 1),
       new ItemModel('2', 'B', 'Mock item B', 2),
-      new ItemModel('3', 'C', 'Mock item C', 3),
+      new ItemModel('3', 'C', 'Mock item C', 3)
     ];
 
     // Mock action firing
@@ -79,7 +79,7 @@ describe('CompanyPage', () => {
     const mockItems: ItemModel[] = [
       new ItemModel('1', 'A', 'Mock item A', 1),
       new ItemModel('2', 'B', 'Mock item B', 2),
-      new ItemModel('3', 'C', 'Mock item C', 3),
+      new ItemModel('3', 'C', 'Mock item C', 3)
     ].reverse();
 
     // Mock action firing
@@ -92,5 +92,3 @@ describe('CompanyPage', () => {
   });
 
 });
-
-
