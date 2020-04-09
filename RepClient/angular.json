@@ -32,6 +32,7 @@
               }
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               {
                 "input": "src/theme/variables.scss"
               },
@@ -98,7 +99,9 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
-            "styles": [],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+            ],
             "scripts": [],
             "assets": [
               {
@@ -121,14 +124,16 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
               "e2e/tsconfig.json"
             ],
-            "exclude": ["**/node_modules/**"]
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "e2e": {
@@ -174,7 +179,8 @@
     }
   },
   "cli": {
-    "defaultCollection": "@ionic/angular-toolkit"
+    "defaultCollection": "@ionic/angular-toolkit",
+    "analytics": "807fdd1e-0495-45f6-8e42-ca801b5047f6"
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

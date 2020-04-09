@@ -1,0 +1,51 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-title>
+			Log in
+		</ion-title>
+	</ion-toolbar>
+</ion-header>
+<form
+	class="max-height"
+	[formGroup]="authForm">
+	<ion-grid class="max-height">
+		<ion-row class="set-height-3"></ion-row>
+		<ion-row class="ion-justify-content-center ion-align-items-center">
+			<ion-col size="12">
+				<mat-form-field class="max-width" appearance="outline">
+					<mat-label>Email</mat-label>
+					<input
+						id="formEmailInput"
+						autocomplete="email"
+						matInput
+						placeholder="example@email.com"
+						formControlName="email"
+					/>
+					<mat-error *ngIf="emailHasError">{{emailErrorMessage}}</mat-error>
+				</mat-form-field>
+			</ion-col>
+			<ion-col size="12">
+				<mat-form-field class="max-width" appearance="outline">
+					<mat-label>Password</mat-label>
+					<input
+						id="formPasswordInput"
+						matInput
+						placeholder="password"
+						autocomplete="password"
+						formControlName="password"
+					>
+					<mat-error *ngIf="passwordHasError">{{passwordErrorMessage}}</mat-error>
+					<mat-icon matSuffix>visibility</mat-icon>
+				</mat-form-field>
+			</ion-col>
+			<ion-row class="ion-justify-content-center ion-align-items-center">
+				<ion-col size="6">
+					<button (click)="onSubmit()" [disabled]="!isFormValid()" mat-raised-button>Log in</button>
+				</ion-col>
+			</ion-row>
+		</ion-row>
+	</ion-grid>
+</form>
+
+
+
