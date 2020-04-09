@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import exp = require('constants');
 import { Observable, of } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 import { SortOptions } from '../shared/model/sort-options';
@@ -13,7 +14,6 @@ import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
 import { CompanyEffects } from './store/company.effects';
 import * as fromCompany from './store/company.reducer';
-import exp = require('constants');
 
 const createMockItems = (): ItemModel[] => [
   new ItemModel('1', 'A', 'Mock item A', 1),
