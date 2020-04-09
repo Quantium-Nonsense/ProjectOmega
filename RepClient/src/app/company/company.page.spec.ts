@@ -13,6 +13,13 @@ import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
 import { CompanyEffects } from './store/company.effects';
 import * as fromCompany from './store/company.reducer';
+import exp = require('constants');
+
+const createMockItems = (): ItemModel[] => [
+  new ItemModel('1', 'A', 'Mock item A', 1),
+  new ItemModel('2', 'B', 'Mock item B', 2),
+  new ItemModel('3', 'C', 'Mock item C', 3)
+];
 
 describe('CompanyPage', () => {
   let component: CompanyPage;
@@ -59,11 +66,7 @@ describe('CompanyPage', () => {
 
   it('should sort by descending order ( done by store effect )', () => {
     // Create mock items
-    const mockItems: ItemModel[] = [
-      new ItemModel('1', 'A', 'Mock item A', 1),
-      new ItemModel('2', 'B', 'Mock item B', 2),
-      new ItemModel('3', 'C', 'Mock item C', 3)
-    ];
+    const mockItems = createMockItems();
 
     // Mock action firing
     actions$ = of(CompanyActions.sortItems({items: mockItems, by: SortOptions.DESCENDING}));
@@ -76,11 +79,7 @@ describe('CompanyPage', () => {
 
   it('should sort by ascending order ( done by store effect )', () => {
     // Create mock items
-    const mockItems: ItemModel[] = [
-      new ItemModel('1', 'A', 'Mock item A', 1),
-      new ItemModel('2', 'B', 'Mock item B', 2),
-      new ItemModel('3', 'C', 'Mock item C', 3)
-    ].reverse();
+    const mockItems: ItemModel[] = createMockItems().reverse();
 
     // Mock action firing
     actions$ = of(CompanyActions.sortItems({items: mockItems, by: SortOptions.ASCENDING}));
@@ -91,4 +90,29 @@ describe('CompanyPage', () => {
     });
   });
 
+  it('should ensure search bar works', () => {
+    component.items = createMockItems();
+    component.itemLookup('A');
+    expect(component.items.length).toEqual(1);
+    expect(component.items[0].description).toEqual('Mock item A');
+  });
+
+  it('should check if inserting random characters breaks search', () => {
+    component.items = createMockItems();
+    component.itemLookup('£%$£%$£%^%$%34234324');
+    // check no items
+    expect(component.items.length).toBeFalsy();
+    // reset items
+    component.items = createMockItems();
+    component.itemLookup('~ASDAS¬¬¬ASDASD%$^%$');
+    // Check no items
+    expect(component.items.length).toBeFalsy();
+
+    // check if search function is broken
+    // Reset items
+    component.items = createMockItems();
+    component.itemLookup('B');
+    expect(component.items.length).toEqual(1);
+    expect(component.items[0].description).toEqual('Mock item B');
+  });
 });
