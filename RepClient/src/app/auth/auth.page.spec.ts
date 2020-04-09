@@ -1,12 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatError } from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
 import { LoadingController, MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { AppState } from '../reducers';
+import { mockEmptyState } from '../shared/test/empty-store-state.model';
 import { TestModule } from '../shared/test/test.module';
 import { AuthPage } from './auth.page';
 
@@ -47,15 +47,7 @@ describe('AuthPage', () => {
     fixture = TestBed.createComponent(AuthPage);
     component = fixture.componentInstance;
     mockStore = TestBed.get(Store);
-    mockStore.setState({
-      auth: {
-        errorMessage: undefined,
-        loading: false,
-        user: undefined
-      },
-      company: undefined,
-      home: undefined
-    });
+    mockStore.setState(mockEmptyState);
     mockStore.refreshState();
     fixture.detectChanges();
 
