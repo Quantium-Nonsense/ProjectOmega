@@ -64,12 +64,19 @@ export class CompanyPage implements OnInit {
     this.subscription.unsubscribe();
   }
 
+  /**
+   * Fires a sortItems action via the store and triggers the store to sort the items by sortBy
+   * @param sortBy How to sort the list
+   */
   sortBy(sortBy: SortOptions): void {
     this.store.dispatch(CompanyActions.sortItems({by: sortBy, items: this.items}));
   }
 
   /**
    * Checks if any items description or name contains the values used in search bar
+   * Simply visual without updating app State so this is not done via store effects
+   * This allows to avoid an extra http call to get the items from the backend again,
+   * instead using the value already stored in the app state
    * @param value The values to search for in the items
    */
   itemLookup(value: string): void {
