@@ -73,7 +73,7 @@ export class CompanyEffects {
         (Math.random() * 153000).toFixed(0),
         `Magic Item ${getRandomLetter()}${getRandomLetter()}${getRandomLetter()} ${i} `,
         `You are now looking at this fantastic piece of magic item ${i}`,
-        i * Math.exp(i))
+        +(i * Math.exp(i)).toString().substr(0, 2))
       );
     }
 
