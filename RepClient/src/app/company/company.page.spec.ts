@@ -2,9 +2,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
 import { SortOptions } from '../shared/model/sort-options';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
@@ -13,7 +14,7 @@ import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
 import { CompanyEffects } from './store/company.effects';
 import * as fromCompany from './store/company.reducer';
-import exp = require('constants');
+import * as fromApp from './../reducers/index';
 
 const createMockItems = (): ItemModel[] => [
   new ItemModel('1', 'A', 'Mock item A', 1),
@@ -25,7 +26,7 @@ describe('CompanyPage', () => {
   let component: CompanyPage;
   let fixture: ComponentFixture<CompanyPage>;
   let actions$: Observable<Action>;
-  let mockStore: MockStore;
+  let mockStore: MockStore<fromApp.AppState>;
   let effects: CompanyEffects;
   let testScheduler: TestScheduler;
 
@@ -114,5 +115,32 @@ describe('CompanyPage', () => {
     component.itemLookup('B');
     expect(component.items.length).toEqual(1);
     expect(component.items[0].description).toEqual('Mock item B');
+  });
+
+  it('should reset items based on store state', () => {
+    const mockItems = createMockItems();
+
+    // Set items in state
+    mockStore.setState({
+      ...mockEmptyState,
+      company: {
+        company: undefined,
+        companyItems: mockItems,
+        errorMessage: undefined,
+        loading: false
+      }
+    });
+
+    // Refresh state
+    mockStore.refreshState();
+
+    component.items = [];
+    fixture.detectChanges();
+    // This should set iitems in component to reflect state
+    component.cancelLookup();
+    fixture.detectChanges();
+    mockStore.select('company')
+      .pipe(take(1))
+      .subscribe((state: fromCompany.State) => expect(state.companyItems).toBe(mockItems));
   });
 });
