@@ -75,21 +75,22 @@ $margins: mt, mr, ml, mb;
   @each $padding in $paddings {
     .w#{$i}#{$padding}#{$i} {
       @extend .#{$padding}#{$i};
-      @extend .w#{$i}
+      @extend .w#{$i};
     }
     .h#{$i}#{$padding}#{$i} {
       @extend .#{$padding}#{$i};
-      @extend .h#{$i}
+      @extend .h#{$i};
     }
   }
+
   @each $margin in $margins {
     .w#{$i}#{$margin}#{$i} {
       @extend .#{$margin}#{$i};
-      @extend .w#{$i}
+      @extend .w#{$i};
     }
     .h#{$i}#{$margin}#{$i} {
       @extend .#{$margin}#{$i};
-      @extend .h#{$i}
+      @extend .h#{$i};
     }
   }
 }

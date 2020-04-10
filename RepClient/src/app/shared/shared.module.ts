@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ListLoaderComponent } from './component/list-loader/list-loader.component';
 
