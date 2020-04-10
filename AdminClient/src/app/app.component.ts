@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss', './styles/styles.scss']
 })
 export class AppComponent {
-title = 'OmegaSys';
+  sideNavOpen = false;
+  title = 'OmegaSys';
 }
