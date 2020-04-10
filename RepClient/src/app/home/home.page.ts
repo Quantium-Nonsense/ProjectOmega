@@ -29,11 +29,13 @@ export class HomePage {
       })
     );
 
-    this.store.dispatch(HomeActions.beginLoadingDashboard());
+    if (!this.companies) {
+      this.store.dispatch(HomeActions.beginLoadingDashboard());
+    }
   }
 
   loadCompaniesItems(name: string): void {
-    this.store.dispatch(HomeActions.dashboardCleanUp());
+    // this.store.dispatch(HomeActions.dashboardCleanUp());
     this.store.dispatch(CompanyActions.companySelected({selectedCompany: name}));
   }
 }

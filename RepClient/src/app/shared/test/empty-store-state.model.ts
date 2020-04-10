@@ -11,6 +11,7 @@ export const mockEmptyState: fromApp.AppState = {
     user: undefined
   },
   company: {
+    showCompaniesBottomSheet: false,
     company: undefined,
     companyItems: undefined,
     errorMessage: undefined,

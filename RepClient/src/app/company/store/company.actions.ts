@@ -26,3 +26,8 @@ export const updateItems = createAction(
   '[Company - Effects] Items updated',
   props<{ items: ItemModel[] }>()
 );
+
+export const triggerCompaniesBottomSheet = createAction(
+  '[Company - Page - UI] User clicked on fab button',
+  props<{ display: boolean }>()
+);

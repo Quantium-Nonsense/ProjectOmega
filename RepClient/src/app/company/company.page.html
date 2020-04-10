@@ -53,7 +53,7 @@
 		</app-list-loader>
 	</ng-template>
 	<!--Fab button to trigger bottom sheet-->
-	<ion-fab class="mrb2" vertical="bottom" horizontal="end" slot="fixed">
+	<ion-fab (click)="changeCompanyButtonClick()" class="mrb2" vertical="bottom" horizontal="end" slot="fixed">
 		<ion-fab-button>
 			<ion-icon name="arrow-up-circle"></ion-icon>
 		</ion-fab-button>

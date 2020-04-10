@@ -7,13 +7,15 @@ export interface State {
   errorMessage: string;
   loading: boolean;
   companyItems: ItemModel[];
+  showCompaniesBottomSheet: boolean;
 }
 
 const initialState: State = {
   company: undefined,
   companyItems: undefined,
   errorMessage: undefined,
-  loading: false
+  loading: false,
+  showCompaniesBottomSheet: false
 };
 
 const _companyReducer = createReducer(
@@ -37,6 +39,10 @@ const _companyReducer = createReducer(
   on(CompanyActions.updateItems, (prevState, {items}) => ({
     ...prevState,
     companyItems: items
+  })),
+  on(CompanyActions.triggerCompaniesBottomSheet, (prevState, {display}) => ({
+    ...prevState,
+    showCompaniesBottomSheet: display
   }))
 );
 
