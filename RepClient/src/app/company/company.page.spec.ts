@@ -9,12 +9,12 @@ import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
+import * as fromApp from './../reducers/index';
 import { CompanyPage } from './company.page';
 import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
 import { CompanyEffects } from './store/company.effects';
 import * as fromCompany from './store/company.reducer';
-import * as fromApp from './../reducers/index';
 
 const createMockItems = (): ItemModel[] => [
   new ItemModel('1', 'A', 'Mock item A', 1),
