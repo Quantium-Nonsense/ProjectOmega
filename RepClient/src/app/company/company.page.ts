@@ -34,7 +34,6 @@ export class CompanyPage implements OnInit {
   private subscription: Subscription = new Subscription();
   private isBottomSheetVisible: boolean;
 
-
   constructor(
     private bottomSheet: MatBottomSheet,
     public store: Store<fromApp.AppState>
