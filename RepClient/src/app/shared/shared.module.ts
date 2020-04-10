@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { IonicModule } from '@ionic/angular';
+import { ListDisplayBottomSheetComponent } from './component/list-display-bottom-sheet/list-display-bottom-sheet.component';
 import { ListLoaderComponent } from './component/list-loader/list-loader.component';
 
 @NgModule({
   declarations: [
-    ListLoaderComponent
+    ListLoaderComponent,
+    ListDisplayBottomSheetComponent
   ],
   imports: [
     CommonModule,
@@ -14,12 +16,14 @@ import { ListLoaderComponent } from './component/list-loader/list-loader.compone
     MatBottomSheetModule
   ],
   exports: [
-    ListLoaderComponent,
     CommonModule,
-    IonicModule
+    IonicModule,
+    ListLoaderComponent,
+    ListDisplayBottomSheetComponent,
+    MatBottomSheetModule
   ],
   entryComponents: [
-    ListLoaderComponent
+    ListDisplayBottomSheetComponent
   ]
 })
 export class SharedModule {

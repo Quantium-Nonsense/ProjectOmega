@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { ListDisplayDataModel } from '../shared/component/list-display-bottom-sheet/model/list-display-data.model';
-import { ListLoaderComponent } from '../shared/component/list-loader/list-loader.component';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import * as fromApp from './../reducers/index';
 import { ItemModel } from './model/item.model';
@@ -34,15 +31,13 @@ export class CompanyPage implements OnInit {
   private subscription: Subscription = new Subscription();
   private isBottomSheetVisible: boolean;
 
-
   constructor(
-    private bottomSheet: MatBottomSheet,
     public store: Store<fromApp.AppState>
   ) {
 
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   ionViewWillEnter(): void {
@@ -53,14 +48,18 @@ export class CompanyPage implements OnInit {
       )
       .subscribe(s => {
         this.currentCompany = s.company;
-        this.isBottomSheetVisible = s.showCompaniesBottomSheet;
         this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company}));
       });
+
     this.subscription.add(
       this.state$.subscribe(
         (currentState: fromCompany.State) => {
           this.items = currentState.companyItems;
-          this.shouldBottomSheetShow(currentState.showCompaniesBottomSheet);
+          if (this.currentCompany !== currentState.company) {
+            this.currentCompany = currentState.company;
+            this.store.dispatch(CompanyActions.companyChanged({newCompany: currentState.company}));
+            this.store.dispatch(CompanyActions.loadItemsOfCompany({company: currentState.company}));
+          }
         }
       )
     );
@@ -68,6 +67,7 @@ export class CompanyPage implements OnInit {
 
   ionViewWillLeave(): void {
     this.subscription.unsubscribe();
+    this.store.dispatch(CompanyActions.cleanup());
   }
 
   /**
@@ -107,24 +107,19 @@ export class CompanyPage implements OnInit {
     this.state$.pipe(take(1)).subscribe(state => this.items = state.companyItems);
   }
 
-  changeCompanyButtonClick(): void {
-    this.store.dispatch(CompanyActions.triggerCompaniesBottomSheet({display: !this.isBottomSheetVisible}));
+  quickShowAllCompanies(): void {
+    this.store.select('home').pipe(take(1)).subscribe(lastState => {
+      this.store.dispatch(CompanyActions.showCompaniesBottomSheet({
+        companiesNames: [...lastState.companies.map(c => c.name)]
+      }));
+    });
   }
 
-  private shouldBottomSheetShow(showCompaniesBottomSheet: boolean): void {
-    if (showCompaniesBottomSheet) {
-      this.store.select('home').pipe(take(1)).subscribe(lastState => {
-        this.bottomSheet.open(ListLoaderComponent, {
-          data: {
-            action: (selectedCompany: string) => {
-              this.store.dispatch(CompanyActions.companySelected({selectedCompany}));
-            },
-            listLabels: [
-              ...lastState.companies
-            ]
-          } as ListDisplayDataModel
-        });
-      });
+  itemsExist(): boolean {
+    if (this.items) {
+      return this.items.length > 0;
     }
+
+    return false;
   }
 }

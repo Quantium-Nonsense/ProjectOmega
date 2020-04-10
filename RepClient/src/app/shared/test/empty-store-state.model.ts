@@ -6,12 +6,11 @@ import * as fromApp from './../../reducers/index';
  */
 export const mockEmptyState: fromApp.AppState = {
   auth: {
-    errorMessage: 'Some Error message',
+    errorMessage: undefined,
     loading: false,
     user: undefined
   },
   company: {
-    showCompaniesBottomSheet: false,
     company: undefined,
     companyItems: undefined,
     errorMessage: undefined,

@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-	<div *ngIf="items; else loading">
+	<div *ngIf="itemsExist(); else loading">
 		<ion-list-header>
 			<ion-grid>
 				<ion-row>
@@ -53,7 +53,7 @@
 		</app-list-loader>
 	</ng-template>
 	<!--Fab button to trigger bottom sheet-->
-	<ion-fab (click)="changeCompanyButtonClick()" class="mrb2" vertical="bottom" horizontal="end" slot="fixed">
+	<ion-fab (click)="quickShowAllCompanies()" class="mrb2" vertical="bottom" horizontal="end" slot="fixed">
 		<ion-fab-button>
 			<ion-icon name="arrow-up-circle"></ion-icon>
 		</ion-fab-button>

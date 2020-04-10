@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
@@ -24,7 +25,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [
-    AppComponent
+    AppComponent,
+
   ],
   entryComponents: [],
   imports: [
@@ -43,6 +45,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
         strictStateImmutability: true
       }
     }),
+    MatBottomSheetModule,
     BrowserAnimationsModule,
     EffectsModule.forRoot([
       AuthEffects,

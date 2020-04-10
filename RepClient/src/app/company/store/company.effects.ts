@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { delay, map, switchMap } from 'rxjs/operators';
+import { AppState } from '../../reducers';
+import { ListDisplayBottomSheetComponent } from '../../shared/component/list-display-bottom-sheet/list-display-bottom-sheet.component';
 import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
 import { ItemModel } from '../model/item.model';
 import * as CompanyActions from './company.actions';
@@ -39,6 +42,17 @@ export class CompanyEffects {
     switchMap(action => of(this.loadItems(action.company)).pipe(delay(2000)))
   ));
 
+  /**
+   * Makes the bottom sheep appear so that the user may quickly switch between companies
+   */
+  showCompaniesOnBottomSheet$ = createEffect(() => this.actions$.pipe(
+    ofType(CompanyActions.showCompaniesBottomSheet),
+    map(action => this.toggleBottomSheet(action.companiesNames))
+  ), this.noDispatchConfig);
+
+  /**
+   * Sorts the items in the state
+   */
   sortItems$ = createEffect(() => this.actions$.pipe(
     ofType(CompanyActions.sortItems),
     map(action => this.sortBy(action.by, action.items))
@@ -46,8 +60,10 @@ export class CompanyEffects {
   );
 
   constructor(
+    private bottomSheet: MatBottomSheet,
     private actions$: Actions,
-    private router: Router) {
+    private router: Router,
+    private store: Store<AppState>) {
   }
 
   /**
@@ -95,4 +111,18 @@ export class CompanyEffects {
 
     return CompanyActions.updateItems({items: sortedItems});
   };
+
+  private toggleBottomSheet(companiesNames: any): void {
+    this.bottomSheet.open(ListDisplayBottomSheetComponent, {
+      data: {
+        action: (selectedCompany: string) => {
+          this.bottomSheet.dismiss();
+          this.store.dispatch(CompanyActions.companySelected({selectedCompany}));
+        },
+        listLabels: [
+          ...companiesNames
+        ]
+      }
+    });
+  }
 }

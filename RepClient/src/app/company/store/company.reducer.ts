@@ -7,15 +7,13 @@ export interface State {
   errorMessage: string;
   loading: boolean;
   companyItems: ItemModel[];
-  showCompaniesBottomSheet: boolean;
 }
 
 const initialState: State = {
   company: undefined,
   companyItems: undefined,
   errorMessage: undefined,
-  loading: false,
-  showCompaniesBottomSheet: false
+  loading: false
 };
 
 const _companyReducer = createReducer(
@@ -40,9 +38,13 @@ const _companyReducer = createReducer(
     ...prevState,
     companyItems: items
   })),
-  on(CompanyActions.triggerCompaniesBottomSheet, (prevState, {display}) => ({
+  on(CompanyActions.companyChanged, (prevState, {newCompany}) => ({
     ...prevState,
-    showCompaniesBottomSheet: display
+    company: newCompany,
+    companyItems: undefined
+  })),
+  on(CompanyActions.cleanup, prevState => ({
+    ...initialState
   }))
 );
 

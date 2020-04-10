@@ -9,8 +9,10 @@ import { ListDisplayDataModel } from './model/list-display-data.model';
 })
 export class ListDisplayBottomSheetComponent implements OnInit {
 
-  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: ListDisplayDataModel) { }
+  constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: ListDisplayDataModel) {
+  }
 
-  ngOnInit() {}
+  ngOnInit(): void {
+  }
 
 }
