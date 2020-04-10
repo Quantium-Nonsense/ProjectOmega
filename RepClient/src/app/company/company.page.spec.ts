@@ -7,7 +7,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
-import { SortOptions } from '../shared/model/sort-options';
+import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
 import { CompanyPage } from './company.page';
 import { ItemModel } from './model/item.model';
@@ -70,7 +70,7 @@ describe('CompanyPage', () => {
     const mockItems = createMockItems();
 
     // Mock action firing
-    actions$ = of(CompanyActions.sortItems({items: mockItems, by: SortOptions.DESCENDING}));
+    actions$ = of(CompanyActions.sortItems({items: mockItems, by: SortOptionsEnum.DESCENDING}));
 
     // Check if stream outputs correct next action with sorted items
     effects.sortItems$.subscribe(action => {
@@ -83,7 +83,7 @@ describe('CompanyPage', () => {
     const mockItems: ItemModel[] = createMockItems().reverse();
 
     // Mock action firing
-    actions$ = of(CompanyActions.sortItems({items: mockItems, by: SortOptions.ASCENDING}));
+    actions$ = of(CompanyActions.sortItems({items: mockItems, by: SortOptionsEnum.ASCENDING}));
 
     // Check if stream outputs correct next action with sorted items
     effects.sortItems$.subscribe(action => {

@@ -4,7 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { of } from 'rxjs';
 import { delay, map, switchMap } from 'rxjs/operators';
-import { SortOptions } from '../../shared/model/sort-options';
+import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
 import { ItemModel } from '../model/item.model';
 import * as CompanyActions from './company.actions';
 
@@ -85,11 +85,11 @@ export class CompanyEffects {
    * @param by How to sort items
    * @param items The items to sort
    */
-  private sortBy = (by: SortOptions, items: ItemModel[]): Action => {
+  private sortBy = (by: SortOptionsEnum, items: ItemModel[]): Action => {
     const sortedItems = [...items].sort((itemA, itemB) => itemA.name.localeCompare(itemB.name));
 
     // If items should be in descending order reverse the list
-    if (by === SortOptions.DESCENDING) {
+    if (by === SortOptionsEnum.DESCENDING) {
       sortedItems.reverse();
     }
 

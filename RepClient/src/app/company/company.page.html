@@ -49,17 +49,8 @@
 
 	</div>
 	<ng-template #loading>
-		<ion-list>
-			<ion-item *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]">
-				<ion-card style="width: 100%">
-					<ion-card-header>
-					</ion-card-header>
-					<ion-card-content>
-						<ion-spinner name="dots"></ion-spinner>
-					</ion-card-content>
-				</ion-card>
-			</ion-item>
-		</ion-list>
+		<app-list-loader>
 
+		</app-list-loader>
 	</ng-template>
 </ion-content>

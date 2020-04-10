@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { SortOptions } from '../shared/model/sort-options';
+import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import * as fromApp from './../reducers/index';
 import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
@@ -15,18 +15,13 @@ import * as fromCompany from './store/company.reducer';
 })
 export class CompanyPage implements OnInit {
 
-  readonly ASCENDING: SortOptions = SortOptions.ASCENDING;
-  readonly DESCENDING: SortOptions = SortOptions.DESCENDING;
+  readonly ASCENDING: SortOptionsEnum = SortOptionsEnum.ASCENDING;
+  readonly DESCENDING: SortOptionsEnum = SortOptionsEnum.DESCENDING;
 
   /**
    * Holds all items of said company
    */
   items: ItemModel[] = [];
-  /**
-   * List of 10 items for loading indicator
-   * Just needs a set length
-   */
-  dummyItems = [];
   /**
    * Company name to display at top of nav bar
    */
@@ -37,9 +32,7 @@ export class CompanyPage implements OnInit {
   constructor(
     public store: Store<fromApp.AppState>
   ) {
-    for (let i = 0; i < 10; i++) {
-      this.dummyItems.push(i);
-    }
+
   }
 
   ngOnInit() {
@@ -68,7 +61,7 @@ export class CompanyPage implements OnInit {
    * Fires a sortItems action via the store and triggers the store to sort the items by sortBy
    * @param sortBy How to sort the list
    */
-  sortBy(sortBy: SortOptions): void {
+  sortBy(sortBy: SortOptionsEnum): void {
     this.store.dispatch(CompanyActions.sortItems({by: sortBy, items: this.items}));
   }
 

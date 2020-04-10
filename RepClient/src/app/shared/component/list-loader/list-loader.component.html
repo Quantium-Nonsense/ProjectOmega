@@ -1,0 +1,15 @@
+<ion-grid>
+	<ion-row id="loadingElements">
+		<ion-col *ngFor="let i of dummyItems" [size]="calculatedCols">
+			<ion-item>
+				<ion-card class="w10pb10">
+					<ion-card-header>
+					</ion-card-header>
+					<ion-card-content>
+						<ion-spinner name="dots"></ion-spinner>
+					</ion-card-content>
+				</ion-card>
+			</ion-item>
+		</ion-col>
+	</ion-row>
+</ion-grid>

@@ -9,12 +9,13 @@ import { CompanyPageRoutingModule } from './company-routing.module';
 import { CompanyPage } from './company.page';
 
 @NgModule({
+  declarations: [CompanyPage],
+  exports: [],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     CompanyPageRoutingModule
-  ],
-  declarations: [CompanyPage]
+  ]
 })
 export class CompanyPageModule {}
