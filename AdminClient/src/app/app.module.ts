@@ -1,8 +1,18 @@
-import { NgModule } from '@angular/core';
+// Modules imported
 import { BrowserModule } from '@angular/platform-browser';
-import { JwtModule } from '@auth0/angular-jwt';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { JwtModule } from '@auth0/angular-jwt';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms'; // <-- NgModel lives here
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { AppRoutingModule } from './app-routing.module';
+
+
+// Components imported
+import { AppComponent } from './app.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { CustomersComponent } from './customers/customers.component';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
@@ -16,11 +26,19 @@ import { AuthEffects } from './auth/store/auth.effects';
 import { appReducer, metaReducers } from './reducers';
 
 @NgModule({
+  declarations: [
+    AppComponent,
+    DashboardComponent,
+    CustomersComponent
+  ],
   bootstrap: [AppComponent],
   declarations: [AppComponent],
   imports: [
-    AppRoutingModule,
     BrowserModule,
+    FormsModule,
+    MatToolbarModule,
+    AppRoutingModule,
+    MatGridListModule,
     BrowserAnimationsModule,
     JwtModule.forRoot({
       config: {
@@ -38,6 +56,7 @@ import { appReducer, metaReducers } from './reducers';
     EffectsModule.forRoot([AuthEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
-  providers: []
+  providers: [],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
