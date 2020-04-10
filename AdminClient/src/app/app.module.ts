@@ -23,7 +23,7 @@ import { CustomersComponent } from './customers/customers.component';
     FormsModule,
     MatToolbarModule,
     AppRoutingModule,
-    MatGridListModule
+    MatGridListModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
