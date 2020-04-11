@@ -13,16 +13,16 @@ $extend-breakpoint: true;
   }
 
   // 100% wide container at all breakpoints
-  .container-fluid {
+  %container-fluid {
     @include make-container();
+  }
+
+  .container-fluid {
+    @extend %container-fluid;
   }
 
   // Responsive containers that are 100% wide until a breakpoint
   @each $breakpoint, $container-max-width in $container-max-widths {
-    .container-#{$breakpoint} {
-      @extend .container-fluid;
-    }
-
     @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
       %responsive-container-#{$breakpoint} {
         max-width: $container-max-width;
@@ -40,6 +40,10 @@ $extend-breakpoint: true;
           }
         }
       }
+    }
+
+    .container-#{$breakpoint} {
+      @extend %container-fluid;
     }
   }
 }
