@@ -18,3 +18,9 @@ body {
   font-size: 8pt;
   margin: 8px;
 }
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing.dark-backdrop {
+  background: #000;
+  opacity: 0.75 !important;
+}
+

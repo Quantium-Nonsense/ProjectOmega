@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/guads/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CustomersComponent } from './customers/customers.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full'}, // default path
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'customers', component: CustomersComponent},
-  { path: 'auth', component: AuthComponent},
+  {path: '', redirectTo: '/dashboard', pathMatch: 'full'}, // default path
+  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: 'customers', component: CustomersComponent, canActivate: [AuthGuard]},
+  {path: 'auth', component: AuthComponent},
   // Add additional routes here as needed
 ];
 
@@ -16,4 +17,5 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
