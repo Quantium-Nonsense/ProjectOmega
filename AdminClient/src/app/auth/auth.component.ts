@@ -10,10 +10,10 @@ import { AuthState } from './store/auth.reducer';
 
 @Component({
   selector: 'app-auth',
-  styleUrls: ['./auth.page.scss'],
-  templateUrl: './auth.page.html'
+  styleUrls: ['./auth.component.scss'],
+  templateUrl: './auth.component.html'
 })
-export class AuthPage implements OnInit, OnDestroy {
+export class AuthComponent implements OnInit, OnDestroy {
 
   /**
    * The authentication form
@@ -75,6 +75,7 @@ export class AuthPage implements OnInit, OnDestroy {
 
   /**
    * Check if email is in the correct format
+   * @returns true if the email is invalid, false if it is valid
    */
   get emailHasError(): boolean {
     return this.authForm.get('email').invalid;
@@ -99,7 +100,7 @@ export class AuthPage implements OnInit, OnDestroy {
   }
 
   /**
-   * Returns appropriate error message for email validation
+   * @returns string with the appropriate error message for email validation
    */
   get emailErrorMessage(): string {
     const emailCtrl = this.authForm.get('email');

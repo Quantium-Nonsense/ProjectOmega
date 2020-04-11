@@ -5,12 +5,12 @@ import { By } from '@angular/platform-browser';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { AppState } from '../reducers';
 import { TestModule } from '../shared/test/test.module';
-import { AuthPage } from './auth.page';
+import { AuthComponent } from './auth.component';
 
 
 describe('AuthPage', () => {
-  let component: AuthPage;
-  let fixture: ComponentFixture<AuthPage>;
+  let component: AuthComponent;
+  let fixture: ComponentFixture<AuthComponent>;
   let mockStore: MockStore<AppState>;
 
   // Mocked services for auth page
@@ -21,10 +21,10 @@ describe('AuthPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AuthPage],
+      declarations: [AuthComponent],
       imports: [TestModule],
       providers: [
-        AuthPage,
+        AuthComponent,
         provideMockStore({
           initialState: {
             auth: {
@@ -39,7 +39,7 @@ describe('AuthPage', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AuthPage);
+    fixture = TestBed.createComponent(AuthComponent);
     component = fixture.componentInstance;
     mockStore = TestBed.inject(MockStore);
     mockStore.refreshState();

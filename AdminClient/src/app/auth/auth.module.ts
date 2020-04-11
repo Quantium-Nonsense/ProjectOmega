@@ -12,10 +12,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuthPageRoutingModule } from './auth-routing.module';
 
-import { AuthPage } from './auth.page';
+import { AuthComponent } from './auth.component';
 
 @NgModule({
-  declarations: [AuthPage],
+  declarations: [AuthComponent],
   imports: [
     CommonModule,
     FlexLayoutModule,

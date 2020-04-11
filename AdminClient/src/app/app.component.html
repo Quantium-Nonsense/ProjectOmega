@@ -1,9 +1,21 @@
-<!--Main Page toolbar-->
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span id="title">{{title}}</span>
-  </mat-toolbar-row>
-</mat-toolbar>
-<div class="container mt-4">
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container>
+  <mat-sidenav
+    [(opened)]="sideNavOpen"
+    mode="over">
+    <span>Some content</span>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <!--Main Page toolbar-->
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <button (click)="sideNavOpen = !sideNavOpen" mat-button>
+          <mat-icon>menu</mat-icon>
+        </button>
+        <span id="title">{{title}}</span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="container mt-4">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
