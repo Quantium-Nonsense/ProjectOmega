@@ -34,5 +34,5 @@ import { AuthComponent } from './auth.component';
     MatProgressSpinner,
   ]
 })
-export class AuthPageModule {
+export class AuthModule {
 }

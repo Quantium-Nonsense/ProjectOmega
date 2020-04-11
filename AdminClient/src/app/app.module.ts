@@ -9,19 +9,22 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 
 // Components imported
 import { AppComponent } from './app.component';
+import { AuthModule } from './auth/auth.module';
 import { CustomersComponent } from './customers/customers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { getToken } from '../../../RepClient/src/app/app.module';
 
 import { AuthEffects } from './auth/store/auth.effects';
 import { appReducer, metaReducers } from './reducers';
+
+export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
 @NgModule({
   declarations: [
@@ -31,30 +34,29 @@ import { appReducer, metaReducers } from './reducers';
   ],
   bootstrap: [AppComponent],
   imports: [
-    BrowserModule,
-    FormsModule,
-    MatToolbarModule,
     AppRoutingModule,
-    MatGridListModule,
+    AuthModule,
+    BrowserModule,
     BrowserAnimationsModule,
+    EffectsModule.forRoot([AuthEffects]),
+    FormsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: getToken
       }
     }),
+    MatToolbarModule,
+    MatButtonModule,
+    MatGridListModule,
+    MatIconModule,
+    MatSidenavModule,
     StoreModule.forRoot(appReducer, {
       metaReducers,
       runtimeChecks: {
         strictActionImmutability: true,
         strictStateImmutability: true
       }
-    }),
-    BrowserAnimationsModule,
-    EffectsModule.forRoot([AuthEffects]),
-    MatSidenavModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatIconModule
+    })
   ],
   providers: [],
 })

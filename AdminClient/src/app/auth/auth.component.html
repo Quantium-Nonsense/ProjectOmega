@@ -38,11 +38,9 @@
             {{passwordErrorMessage}}
           </mat-error>
         </mat-form-field>
-        <div fxLayout="row" fxLayoutAlign="center">
-          <div fxLayout="column" gdColumns="6">
-            <button (click)="onSubmit()" [disabled]="!isFormValid()" mat-raised-button>Log in</button>
-          </div>
-        </div>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <button (click)="onSubmit()" [disabled]="!isFormValid()" mat-raised-button class="w-100"><mat-icon class="mr-2">lock_open</mat-icon> Log in</button>
       </div>
     </form>
   </div>
