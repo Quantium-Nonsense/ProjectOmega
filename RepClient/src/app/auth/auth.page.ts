@@ -94,6 +94,7 @@ export class AuthPage implements OnInit {
       : passwordCtrl.hasError('minlength')
         ? 'Password should be at least 7 characters long!'
         : '';
+
   }
 
   protected isFormValid(): boolean {
