@@ -1,17 +1,19 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { User } from '../../models/auth/user.model';
-import * as AuthActions from '../store/auth.actions';
+import * as AuthActions from './auth.actions';
 
 export interface AuthState {
   user: User;
   errorMessage: string;
   loading: boolean;
+  returnUrl: string;
 }
 
 const initialState: AuthState = {
   errorMessage: undefined,
   loading: false,
-  user: undefined
+  user: undefined,
+  returnUrl: ''
 };
 
 const _authReducer = createReducer(
@@ -19,13 +21,18 @@ const _authReducer = createReducer(
   on(AuthActions.loginRejected, (prevState, {errorMessage}) => ({
       ...prevState,
       errorMessage,
-      loading: false
+      loading: false,
+      returnUrl: ''
     })
   ),
   on(AuthActions.loginAttempt, prevState => ({
     ...prevState,
     errorMessage: undefined,
     loading: true
+  })),
+  on(AuthActions.loginInitiated, (prevState, {returnUrl}) => ({
+    ...prevState,
+    returnUrl,
   }))
 );
 

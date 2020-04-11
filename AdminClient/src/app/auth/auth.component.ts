@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from '../reducers';
@@ -25,8 +26,15 @@ export class AuthComponent implements OnInit, OnDestroy {
    */
   private subscriptions = new Subscription();
 
+  /**
+   * The url to go to once a login is successful
+   */
+  private returnUrl: string;
+
   constructor(
     public loadingSpinnerService: LoadingSpinnerService,
+    private route: ActivatedRoute,
+    private router: Router,
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
   ) {
@@ -48,6 +56,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // Clean up all subs to avoid memory leak
     this.subscriptions.unsubscribe();
+    // this.loadingSpinnerService.spin$.next(false);
   }
 
   /**
@@ -92,7 +101,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     return passwordCtrl.hasError('required')
       ? 'Password is required!'
       : passwordCtrl.hasError('minlength')
-        ? 'Password should be at least 7 characters long!'
+        ? 'Password should be at least 7 characters long'
         : '';
 
   }

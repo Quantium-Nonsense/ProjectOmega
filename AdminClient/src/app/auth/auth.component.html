@@ -19,7 +19,7 @@
             placeholder="email@example.com"
             formControlName="email"
           />
-          <mat-error *ngIf="emailHasError">{{emailErrorMessage}}</mat-error>
+          <mat-error #emailError *ngIf="emailHasError">{{emailErrorMessage}}</mat-error>
         </mat-form-field>
       </div>
       <div fxLayout="row">
@@ -35,13 +35,13 @@
             formControlName="password"
             type="password"
           />
-          <mat-error *ngIf="passwordHasError">
+          <mat-error #passwordError *ngIf="passwordHasError">
             {{passwordErrorMessage}}
           </mat-error>
         </mat-form-field>
       </div>
       <div fxLayout="row" fxLayoutAlign="center">
-        <button (click)="onSubmit()" [disabled]="!isFormValid()" mat-raised-button class="w-100" color="primary"><mat-icon class="mr-2">lock_open</mat-icon> Log in</button>
+        <button #loginButton (click)="onSubmit()" [disabled]="!isFormValid()" mat-raised-button class="w-100" color="primary"><mat-icon class="mr-2">lock_open</mat-icon> Log in</button>
       </div>
     </form>
   </div>
