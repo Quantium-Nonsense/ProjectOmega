@@ -24,55 +24,35 @@ export class CustomersService {
 
   createCustomerRecord(customer: Customer): Observable<any> {
     CUSTOMERS.push(customer);
-    console.log('service check');
     console.log(CUSTOMERS[CUSTOMERS.length - 1])
     return of(CUSTOMERS[CUSTOMERS.length - 1]);
   }
 
   updateCustomerRecord(idOrName: any, column: string, newEntry: string): Observable<any> {
     let i = 0;
-    if (idOrName.endsWith('*')) { // if *, search by id
-      while (i < CUSTOMERS.length) { // scan customer records
-        if (idOrName === CUSTOMERS[i].id && CUSTOMERS[i].hasOwnProperty(column)) { // check if the id exists + column is correct
-          console.log('Property: ' + column + ' exists!')
-          CUSTOMERS[i][column] = newEntry; // select record by array position then change property base on column
-          return of(CUSTOMERS[i]); // observable return here
-        }
-        i++;
+    while (i < CUSTOMERS.length) { // scan customer records
+      if (idOrName === CUSTOMERS[i].id && CUSTOMERS[i].hasOwnProperty(column)) { // check if the id exists + column is correct
+        CUSTOMERS[i][column] = newEntry; // select record by array position then change property base on column
+        return of(CUSTOMERS[i]); // observable return here
       }
-      return null;
-    }
-    else {
-      while (i < CUSTOMERS.length) { // scan customer records
-        if (idOrName === CUSTOMERS[i].name && CUSTOMERS[i].hasOwnProperty(column)) { // check if the name exists + column is correct
-          console.log('Property: ' + column + ' exists!')
-          CUSTOMERS[i][column] = newEntry; // select record by array position then change property base on column
-          return of(CUSTOMERS[i]); // observable return here
-        }
-        i++;
+      else if (idOrName === CUSTOMERS[i].name && CUSTOMERS[i].hasOwnProperty(column)) {
+        CUSTOMERS[i][column] = newEntry;
+        return of(CUSTOMERS[i]);
       }
-      return null;
+      i++;
     }
+    console.log('Error, entry not found.');
   }
 
   deleteCustomerRecord(idOrName: any): Observable<any> {
-    if (idOrName.endsWith('*')) { // if *, search by id
-      const idTransformed = idOrName.replace('*',''); // remove * from string
-      for (let cust of CUSTOMERS) { // scan customer records
-        if (idTransformed === CUSTOMERS[CUSTOMERS.indexOf(cust)].id) { // check if the id exists
-          return of(CUSTOMERS.splice(CUSTOMERS.indexOf(cust), 1)); // delete entry, observable return
-        }
+    for (const cust of CUSTOMERS) { // scan customer records
+      if (idOrName === CUSTOMERS[CUSTOMERS.indexOf(cust)].id) { // check if the id exists
+        return of(CUSTOMERS.splice(CUSTOMERS.indexOf(cust), 1)); // delete entry, observable return
       }
-      return null;
-    }
-    else {
-      for (let cust of CUSTOMERS) { // scan customer records
-        if (idOrName === CUSTOMERS[CUSTOMERS.indexOf(cust)].name) { // check if the name exists
-          CUSTOMERS.splice(CUSTOMERS.indexOf(cust), 1); // delete entry
-          return of(CUSTOMERS[CUSTOMERS.indexOf(cust)]); // observable return here
-        }
+      else if (idOrName === CUSTOMERS[CUSTOMERS.indexOf(cust)].name) {
+        return of(CUSTOMERS.splice(CUSTOMERS.indexOf(cust), 1));
       }
-      return null;
     }
+    console.log('Error, entry not found.');
   }
 }
