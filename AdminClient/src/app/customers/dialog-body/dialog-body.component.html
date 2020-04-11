@@ -1,144 +1,306 @@
-<div class="container" fxLayout
-     fxLayout.xs="column"
-     fxLayoutAlign="none"
-     fxLayoutGap="10px"
-     fxLayoutGap.xs="0">
+<div id="create" *ngIf="displayCreate()">
+  <div class="container"
+       fxLayout="row"
+       fxLayout.xs="row"
+       fxLayoutAlign="stretch"
+       fxLayoutGap="0"
+       fxLayoutGap.xs="0">
+    <div id="createRecord">
+      <h2>
+        Create Record
+      </h2>
+    </div>
 
-  <div id="create" fxFlex fxFlexOffset="50px" *ngIf="displayCreate()">
-    <form [formGroup]="dialogForm">
-      <br>
-      <h2>Create Record</h2>
-      <br>
-      <label>
-        Name:
-        <br>
-        <input type="text" formControlName="dialogControl1">
-      </label>
-      <br>
-      <label>
-        Category:
-        <br>
-        <input type="text" formControlName="dialogControl2">
-      </label>
-      <br>
-      <label>
-        Telephone:
-        <br>
-        <input type="text" formControlName="dialogControl3">
-      </label>
-      <br>
-      <label>
-        Email:
-        <br>
-        <input type="text" formControlName="dialogControl4">
-      </label>
-      <br>
-      <label>
-        Website:
-        <br>
-        <input type="text" formControlName="dialogControl5">
-      </label>
-      <br>
-      <label>
-        Contact:
-        <br>
-        <input type="text" formControlName="dialogControl6">
-      </label>
-      <br>
-      <label>
-        Address:
-        <br>
-        <input type="text" formControlName="dialogControl7">
-      </label>
-      <br>
-      <label>
-        Town/City:
-        <br>
-        <input type="text" formControlName="dialogControl8">
-      </label>
-      <br>
-      <label>
-        County:
-        <br>
-        <input type="text" formControlName="dialogControl9">
-      </label>
-      <br>
-      <label>
-        Country:
-        <br>
-        <input type="text" formControlName="dialogControl10">
-      </label>
-      <br>
-      <label>
-        Postcode:
-        <br>
-        <input type="text" formControlName="dialogControl11">
-      </label>
-
-      <button (click)="close()" type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">X</span>
-      </button>
-      <br><br>
-
-      <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
-    </form>
   </div>
 
+  <form [formGroup]="dialogForm">
+
+    <div class="container"
+           fxLayout="row"
+           fxLayout.xs="row"
+           fxLayoutAlign="stretch"
+           fxLayoutGap="2%"
+           fxLayoutGap.xs="2%">
+
+      <div id="name" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Name
+          </mat-label>
+          <input matInput placeholder="E.g. Bang Pharmaceuticals" type="text" formControlName="dialogControl1">
+        </mat-form-field>
+      </div>
+
+
+      <div id="category" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Category
+          </mat-label>
+          <input matInput placeholder=" E.g. Business, Individual..." type="text" formControlName="dialogControl2">
+        </mat-form-field>
+      </div>
+
+
+      <div id="telephone" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Telephone
+          </mat-label>
+          <input matInput placeholder="E.g. 07942946132, +44683..." type="text" formControlName="dialogControl3">
+        </mat-form-field>
+      </div>
+
+      <div id="email" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Email Address
+          </mat-label>
+          <input matInput placeholder="E.g. example@address.com" type="text" formControlName="dialogControl4">
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="container"
+         fxLayout="row"
+         fxLayout.xs="row"
+         fxLayoutAlign="stretch"
+         fxLayoutGap="2%"
+         fxLayoutGap.xs="2%">
+
+      <div id="website" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Website
+          </mat-label>
+          <input matInput placeholder="E.g. www.bangpharmaceuticals.com" type="text" formControlName="dialogControl5">
+        </mat-form-field>
+      </div>
+
+      <div id="contact" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Contact Full Name
+          </mat-label>
+          <input matInput placeholder="E.g. Andrew Richardson" type="text" formControlName="dialogControl6">
+        </mat-form-field>
+      </div>
+
+
+      <div id="address" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Address Line
+          </mat-label>
+          <input matInput placeholder="E.g. 14 St. Thomas Street" type="text" formControlName="dialogControl7">
+        </mat-form-field>
+      </div>
+
+      <div id="townOrCity" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Town/City
+          </mat-label>
+          <input matInput placeholder="E.g. London" type="text" formControlName="dialogControl8">
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="container"
+         fxLayout="row"
+         fxLayout.xs="row"
+         fxLayoutAlign="stretch"
+         fxLayoutGap="2%"
+         fxLayoutGap.xs="2%">
+
+      <div id="county" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            County
+          </mat-label>
+          <input matInput placeholder="E.g. Greater London" type="text" formControlName="dialogControl9">
+        </mat-form-field>
+      </div>
+
+      <div id="country" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Country
+          </mat-label>
+          <input matInput placeholder="E.g. England" type="text" formControlName="dialogControl10">
+        </mat-form-field>
+      </div>
+
+      <div id="postcode" fxFlex="22%">
+        <mat-form-field>
+          <mat-label>
+            Postcode
+          </mat-label>
+          <input matInput placeholder="E.g. NW2 5TG" type="text" formControlName="dialogControl11">
+        </mat-form-field>
+      </div>
+
+    </div>
+
+    <div class="container"
+         fxLayout="column"
+         fxLayout.xs="column"
+         fxLayoutAlign="stretch"
+         fxLayoutGap="1%"
+         fxLayoutGap.xs="1%">
+
+      <div id="closeButton">
+        <button (click)="close()" type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">X</span>
+        </button>
+      </div>
+
+      <div id="submitButton">
+        <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
+      </div>
+
+    </div>
+  </form>
 </div>
 
-<div id="load" fxFlex="15%" *ngIf="displayLoad()">
-  <br>
+<div id="load" *ngIf="displayLoad()">
   <h2>Customers loaded!</h2>
-  <br>
 </div>
 
 <div id="update" *ngIf="displayUpdate()">
-  <form [formGroup]="dialogForm">
-    <br>
-    <h2>Update Record</h2>
-    <br>
-    <label>
-      Company Name/ID: (For an ID, please add a '*' character after the numerical ID input like so 'ID*')
-      <br>
-      <input type="text" formControlName="dialogControl1">
-    </label>
-    <label>
-      Field to Update:
-      <br>
-      <input type="text" formControlName="dialogControl2">
-    </label>
-    <label>
-      New Entry:
-      <br>
-      <input type="text" formControlName="dialogControl3">
-    </label>
+    <form [formGroup]="dialogForm">
 
-    <button type="button" class="close" aria-label="Close">
-      <span aria-hidden="true">X</span>
-    </button>
-    <br><br>
+      <div class="container"
+           fxLayout="row"
+           fxLayout.xs="row"
+           fxLayoutAlign="stretch"
+           fxLayoutGap="2%"
+           fxLayoutGap.xs="2%">
 
-    <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
-  </form>
+        <div id="updateRecord">
+          <h2>
+            Update Record
+            <br>
+            (For an ID, please add a '*' character after the numerical ID input like so 'ID*')
+          </h2>
+        </div>
+      </div>
+
+      <div class="container"
+           fxLayout="row"
+           fxLayout.xs="row"
+           fxLayoutAlign="stretch"
+           fxLayoutGap="2%"
+           fxLayoutGap.xs="2%">
+
+        <div id="companyNameOrID">
+          <mat-form-field>
+            <mat-label>
+              Company Name/ID
+            </mat-label>
+            <input matInput placeholder="E.g. Lee's Plumbing" type="text" formControlName="dialogControl1">
+          </mat-form-field>
+        </div>
+
+        <div id="fieldUpdate">
+          <mat-form-field>
+            <mat-label>
+              Field to Update
+            </mat-label>
+            <input matInput placeholder="E.g. Address" type="text" formControlName="dialogControl2">
+          </mat-form-field>
+        </div>
+
+        <div id="fieldNewEntry">
+          <mat-form-field>
+            <mat-label>
+              New Entry
+            </mat-label>
+            <input matInput placeholder="E.g. 23 West Street" type="text" formControlName="dialogControl3">
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="container"
+           fxLayout="column"
+           fxLayout.xs="column"
+           fxLayoutAlign="stretch"
+           fxLayoutGap="1%"
+           fxLayoutGap.xs="1%">
+
+        <div id="closeButtonUpt">
+          <button (click)="close()" type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">X</span>
+          </button>
+        </div>
+
+        <div id="submitButtonUpt">
+          <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
+        </div>
+
+      </div>
+    </form>
 </div>
 
 <div id="delete" *ngIf="displayDelete()">
   <form [formGroup]="dialogForm">
-    <br>
-    <h2>Delete Record</h2>
-    <br>
-    <label>
-      Company Name/ID: (For an ID, please add a '*' character after the numerical ID input like so 'ID*')
-      <br>
-      <input type="text" formControlName="dialogControl1">
-    </label>
+    <div class="container"
+         fxLayout="row"
+         fxLayout.xs="row"
+         fxLayoutAlign="stretch"
+         fxLayoutGap="0"
+         fxLayoutGap.xs="0">
 
-    <button type="button" class="close" aria-label="Close">
-      <span aria-hidden="true">X</span>
-    </button>
-    <br><br>
+      <div id="deleteRecord">
+        <h2>
+          Delete Record
+          <br>
+          (For an ID, please add a '*' character after the numerical ID input like so 'ID*')
+        </h2>
+      </div>
 
-    <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
+    </div>
+
+    <div class="container"
+         fxLayout="row"
+         fxLayout.xs="row"
+         fxLayoutAlign="stretch"
+         fxLayoutGap="0"
+         fxLayoutGap.xs="0">
+
+        <div id="companyNameOrIDDlt">
+          <mat-form-field>
+            <mat-label>
+              Company Name/ID
+            </mat-label>
+            <input matInput placeholder="E.g. Lee's Plumbing" type="text" formControlName="dialogControl1">
+          </mat-form-field>
+        </div>
+
+    </div>
+
+    <div class="container"
+         fxLayout="column"
+         fxLayout.xs="column"
+         fxLayoutAlign="stretch"
+         fxLayoutGap="1%"
+         fxLayoutGap.xs="1%">
+
+      <div id="closeButtonDlt">
+        <button (click)="close()" type="button" class="close" aria-label="Close">
+          <span aria-hidden="true">X</span>
+        </button>
+      </div>
+
+      <div id="submitButtonDlt">
+        <md-button (click)="submit()" type="submit" class="md-raised md-primary">SUBMIT</md-button>
+      </div>
+
+    </div>
+
   </form>
 </div>
 

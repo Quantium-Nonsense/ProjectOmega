@@ -30,6 +30,7 @@ import { DialogBodyComponent } from './customers/dialog-body/dialog-body.compone
     BrowserAnimationsModule,
     FormsModule,
     FlexLayoutModule,
+    MatInputModule,
     MatToolbarModule,
     AppRoutingModule,
     MatGridListModule,
