@@ -21,7 +21,10 @@ export class AuthEffects {
       ofType(AuthActions.loginAttempt),
       withLatestFrom(this.store$),
       switchMap(
-        ([action, storeState] ) => of(this.storeJwt()).pipe(delay(2000), tap(() => this.redirectToPreviousUrl(storeState.returnUrl)))
+        ([action, storeState]) => of(this.storeJwt()).pipe(delay(2000), tap(
+          // @ts-ignore
+          () => this.redirectToPreviousUrl(storeState.auth.returnUrl)) // Strangely, it's storing the state under 'auth'
+        )
       )
     ));
 

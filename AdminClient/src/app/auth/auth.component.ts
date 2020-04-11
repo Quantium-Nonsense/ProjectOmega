@@ -53,10 +53,20 @@ export class AuthComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    // Clean up all subs to avoid memory leak
-    this.subscriptions.unsubscribe();
-    // this.loadingSpinnerService.spin$.next(false);
+  /**
+   * Returns appropriate error message for password validation
+   *
+   * @returns The error message should the password have an error, empty string otherwise
+   */
+  protected get passwordErrorMessage(): string {
+    const passwordCtrl = this.authForm.get('password');
+
+    return passwordCtrl.hasError('required')
+      ? 'Password is required!'
+      : passwordCtrl.hasError('minlength')
+        ? 'Password should be at least 7 characters long!'
+        : '';
+
   }
 
   /**
@@ -90,20 +100,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     return this.authForm.get('email').invalid;
   }
 
-  /**
-   * Returns appropriate error message for password validation
-   *
-   * @returns The error message should the password have an error, empty string otherwise
-   */
-  protected get passwordErrorMessage(): string {
-    const passwordCtrl = this.authForm.get('password');
-
-    return passwordCtrl.hasError('required')
-      ? 'Password is required!'
-      : passwordCtrl.hasError('minlength')
-        ? 'Password should be at least 7 characters long'
-        : '';
-
+  ngOnDestroy(): void {
+    // Clean up all subs to avoid memory leak
+    this.subscriptions.unsubscribe();
+    this.loadingSpinnerService.spin$.next(false);
   }
 
   protected isFormValid(): boolean {
