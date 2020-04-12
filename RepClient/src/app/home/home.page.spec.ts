@@ -6,6 +6,8 @@ import { Action, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { take } from 'rxjs/operators';
 import { CompanyModel } from '../models/home/company.model';
+import { ListLoaderComponent } from '../shared/component/list-loader/list-loader.component';
+import { SharedModule } from '../shared/shared.module';
 import * as fromApp from './../reducers/index';
 import { HomePage } from './home.page';
 import * as HomeActions from './store/home.actions';
@@ -20,6 +22,7 @@ describe('HomePage', () => {
     TestBed.configureTestingModule({
       declarations: [HomePage],
       imports: [
+        SharedModule,
         IonicModule.forRoot()
       ],
       providers: [
@@ -58,6 +61,7 @@ describe('HomePage', () => {
     // Initialize component
     component.ionViewWillEnter();
     fixture.detectChanges(); // Check for changes
+
     // Ensure loading elements exist
     const loadingBuffer = fixture.debugElement.query(By.css('#loadingElements'));
 

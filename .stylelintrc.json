@@ -2,5 +2,8 @@
   "extends": [
     "stylelint-config-standard",
     "stylelint-config-sass-guidelines"
-  ]
+  ],
+  "rules": {
+    "at-extend-no-missing-placeholder": false
+  }
 }
