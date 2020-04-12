@@ -20,7 +20,11 @@ const routes: Routes = [
   {
     loadChildren: () => import('./company/company.module').then(m => m.CompanyPageModule),
     path: 'company'
+  },  {
+    path: 'order',
+    loadChildren: () => import('./order/order.module').then( m => m.OrderPageModule)
   }
+
 
 ];
 
