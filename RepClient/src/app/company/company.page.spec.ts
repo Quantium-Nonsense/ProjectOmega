@@ -36,6 +36,7 @@ const createMockCompanies = (): CompanyModel[] => [
 describe('CompanyPage', () => {
   let component: CompanyPage;
   let fixture: ComponentFixture<CompanyPage>;
+
   let actions$: Observable<Action>;
   let mockStore: MockStore<fromApp.AppState>;
   let effects: CompanyEffects;

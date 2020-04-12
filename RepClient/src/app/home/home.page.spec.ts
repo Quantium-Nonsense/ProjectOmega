@@ -1,22 +1,38 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { IonicModule, IonSpinner } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
+import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { CompanyModel } from '../models/home/company.model';
-import { ListLoaderComponent } from '../shared/component/list-loader/list-loader.component';
 import { SharedModule } from '../shared/shared.module';
 import * as fromApp from './../reducers/index';
 import { HomePage } from './home.page';
 import * as HomeActions from './store/home.actions';
-import * as fromHome from './store/home.reducer';
+import { HomeEffects } from './store/home.effects';
 
 describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
+
   let mockStore: MockStore<fromApp.AppState>;
+  let actions$: Observable<Action>;
+  let effects: HomeEffects;
+  let dummyCompanySpy: jasmine.Spy;
+
+  const mockCompanies = () => {
+    const imageUrl = 'assets/shapes.svg';
+    const companies: CompanyModel[] = [];
+
+    for (let i = 0; i < 4; i++) {
+      companies.push(new CompanyModel(`Company ${i}`, imageUrl, `Some fantastic company called ${i}!`));
+    }
+
+    return companies;
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -26,14 +42,21 @@ describe('HomePage', () => {
         IonicModule.forRoot()
       ],
       providers: [
-        provideMockStore()
+        HomeEffects,
+        provideMockStore(),
+        provideMockActions(() => actions$)
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
 
     fixture = TestBed.createComponent(HomePage);
     component = fixture.componentInstance;
-    mockStore = TestBed.inject(Store) as MockStore<fromApp.AppState>;
+
+    // NgRx related
+    mockStore = TestBed.inject(MockStore) as MockStore<fromApp.AppState>;
+    effects = TestBed.inject(HomeEffects);
+
+
 
     // Set store state
     mockStore.setState({
@@ -50,6 +73,16 @@ describe('HomePage', () => {
     // Force angular to pick up changes
     fixture.detectChanges();
 
+  }));
+
+  it('should begin loading when you hit dashboard', async(() => {
+    spyOn(effects, 'createDummyCompanies').and.returnValue(mockCompanies());
+
+    actions$ = of(HomeActions.beginLoadingDashboard()); // Mock dashboard first action
+    effects.dashboardBeginLoading$.subscribe(action => {
+      expect(action).toEqual(HomeActions.dashboardLoaded({companies: mockCompanies()}));
+      expect(effects.createDummyCompanies).toHaveBeenCalled();
+    });
   }));
 
   it('should create', () => {
@@ -74,14 +107,7 @@ describe('HomePage', () => {
 
   it('should display companies on dashboard', () => {
 
-    // Create dummy companies
-    const imageUrl = 'assets/shapes.svg';
-    const companies: CompanyModel[] = [];
-
-    for (let i = 0; i < 4; i++) {
-      companies.push(new CompanyModel(`Company ${i}`, imageUrl, `Some fantastic company called ${i}!`));
-    }
-
+    const companies = mockCompanies();
     component.ionViewWillEnter();
     // Set state with dummy companies
     mockStore.setState({
@@ -107,6 +133,7 @@ describe('HomePage', () => {
     expect(mainContent).toBeTruthy();
 
   });
+
   it('should update state to clean', () => {
     // Create dummy companies
     const imageUrl = 'assets/shapes.svg';

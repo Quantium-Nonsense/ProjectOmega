@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
@@ -9,8 +8,7 @@ import * as HomeActions from './home.actions';
 
 @Injectable()
 export class HomeEffects {
-  dashboardBeginLoading$ = createEffect(
-    () => this.actions$.pipe(
+  dashboardBeginLoading$ = createEffect(() => this.actions$.pipe(
       ofType(HomeActions.beginLoadingDashboard),
       switchMap(
         action => of(this.getDummyCompanies()).pipe(delay(2000))
@@ -24,9 +22,18 @@ export class HomeEffects {
   }
 
   /**
-   * Create a list of 4 dummy companies for placeholders
+   * Fires the action to indicate dashboard has loaded
    */
-  private getDummyCompanies = (): Action => {
+  getDummyCompanies = (): Action => {
+    const companies = this.createDummyCompanies();
+
+    return HomeActions.dashboardLoaded({companies});
+  };
+
+  /**
+   * Creates 4 dummy companies
+   */
+  createDummyCompanies = (): CompanyModel[] => {
     const imageUrl = 'assets/shapes.svg';
     const companies: CompanyModel[] = [];
 
@@ -34,6 +41,7 @@ export class HomeEffects {
       companies.push(new CompanyModel(`Company ${i}`, imageUrl, `Some fantastic company called ${i}!`));
     }
 
-    return HomeActions.dashboardLoaded({companies});
+    return companies;
   };
+
 }
