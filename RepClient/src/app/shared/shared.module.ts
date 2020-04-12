@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MAT_BOTTOM_SHEET_DATA, MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { IonicModule } from '@ionic/angular';
 import { ListDisplayBottomSheetComponent } from './component/list-display-bottom-sheet/list-display-bottom-sheet.component';
 import { ListLoaderComponent } from './component/list-loader/list-loader.component';
@@ -13,7 +13,7 @@ import { ListLoaderComponent } from './component/list-loader/list-loader.compone
   imports: [
     CommonModule,
     IonicModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
   ],
   exports: [
     CommonModule,
