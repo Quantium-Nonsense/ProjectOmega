@@ -4,6 +4,7 @@
     "stylelint-config-sass-guidelines"
   ],
   "rules": {
+    "value-keyword-case": null,
     "at-extend-no-missing-placeholder": false
   }
 }
