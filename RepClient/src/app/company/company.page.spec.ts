@@ -57,7 +57,7 @@ describe('CompanyPage', () => {
       imports: [
         SharedModule,
         NoopAnimationsModule,
-        IonicModule.forRoot(),
+        IonicModule.forRoot()
       ],
       providers: [
         {provide: Router, useValue: navSpy},
