@@ -3,6 +3,7 @@ import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatBottomSheetHarness } from '@angular/material/bottom-sheet/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -21,6 +22,7 @@ import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
 import { CompanyEffects } from './store/company.effects';
 import * as fromCompany from './store/company.reducer';
+import Jasmine = jasmine.Jasmine;
 
 const createMockItems = (): ItemModel[] => [
   new ItemModel('1', 'A', 'Mock item A', 1),
@@ -45,17 +47,20 @@ describe('CompanyPage', () => {
   let loader: HarnessLoader;
   let documentLoader: HarnessLoader;
 
+  let navSpy: jasmine.SpyObj<Router>;
+
   beforeEach(async(() => {
+    navSpy = jasmine.createSpyObj<Router>(['navigateByUrl']);
+
     TestBed.configureTestingModule({
       declarations: [CompanyPage],
       imports: [
         SharedModule,
         NoopAnimationsModule,
         IonicModule.forRoot(),
-        RouterTestingModule
       ],
       providers: [
-        RouterTestingModule,
+        {provide: Router, useValue: navSpy},
         CompanyEffects,
         provideMockActions(() => actions$),
         provideMockStore({
@@ -101,6 +106,24 @@ describe('CompanyPage', () => {
     await bottomSheet.dismiss(); // Ensure the bottom sheet is dismissed so it wont interfere with other tests;
 
     expect(text.includes('Company 1')).toEqual(true); // Check if part of the dummy text is there
+  });
+
+  it('should update the store with items of new company', async(() => {
+    spyOn(effects, 'createFakeItems').and.callThrough().and.returnValue(createMockItems());
+
+    actions$ = of(CompanyActions.loadItemsOfCompany({company: 'Company 1'}));
+
+    effects.getItemsOfSelectedCompany$.subscribe(action => {
+      expect(action).toEqual(CompanyActions.itemsOfCompanyLoaded({items: createMockItems()}));
+    });
+  }));
+
+  it('should check when a company is selected redirect is triggered', () => {
+    actions$ = of(CompanyActions.companySelected({selectedCompany: 'Company 1'}));
+
+    effects.redirectToCompanyPage$.subscribe(); // trigger has no dispatch
+
+    expect(navSpy.navigateByUrl).toHaveBeenCalled();
   });
 
   it('should create', () => {

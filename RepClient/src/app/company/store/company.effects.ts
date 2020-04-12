@@ -1,3 +1,4 @@
+import { strategy } from '@angular-devkit/core/src/experimental/jobs';
 import { Injectable } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
@@ -34,7 +35,8 @@ export class CompanyEffects {
   /**
    * This should trigger when the items of a selected company should be loaded in the store
    * Triggers when a load items of company action was dispatched in the store
-   * When it finishes loading it fires a new action that informs the store items have been loaded and that it should update the state
+   * When it finishes loading it fires a new action that informs the store items have been loaded
+   * and that it should update the state
    * // todo: It should dispatch further action in case of failure
    */
   getItemsOfSelectedCompany$ = createEffect(() => this.actions$.pipe(
@@ -66,13 +68,7 @@ export class CompanyEffects {
     private store: Store<AppState>) {
   }
 
-  /**
-   * Creates fake items for company for testing purposes and returns action of type itemsOfCompanyLoaded
-   * @param company Name of company
-   * @see CompanyActions
-   */
-  private loadItems = (company: string): Action => {
-    // Fake http request
+  createFakeItems = (): ItemModel[] => {
     const fakeItems: ItemModel[] = [];
 
     /**
@@ -92,6 +88,19 @@ export class CompanyEffects {
         +(i * Math.exp(i)).toString().substr(0, 2))
       );
     }
+
+    return fakeItems;
+  };
+
+  /**
+   * Creates fake items for company for testing purposes and returns action of type itemsOfCompanyLoaded
+   * @param company Name of company
+   * @see CompanyActions
+   */
+  private loadItems = (company: string): Action => {
+    // Fake http request
+
+    const fakeItems = this.createFakeItems();
 
     return CompanyActions.itemsOfCompanyLoaded({items: fakeItems});
   };

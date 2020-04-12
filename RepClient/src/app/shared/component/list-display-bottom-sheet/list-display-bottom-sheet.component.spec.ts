@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { IonicModule } from '@ionic/angular';
 import { SharedModule } from '../../shared.module';
 
