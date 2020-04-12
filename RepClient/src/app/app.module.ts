@@ -25,7 +25,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 @NgModule({
   bootstrap: [AppComponent],
   declarations: [
-    AppComponent,
+    AppComponent
 
   ],
   entryComponents: [],

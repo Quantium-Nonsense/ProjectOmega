@@ -3,7 +3,7 @@ import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
 import { ItemModel } from '../model/item.model';
 
 export const cleanup = createAction(
-  '[Company navigation to any] Leaving Company page',
+  '[Company navigation to any] Leaving Company page'
 );
 
 export const loadItemsOfCompany = createAction(
