@@ -1,0 +1,52 @@
+<div fxLayout="row">
+  <h2>Log in</h2>
+</div>
+<div fxLayout="row" fxLayoutAlign="center">
+  <div fxLayout="column">
+    <form
+      class="max-height"
+      [formGroup]="authForm"
+    >
+      <div fxLayout="row">
+        <mat-form-field
+          class="max-width"
+          appearance="outline"
+        >
+          <input
+            id="formEmailInput"
+            autocomplete="email"
+            matInput
+            placeholder="email@example.com"
+            formControlName="email"
+          />
+          <mat-error *ngIf="emailHasError" id="emailError">{{emailErrorMessage}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row">
+        <mat-form-field
+          class="max-width"
+          appearance="outline"
+        >
+          <input
+            id="formPasswordInput"
+            matInput
+            placeholder="password"
+            autocomplete="password"
+            formControlName="password"
+            type="password"
+          />
+          <mat-error *ngIf="passwordHasError" id="passwordError">
+            {{passwordErrorMessage}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="center">
+        <button (click)="onSubmit()" [disabled]="!isFormValid()" class="w-100" color="primary" id="loginButton"
+                mat-raised-button>
+          <mat-icon class="mr-2">lock_open</mat-icon>
+          Log in
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

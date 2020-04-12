@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from '../reducers';
@@ -10,10 +11,10 @@ import { AuthState } from './store/auth.reducer';
 
 @Component({
   selector: 'app-auth',
-  styleUrls: ['./auth.page.scss'],
-  templateUrl: './auth.page.html'
+  styleUrls: ['./auth.component.scss'],
+  templateUrl: './auth.component.html'
 })
-export class AuthPage implements OnInit, OnDestroy {
+export class AuthComponent implements OnInit, OnDestroy {
 
   /**
    * The authentication form
@@ -25,8 +26,15 @@ export class AuthPage implements OnInit, OnDestroy {
    */
   private subscriptions = new Subscription();
 
+  /**
+   * The url to go to once a login is successful
+   */
+  private returnUrl: string;
+
   constructor(
     public loadingSpinnerService: LoadingSpinnerService,
+    private route: ActivatedRoute,
+    private router: Router,
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
   ) {
@@ -34,7 +42,6 @@ export class AuthPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.authForm = this.formInitialization();
     this.subscriptions.add(
       this.store.select('auth').subscribe((state: AuthState) => {
@@ -46,9 +53,20 @@ export class AuthPage implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    // Clean up all subs to avoid memory leak
-    this.subscriptions.unsubscribe();
+  /**
+   * Returns appropriate error message for password validation
+   *
+   * @returns The error message should the password have an error, empty string otherwise
+   */
+  protected get passwordErrorMessage(): string {
+    const passwordCtrl = this.authForm.get('password');
+
+    return passwordCtrl.hasError('required')
+      ? 'Password is required!'
+      : passwordCtrl.hasError('minlength')
+        ? 'Password should be at least 7 characters long!'
+        : '';
+
   }
 
   /**
@@ -75,23 +93,17 @@ export class AuthPage implements OnInit, OnDestroy {
 
   /**
    * Check if email is in the correct format
+   *
+   * @returns true if the email is invalid, false if it is valid
    */
   get emailHasError(): boolean {
     return this.authForm.get('email').invalid;
   }
 
-  /**
-   * Returns appropriate error message for password validation
-   */
-  protected get passwordErrorMessage(): string {
-    const passwordCtrl = this.authForm.get('password');
-
-    return passwordCtrl.hasError('required')
-      ? 'Password is required!'
-      : passwordCtrl.hasError('minlength')
-        ? 'Password should be at least 7 characters long!'
-        : '';
-
+  ngOnDestroy(): void {
+    // Clean up all subs to avoid memory leak
+    this.subscriptions.unsubscribe();
+    this.loadingSpinnerService.spin$.next(false);
   }
 
   protected isFormValid(): boolean {
@@ -99,7 +111,7 @@ export class AuthPage implements OnInit, OnDestroy {
   }
 
   /**
-   * Returns appropriate error message for email validation
+   * @returns string with the appropriate error message for email validation
    */
   get emailErrorMessage(): string {
     const emailCtrl = this.authForm.get('email');
@@ -113,6 +125,8 @@ export class AuthPage implements OnInit, OnDestroy {
 
   /**
    * Check if password is in correct format
+   *
+   * @returns true if the password is in an invalid format, false otherwise
    */
   get passwordHasError(): boolean {
     return this.authForm.get('password').invalid;
@@ -124,6 +138,8 @@ export class AuthPage implements OnInit, OnDestroy {
    * A big note for this class is that the Form state is not stored in the global store object state
    * The reason behind this is that a form state that has not been submitted is a very localized state and should NOT be shared
    * Between components thus does not belong in the global app store state, rather when a form is submitted then use the app store
+   *
+   * @returns the form with initialized fields
    */
   private formInitialization = (): FormGroup =>
     new FormGroup({
