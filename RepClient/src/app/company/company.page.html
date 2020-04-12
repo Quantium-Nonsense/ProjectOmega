@@ -34,17 +34,33 @@
 			</ion-grid>
 		</ion-list-header>
 		<ion-virtual-scroll [items]="items" approxItemHeight="320px">
-			<ion-item class="ion-margin-bottom" *virtualItem="let item; let itemBounds = bounds;">
-				<ion-thumbnail slot="start">
-					<ion-img [src]="'assets/shapes.svg'"
-					         [alt]="item.name"></ion-img>
-				</ion-thumbnail>
-				<ion-label>
-					<h3>{{ item.name }}</h3>
-					<p>{{ item.description }}</p>
-					<p>{{ item.price | currency: 'GBP':'symbol':'1.2'}}</p>
-				</ion-label>
-			</ion-item>
+			<ion-item-sliding
+				*virtualItem="let item; let itemBounds = bounds;">
+
+				<ion-item-options side="end">
+					<ion-item-option>
+						<ion-icon slot="icon-only" name="add-outline"></ion-icon>
+					</ion-item-option>
+					<ion-item-option>
+						0
+					</ion-item-option>
+					<ion-item-option>
+						<ion-icon slot="icon-only" name="remove-outline"></ion-icon>
+					</ion-item-option>
+				</ion-item-options>
+
+				<ion-item>
+					<ion-thumbnail slot="start">
+						<ion-img [src]="'assets/shapes.svg'"
+						         [alt]="item.name"></ion-img>
+					</ion-thumbnail>
+					<ion-label>
+						<h3>{{ item.name }}</h3>
+						<p>{{ item.description }}</p>
+						<p>{{ item.price | currency: 'GBP':'symbol':'1.2'}}</p>
+					</ion-label>
+				</ion-item>
+			</ion-item-sliding>
 		</ion-virtual-scroll>
 	</div>
 	<ng-template #loading>

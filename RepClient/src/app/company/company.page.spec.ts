@@ -1,13 +1,19 @@
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatBottomSheetHarness } from '@angular/material/bottom-sheet/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
+import { CompanyModel } from '../models/home/company.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
+import { SharedModule } from '../shared/shared.module';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
 import * as fromApp from './../reducers/index';
 import { CompanyPage } from './company.page';
@@ -21,6 +27,11 @@ const createMockItems = (): ItemModel[] => [
   new ItemModel('2', 'B', 'Mock item B', 2),
   new ItemModel('3', 'C', 'Mock item C', 3)
 ];
+const createMockCompanies = (): CompanyModel[] => [
+  new CompanyModel('Company 1', 'A', 'Mock Company A'),
+  new CompanyModel('Company 2', 'B', 'Mock Company B'),
+  new CompanyModel('Company 3', 'C', 'Mock Company C')
+];
 
 describe('CompanyPage', () => {
   let component: CompanyPage;
@@ -30,10 +41,15 @@ describe('CompanyPage', () => {
   let effects: CompanyEffects;
   let testScheduler: TestScheduler;
 
+  let loader: HarnessLoader;
+  let documentLoader: HarnessLoader;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [CompanyPage],
       imports: [
+        SharedModule,
+        NoopAnimationsModule,
         IonicModule.forRoot(),
         RouterTestingModule
       ],
@@ -50,6 +66,9 @@ describe('CompanyPage', () => {
     fixture = TestBed.createComponent(CompanyPage);
     component = fixture.componentInstance;
 
+    loader = TestbedHarnessEnvironment.loader(fixture);
+    documentLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
+
     testScheduler = new TestScheduler(((actual, expected) => {
       expect(actual).toEqual(expected);
     }));
@@ -60,6 +79,28 @@ describe('CompanyPage', () => {
 
     fixture.detectChanges();
   }));
+
+  it('should display bottom sheet', async () => {
+    component.ngOnInit();
+    component.ionViewWillEnter();
+    fixture.detectChanges();
+
+    const mockCompanies = createMockCompanies();
+    actions$ = of(CompanyActions.showCompaniesBottomSheet({companiesNames: [...mockCompanies.map(c => c.name)]}));
+
+    effects.showCompaniesOnBottomSheet$.subscribe(); // Trigger effect
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const bottomSheet = await documentLoader.getHarness(MatBottomSheetHarness); // Get the bottom sheet component
+    const bottomSheetHost = await bottomSheet.host(); // Get the element
+    const text = await bottomSheetHost.text(); // Get the text of the component
+
+    await bottomSheet.dismiss(); // Ensure the bottom sheet is dismissed so it wont interfere with other tests;
+
+    expect(text.includes('Company 1')).toEqual(true); // Check if part of the dummy text is there
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
