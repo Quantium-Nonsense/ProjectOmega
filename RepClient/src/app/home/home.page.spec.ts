@@ -56,8 +56,6 @@ describe('HomePage', () => {
     mockStore = TestBed.inject(MockStore) as MockStore<fromApp.AppState>;
     effects = TestBed.inject(HomeEffects);
 
-
-
     // Set store state
     mockStore.setState({
       auth: undefined,
