@@ -114,6 +114,8 @@ module.exports = {
                 "import/no-deprecated": "warn",
                 "import/order": "off",
                 "jsdoc/no-types": "error",
+                "jsdoc/require-param-type": "off", //conflicts with jsdoc/no-types
+                "jsdoc/require-returns-type": "off", //conflicts with jsdoc/no-types
                 "max-classes-per-file": "off",
                 "max-len": [
                     "error",

@@ -1,5 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 
+export const loginInitiated = createAction(
+  '[Authentication - Guard] Guard began authentication protocol',
+  props<{ returnUrl: string }>()
+);
+
 export const loginRejected = createAction(
   '[Authentication - Guard] Guard rejected redirect',
   props<{ errorMessage: string }>()
@@ -11,5 +16,5 @@ export const loginAttempt = createAction(
 );
 
 export const loginSuccessful = createAction(
-  '[Authentication - Page] Successful Authentication'
+  '[Authentication - Page] Successful Authentication',
 );

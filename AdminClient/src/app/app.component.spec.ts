@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'Admin Client'`, () => {
+  it('should have as title "OmegaSys"', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('Admin Client');
+    expect(app.title).toEqual('OmegaSys');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('Admin Client app is running!');
+    expect(compiled.querySelector('#title').textContent).toContain('OmegaSys');
   });
 });
