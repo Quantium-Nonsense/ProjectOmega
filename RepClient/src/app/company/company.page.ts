@@ -76,7 +76,7 @@ export class CompanyPage implements OnInit {
             this.store.dispatch(CompanyActions.loadItemsOfCompany({company: currentState.company}));
           }
         }
-      ),
+      )
     );
   }
 
