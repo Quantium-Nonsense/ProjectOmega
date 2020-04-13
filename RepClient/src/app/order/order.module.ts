@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
+import { SharedModule } from '../shared/shared.module';
 
 import { OrderPageRoutingModule } from './order-routing.module';
 
@@ -13,7 +14,8 @@ import { OrderPage } from './order.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    OrderPageRoutingModule
+    OrderPageRoutingModule,
+    SharedModule
   ],
   declarations: [OrderPage]
 })

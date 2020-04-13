@@ -3,9 +3,9 @@
 		<ion-buttons slot="start">
 			<ion-menu-button></ion-menu-button>
 		</ion-buttons>
-		<ion-buttons class="w50mr15" slot="end">
+		<ion-buttons class="w2mr2 exclamation-pos" slot="end">
 			<ion-tab-button>
-				<ion-badge color="tertiary">1</ion-badge>
+				<ion-badge *ngIf="displayItemsInBasketIndicator" color="danger">!</ion-badge>
 				<ion-icon name="cart-outline"></ion-icon>
 			</ion-tab-button>
 		</ion-buttons>

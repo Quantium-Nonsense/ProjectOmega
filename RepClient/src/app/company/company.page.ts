@@ -156,4 +156,12 @@ export class CompanyPage implements OnInit {
 
     return 0;
   }
+
+  showItemsInBasket(): boolean {
+    if (this.order) {
+      return this.order.some(i => i.quantity > 0);
+    }
+
+    return false;
+  }
 }
