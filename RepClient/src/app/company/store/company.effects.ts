@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { delay, map, switchMap } from 'rxjs/operators';
-import { AppState } from '../../reducers';
+import { delay, map, switchMap, take } from 'rxjs/operators';
+import { State } from '../../reducers';
 import { ListDisplayBottomSheetComponent } from '../../shared/component/list-display-bottom-sheet/list-display-bottom-sheet.component';
 import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
 import { ItemModel } from '../model/item.model';
@@ -65,7 +65,7 @@ export class CompanyEffects {
     private bottomSheet: MatBottomSheet,
     private actions$: Actions,
     private router: Router,
-    private store: Store<AppState>) {
+    private store: Store<State>) {
   }
 
   createFakeItems = (): ItemModel[] => {
@@ -75,14 +75,15 @@ export class CompanyEffects {
      * Used to check sorting
      */
     const randomLetters = ['A', 'B', 'C', 'D', 'E'];
-
+    let currentCompany: string; // this is necessary to test store functionality
+    this.store.select('company').pipe(take(1)).subscribe(s => currentCompany = s.company);
     // A simple inner function to get a random letter from the array
     const getRandomLetter = () =>
       randomLetters[Math.floor(Math.random() * randomLetters.length)];
 
     for (let i = 0; i < 50; i++) {
       fakeItems.push(new ItemModel(
-        (Math.random() * 153000).toFixed(0),
+        i.toString() + currentCompany,
         `Magic Item ${getRandomLetter()}${getRandomLetter()}${getRandomLetter()} ${i} `,
         `You are now looking at this fantastic piece of magic item ${i}`,
         +(i * Math.exp(i)).toString().substr(0, 2))

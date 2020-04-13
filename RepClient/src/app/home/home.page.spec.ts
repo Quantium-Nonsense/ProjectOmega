@@ -7,7 +7,7 @@ import { Action, Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import { CompanyModel } from '../models/home/company.model';
+import { CompanyModel } from '../shared/model/home/company.model';
 import { SharedModule } from '../shared/shared.module';
 import * as fromApp from './../reducers/index';
 import { HomePage } from './home.page';
@@ -18,7 +18,7 @@ describe('HomePage', () => {
   let component: HomePage;
   let fixture: ComponentFixture<HomePage>;
 
-  let mockStore: MockStore<fromApp.AppState>;
+  let mockStore: MockStore<fromApp.State>;
   let actions$: Observable<Action>;
   let effects: HomeEffects;
   let dummyCompanySpy: jasmine.Spy;
@@ -53,7 +53,7 @@ describe('HomePage', () => {
     component = fixture.componentInstance;
 
     // NgRx related
-    mockStore = TestBed.inject(MockStore) as MockStore<fromApp.AppState>;
+    mockStore = TestBed.inject(MockStore) as MockStore<fromApp.State>;
     effects = TestBed.inject(HomeEffects);
 
     // Set store state

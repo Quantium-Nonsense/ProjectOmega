@@ -1,13 +1,13 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { CompanyModel } from '../../models/home/company.model';
+import { CompanyModel } from '../../shared/model/home/company.model';
 import * as HomeActions from './home.actions';
 
-export interface HomeState {
+export interface State {
   companies: CompanyModel[];
   loading: boolean;
 }
 
-const initialState: HomeState = {
+const initialState: State = {
   companies: undefined,
   loading: false
 };
@@ -29,4 +29,4 @@ const _homeReducer = createReducer(
     loading: false
   })));
 
-export const homeReducer = (state: HomeState | undefined, action: Action): HomeState => _homeReducer(state, action);
+export const homeReducer = (state: State | undefined, action: Action): State => _homeReducer(state, action);

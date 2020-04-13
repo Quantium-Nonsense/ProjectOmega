@@ -38,13 +38,13 @@
 				*virtualItem="let item; let itemBounds = bounds;">
 
 				<ion-item-options side="end">
-					<ion-item-option>
+					<ion-item-option (click)="addItem(item)">
 						<ion-icon slot="icon-only" name="add-outline"></ion-icon>
 					</ion-item-option>
 					<ion-item-option>
 						0
 					</ion-item-option>
-					<ion-item-option>
+					<ion-item-option (click)="removeItem(item)">
 						<ion-icon slot="icon-only" name="remove-outline"></ion-icon>
 					</ion-item-option>
 				</ion-item-options>

@@ -7,6 +7,7 @@ import * as fromApp from './../reducers/index';
 import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
 import * as fromCompany from './store/company.reducer';
+import * as OrderActions from './../order/store/order.actions';
 
 @Component({
   selector: 'app-company',
@@ -32,7 +33,7 @@ export class CompanyPage implements OnInit {
   private isBottomSheetVisible: boolean;
 
   constructor(
-    public store: Store<fromApp.AppState>
+    public store: Store<fromApp.State>
   ) {
 
   }
@@ -121,5 +122,13 @@ export class CompanyPage implements OnInit {
     }
 
     return false;
+  }
+
+  addItem(item: ItemModel): void {
+    this.store.dispatch(OrderActions.addItem({item}));
+  }
+
+  removeItem(item: any): void {
+    throw new Error('Not implemented');
   }
 }

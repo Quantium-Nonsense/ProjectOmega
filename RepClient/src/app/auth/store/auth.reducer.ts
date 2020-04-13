@@ -1,14 +1,14 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { User } from '../../models/auth/user.model';
+import { User } from '../../shared/model/auth/user.model';
 import * as AuthActions from '../store/auth.actions';
 
-export interface AuthState {
+export interface State {
   user: User;
   errorMessage: string;
   loading: boolean;
 }
 
-const initialState: AuthState = {
+const initialState: State = {
   errorMessage: undefined,
   loading: false,
   user: undefined
@@ -29,4 +29,4 @@ const _authReducer = createReducer(
   }))
 );
 
-export const authReducer = (state: AuthState | undefined, action: Action): AuthState => _authReducer(state, action);
+export const authReducer = (state: State | undefined, action: Action): State => _authReducer(state, action);

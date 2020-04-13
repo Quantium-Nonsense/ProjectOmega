@@ -12,7 +12,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
-import { CompanyModel } from '../models/home/company.model';
+import { CompanyModel } from '../shared/model/home/company.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import { SharedModule } from '../shared/shared.module';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
@@ -40,7 +40,7 @@ describe('CompanyPage', () => {
   let fixture: ComponentFixture<CompanyPage>;
 
   let actions$: Observable<Action>;
-  let mockStore: MockStore<fromApp.AppState>;
+  let mockStore: MockStore<fromApp.State>;
   let effects: CompanyEffects;
   let testScheduler: TestScheduler;
 

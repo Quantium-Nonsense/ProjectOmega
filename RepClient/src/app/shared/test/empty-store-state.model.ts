@@ -4,7 +4,7 @@ import * as fromApp from './../../reducers/index';
  * This should only be used for testing purposes
  * Provides an empty state for all parts of the store
  */
-export const mockEmptyState: fromApp.AppState = {
+export const mockEmptyState: fromApp.State = {
   auth: {
     errorMessage: undefined,
     loading: false,
@@ -19,5 +19,8 @@ export const mockEmptyState: fromApp.AppState = {
   home: {
     companies: undefined,
     loading: false
+  },
+  order: {
+    items: undefined
   }
 };

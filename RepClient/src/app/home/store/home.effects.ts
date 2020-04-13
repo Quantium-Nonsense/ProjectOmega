@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { of } from 'rxjs';
 import { delay, switchMap } from 'rxjs/operators';
-import { CompanyModel } from '../../models/home/company.model';
+import { CompanyModel } from '../../shared/model/home/company.model';
 import * as HomeActions from './home.actions';
 
 @Injectable()

@@ -18,6 +18,7 @@ import { AppComponent } from './app.component';
 import { AuthEffects } from './auth/store/auth.effects';
 import { CompanyEffects } from './company/store/company.effects';
 import { HomeEffects } from './home/store/home.effects';
+import { OrderEffects } from './order/store/order.effects';
 import { appReducer, metaReducers } from './reducers';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
@@ -50,7 +51,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     EffectsModule.forRoot([
       AuthEffects,
       HomeEffects,
-      CompanyEffects
+      CompanyEffects,
+      OrderEffects
     ]),
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],

@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { CompanyModel } from '../../models/home/company.model';
+import { CompanyModel } from '../../shared/model/home/company.model';
 
 export const beginLoadingDashboard = createAction(
   '[Home - Page] Loading Dashboard'

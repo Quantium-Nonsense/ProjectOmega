@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 import { LoadingController, MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { AppState } from '../reducers';
+import { State } from '../reducers';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
 import { TestModule } from '../shared/test/test.module';
 import { AuthPage } from './auth.page';
@@ -13,7 +13,7 @@ import { AuthPage } from './auth.page';
 describe('AuthPage', () => {
   let component: AuthPage;
   let fixture: ComponentFixture<AuthPage>;
-  let mockStore: MockStore<AppState>;
+  let mockStore: MockStore<State>;
 
   // Mocked services for auth page
   const mockMenuController = jasmine.createSpyObj<MenuController>(['enable']);
