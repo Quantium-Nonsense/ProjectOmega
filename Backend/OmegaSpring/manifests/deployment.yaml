@@ -1,0 +1,125 @@
+# Create Cluster:
+
+# Requires access to register app on Azure
+# Azure CLI:
+  az aks create --resource-group OmegaApp --name OmegaCluster --node-count 1 --enable-addons monitoring --generate-ssh-keys
+
+  # Configure kubectl to use the credentials for the new AKS cluster:
+  az aks get-credentials --name OmegaCluster --resource-group OmegaApp
+
+  az account set --subscription "SUBSCRIPTION-NAME"
+
+
+
+  "dnsPrefix": "OmegaClust-OmegaApp-ef03e2",
+  "fqdn": "omegaclust-omegaapp-ef03e2-2afe60e4.hcp.eastus.azmk8s.io",
+  "id": "/subscriptions/ef03e228-1cbf-4781-b858-977cc79e1e6e/resourcegroups/OmegaApp/providers/Microsoft.ContainerService/managedClusters/OmegaCluster",
+    "adminUsername": "azureuser",
+  "location": "eastus",
+  "name": "OmegaCluster",
+
+    "dnsServiceIp": "10.0.0.10",
+    "dockerBridgeCidr": "172.17.0.1/16",
+
+    "outboundType": "loadBalancer",
+    "podCidr": "10.244.0.0/16",
+    "serviceCidr": "10.0.0.0/16"
+  },
+  "nodeResourceGroup": "MC_OmegaApp_OmegaCluster_eastus",,
+  "resourceGroup": "OmegaApp",
+  "servicePrincipalProfile": {
+
+
+# Containarize APP:
+# Create Container Registery:
+  az acr create --resource-group  --name Omegacr --sku Basic
+
+
+
+  {
+    "id": "/subscriptions/ef03e228-1cbf-4781-b858-977cc79e1e6e/resourceGroups/OmegaApp/providers/Microsoft.ContainerRegistry/registries/Omegacr",
+    "identity": null,
+    "location": "eastus",
+    "loginServer": "omegacr.azurecr.io",
+    "name": "Omegacr",
+    "networkRuleSet": null,
+    "resourceGroup": "OmegaApp",
+  }
+
+  # Login to Azure with correct dictionairy
+  az login --tenant harryspitsillideshotmail.onmicrosoft.com
+
+  az aks get-credentials --resource-group OmegaApp --name OmegaCluster
+
+
+  # Login to container Registery
+
+  az acr login --name omegacr
+  az acr list --resource-group OmegaApp --query "[].{acrLoginServer:loginServer}" --output table
+
+ # View list of local docker images:
+  Docker images
+
+ # View list of images in Container registery
+
+  az acr repository list --name omegacr --output table
+
+  ####CONTAINARIZATION:
+  #Step[1]
+  mvn clean package
+
+  # Docker Build , Tag, Push
+    docker push omegacr.azurecr.io/docker
+  # Deploy:
+    kubectl apply -f deployment.yaml
+   docker build -t omegacr.azurecr.io/docker .
+  # Pipline:
+
+
+  # Build docker image with maven:
+  mvnw com.google.cloud.tools:jib-maven-plugin:dockerBuild -Dimage=springio/gs-spring-boot-docker
+
+  #Build docker image and Push with maven:
+  mvnw com.google.cloud.tools:jib-maven-plugin:build -Dimage=springio/gs-spring-boot-dockerCOPY
+
+  #Run docker image:
+  docker run -p 8080:8080 -t omegacr.azurecr.io/docker
+
+  # to maintain access to container registery and push images.
+  powershell admin: iex ([System.Text.Encoding]::UTF8.GetString((Invoke-WebRequest -Uri https://aka.ms/acr/installaad/win).Content))
+   az acr login -n omegacr
+  # to build and push docker image with maven to ACR
+  mvn compile jib:build
+
+   # to build image and push to ACR using Azure api:
+  az acr build --registry omegacr --image helloacrtasks:v1 .
+
+  # to delete image from respository:
+  az acr repository delete --name myregistry --image acr-helloworld:latest
+
+  # Kuberenetes
+  kubectl apply -f ../manifests/backend-deployment.yaml
+  kubectl apply -f ../manifests/backend-cluster-ip.yaml
+
+  # integrate AKS with ACR: a Role is added in AAD
+  az aks update -n OmegaCluster -g OmegaApp --attach-acr omegacr
+
+  # ensure you have proper AKS credentials
+  az aks get-credentials -g myResourceGroup -n myAKSCluster
+
+  # Expose to outside world:
+  kubectl expose deployment backend-deployment --type=LoadBalancer --port 8080 --target-port 5000
+
+  # Explore created service
+  kubectl describe services backend-deployment
+  kubectl get pods --output=wide
+
+
+
+  #Load-BalanceR:
+  kubectl expose deployment backend-deployment --type=LoadBalancer --port 8080 --target-port 5000
+
+  #Edit services
+  kubectl edit service/backend-deployment
+
+

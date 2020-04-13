@@ -3,7 +3,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { IonicModule } from '@ionic/angular';
 import { MatModule } from './mat.module';
 
 @NgModule({
@@ -11,7 +10,6 @@ import { MatModule } from './mat.module';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
     ReactiveFormsModule,
     NoopAnimationsModule,
     HttpClientModule,
@@ -20,7 +18,6 @@ import { MatModule } from './mat.module';
   exports: [
     CommonModule,
     FormsModule,
-    IonicModule,
     ReactiveFormsModule,
     NoopAnimationsModule,
     HttpClientModule,
