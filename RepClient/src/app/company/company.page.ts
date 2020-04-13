@@ -129,6 +129,6 @@ export class CompanyPage implements OnInit {
   }
 
   removeItem(item: any): void {
-    throw new Error('Not implemented');
+    this.store.dispatch(OrderActions.removeItem({item}));
   }
 }

@@ -11,3 +11,8 @@ export const updateOrderItems = createAction(
   '[Order Effects] Update the order accordingly',
   props<{ orderItems: OrderItemModel[] }>()
 );
+
+export const removeItem = createAction(
+  '[Company Items / Order - Page] Signal that item is removed',
+  props<{ item: ItemModel }>()
+);

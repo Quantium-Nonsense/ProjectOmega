@@ -15,6 +15,9 @@ const _orderReducer = createReducer(
   on(OrderActions.addItem, prevState => ({
     ...prevState
   })),
+  on(OrderActions.removeItem, prevState => ({
+    ...prevState
+  })),
   on(OrderActions.updateOrderItems, (prevState, {orderItems: updatedOrderItems}) => ({
     items: updatedOrderItems
   }))
