@@ -3,11 +3,11 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
+import * as OrderActions from './../order/store/order.actions';
 import * as fromApp from './../reducers/index';
 import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
 import * as fromCompany from './store/company.reducer';
-import * as OrderActions from './../order/store/order.actions';
 
 @Component({
   selector: 'app-company',
