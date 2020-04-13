@@ -153,6 +153,7 @@ export class CompanyPage implements OnInit {
         return itemInOrder.quantity;
       }
     }
+
     return 0;
   }
 }

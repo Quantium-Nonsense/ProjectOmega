@@ -1,14 +1,6 @@
-<ion-header>
-	<ion-toolbar>
-		<ion-buttons slot="start">
-			<ion-menu-button></ion-menu-button>
-		</ion-buttons>
-		<ion-title>
-			{{ currentCompany }}
-		</ion-title>
-	</ion-toolbar>
-</ion-header>
+<app-header [title]="currentCompany">
 
+</app-header>
 <ion-content>
 	<div *ngIf="itemsExist(); else loading">
 		<ion-list-header>

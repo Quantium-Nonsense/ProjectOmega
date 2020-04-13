@@ -11,7 +11,7 @@ export class HomeEffects {
   dashboardBeginLoading$ = createEffect(() => this.actions$.pipe(
       ofType(HomeActions.beginLoadingDashboard),
       switchMap(
-        action => of(this.getDummyCompanies()).pipe(delay(2000))
+        action => of(this.getDummyCompanies()).pipe(delay(20000000))
       )
     )
   );

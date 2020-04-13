@@ -25,14 +25,16 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
-@for $i from 1 through 10 {
+$maxIteration: 20;
+
+@for $i from 1 through $maxIteration {
 
   .w#{$i} {
-    width: $i * 10%;
+    width: $i * 5%;
   }
 
   .h#{$i} {
-    height: $i * 10%;
+    height: $i * 5%;
   }
 
   .pt#{$i} {
@@ -77,31 +79,33 @@ $margins: mt, mr, ml, mb;
 
 $sides: t, r, l, b; // top, right, left, bottom
 
-@for $i from 1 through 10 {
-  @each $padding in $paddings {
-    .w#{$i}#{$padding}#{$i} {
-      @extend .#{$padding}#{$i};
-      @extend .w#{$i};
+@for $i from 1 through $maxIteration {
+  @for $j from 1 through $maxIteration {
+    @each $padding in $paddings {
+      .w#{$i}#{$padding}#{$j} {
+        @extend .#{$padding}#{$j};
+        @extend .w#{$i};
+      }
+      .h#{$i}#{$padding}#{$i} {
+        @extend .#{$padding}#{$j};
+        @extend .h#{$i};
+      }
     }
-    .h#{$i}#{$padding}#{$i} {
-      @extend .#{$padding}#{$i};
-      @extend .h#{$i};
-    }
-  }
 
-  @each $margin in $margins {
-    .w#{$i}#{$margin}#{$i} {
-      @extend .#{$margin}#{$i};
-      @extend .w#{$i};
-    }
-    .h#{$i}#{$margin}#{$i} {
-      @extend .#{$margin}#{$i};
-      @extend .h#{$i};
+    @each $margin in $margins {
+      .w#{$i}#{$margin}#{$j} {
+        @extend .#{$margin}#{$j};
+        @extend .w#{$i};
+      }
+      .h#{$i}#{$margin}#{$j} {
+        @extend .#{$margin}#{$j};
+        @extend .h#{$i};
+      }
     }
   }
 }
 
-@for $i from 1 through 10 {
+@for $i from 1 through $maxIteration {
   // Combine the margins for two sides per class
   @each $side in $sides {
     @if $side != t {
