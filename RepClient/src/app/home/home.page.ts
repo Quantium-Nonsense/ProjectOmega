@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { CompanyModel } from '../shared/model/home/company.model';
 import { State } from '../reducers';
+import { CompanyModel } from '../shared/model/home/company.model';
 import * as CompanyActions from './../company/store/company.actions';
 import * as HomeActions from './store/home.actions';
 
