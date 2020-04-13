@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import * as _ from 'lodash';
-import { of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { ItemModel } from '../../company/model/item.model';
 import * as fromApp from '../../reducers/index';

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { OrderItemModel } from '../shared/model/order/order-item.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import * as OrderActions from './../order/store/order.actions';
 import * as fromApp from './../reducers/index';
@@ -28,6 +29,11 @@ export class CompanyPage implements OnInit {
    */
   currentCompany = '';
 
+  /**
+   * Hold the orders to display quantity
+   */
+  order: OrderItemModel[] = [];
+
   private state$ = this.store.select('company');
   private subscription: Subscription = new Subscription();
   private isBottomSheetVisible: boolean;
@@ -42,15 +48,23 @@ export class CompanyPage implements OnInit {
   }
 
   ionViewWillEnter(): void {
-    this.store.select('company')
-      .pipe(
-        // Force to run synchronously as company is already loaded from dashboard
-        take(1)
-      )
-      .subscribe(s => {
-        this.currentCompany = s.company;
-        this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company}));
-      });
+    this.subscription.add(
+      this.store.select('company')
+        .pipe(
+          // Force to run synchronously as company is already loaded from dashboard
+          take(1)
+        )
+        .subscribe(s => {
+          this.currentCompany = s.company;
+          this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company}));
+        })
+    );
+
+    this.subscription.add(
+      this.store.select('order').subscribe(orderState => {
+        this.order = orderState.items;
+      })
+    );
 
     this.subscription.add(
       this.state$.subscribe(
@@ -62,7 +76,7 @@ export class CompanyPage implements OnInit {
             this.store.dispatch(CompanyActions.loadItemsOfCompany({company: currentState.company}));
           }
         }
-      )
+      ),
     );
   }
 
@@ -130,5 +144,15 @@ export class CompanyPage implements OnInit {
 
   removeItem(item: any): void {
     this.store.dispatch(OrderActions.removeItem({item}));
+  }
+
+  getOrderQuantityForItem(item: ItemModel): number {
+    if (this.order) {
+      const itemInOrder = this.order.find(i => i.id === item.id);
+      if (itemInOrder) {
+        return itemInOrder.quantity;
+      }
+    }
+    return 0;
   }
 }
