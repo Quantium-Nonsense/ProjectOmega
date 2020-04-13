@@ -76,7 +76,7 @@ export class CompanyPage implements OnInit {
             this.store.dispatch(CompanyActions.loadItemsOfCompany({company: currentState.company}));
           }
         }
-      ),
+      )
     );
   }
 
@@ -153,6 +153,7 @@ export class CompanyPage implements OnInit {
         return itemInOrder.quantity;
       }
     }
+
     return 0;
   }
 }
