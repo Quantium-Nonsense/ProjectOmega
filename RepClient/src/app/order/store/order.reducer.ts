@@ -28,10 +28,13 @@ export const selectItemsByCompany: MemoizedSelector<fromApp.State, ItemsByCompan
   fromHome.selectHome,
   (orderState: State, companyState: fromHome.State) => {
     const itemsByCompany: ItemsByCompanyModel[] = [];
-    const compNames = companyState.companies.map(c => c.name);
+    const compNames = companyState.companies ? companyState.companies.map(c => c.name) : [];
 
     for (const company of compNames) {
-      if (orderState.items.find(i => i.companyId === company)) { // If there are items in order from this company
+      const companyInOrder: OrderItemModel = orderState.items
+        ? orderState.items.find(i => i.companyId === company)
+        : null;
+      if (companyInOrder) { // If there are items in order from this company
         // Get the items to add that belong to current company and exist in order
         const itemsToAdd: OrderItemModel[] = [...orderState.items.filter(item => item.companyId.includes(company))];
         if (itemsByCompany) { // if the object array is not empty
