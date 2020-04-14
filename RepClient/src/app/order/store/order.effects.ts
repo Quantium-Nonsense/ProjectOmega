@@ -1,20 +1,17 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { AlertController, PopoverController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { map, take } from 'rxjs/operators';
-import { ItemModel } from '../../shared/model/company-items/item.model';
 import * as fromApp from '../../reducers/index';
+import { ItemModel } from '../../shared/model/company-items/item.model';
 import { OrderItemModel } from '../../shared/model/order/order-item.model';
 import * as OrderActions from './order.actions';
 import * as fromOrder from './order.reducer';
 
 @Injectable()
 export class OrderEffects {
-
 
   navigateToConfirmationPage$ = createEffect(() => this.actions$.pipe(
     ofType(OrderActions.navigateToConfirmOrder),
