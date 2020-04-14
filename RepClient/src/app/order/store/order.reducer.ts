@@ -1,8 +1,7 @@
-import { newArray } from '@angular/compiler/src/util';
 import { Action, createReducer, createSelector, MemoizedSelector, on } from '@ngrx/store';
 import * as fromHome from '../../home/store/home.reducer';
 import * as fromApp from '../../reducers/index';
-import { ItemModel } from '../../shared/model/company-items/item.model';
+import { ItemsByCompanyModel } from '../../shared/model/order/items-by-company.model';
 import { OrderItemModel } from '../../shared/model/order/order-item.model';
 import * as OrderActions from './order.actions';
 
@@ -24,26 +23,39 @@ export const selectItems = createSelector(
   (state: State) => state.items
 );
 
-export const selectItemsByCompany = createSelector(
+export const selectItemsByCompany: MemoizedSelector<fromApp.State, ItemsByCompanyModel[]> = createSelector(
   selectOrder,
   fromHome.selectHome,
   (orderState: State, companyState: fromHome.State) => {
-    const itemsByCompanyMap: { companyNames: string[], items: [OrderItemModel[]] } = {
-      companyNames: [],
-      items: [[]]
-    };
+    const itemsByCompany: ItemsByCompanyModel[] = [];
     const compNames = companyState.companies.map(c => c.name);
 
     for (const company of compNames) {
-      if (orderState.items.find(i => i.companyId === company)) {
-        itemsByCompanyMap.companyNames.push(company);
-        itemsByCompanyMap.items[itemsByCompanyMap.companyNames.indexOf(company)] = [...orderState.items.filter(i => i.companyId === company)];
+      if (orderState.items.find(i => i.companyId === company)) { // If there are items in order from this company
+        // Get the items to add that belong to current company and exist in order
+        const itemsToAdd: OrderItemModel[] = [...orderState.items.filter(item => item.companyId.includes(company))];
+        if (itemsByCompany) { // if the object array is not empty
+          // find the object that belongs to the company in query
+          const toAdd: ItemsByCompanyModel = itemsByCompany.find(ibc => ibc.companyName.includes(company));
+          if (toAdd) {
+            // Assign items in current order to object
+            toAdd.companyItems = itemsToAdd;
+          } else {
+            // If object group has items but no item matches current company
+            itemsByCompany.push({companyName: company, companyItems: itemsToAdd});
+          }
+        } else {
+          // if object array has no objects in it yet
+          // Add company with items
+          itemsByCompany.push({companyItems: itemsToAdd, companyName: company});
+        }
       }
     }
 
-    return itemsByCompanyMap;
-  }
-);
+    // At the end we return the array of company with associated items in order array
+
+    return itemsByCompany;
+  });
 
 const _orderReducer = createReducer(
   initialState,

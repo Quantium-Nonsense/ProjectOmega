@@ -14,6 +14,7 @@ import { OrderItemModel } from '../../model/order/order-item.model';
 export class AddRemoveItemComponent implements OnInit {
 
   @Input() item: ItemModel;
+  @Input() buttonStyle: 'IONIC_SLIDING' | 'MATERIAL';
 
   order: OrderItemModel[];
 
