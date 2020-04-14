@@ -1,0 +1,11 @@
+<ion-item-options side="end">
+  <ion-item-option (click)="addItem(item)">
+    <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+  </ion-item-option>
+  <ion-item-option>
+    {{getOrderQuantityForItem(item)}}
+  </ion-item-option>
+  <ion-item-option (click)="removeItem(item)">
+    <ion-icon slot="icon-only" name="remove-outline"></ion-icon>
+  </ion-item-option>
+</ion-item-options>

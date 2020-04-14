@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { IonicModule } from '@ionic/angular';
+import { AddRemoveItemComponent } from './component/add-remove-item/add-remove-item.component';
 import { HeaderComponent } from './component/header/header.component';
 import { ListDisplayBottomSheetComponent } from './component/list-display-bottom-sheet/list-display-bottom-sheet.component';
 import { ListLoaderComponent } from './component/list-loader/list-loader.component';
@@ -16,7 +17,8 @@ import { ListLoaderComponent } from './component/list-loader/list-loader.compone
   declarations: [
     ListLoaderComponent,
     ListDisplayBottomSheetComponent,
-    HeaderComponent
+    HeaderComponent,
+    AddRemoveItemComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { ListLoaderComponent } from './component/list-loader/list-loader.compone
     MatButtonModule,
     MatBadgeModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AddRemoveItemComponent
   ],
   entryComponents: [
     ListDisplayBottomSheetComponent

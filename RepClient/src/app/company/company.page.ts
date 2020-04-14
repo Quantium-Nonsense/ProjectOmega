@@ -138,25 +138,6 @@ export class CompanyPage implements OnInit {
     return false;
   }
 
-  addItem(item: ItemModel): void {
-    this.store.dispatch(OrderActions.addItem({item}));
-  }
-
-  removeItem(item: any): void {
-    this.store.dispatch(OrderActions.removeItem({item}));
-  }
-
-  getOrderQuantityForItem(item: ItemModel): number {
-    if (this.order) {
-      const itemInOrder = this.order.find(i => i.id === item.id);
-      if (itemInOrder) {
-        return itemInOrder.quantity;
-      }
-    }
-
-    return 0;
-  }
-
   showItemsInBasket(): boolean {
     if (this.order) {
       return this.order.some(i => i.quantity > 0);

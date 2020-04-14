@@ -1,4 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
+import * as fromApp from '../../reducers/index';
 import { ItemModel } from '../../shared/model/company-items/item.model';
 import * as CompanyActions from './company.actions.js';
 
@@ -15,6 +16,9 @@ const initialState: State = {
   errorMessage: undefined,
   loading: false
 };
+
+export const selectCompany = (state: fromApp.State) => state.company;
+
 
 const _companyReducer = createReducer(
   initialState,
