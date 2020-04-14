@@ -3,7 +3,8 @@ FROM adoptopenjdk/openjdk11:alpine-jre
 #FROM openjdk:8u212-jdk-slim##########
 
 #Author
-MAINTAINER omega.com
+#MAINTAINER
+LABEL maintainer=omega.com
 
 # The application's jar file (when packaged)
 ARG JAR_FILE=target/*.jar
