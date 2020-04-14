@@ -1,0 +1,30 @@
+<div fxLayout="row">
+  <h2>Products</h2>
+</div>
+<div fxLayout="row">
+  <div class="mat-elevation-z8">
+    <table aria-label="Elements" class="full-width-table" mat-table matSort>
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Id</th>
+        <td *matCellDef="let row" mat-cell>{{row.id}}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
+        <td *matCellDef="let row" mat-cell>{{row.name}}</td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+    </table>
+
+    <mat-paginator #paginator
+                   [length]="dataSource?.data.length"
+                   [pageIndex]="0"
+                   [pageSizeOptions]="[25, 50, 100, 250]"
+                   [pageSize]="50">
+    </mat-paginator>
+  </div>
+</div>

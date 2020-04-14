@@ -1,6 +1,3 @@
-// Extend each breakpoint which is smaller or equal to the current breakpoint
-$extend-breakpoint: true;
-
 // Container widths
 //
 // Set the container width, and override it for fixed navbars in media queries.
@@ -27,6 +24,9 @@ $extend-breakpoint: true;
       %responsive-container-#{$breakpoint} {
         max-width: $container-max-width;
       }
+
+      // Extend each breakpoint which is smaller or equal to the current breakpoint
+      $extend-breakpoint: true;
 
       @each $name, $width in $grid-breakpoints {
         @if ($extend-breakpoint) {

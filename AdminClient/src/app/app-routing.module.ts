@@ -10,6 +10,7 @@ export const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'customers', component: CustomersComponent, canActivate: [AuthGuard]},
   {path: 'auth', component: AuthComponent},
+  {path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule)},
   // Add additional routes here as needed
 ];
 
