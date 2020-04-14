@@ -14,7 +14,7 @@ describe('OrderPage', () => {
       declarations: [OrderPage],
       imports: [
         IonicModule.forRoot(),
-        SharedModule,
+        SharedModule
       ],
       providers: [
         provideMockStore()

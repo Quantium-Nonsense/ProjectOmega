@@ -1,9 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { SharedModule } from '../../shared.module';
-import * as fromApp from '../../../reducers/index';
 import * as fromOrder from '../../../order/store/order.reducer';
+import * as fromApp from '../../../reducers/index';
+import { SharedModule } from '../../shared.module';
 
 import { AddRemoveItemComponent } from './add-remove-item.component';
 
