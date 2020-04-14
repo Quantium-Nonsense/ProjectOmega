@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import * as fromApp from './../../../reducers/index';
 import * as OrderActions from './../../../order/store/order.actions';
+import * as fromApp from './../../../reducers/index';
 
 @Component({
   selector: 'app-header',

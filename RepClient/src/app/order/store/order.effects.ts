@@ -5,15 +5,14 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import * as _ from 'lodash';
 import { map, take } from 'rxjs/operators';
-import { ItemModel } from '../../shared/model/company-items/item.model';
 import * as fromApp from '../../reducers/index';
+import { ItemModel } from '../../shared/model/company-items/item.model';
 import { OrderItemModel } from '../../shared/model/order/order-item.model';
 import * as OrderActions from './order.actions';
 import * as fromOrder from './order.reducer';
 
 @Injectable()
 export class OrderEffects {
-
 
   openOrderMenu$ = createEffect(() => this.actions$.pipe(
     ofType(OrderActions.navigateToConfirmOrder),
@@ -36,7 +35,7 @@ export class OrderEffects {
   constructor(
     private actions$: Actions,
     private store: Store<fromApp.State>,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {
   }
 
