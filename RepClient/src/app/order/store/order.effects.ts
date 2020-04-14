@@ -33,7 +33,7 @@ export class OrderEffects {
   constructor(
     private router: Router,
     private actions$: Actions,
-    private store: Store<fromApp.State>,
+    private store: Store<fromApp.State>
   ) {
   }
 
