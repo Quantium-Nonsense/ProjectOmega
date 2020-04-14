@@ -13,7 +13,6 @@ export interface State {
   order: fromOrder.State;
 }
 
-
 export const appReducer: ActionReducerMap<State> = {
   auth: fromAuth.authReducer,
   company: fromCompany.companyReducer,

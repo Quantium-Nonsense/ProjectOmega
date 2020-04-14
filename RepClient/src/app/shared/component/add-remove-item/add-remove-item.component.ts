@@ -2,14 +2,14 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as OrderActions from '../../../order/store/order.actions';
 import { selectItems } from '../../../order/store/order.reducer';
-import { ItemModel } from '../../model/company-items/item.model';
 import * as fromApp from '../../../reducers/index';
+import { ItemModel } from '../../model/company-items/item.model';
 import { OrderItemModel } from '../../model/order/order-item.model';
 
 @Component({
   selector: 'app-add-remove-item',
   templateUrl: './add-remove-item.component.html',
-  styleUrls: ['./add-remove-item.component.scss'],
+  styleUrls: ['./add-remove-item.component.scss']
 })
 export class AddRemoveItemComponent implements OnInit {
 

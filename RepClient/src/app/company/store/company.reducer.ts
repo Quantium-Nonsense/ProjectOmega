@@ -19,7 +19,6 @@ const initialState: State = {
 
 export const selectCompany = (state: fromApp.State) => state.company;
 
-
 const _companyReducer = createReducer(
   initialState,
   on(CompanyActions.companySelected, (prevState, {selectedCompany}) => ({

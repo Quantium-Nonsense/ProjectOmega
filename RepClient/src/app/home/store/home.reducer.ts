@@ -1,7 +1,7 @@
 import { Action, createReducer, createSelector, on } from '@ngrx/store';
+import * as fromApp from '../../reducers/index';
 import { CompanyModel } from '../../shared/model/home/company.model';
 import * as HomeActions from './home.actions';
-import * as fromApp from '../../reducers/index';
 
 export interface State {
   companies: CompanyModel[];
