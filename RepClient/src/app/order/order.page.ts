@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { selectAllCompaniesNames } from '../home/store/home.reducer';
+import { Subscription } from 'rxjs';
 import { ItemsByCompanyModel } from '../shared/model/order/items-by-company.model';
-import { OrderItemModel } from '../shared/model/order/order-item.model';
 import * as fromApp from './../reducers/index';
-import { selectItems, selectItemsByCompany } from './store/order.reducer';
+import { selectItemsByCompany } from './store/order.reducer';
 
 @Component({
   selector: 'app-order',

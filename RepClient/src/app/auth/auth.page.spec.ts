@@ -70,7 +70,8 @@ describe('AuthPage', () => {
         user: undefined
       },
       company: undefined,
-      home: undefined
+      home: undefined,
+      order: undefined
     });
 
     mockStore.refreshState();
@@ -103,7 +104,8 @@ describe('AuthPage', () => {
         user: undefined
       },
       company: undefined,
-      home: undefined
+      home: undefined,
+      order: undefined
     });
 
     mockStore.refreshState();

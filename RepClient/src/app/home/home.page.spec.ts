@@ -3,12 +3,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { IonicModule } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Action, Store } from '@ngrx/store';
+import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 import { CompanyModel } from '../shared/model/home/company.model';
 import { SharedModule } from '../shared/shared.module';
+import { mockEmptyState } from '../shared/test/empty-store-state.model';
 import * as fromApp from './../reducers/index';
 import { HomePage } from './home.page';
 import * as HomeActions from './store/home.actions';
@@ -21,7 +21,6 @@ describe('HomePage', () => {
   let mockStore: MockStore<fromApp.State>;
   let actions$: Observable<Action>;
   let effects: HomeEffects;
-  let dummyCompanySpy: jasmine.Spy;
 
   const mockCompanies = () => {
     const imageUrl = 'assets/shapes.svg';
@@ -57,14 +56,7 @@ describe('HomePage', () => {
     effects = TestBed.inject(HomeEffects);
 
     // Set store state
-    mockStore.setState({
-      auth: undefined,
-      company: undefined,
-      home: {
-        companies: undefined,
-        loading: true
-      }
-    });
+    mockStore.setState(mockEmptyState);
 
     // Ensure store reflects new state
     mockStore.refreshState();
@@ -109,8 +101,7 @@ describe('HomePage', () => {
     component.ionViewWillEnter();
     // Set state with dummy companies
     mockStore.setState({
-      auth: undefined,
-      company: undefined,
+      ...mockEmptyState,
       home: {
         companies,
         loading: false
@@ -144,8 +135,7 @@ describe('HomePage', () => {
     component.ionViewWillEnter();
     // Set state with dummy companies
     mockStore.setState({
-      auth: undefined,
-      company: undefined,
+      ...mockEmptyState,
       home: {
         companies,
         loading: false
@@ -158,8 +148,7 @@ describe('HomePage', () => {
 
     // Reset state
     mockStore.setState({
-      auth: undefined,
-      company: undefined,
+      ...mockEmptyState,
       home: {
         companies: undefined,
         loading: false
@@ -175,5 +164,6 @@ describe('HomePage', () => {
 
     expect(loadingBuffer).toBeTruthy();
     expect(mainContent).toBeFalsy();
-  });
+  })
+  ;
 });

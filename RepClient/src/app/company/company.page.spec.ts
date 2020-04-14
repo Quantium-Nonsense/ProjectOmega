@@ -25,9 +25,9 @@ import * as fromCompany from './store/company.reducer';
 import Jasmine = jasmine.Jasmine;
 
 const createMockItems = (): ItemModel[] => [
-  new ItemModel('1', 'A', 'Mock item A', 1),
-  new ItemModel('2', 'B', 'Mock item B', 2),
-  new ItemModel('3', 'C', 'Mock item C', 3)
+  new ItemModel('1', 'A', 'Mock item A', 1, 'Mock Company A'),
+  new ItemModel('2', 'B', 'Mock item B', 2, 'Mock Company B'),
+  new ItemModel('3', 'C', 'Mock item C', 3, 'Mock Company C')
 ];
 const createMockCompanies = (): CompanyModel[] => [
   new CompanyModel('Company 1', 'A', 'Mock Company A'),
