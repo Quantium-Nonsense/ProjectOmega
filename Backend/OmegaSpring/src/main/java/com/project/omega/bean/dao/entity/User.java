@@ -5,12 +5,13 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.Collection;
 
 @Entity
 @DynamicUpdate(true)
-@Table(name = "user")
-public class User {
+@Table(name = "users")
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -135,5 +136,14 @@ public class User {
         public User build() {
             return new User(id, firstName, lastName, email, password, roles);
         }
+    }
+
+        @Override
+        public String toString() {
+           String result = String.format(
+                "Order[id=%d]%n",
+                id);
+          return result;
+
     }
 }

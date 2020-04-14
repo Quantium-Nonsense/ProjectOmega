@@ -1,9 +1,11 @@
-package com.baeldung.validation;
+package com.project.omega.helper;
+
+import com.project.omega.bean.dto.UserDTO;
+import com.project.omega.helper.annotations.PasswordMatches;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.baeldung.web.dto.UserDto;
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, Object> {
 

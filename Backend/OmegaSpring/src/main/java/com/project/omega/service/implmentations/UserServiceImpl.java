@@ -20,10 +20,15 @@ import com.project.omega.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
+
     @Autowired
     private UserRepository userRepository;
 
@@ -41,7 +47,7 @@ public class UserServiceImpl implements UserService {
     private IndustryRepository industryRepository;
 
     @Autowired
-    private TokenService tokenService;
+    TokenService tokenService;
 
     @Autowired
     ObjectMapper objectMapper;
