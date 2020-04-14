@@ -1,4 +1,4 @@
-import { ItemModel } from '../../../company/model/item.model';
+import { ItemModel } from '../company-items/item.model';
 
 export class OrderItemModel extends ItemModel {
   quantity: number;

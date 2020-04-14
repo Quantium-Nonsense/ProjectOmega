@@ -6,7 +6,7 @@ import { OrderItemModel } from '../shared/model/order/order-item.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import * as OrderActions from './../order/store/order.actions';
 import * as fromApp from './../reducers/index';
-import { ItemModel } from './model/item.model';
+import { ItemModel } from '../shared/model/company-items/item.model';
 import * as CompanyActions from './store/company.actions';
 import * as fromCompany from './store/company.reducer';
 

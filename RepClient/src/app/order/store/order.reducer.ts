@@ -20,6 +20,9 @@ const _orderReducer = createReducer(
   })),
   on(OrderActions.updateOrderItems, (prevState, {orderItems: updatedOrderItems}) => ({
     items: updatedOrderItems
+  })),
+  on(OrderActions.resetOrder, (prevState: State) => ({
+    items: undefined
   }))
 );
 

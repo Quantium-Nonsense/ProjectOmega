@@ -1,6 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatBottomSheet, MatBottomSheetModule, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from './component/header/header.component';
 import { ListDisplayBottomSheetComponent } from './component/list-display-bottom-sheet/list-display-bottom-sheet.component';
@@ -15,7 +21,13 @@ import { ListLoaderComponent } from './component/list-loader/list-loader.compone
   imports: [
     CommonModule,
     IonicModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    MatIconModule,
+    MatBadgeModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatSnackBarModule
   ],
   exports: [
     CommonModule,
@@ -23,7 +35,13 @@ import { ListLoaderComponent } from './component/list-loader/list-loader.compone
     IonicModule,
     ListLoaderComponent,
     ListDisplayBottomSheetComponent,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    MatDividerModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatBadgeModule,
+    MatIconModule,
+    MatSnackBarModule
   ],
   entryComponents: [
     ListDisplayBottomSheetComponent

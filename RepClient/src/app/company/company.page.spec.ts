@@ -18,7 +18,7 @@ import { SharedModule } from '../shared/shared.module';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
 import * as fromApp from './../reducers/index';
 import { CompanyPage } from './company.page';
-import { ItemModel } from './model/item.model';
+import { ItemModel } from '../shared/model/company-items/item.model';
 import * as CompanyActions from './store/company.actions';
 import { CompanyEffects } from './store/company.effects';
 import * as fromCompany from './store/company.reducer';

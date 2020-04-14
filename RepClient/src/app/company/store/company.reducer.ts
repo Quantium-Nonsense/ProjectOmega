@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { ItemModel } from '../model/item.model';
+import { ItemModel } from '../../shared/model/company-items/item.model';
 import * as CompanyActions from './company.actions.js';
 
 export interface State {

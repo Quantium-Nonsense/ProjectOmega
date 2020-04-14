@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
-import { ItemModel } from '../model/item.model';
+import { ItemModel } from '../../shared/model/company-items/item.model';
 
 export const cleanup = createAction(
   '[Company navigation to any] Leaving Company page'

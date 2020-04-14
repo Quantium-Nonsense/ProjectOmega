@@ -9,7 +9,7 @@ import { delay, map, switchMap, take } from 'rxjs/operators';
 import { State } from '../../reducers';
 import { ListDisplayBottomSheetComponent } from '../../shared/component/list-display-bottom-sheet/list-display-bottom-sheet.component';
 import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
-import { ItemModel } from '../model/item.model';
+import { ItemModel } from '../../shared/model/company-items/item.model';
 import * as CompanyActions from './company.actions';
 
 @Injectable()

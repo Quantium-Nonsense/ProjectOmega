@@ -20,6 +20,7 @@ import { CompanyEffects } from './company/store/company.effects';
 import { HomeEffects } from './home/store/home.effects';
 import { OrderEffects } from './order/store/order.effects';
 import { appReducer, metaReducers } from './reducers';
+import { SharedModule } from './shared/shared.module';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -46,6 +47,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
         strictStateImmutability: true
       }
     }),
+    SharedModule,
     MatBottomSheetModule,
     BrowserAnimationsModule,
     EffectsModule.forRoot([
