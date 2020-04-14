@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { AlertController, PopoverController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
@@ -15,11 +16,10 @@ import * as fromOrder from './order.reducer';
 export class OrderEffects {
 
 
-  openOrderMenu$ = createEffect(() => this.actions$.pipe(
+  navigateToConfirmationPage$ = createEffect(() => this.actions$.pipe(
     ofType(OrderActions.navigateToConfirmOrder),
     map((action: Action) => {
-      return undefined;
-      // Open menu buttons will dispatch
+      this.router.navigateByUrl('/order');
     })
   ), {dispatch: false});
 
@@ -34,9 +34,9 @@ export class OrderEffects {
   ));
 
   constructor(
+    private router: Router,
     private actions$: Actions,
     private store: Store<fromApp.State>,
-    private snackBar: MatSnackBar,
   ) {
   }
 

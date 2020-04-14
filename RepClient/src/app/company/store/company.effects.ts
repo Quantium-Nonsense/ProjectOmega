@@ -86,7 +86,8 @@ export class CompanyEffects {
         i.toString() + currentCompany,
         `Magic Item ${getRandomLetter()}${getRandomLetter()}${getRandomLetter()} ${i} `,
         `You are now looking at this fantastic piece of magic item ${i}`,
-        +(i * Math.exp(i)).toString().substr(0, 2))
+        +(i * Math.exp(i)).toString().substr(0, 2),
+        currentCompany)
       );
     }
 
