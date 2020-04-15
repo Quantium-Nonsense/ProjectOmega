@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      component: omega-backend
+  template:
+    metadata:
+      labels:
+        component: omega-backend
+    spec:
+        containers:
+          - name: omega-api
+            image: omegacr.azurecr.io/docker:v2
+            ports:
+              - containerPort: 5000
