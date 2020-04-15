@@ -1,5 +1,6 @@
 package com.project.omega.controller;
 
+import com.project.omega.authentication.SetupDataLoaderForRoleAndPrivilege;
 import com.project.omega.bean.dao.auth.JwtRequest;
 import com.project.omega.bean.dao.auth.JwtResponse;
 import com.project.omega.bean.dao.auth.Privilege;
@@ -54,6 +55,9 @@ public class JwtAuthenticationController {
     @Autowired
     private MessageSource messages;
 
+    @Autowired
+    SetupDataLoaderForRoleAndPrivilege setupDataLoaderForRoleAndPrivilege;
+
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         LOGGER.debug("Authentication for JwtRequest: {}", authenticationRequest);
@@ -67,6 +71,9 @@ public class JwtAuthenticationController {
         /*CALLS THE authenticate() method in the same class */
         authenticate(user.getEmail(), user.getPassword());
 
+        /*Pass the user detail into userDetailService and create User*/
+        User newUser = userDetailsService.createUser(user);
+
         /*Binds the Information sent via UserDTO with the JwtRequestBuilder.*/
         JwtRequest jwtRequest = new JwtRequest.JwtRequestBuilder()
                 .setEmail(user.getEmail())
@@ -78,9 +85,6 @@ public class JwtAuthenticationController {
 
         /*The JWT token along with the user details is saved onto the Token entity */
         userService.createVerificationTokenForUser(jwtToken, user);
-
-        /*Pass the user detail into userDetailService and create User*/
-        User newUser = userDetailsService.createUser(user);
 
         return new ResponseEntity(newUser, HttpStatus.CREATED);
     }

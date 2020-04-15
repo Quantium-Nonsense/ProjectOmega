@@ -24,8 +24,11 @@ public class User implements Serializable {
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    @ManyToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
     @OneToOne(cascade = CascadeType.ALL)

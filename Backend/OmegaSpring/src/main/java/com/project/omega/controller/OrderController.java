@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value="/order")
+@RequestMapping(value = "/order")
 public class OrderController {
 
     @Autowired
@@ -96,7 +96,7 @@ public class OrderController {
 //        order.setOrderClient(orderClient);
 
 
-//Product Existence Validation method
+    //Product Existence Validation method
     private void validateProductsExistence(List<OrderProductDto> orderProducts) throws ProductNotFoundException {
         List<OrderProductDto> list = new ArrayList<>();
         for (OrderProductDto op : orderProducts) {
@@ -126,7 +126,6 @@ public class OrderController {
         }
 
 
-
         public List<OrderProductDto> getProductOrders() {
 
             return productOrders;
@@ -149,20 +148,22 @@ public class OrderController {
 
 
     @GetMapping(value = "/get")
-    public ResponseEntity fetchAllOrders (){
+    public ResponseEntity fetchAllOrders(@RequestHeader(name = "Authorization") String token) {
         Iterable<Order> order = orderService.getAllOrders();
-return new ResponseEntity (order, HttpStatus.OK);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + token);
+        return new ResponseEntity(order, HttpStatus.OK);
     }
-//    @GetMapping(value = "/get")
+
+    //    @GetMapping(value = "/get")
 //    @ResponseStatus(HttpStatus.OK)
 //    public @NotNull Iterable<Order> list() {
 //        return this.orderService.getAllOrders();
 //    }
-        @GetMapping(value = "/get/{id}")
-        public ResponseEntity fetchOrderById (@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
-            Order order = orderService.getOrderById(id);
-            return new ResponseEntity(order, HttpStatus.OK);
-        }
+    @GetMapping(value = "/get/{id}")
+    public ResponseEntity fetchOrderById(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
+        Order order = orderService.getOrderById(id);
+        return new ResponseEntity(order, HttpStatus.OK);
+    }
 
 //
 //    @PutMapping (value = "update/{id}/")
@@ -173,4 +174,4 @@ return new ResponseEntity (order, HttpStatus.OK);
 //    @GetMapping (value = "/get")
 
 
-    }
+}
