@@ -2,10 +2,7 @@ package com.project.omega.bean.dao.entity;
 
 import lombok.Builder;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
@@ -26,15 +23,20 @@ public class Product implements Serializable {
     @PositiveOrZero
     private int price;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company company;
+
     public Product() {
 
     }
 
-    public Product(Long id, String name, String description, int price) {
+    public Product(Long id, String name, String description, int price, Company company) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
+        this.company = company;
     }
 
     public Long getId() {
@@ -69,12 +71,21 @@ public class Product implements Serializable {
         this.price = price;
     }
 
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
     public static class ProductBuilder {
 
         private Long id;
         private String name;
         private String description;
         private int price;
+        private Company company;
 
         public ProductBuilder() {
         }
@@ -99,8 +110,13 @@ public class Product implements Serializable {
             return this;
         }
 
+        public Product.ProductBuilder setCompany(Company company) {
+            this.company = company;
+            return this;
+        }
+
         public Product build() {
-            return new Product(id, name, description, price);
+            return new Product(id, name, description, price, company);
         }
     }
 }
