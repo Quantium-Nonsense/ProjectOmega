@@ -1,5 +1,6 @@
 package com.project.omega.service.implmentations;
 
+import com.project.omega.bean.dao.entity.Company;
 import com.project.omega.bean.dao.entity.Product;
 import com.project.omega.exceptions.NoRecordsFoundException;
 
@@ -94,5 +95,13 @@ public class ProductServiceImpl implements ProductService {
         }
         productRepository.deleteById(id);
         return product.get();
+    }
+
+    public List<Product> getProductsByCompany(Long id) throws NoRecordsFoundException {
+        List<Product> products = productRepository.findByCompany_Id(id);
+        if(products.isEmpty()) {
+            throw new NoRecordsFoundException(Constant.ERROR_NO_RECORDS);
+        }
+        return products;
     }
 }

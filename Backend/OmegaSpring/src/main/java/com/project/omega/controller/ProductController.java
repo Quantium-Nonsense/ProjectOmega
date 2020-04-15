@@ -74,5 +74,11 @@ public class ProductController {
         Product product = productService.updateProductById(id, update);
         return new ResponseEntity(product, HttpStatus.OK);
     }
+
+    @GetMapping(value = "/company/{id}")
+    public ResponseEntity getByCompanyId(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
+        List<Product> products = productService.getProductsByCompany(id);
+        return new ResponseEntity(products, HttpStatus.OK);
+    }
 }
 
