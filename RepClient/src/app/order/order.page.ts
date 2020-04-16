@@ -3,12 +3,12 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { selectCompany } from '../company/store/company.reducer';
 import { selectAllCompaniesNames } from '../home/store/home.reducer';
+import * as fromHome from '../home/store/home.reducer';
 import { CompanyModel } from '../shared/model/home/company.model';
 import { ItemsByCompanyModel } from '../shared/model/order/items-by-company.model';
+import * as CompanyActions from './../company/store/company.actions';
 import * as fromApp from './../reducers/index';
 import { selectItemsByCompany } from './store/order.reducer';
-import * as fromHome from '../home/store/home.reducer';
-import * as CompanyActions from './../company/store/company.actions';
 
 @Component({
   selector: 'app-order',
