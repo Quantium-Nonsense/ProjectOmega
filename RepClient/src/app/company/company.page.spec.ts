@@ -92,7 +92,15 @@ describe('CompanyPage', () => {
     fixture.detectChanges();
 
     const mockCompanies = createMockCompanies();
-    actions$ = of(CompanyActions.showCompaniesBottomSheet({companiesNames: [...mockCompanies.map(c => c.name)]}));
+    actions$ = of(CompanyActions.showCompaniesBottomSheet({
+      data: {
+        action: (selectedCompany: string) => {
+        },
+        listLabels: [
+          ...mockCompanies.map(c => c.name)
+        ]
+      }
+    }));
 
     effects.showCompaniesOnBottomSheet$.subscribe(); // Trigger effect
 
