@@ -5,6 +5,7 @@
   ],
   "rules": {
     "value-keyword-case": null,
-    "at-extend-no-missing-placeholder": false
+    "at-extend-no-missing-placeholder": false,
+    "no-empty-source": null
   }
 }
