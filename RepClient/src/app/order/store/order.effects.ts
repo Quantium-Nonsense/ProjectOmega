@@ -8,10 +8,16 @@ import * as fromApp from '../../reducers/index';
 import { ItemModel } from '../../shared/model/company-items/item.model';
 import { OrderItemModel } from '../../shared/model/order/order-item.model';
 import * as OrderActions from './order.actions';
+import { selectItemsByCompany } from './order.reducer';
 import * as fromOrder from './order.reducer';
 
 @Injectable()
 export class OrderEffects {
+
+  resetOrderState$ = createEffect(() => this.actions$.pipe(
+    ofType(OrderActions.resetOrder),
+    map(action => selectItemsByCompany.release())
+  ), {dispatch: false});
 
   navigateToConfirmationPage$ = createEffect(() => this.actions$.pipe(
     ofType(OrderActions.navigateToConfirmOrder),

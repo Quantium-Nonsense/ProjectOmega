@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { ListDisplayDataModel } from '../../shared/component/list-display-bottom-sheet/model/list-display-data.model';
 import { ItemModel } from '../../shared/model/company-items/item.model';
 import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
 
@@ -33,7 +34,7 @@ export const updateItems = createAction(
 
 export const showCompaniesBottomSheet = createAction(
   '[Company - Page - UI] User clicked on fab button',
-  props<{ companiesNames: string[] }>()
+  props<{ data: ListDisplayDataModel }>()
 );
 
 export const companyChanged = createAction(

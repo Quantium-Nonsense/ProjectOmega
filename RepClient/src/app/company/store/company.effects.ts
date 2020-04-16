@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 import { delay, map, switchMap, take } from 'rxjs/operators';
 import { State } from '../../reducers';
 import { ListDisplayBottomSheetComponent } from '../../shared/component/list-display-bottom-sheet/list-display-bottom-sheet.component';
+import { ListDisplayDataModel } from '../../shared/component/list-display-bottom-sheet/model/list-display-data.model';
 import { ItemModel } from '../../shared/model/company-items/item.model';
 import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
 import * as CompanyActions from './company.actions';
@@ -49,7 +50,7 @@ export class CompanyEffects {
    */
   showCompaniesOnBottomSheet$ = createEffect(() => this.actions$.pipe(
     ofType(CompanyActions.showCompaniesBottomSheet),
-    map(action => this.toggleBottomSheet(action.companiesNames))
+    map(action => this.toggleBottomSheet(action.data))
   ), this.noDispatchConfig);
 
   /**
@@ -123,17 +124,10 @@ export class CompanyEffects {
     return CompanyActions.updateItems({items: sortedItems});
   };
 
-  private toggleBottomSheet(companiesNames: any): void {
+  private toggleBottomSheet(data: ListDisplayDataModel): void {
+    this.bottomSheet.dismiss();
     this.bottomSheet.open(ListDisplayBottomSheetComponent, {
-      data: {
-        action: (selectedCompany: string) => {
-          this.bottomSheet.dismiss();
-          this.store.dispatch(CompanyActions.companySelected({selectedCompany}));
-        },
-        listLabels: [
-          ...companiesNames
-        ]
-      }
+      data
     });
   }
 }

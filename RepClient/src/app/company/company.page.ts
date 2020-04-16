@@ -125,8 +125,16 @@ export class CompanyPage implements OnInit {
   quickShowAllCompanies(): void {
     this.store.select('home').pipe(take(1)).subscribe(lastState => {
       this.store.dispatch(CompanyActions.showCompaniesBottomSheet({
-        companiesNames: [...lastState.companies.map(c => c.name)]
-      }));
+          data: {
+            action: (selectedCompany: string) => {
+              this.store.dispatch(CompanyActions.companySelected({selectedCompany}));
+            },
+            listLabels: [
+              ...lastState.companies.map(c => c.name)
+            ]
+          }
+        }
+      ));
     });
   }
 
