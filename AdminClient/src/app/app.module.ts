@@ -1,23 +1,24 @@
 // Modules imported
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // for supporting dialog display
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // <-- NgModel lives here
-import { FlexLayoutModule } from '@angular/flex-layout'; // FlexLayout for styling
-import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button'; // <-- NgModel lives here
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatInputModule} from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
+import { HttpClientModule} from '@angular/common/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Components imported
 import { AppComponent } from './app.component';
 import { CustomersComponent } from './customers/customers.component';
 import { DialogBodyComponent } from './customers/dialog-body/dialog-body.component';
+
 
 @NgModule({
   declarations: [
@@ -25,25 +26,24 @@ import { DialogBodyComponent } from './customers/dialog-body/dialog-body.compone
     CustomersComponent,
     DialogBodyComponent
   ],
+  bootstrap: [AppComponent],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     FlexLayoutModule,
+    HttpClientModule,
     MatInputModule,
     MatToolbarModule,
-    AppRoutingModule,
+    MatButtonModule,
     MatGridListModule,
-    HttpClientModule,
-    MatTableModule,
-    MatCheckboxModule,
+    MatIconModule,
+    MatSidenavModule,
+    ReactiveFormsModule,
     MatFormFieldModule,
-    MatDialogModule,
-    MatInputModule,
-    ReactiveFormsModule
   ],
-  providers: [],
-  bootstrap: [AppComponent],
+  providers: [HttpClientModule],
   entryComponents: [DialogBodyComponent]
 })
 export class AppModule { }
