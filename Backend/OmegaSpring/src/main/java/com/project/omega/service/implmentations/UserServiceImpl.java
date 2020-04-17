@@ -3,7 +3,6 @@ package com.project.omega.service.implmentations;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.auth.JwtRequest;
 import com.project.omega.bean.dao.auth.Token;
-import com.project.omega.bean.dao.entity.Industry;
 import com.project.omega.bean.dao.entity.PasswordResetToken;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.UserDTO;
@@ -11,7 +10,6 @@ import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.helper.Constant;
 import com.project.omega.helper.TokenConstants;
-import com.project.omega.repository.IndustryRepository;
 import com.project.omega.repository.UserRepository;
 import com.project.omega.service.interfaces.AuthenticationService;
 import com.project.omega.service.interfaces.PasswordResetTokenService;
@@ -39,12 +37,8 @@ public class UserServiceImpl implements UserService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private IndustryRepository industryRepository;
 
     @Autowired
     TokenService tokenService;
@@ -101,28 +95,6 @@ public class UserServiceImpl implements UserService {
         userRepository.save(u);
         return userDetails;
     }
-
-    public User updateUserByIdForIndustry(Long id, String updateIndustry) throws Exception {
-        Optional<User> user = userRepository.findById(id);
-        Industry industry = industryRepository.findByName(updateIndustry).get();
-        if (!user.isPresent()) {
-            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + id);
-        }
-        user.get().setIndustry(industry);
-        userRepository.save(user.get());
-        return user.get();
-    }
-
-    public List<User> getUsersFromIndustry(String name) throws NoRecordsFoundException {
-        Optional<Industry> industry = industryRepository.findByName(name);
-        if (!industry.isPresent()) {
-            throw new NoRecordsFoundException(Constant.ERROR_NO_RECORDS);
-        }
-        Long industryId = industry.get().getId();
-        List<User> users = userRepository.findAllByIndustry(industryId);
-        return users;
-    }
-
 
     @Override
     public void createVerificationTokenForUser(String jwt, UserDTO user) {

@@ -6,7 +6,6 @@ import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.ProductNotFoundException;
 import com.project.omega.helper.Constant;
 import com.project.omega.repository.ProductRepository;
-import com.project.omega.service.implmentations.IndustryServiceImpl;
 import com.project.omega.service.implmentations.ProductServiceImpl;
 import com.project.omega.service.interfaces.ProductService;
 import org.junit.Assert;

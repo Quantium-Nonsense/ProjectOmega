@@ -28,10 +28,6 @@ public class User implements Serializable {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "industry_id", referencedColumnName = "id")
-    private Industry industry;
-
     public User() {
 
     }
@@ -69,14 +65,6 @@ public class User implements Serializable {
         return roles;
     }
 
-    public Industry getIndustry() {
-        return industry;
-    }
-
-    public void setIndustry(Industry industry) {
-        this.industry = industry;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -92,7 +80,6 @@ public class User implements Serializable {
         private String lastName;
         private String email;
         private String password;
-        private Industry industry;
         private Collection<Role> roles;
 
         public UserBuilder() {
@@ -120,11 +107,6 @@ public class User implements Serializable {
 
         public UserBuilder setPassword(String password) {
             this.password = password;
-            return this;
-        }
-
-        public UserBuilder setIndustry(Industry industry) {
-            this.industry = industry;
             return this;
         }
 

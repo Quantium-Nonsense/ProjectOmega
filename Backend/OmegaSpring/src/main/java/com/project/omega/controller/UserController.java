@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.UserNotFoundException;
-import com.project.omega.service.implmentations.IndustryServiceImpl;
 import com.project.omega.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

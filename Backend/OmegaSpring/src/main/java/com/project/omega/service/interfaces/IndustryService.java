@@ -1,8 +1,5 @@
 package com.project.omega.service.interfaces;
 
-import com.project.omega.bean.dao.entity.Industry;
-import com.project.omega.exceptions.DuplicateIndustryException;
-import com.project.omega.exceptions.IndustryNotFoundException;
 import com.project.omega.exceptions.NoRecordsFoundException;
 
 import java.util.List;

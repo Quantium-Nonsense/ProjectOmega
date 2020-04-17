@@ -18,10 +18,6 @@ public interface UserService {
 
     User updateUserById(Long id, User update) throws UserNotFoundException, Exception;
 
-    User updateUserByIdForIndustry(Long id, String updateIndustry) throws Exception;
-
-    List<User> getUsersFromIndustry(String industryName) throws NoRecordsFoundException;
-
     void createVerificationTokenForUser(String token, UserDTO user);
 
     String validateVerificationToken(String token);
