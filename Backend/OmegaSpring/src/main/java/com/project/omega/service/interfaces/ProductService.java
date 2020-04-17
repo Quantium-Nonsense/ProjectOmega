@@ -17,5 +17,5 @@ public  interface ProductService {
     List<Product> getProductsBySearchQuery(String name) throws NoRecordsFoundException;
     Product updateProductById(Long id, Product newProduct) throws Exception;
     Product deleteProductById(Long id) throws ProductNotFoundException;
-    List<Product> getProductsByCompany(Long id) throws NoRecordsFoundException;
+    List<Product> getProductsBySupplier(Long id) throws NoRecordsFoundException;
 }

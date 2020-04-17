@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.entity.Product;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.ProductNotFoundException;
-import com.project.omega.service.implmentations.IndustryServiceImpl;
 import com.project.omega.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -75,9 +74,9 @@ public class ProductController {
         return new ResponseEntity(product, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/company/{id}")
-    public ResponseEntity getByCompanyId(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
-        List<Product> products = productService.getProductsByCompany(id);
+    @GetMapping(value = "/supplier/{id}")
+    public ResponseEntity getBySupplierId(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
+        List<Product> products = productService.getProductsBySupplier(id);
         return new ResponseEntity(products, HttpStatus.OK);
     }
 }

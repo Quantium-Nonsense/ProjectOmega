@@ -24,19 +24,19 @@ public class Product implements Serializable {
     private int price;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", referencedColumnName = "id")
-    private Company company;
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
+    private Supplier supplier;
 
     public Product() {
 
     }
 
-    public Product(Long id, String name, String description, int price, Company company) {
+    public Product(Long id, String name, String description, int price, Supplier supplier) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.company = company;
+        this.supplier = supplier;
     }
 
     public Long getId() {
@@ -71,12 +71,12 @@ public class Product implements Serializable {
         this.price = price;
     }
 
-    public Company getCompany() {
-        return company;
+    public Supplier getSupplier() {
+        return supplier;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public static class ProductBuilder {
@@ -85,7 +85,7 @@ public class Product implements Serializable {
         private String name;
         private String description;
         private int price;
-        private Company company;
+        private Supplier supplier;
 
         public ProductBuilder() {
         }
@@ -110,13 +110,13 @@ public class Product implements Serializable {
             return this;
         }
 
-        public Product.ProductBuilder setCompany(Company company) {
-            this.company = company;
+        public Product.ProductBuilder setSupplier(Supplier supplier) {
+            this.supplier = supplier;
             return this;
         }
 
         public Product build() {
-            return new Product(id, name, description, price, company);
+            return new Product(id, name, description, price, supplier);
         }
     }
 }

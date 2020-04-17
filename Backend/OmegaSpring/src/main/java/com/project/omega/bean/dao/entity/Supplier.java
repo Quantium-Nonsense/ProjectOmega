@@ -6,8 +6,8 @@ import javax.persistence.*;
 
 @Entity
 @Builder
-@Table(name = "company")
-public class Company {
+@Table(name = "supplier")
+public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,11 +36,11 @@ public class Company {
 
     private String notes;
 
-    public Company() {
+    public Supplier() {
 
     }
 
-    public Company(Long id, String firstName, String lastName, String companyName, String email, String address, String postcode, String town, String county, String country, String description, String contactNumber, String notes) {
+    public Supplier(Long id, String firstName, String lastName, String companyName, String email, String address, String postcode, String town, String county, String country, String description, String contactNumber, String notes) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -108,7 +108,7 @@ public class Company {
         return notes;
     }
 
-    public static class CompanyBuilder {
+    public static class SupplierBuilder {
 
         private Long id;
         private String firstName;
@@ -124,73 +124,73 @@ public class Company {
         private String contactNumber;
         private String notes;
 
-        public CompanyBuilder setId(Long id) {
+        public SupplierBuilder setId(Long id) {
             this.id = id;
             return this;
         }
 
-        public CompanyBuilder setFirstName(String firstName) {
+        public SupplierBuilder setFirstName(String firstName) {
             this.firstName = firstName;
             return this;
         }
 
-        public CompanyBuilder setLastName(String lastName) {
+        public SupplierBuilder setLastName(String lastName) {
             this.lastName = lastName;
             return this;
         }
 
-        public CompanyBuilder setCompanyName(String companyName) {
+        public SupplierBuilder setCompanyName(String companyName) {
             this.companyName = companyName;
             return this;
         }
 
-        public CompanyBuilder setAddress(String address) {
+        public SupplierBuilder setAddress(String address) {
             this.address = address;
             return this;
         }
 
-        public CompanyBuilder setPostcode(String postcode) {
+        public SupplierBuilder setPostcode(String postcode) {
             this.postcode = postcode;
             return this;
         }
 
-        public CompanyBuilder setTown(String town) {
+        public SupplierBuilder setTown(String town) {
             this.town = town;
             return this;
         }
 
-        public CompanyBuilder setCounty(String county) {
+        public SupplierBuilder setCounty(String county) {
             this.county = county;
             return this;
         }
 
-        public CompanyBuilder setCountry(String country) {
+        public SupplierBuilder setCountry(String country) {
             this.country = country;
             return this;
         }
 
-        public CompanyBuilder setEmail(String email) {
+        public SupplierBuilder setEmail(String email) {
             this.email = email;
             return this;
         }
 
-        public CompanyBuilder setDescription(String description) {
+        public SupplierBuilder setDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public CompanyBuilder setContactNumber(String contactNumber) {
+        public SupplierBuilder setContactNumber(String contactNumber) {
             this.contactNumber = contactNumber;
             return this;
         }
 
-        public CompanyBuilder setNotes(String notes) {
+        public SupplierBuilder setNotes(String notes) {
             this.notes = notes;
             return this;
         }
 
-        public Company build() {
-            return new Company(id, firstName, lastName, companyName, address, postcode, town, county, country, email, description, contactNumber, notes);
+        public Supplier build() {
+            return new Supplier(id, firstName, lastName, companyName, address, postcode, town, county, country, email, description, contactNumber, notes);
         }
     }
 
