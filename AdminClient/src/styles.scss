@@ -1,5 +1,5 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-@import "../RepClient/src/theme/util";
+@import '../RepClient/src/theme/util';
 
 html,
 body {
@@ -30,4 +30,3 @@ mat-sidenav {
   height: 100vh;
   min-width: 30vw;
 }
-
