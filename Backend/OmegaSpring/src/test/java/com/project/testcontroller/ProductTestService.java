@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -184,7 +185,7 @@ public class ProductTestService extends OmegaApplicationTests {
     }
 
     @Test
-    public void productSupplierIntegrationTest() {
+    public void productSupplierIntegrationTest_Positive() throws Exception {
         Supplier supplier = new Supplier.SupplierBuilder()
                 .setId(1L)
                 .setFirstName("John")
@@ -208,11 +209,23 @@ public class ProductTestService extends OmegaApplicationTests {
                 .setPrice(666)
                 .setSupplier(supplier)
                 .build();
-        Mockito.when(productRepository.findBySupplier_Id(Mockito.anyLong())).thenReturn(Stream.of(suppliedProduct).collect(Collectors.toList()));
+        Mockito.when(productRepository.findBySupplier_Id(1L)).thenReturn(Stream.of(suppliedProduct).collect(Collectors.toList()));
         Assert.assertEquals(1, productRepository.findBySupplier_Id(1L).size());
-        Assert.assertNotNull(productRepository.getOne(1L).getSupplier());
-        Assert.assertEquals(supplier, productRepository.getOne(1L).getSupplier());
-        Assert.assertEquals(suppliedProduct.getSupplier(), productRepository.getOne(1L).getSupplier());
-        Assert.assertEquals("GSK", productRepository.getOne(1L).getSupplier().getCompanyName());
+        Assert.assertEquals(supplier, productService.getProductsBySupplier(1L).get(0).getSupplier());
+        Assert.assertEquals(supplier.getEmail(), productService.getProductsBySupplier(1L).get(0).getSupplier().getEmail());
+    }
+
+    @Test
+    public void productSupplierIntegrationTest_Negative()  throws Exception {
+
+        List<Product> empty = new ArrayList<>();
+
+        Mockito.when(productRepository.findBySupplier_Id(Mockito.anyLong())).thenReturn(empty);
+        try {
+            productService.getProductsBySupplier(1L);
+        } catch (Exception e) {
+            Assert.assertEquals(0, productRepository.findBySupplier_Id(1L).size());
+            Assert.assertTrue(e.getMessage().contains(Constant.ERROR_NO_RECORDS));
+        }
     }
 }

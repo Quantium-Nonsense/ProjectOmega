@@ -124,6 +124,9 @@ public class Supplier {
         private String contactNumber;
         private String notes;
 
+        public SupplierBuilder() {
+        }
+
         public SupplierBuilder setId(Long id) {
             this.id = id;
             return this;
