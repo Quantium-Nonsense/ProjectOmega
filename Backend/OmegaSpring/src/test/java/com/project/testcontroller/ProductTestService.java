@@ -2,6 +2,7 @@ package com.project.testcontroller;
 
 import com.project.OmegaApplicationTests;
 import com.project.omega.bean.dao.entity.Product;
+import com.project.omega.bean.dao.entity.Supplier;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.ProductNotFoundException;
 import com.project.omega.helper.Constant;
@@ -180,5 +181,38 @@ public class ProductTestService extends OmegaApplicationTests {
         Assert.assertEquals(1, productService.getProductsEqualPrice(420).size());
         Assert.assertEquals(1, productService.getProductsAbovePrice(300).size());
         Assert.assertEquals(1, productService.getProductsBelowPrice(300).size());
+    }
+
+    @Test
+    public void productSupplierIntegrationTest() {
+        Supplier supplier = new Supplier.SupplierBuilder()
+                .setId(1L)
+                .setFirstName("John")
+                .setLastName("Doe")
+                .setCompanyName("GSK")
+                .setAddress("somewhere")
+                .setPostcode("LL1 1LL")
+                .setTown("Nowheresville")
+                .setCounty("Buckinghamshire")
+                .setCountry("England")
+                .setEmail("J.Doe@GSK.co.uk")
+                .setDescription("Glaxo")
+                .setContactNumber("01352700100")
+                .setNotes("Provides drugs")
+                .build();
+
+        Product suppliedProduct = new Product.ProductBuilder()
+                .setId(1L)
+                .setName("Wonderdrug")
+                .setDescription("The cure-all")
+                .setPrice(666)
+                .setSupplier(supplier)
+                .build();
+        Mockito.when(productRepository.findBySupplier_Id(Mockito.anyLong())).thenReturn(Stream.of(suppliedProduct).collect(Collectors.toList()));
+        Assert.assertEquals(1, productRepository.findBySupplier_Id(1L).size());
+        Assert.assertNotNull(productRepository.getOne(1L).getSupplier());
+        Assert.assertEquals(supplier, productRepository.getOne(1L).getSupplier());
+        Assert.assertEquals(suppliedProduct.getSupplier(), productRepository.getOne(1L).getSupplier());
+        Assert.assertEquals("GSK", productRepository.getOne(1L).getSupplier().getCompanyName());
     }
 }
