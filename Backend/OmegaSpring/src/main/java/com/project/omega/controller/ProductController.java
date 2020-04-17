@@ -62,10 +62,10 @@ public class ProductController {
         return new ResponseEntity(products, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteById(@PathVariable(value = "id") Long id) throws ProductNotFoundException {
         Product products = productService.deleteProductById(id);
-        return new ResponseEntity(products, HttpStatus.GONE); //inspired by Alex
+        return new ResponseEntity(products, HttpStatus.GONE);
     }
 
     @PutMapping(value = "/update/{id}")

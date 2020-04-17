@@ -8,7 +8,6 @@ import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.UserNotFoundException;
-import com.project.omega.helper.Constant;
 import com.project.omega.helper.TokenConstants;
 import com.project.omega.repository.UserRepository;
 import com.project.omega.service.interfaces.AuthenticationService;
@@ -18,6 +17,7 @@ import com.project.omega.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -55,11 +55,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private MessageSource messages;
+
 
     public List<User> getAllUsers() throws NoRecordsFoundException {
         List<User> users = (List) userRepository.findAll();
         if (users.isEmpty()) {
-            throw new NoRecordsFoundException(Constant.ERROR_NO_RECORDS);
+            throw new NoRecordsFoundException(messages.getMessage("message.noRecords", null, null));
         }
         return users;
     }
@@ -67,7 +70,7 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long id) throws UserNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
-            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + id);
+            throw new UserNotFoundException(messages.getMessage("message.userNotFound", null, null));
         }
         return user.get();
     }
@@ -75,7 +78,7 @@ public class UserServiceImpl implements UserService {
     public User deleteUserById(Long id) throws UserNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
-            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + id);
+            throw new UserNotFoundException(messages.getMessage("message.userNotFound", null, null));
         }
         userRepository.deleteById(id);
         return user.get();
@@ -84,7 +87,7 @@ public class UserServiceImpl implements UserService {
     public User updateUserById(Long id, User userDetails) throws Exception {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
-            throw new UserNotFoundException(Constant.ERROR_USER_NOT_FOUND + id);
+            throw new UserNotFoundException(messages.getMessage("message.userNotFound", null, null));
         }
         User u = new User.UserBuilder()
                 .setId(id)

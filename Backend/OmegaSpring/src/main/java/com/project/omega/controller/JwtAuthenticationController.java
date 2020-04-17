@@ -155,7 +155,6 @@ public class JwtAuthenticationController {
         return "";
     }
 
-
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));

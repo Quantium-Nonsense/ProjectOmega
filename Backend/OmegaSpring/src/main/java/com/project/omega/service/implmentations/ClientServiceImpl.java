@@ -7,6 +7,7 @@ import com.project.omega.helper.Constant;
 import com.project.omega.repository.ClientRepository;
 import com.project.omega.service.interfaces.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +19,10 @@ import java.util.Optional;
 public class ClientServiceImpl implements ClientService {
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private MessageSource messages;
 
     public Client createClient(Client client) {
         clientRepository.save(client);
@@ -27,40 +31,29 @@ public class ClientServiceImpl implements ClientService {
 
     public List<Client> getAllClients() throws NoRecordsFoundException {
         List<Client> clients = clientRepository.findAll();
-        if(clients.isEmpty()) {
-            throw new NoRecordsFoundException(Constant.ERROR_NO_PRODUCTS);
+        if (clients.isEmpty()) {
+            throw new NoRecordsFoundException(messages.getMessage("message.noRecords", null, null));
         }
         return clients;
     }
 
-    public Client getClientById (Long id) throws ClientNotFoundException {
+    public Client getClientById(Long id) throws ClientNotFoundException {
         Optional<Client> client = clientRepository.findById(id);
-        if(!client.isPresent()) {
-            throw new ClientNotFoundException(Constant.ERROR_CLIENT_NOT_FOUND + id);
+        if (!client.isPresent()) {
+            throw new ClientNotFoundException(messages.getMessage("message.clientNotFound", null, null));
 
         }
         return client.get();
 
     }
 
-
-//    public List<Client> getClientsBySearchQuery(String name) throws NoRecordsFoundException {
-//        List<Client> clients = clientRepository.findByClientNameContaining(name);
-//        if (clients.isEmpty()){
-//            throw new NoRecordsFoundException(Constant.ERROR_NO_RECORDS);
-//        }
-//        return clients;
-//    }
-
-
-    public Client updateClientById(Long id, Client newClient) throws ClientNotFoundException{
-        if (!clientRepository.findById(id).isPresent()){
-            throw new ClientNotFoundException(Constant.ERROR_CLIENT_NOT_FOUND + id );
+    public Client updateClientById(Long id, Client newClient) throws ClientNotFoundException {
+        if (!clientRepository.findById(id).isPresent()) {
+            throw new ClientNotFoundException(messages.getMessage("message.clientNotFound", null, null));
         }
-        if(newClient.getFirst_name() != null && newClient.getLast_name()!= null) {
+        if (newClient.getFirst_name() != null && newClient.getLast_name() != null) {
             newClient.setId(id);
             clientRepository.save(newClient);
-
         } else {
             throw new RuntimeException("Null/invalid values detected");
         }
@@ -69,17 +62,12 @@ public class ClientServiceImpl implements ClientService {
 
     public Optional<Client> deleteClientById(Long id) throws ClientNotFoundException {
         Optional<Client> client = clientRepository.findById(id);
-        if (!client.isPresent()){
-            throw new ClientNotFoundException(Constant.ERROR_CLIENT_NOT_FOUND + id );
+        if (!client.isPresent()) {
+            throw new ClientNotFoundException(messages.getMessage("message.clientNotFound", null, null));
         }
         clientRepository.deleteById(id);
         return client;
-
-
-
     }
-
-
 
 
 }

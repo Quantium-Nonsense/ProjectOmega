@@ -21,60 +21,41 @@ import java.util.Optional;
 @RequestMapping(value = "/client")
 public class ClientController {
 
-
     @Autowired
     ClientService clientService;
 
     private ObjectMapper mapper = new ObjectMapper();
 
 
-    @PostMapping (value= "/create",  headers = "Accept=application/json")
+    @PostMapping(value = "/create", headers = "Accept=application/json")
     public ResponseEntity<Client> createClient(@RequestBody Client client) {
-        Client newClient  = clientService.createClient(client);
-
+        Client newClient = clientService.createClient(client);
         return new ResponseEntity(newClient, HttpStatus.CREATED);
-
     }
-    @GetMapping (value = "/get")
+
+    @GetMapping(value = "/get")
     public ResponseEntity<Client> GetAllClients() throws NoRecordsFoundException {
         List<Client> clients = clientService.getAllClients();
-
         return new ResponseEntity(clients, HttpStatus.OK);
-
     }
 
-    @GetMapping (value = "/get/{id}")
-    public ResponseEntity getClient (@PathVariable (value="id") Long id) throws ClientNotFoundException, NoRecordsFoundException {
+    @GetMapping(value = "/get/{id}")
+    public ResponseEntity getClient(@PathVariable(value = "id") Long id) throws ClientNotFoundException, NoRecordsFoundException {
         Client client = clientService.getClientById(id);
-
         return new ResponseEntity(client, HttpStatus.OK);
 
     }
 
-//    @PostMapping (value = "/get/")
-//    public ResponseEntity  getClientName (@RequestBody String name) throws NoRecordsFoundException {
-//        List <Client> clients = clientService.getClientsbySearchQuery(name);
-//        return new ResponseEntity (clients, HttpStatus.OK);
-//
-//    }
-
-    @DeleteMapping (value = "/delete/{id}")
-    public ResponseEntity deleteClient (@PathVariable (value = "id") Long id) throws ClientNotFoundException {
+    @DeleteMapping(value = "/delete/{id}")
+    public ResponseEntity deleteClient(@PathVariable(value = "id") Long id) throws ClientNotFoundException {
         Optional<Client> client = clientService.deleteClientById(id);
-        return new ResponseEntity(client, HttpStatus.OK);
-
-
+        return new ResponseEntity(client, HttpStatus.GONE);
     }
 
-    @PutMapping (value = "/update/{id}")
-    public ResponseEntity updateClient (@PathVariable (value= "id") Long id, @RequestBody Client updated) throws ClientNotFoundException {
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity updateClient(@PathVariable(value = "id") Long id, @RequestBody Client updated) throws ClientNotFoundException {
         Client client = clientService.updateClientById(id, updated);
         return new ResponseEntity(client, HttpStatus.OK);
-
-
-
-
-
     }
 }
 

@@ -14,7 +14,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ public class ProductTestService extends OmegaApplicationTests {
 
     @InjectMocks
     ProductService productService = new ProductServiceImpl();
+
+    @Autowired
+    MessageSource messages;
 
     @Test
     public void createProductTest() throws NoRecordsFoundException {
@@ -72,7 +77,7 @@ public class ProductTestService extends OmegaApplicationTests {
             productService.getAllProducts();
         } catch (NoRecordsFoundException e) {
             Assert.assertTrue(productRepository.findAll().isEmpty());
-            Assert.assertTrue(e.getMessage().equals(Constant.ERROR_NO_PRODUCTS));
+            Assert.assertTrue(e.getMessage().equals(messages.getMessage("message.noRecords", null, null)));
         }
     }
 
@@ -100,7 +105,7 @@ public class ProductTestService extends OmegaApplicationTests {
         try {
             productService.getProductById(1L);
         } catch (ProductNotFoundException e) {
-            Assert.assertTrue(e.getMessage().equals(Constant.ERROR_PRODUCT_NOT_FOUND + 1L));
+            Assert.assertTrue(e.getMessage().equals(messages.getMessage("message.productNotFound", null, null)));
         }
     }
 

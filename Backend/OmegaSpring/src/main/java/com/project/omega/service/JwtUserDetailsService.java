@@ -14,6 +14,7 @@ import com.project.omega.service.interfaces.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,6 +43,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private MessageSource messages;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
@@ -68,7 +72,7 @@ public class JwtUserDetailsService implements UserDetailsService {
         LOGGER.debug("Creating user account with information: {}", user);
         String email = user.getEmail();
         if (userRepository.existsByEmail(email)) {
-            throw new DuplicateUserException(Constant.ERROR_USER_EXISTS + email);
+            throw new DuplicateUserException(messages.getMessage("UniqueUsername.user.username", null, null));
         }
         Collection<Role> assignedRoles = user.getRoles();
         Role role = new Role();

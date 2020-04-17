@@ -111,3 +111,4 @@ dist
 Backend/OmegaSpring/.idea
 Backend/OmegaSpring/target
 Backend/OmegaSpring/sprintone.iml
+Backend/OmegaSpring/src/main/java/com/project/omega/authentication/SetupDataLoaderForRoleAndPrivilege.java

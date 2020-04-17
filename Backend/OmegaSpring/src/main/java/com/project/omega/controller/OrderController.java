@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value="/order")
+@RequestMapping(value = "/order")
 public class OrderController {
 
     @Autowired
@@ -89,14 +89,20 @@ public class OrderController {
 
         return new ResponseEntity<>(order, headers, HttpStatus.CREATED);
     }
-//        OrderClient orderClient = orderClientService.create(new OrderClient(order, userService.getUserById(formdtos2.getUser().getId()),
-//                clientService.getClientById(formdtos2.getClient().getId())));
-//
-//
-//        order.setOrderClient(orderClient);
 
+    @GetMapping(value = "/get")
+    public ResponseEntity fetchAllOrders() {
+        Iterable<Order> order = orderService.getAllOrders();
+        return new ResponseEntity(order, HttpStatus.OK);
+    }
 
-//Product Existence Validation method
+    @GetMapping(value = "/{id}")
+    public ResponseEntity fetchOrderById(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
+        Order order = orderService.getOrderById(id);
+        return new ResponseEntity(order, HttpStatus.OK);
+    }
+
+    //Product Existence Validation method
     private void validateProductsExistence(List<OrderProductDto> orderProducts) throws ProductNotFoundException {
         List<OrderProductDto> list = new ArrayList<>();
         for (OrderProductDto op : orderProducts) {
@@ -109,7 +115,6 @@ public class OrderController {
             new ResourceNotFoundException("Product not found");
         }
     }
-
 
     /// Class for form received from Front-End
     public static class OrderForm implements Serializable {
@@ -126,7 +131,6 @@ public class OrderController {
         }
 
 
-
         public List<OrderProductDto> getProductOrders() {
 
             return productOrders;
@@ -137,33 +141,24 @@ public class OrderController {
             this.productOrders = productOrders;
         }
     }
+
+
 //
 //    public static class ClientForm implements Serializable {
 //
 //        private FormDTO OrderClient;
 //
 //        public FormDTO getClientOrders() {
-//            return OrderClient;}
-//
+//            return OrderClient;
+//            }
 //        }
-
-
-    @GetMapping(value = "/get")
-    public ResponseEntity fetchAllOrders (){
-        Iterable<Order> order = orderService.getAllOrders();
-return new ResponseEntity (order, HttpStatus.OK);
-    }
+//
 //    @GetMapping(value = "/get")
 //    @ResponseStatus(HttpStatus.OK)
 //    public @NotNull Iterable<Order> list() {
 //        return this.orderService.getAllOrders();
 //    }
-        @GetMapping(value = "/get/{id}")
-        public ResponseEntity fetchOrderById (@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
-            Order order = orderService.getOrderById(id);
-            return new ResponseEntity(order, HttpStatus.OK);
-        }
-
+//
 //
 //    @PutMapping (value = "update/{id}/")
 //    public ResponseEntity updateStatus(@PathVariable (value="id") Long id, @RequestBody Order order){
@@ -171,6 +166,9 @@ return new ResponseEntity (order, HttpStatus.OK);
 //        return new ResponseEntity(order, HttpStatus.OK);
 //    }
 //    @GetMapping (value = "/get")
-
-
-    }
+//
+//    OrderClient orderClient = orderClientService.create(new OrderClient(order, userService.getUserById(formdtos2.getUser().getId()),
+//            clientService.getClientById(formdtos2.getClient().getId())));
+//
+//    order.setOrderClient(orderClient);
+}

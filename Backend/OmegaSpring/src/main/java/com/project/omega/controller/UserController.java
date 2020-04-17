@@ -23,7 +23,7 @@ public class UserController {
     @GetMapping(value = "/get")
     public ResponseEntity getUsers() throws NoRecordsFoundException {
         List<User> users = userService.getAllUsers();
-        return new ResponseEntity(users, HttpStatus.OK);
+        return new ResponseEntity(users, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}")
@@ -32,10 +32,10 @@ public class UserController {
         return new ResponseEntity(user, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteById(@PathVariable(value = "id") Long id) throws UserNotFoundException {
         User user = userService.deleteUserById(id);
-        return new ResponseEntity(user, HttpStatus.I_AM_A_TEAPOT);
+        return new ResponseEntity(user, HttpStatus.GONE);
     }
 
     @PutMapping(value = "/update/{id}")
