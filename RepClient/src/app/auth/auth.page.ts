@@ -4,9 +4,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoadingController, MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { AppState } from '../reducers';
+import * as fromApp from './../reducers/index';
 import * as AuthActions from './store/auth.actions';
-import { AuthState } from './store/auth.reducer';
+import * as fromAuth from './store/auth.reducer';
 
 @Component({
   selector: 'app-auth',
@@ -35,7 +35,7 @@ export class AuthPage implements OnInit {
   constructor(
     public menuController: MenuController,
     public loadingController: LoadingController,
-    private store: Store<AppState>,
+    private store: Store<fromApp.State>,
     private snackBar: MatSnackBar
   ) {
 
@@ -45,7 +45,7 @@ export class AuthPage implements OnInit {
     // Disable sideway scroll on log in page
     this.menuController.enable(false);
     this.subscriptions.add(
-      this.store.select('auth').subscribe((state: AuthState) => {
+      this.store.select('auth').subscribe((state: fromAuth.State) => {
         if (state.errorMessage) {
           this.showMessage(state.errorMessage);
         }

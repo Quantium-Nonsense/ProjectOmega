@@ -1,5 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { ItemModel } from '../model/item.model';
+import * as fromApp from '../../reducers/index';
+import { ItemModel } from '../../shared/model/company-items/item.model';
 import * as CompanyActions from './company.actions.js';
 
 export interface State {
@@ -15,6 +16,8 @@ const initialState: State = {
   errorMessage: undefined,
   loading: false
 };
+
+export const selectCompany = (state: fromApp.State) => state.company;
 
 const _companyReducer = createReducer(
   initialState,
@@ -37,6 +40,14 @@ const _companyReducer = createReducer(
   on(CompanyActions.updateItems, (prevState, {items}) => ({
     ...prevState,
     companyItems: items
+  })),
+  on(CompanyActions.companyChanged, (prevState, {newCompany}) => ({
+    ...prevState,
+    company: newCompany,
+    companyItems: undefined
+  })),
+  on(CompanyActions.cleanup, prevState => ({
+    ...initialState
   }))
 );
 

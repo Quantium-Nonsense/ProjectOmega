@@ -43,6 +43,7 @@
         "check-super-calls": true
       }
     ],
+    "object-literal-sort-keys": false,
     "no-duplicate-super": true,
     "new-parens": true,
     "no-misused-new": true,
@@ -338,7 +339,7 @@
       true,
       "check-multiline-start"
     ],
-    "no-redundant-jsdoc": true,
+    "no-redundant-jsdoc": false,
     "ban-ts-ignore": true,
     "no-console": [
       true,

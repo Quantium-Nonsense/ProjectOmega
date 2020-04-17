@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { SortOptions } from '../shared/model/sort-options';
+import { ItemModel } from '../shared/model/company-items/item.model';
+import { OrderItemModel } from '../shared/model/order/order-item.model';
+import { SortOptionsEnum } from '../shared/model/sort-options.enum';
+import * as OrderActions from './../order/store/order.actions';
 import * as fromApp from './../reducers/index';
-import { ItemModel } from './model/item.model';
 import * as CompanyActions from './store/company.actions';
 import * as fromCompany from './store/company.reducer';
 
@@ -15,61 +17,87 @@ import * as fromCompany from './store/company.reducer';
 })
 export class CompanyPage implements OnInit {
 
-  readonly ASCENDING: SortOptions = SortOptions.ASCENDING;
-  readonly DESCENDING: SortOptions = SortOptions.DESCENDING;
+  readonly ASCENDING: SortOptionsEnum = SortOptionsEnum.ASCENDING;
+  readonly DESCENDING: SortOptionsEnum = SortOptionsEnum.DESCENDING;
 
   /**
    * Holds all items of said company
    */
   items: ItemModel[] = [];
   /**
-   * List of 10 items for loading indicator
-   * Just needs a set length
-   */
-  dummyItems = [];
-  /**
    * Company name to display at top of nav bar
    */
   currentCompany = '';
+
+  /**
+   * Hold the orders to display quantity
+   */
+  order: OrderItemModel[] = [];
+
   private state$ = this.store.select('company');
   private subscription: Subscription = new Subscription();
+  private isBottomSheetVisible: boolean;
 
   constructor(
-    public store: Store<fromApp.AppState>
+    public store: Store<fromApp.State>
   ) {
-    for (let i = 0; i < 10; i++) {
-      this.dummyItems.push(i);
-    }
+
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
   ionViewWillEnter(): void {
-    this.store.select('company')
-      .pipe(
-        // Force to run synchronously as company is already loaded from dashboard
-        take(1)
+    this.subscription.add(
+      this.store.select('company')
+        .pipe(
+          // Force to run synchronously as company is already loaded from dashboard
+          take(1)
+        )
+        .subscribe(s => {
+          this.currentCompany = s.company;
+          this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company}));
+        })
+    );
+
+    this.subscription.add(
+      this.store.select('order').subscribe(orderState => {
+        this.order = orderState.items;
+      })
+    );
+
+    this.subscription.add(
+      this.state$.subscribe(
+        (currentState: fromCompany.State) => {
+          this.items = currentState.companyItems;
+          if (this.currentCompany !== currentState.company) {
+            this.currentCompany = currentState.company;
+            this.store.dispatch(CompanyActions.companyChanged({newCompany: currentState.company}));
+            this.store.dispatch(CompanyActions.loadItemsOfCompany({company: currentState.company}));
+          }
+        }
       )
-      .subscribe(s => {
-        this.currentCompany = s.company;
-        this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company}));
-      });
-    this.subscription.add(this.state$.subscribe((currentState: fromCompany.State) => {
-      this.items = currentState.companyItems;
-    }));
+    );
   }
 
   ionViewWillLeave(): void {
     this.subscription.unsubscribe();
+    this.store.dispatch(CompanyActions.cleanup());
   }
 
-  sortBy(sortBy: SortOptions): void {
+  /**
+   * Fires a sortItems action via the store and triggers the store to sort the items by sortBy
+   * @param sortBy How to sort the list
+   */
+  sortBy(sortBy: SortOptionsEnum): void {
     this.store.dispatch(CompanyActions.sortItems({by: sortBy, items: this.items}));
   }
 
   /**
    * Checks if any items description or name contains the values used in search bar
+   * Simply visual without updating app State so this is not done via store effects
+   * This allows to avoid an extra http call to get the items from the backend again,
+   * instead using the value already stored in the app state
    * @param value The values to search for in the items
    */
   itemLookup(value: string): void {
@@ -92,5 +120,37 @@ export class CompanyPage implements OnInit {
   cancelLookup(): void {
     // Take 1 forces ngrx store to return current value synchronously
     this.state$.pipe(take(1)).subscribe(state => this.items = state.companyItems);
+  }
+
+  quickShowAllCompanies(): void {
+    this.store.select('home').pipe(take(1)).subscribe(lastState => {
+      this.store.dispatch(CompanyActions.showCompaniesBottomSheet({
+          data: {
+            action: (selectedCompany: string) => {
+              this.store.dispatch(CompanyActions.companySelected({selectedCompany}));
+            },
+            listLabels: [
+              ...lastState.companies.map(c => c.name)
+            ]
+          }
+        }
+      ));
+    });
+  }
+
+  itemsExist(): boolean {
+    if (this.items) {
+      return this.items.length > 0;
+    }
+
+    return false;
+  }
+
+  showItemsInBasket(): boolean {
+    if (this.order) {
+      return this.order.some(i => i.quantity > 0);
+    }
+
+    return false;
   }
 }

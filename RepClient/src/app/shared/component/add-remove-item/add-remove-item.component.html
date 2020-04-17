@@ -1,0 +1,35 @@
+<ng-container *ngIf="buttonStyle === 'IONIC_SLIDING'">
+	<ion-item-options side="end">
+		<ion-item-option (click)="addItem(item)">
+			<ion-icon slot="icon-only" name="add-outline"></ion-icon>
+		</ion-item-option>
+		<ion-item-option>
+			{{getOrderQuantityForItem(item)}}
+		</ion-item-option>
+		<ion-item-option (click)="removeItem(item)">
+			<ion-icon slot="icon-only" name="remove-outline"></ion-icon>
+		</ion-item-option>
+	</ion-item-options>
+</ng-container>
+
+<ng-container *ngIf="buttonStyle === 'MATERIAL'">
+	<ion-grid>
+		<ion-row>
+			<ion-col size="5">
+				<button (click)="addItem(item)" mat-icon-button>
+					<mat-icon>add</mat-icon>
+				</button>
+			</ion-col>
+			<ion-col size="3">
+				<p>
+					{{getOrderQuantityForItem(item)}}
+				</p>
+			</ion-col>
+			<ion-col size="4">
+				<button (click)="removeItem(item)" mat-icon-button>
+					<mat-icon>remove</mat-icon>
+				</button>
+			</ion-col>
+		</ion-row>
+	</ion-grid>
+</ng-container>
