@@ -56,8 +56,6 @@ public class Order implements Serializable {
         return sum;
     }
 
-
-
     public Order(Long id, LocalDate dateCreated, @Valid List<OrderProduct> orderProducts, @Valid User user, @NotBlank String status) {
         this.id = id;
         this.dateCreated = dateCreated;

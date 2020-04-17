@@ -20,8 +20,10 @@ public class User implements Serializable {
 
     private String lastName;
 
+    @NotBlank
     private String email;
 
+    @NotBlank
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -32,7 +34,7 @@ public class User implements Serializable {
 
     }
 
-    public User(Long id, String firstName, String lastName, @NotBlank String email, @NotBlank String password, Collection<Role> roles) {
+    public User(Long id, String firstName, String lastName, String email, String password, Collection<Role> roles) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

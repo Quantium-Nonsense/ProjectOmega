@@ -44,16 +44,4 @@ public class UserController {
         User user = userService.updateUserById(id, update);
         return new ResponseEntity(user, HttpStatus.OK);
     }
-
-    @PutMapping(value = "/updateForIndustry/{id}/{industryName}")
-    public ResponseEntity updateByIdForIndustry(@PathVariable(value = "id") Long id, @PathVariable(value = "industryName") String industry) throws Exception {
-        User user = userService.updateUserByIdForIndustry(id, industry);
-        return new ResponseEntity(user, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/get/{name}")
-    public ResponseEntity getUsersInIndustry(@PathVariable(value = "name") String industryName) throws NoRecordsFoundException {
-        List<User> users = userService.getUsersFromIndustry(industryName);
-        return new ResponseEntity(users, HttpStatus.OK);
-    }
 }

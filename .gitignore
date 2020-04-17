@@ -108,6 +108,6 @@ dist
 .idea/
 
 # Backend stuff to ignore
-Backend/sprintone/.idea
-Backend/sprintone/target
-Backend/sprintone/sprintone.iml
+Backend/OmegaSpring/.idea
+Backend/OmegaSpring/target
+Backend/OmegaSpring/sprintone.iml

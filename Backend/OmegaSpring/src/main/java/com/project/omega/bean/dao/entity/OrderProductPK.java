@@ -1,10 +1,7 @@
 package com.project.omega.bean.dao.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.project.omega.bean.dao.entity.Product;
-import com.sun.istack.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +11,6 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "order")
 public class OrderProductPK implements Serializable {
 
-//    @JsonBakReference
     @ManyToOne(optional = false, fetch= FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order order;
@@ -44,6 +40,10 @@ public class OrderProductPK implements Serializable {
         this.order = order;
     }
 
+    public Object setOrder() {
+        return new Order();
+    }
+
     public Product getProduct() {
         return product;
     }
@@ -52,14 +52,9 @@ public class OrderProductPK implements Serializable {
         this.product = product;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof OrderProductPK)) return false;
-//        OrderProductPK that = (OrderProductPK) o;
-//        return order.equals(that.order) &&
-//                product.equals(that.product) && client.equals(that.client);
-//    }
+    public Object setProduct() {
+        return new Product();
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -84,7 +79,6 @@ public class OrderProductPK implements Serializable {
         return true;
     }
 
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -106,18 +100,4 @@ public class OrderProductPK implements Serializable {
 
         return result;
     }
-
-    public Object setOrder() {
-        return new Order();
-    }
-
-    public Object setProduct() {
-        return new Product();
-    }
 }
-
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(order, product, client);
-//    }
-//}

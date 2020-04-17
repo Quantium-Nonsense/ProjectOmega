@@ -23,6 +23,10 @@ public class AdminRoles {
     @JoinTable(name = "roles_privileges", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
     private Collection<Privilege> privileges;
 
+    public AdminRoles() {
+
+    }
+
     public AdminRoles(final String name) {
         super();
         this.name = name;
