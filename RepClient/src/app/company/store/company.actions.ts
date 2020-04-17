@@ -1,6 +1,11 @@
 import { createAction, props } from '@ngrx/store';
-import { SortOptions } from '../../shared/model/sort-options';
-import { ItemModel } from '../model/item.model';
+import { ListDisplayDataModel } from '../../shared/component/list-display-bottom-sheet/model/list-display-data.model';
+import { ItemModel } from '../../shared/model/company-items/item.model';
+import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
+
+export const cleanup = createAction(
+  '[Company navigation to any] Leaving Company page'
+);
 
 export const loadItemsOfCompany = createAction(
   '[Company - Page] Begin Loading Items of company',
@@ -8,7 +13,7 @@ export const loadItemsOfCompany = createAction(
 );
 
 export const companySelected = createAction(
-  '[Dashboard -> Company Pages] Incoming Action Company Selected',
+  '[Dashboard navigation to Company Pages] Incoming Action Company Selected',
   props<{ selectedCompany: string }>()
 );
 
@@ -19,10 +24,20 @@ export const itemsOfCompanyLoaded = createAction(
 
 export const sortItems = createAction(
   '[Company - Page - Action with Effect] Sort items',
-  props<{ by: SortOptions, items: ItemModel[] }>()
+  props<{ by: SortOptionsEnum, items: ItemModel[] }>()
 );
 
 export const updateItems = createAction(
   '[Company - Effects] Items updated',
   props<{ items: ItemModel[] }>()
+);
+
+export const showCompaniesBottomSheet = createAction(
+  '[Company - Page - UI] User clicked on fab button',
+  props<{ data: ListDisplayDataModel }>()
+);
+
+export const companyChanged = createAction(
+  '[Company - Page] Company changed',
+  props<{ newCompany: string }>()
 );
