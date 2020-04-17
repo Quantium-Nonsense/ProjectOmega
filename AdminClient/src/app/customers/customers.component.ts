@@ -26,30 +26,30 @@ export class CustomersComponent implements OnInit {
     this.getData();
   }
 
-  private getData(): void {
+  getData(): void {
     this.customerService.getCustomers()
       .pipe(delay(2000)).subscribe(customers => this.customers = customers);
   }
 
-  private updateCustomerRecord(id: number, column: string, newEntry: string): void {
+  updateCustomerRecord(id: number, column: string, newEntry: string): void {
     this.customerService.updateCustomerRecord(id, column, newEntry)
       .subscribe();
   }
 
-  private openLoadRecordDialog(): void {
+  openLoadRecordDialog(): void {
     this.getData(); // no input dialog here, therefore instant data call (no input needed)
     this.data = 'load';
   }
 
-  private openCreateRecordDialog(): void {
+  openCreateRecordDialog(): void {
     this.data = 'create';
   }
 
-  private openUpdateRecordDialog(): void {
+  openUpdateRecordDialog(): void {
     this.data = 'update';
   }
 
-  private openDeleteRecordDialog(): void {
+  openDeleteRecordDialog(): void {
     this.data = 'delete';
   }
 }
