@@ -1,4 +1,5 @@
 // Modules imported
+import { MatCardModule } from '@angular/material/card';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgModule } from '@angular/core';
@@ -23,6 +24,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { AuthEffects } from './auth/store/auth.effects';
 import { appReducer, metaReducers } from './reducers';
+import { SharedModule } from './shared/shared.module';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -37,6 +39,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     AppRoutingModule,
     AuthModule,
     BrowserModule,
+    SharedModule,
     BrowserAnimationsModule,
     EffectsModule.forRoot([AuthEffects]),
     FormsModule,
@@ -56,7 +59,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
         strictActionImmutability: true,
         strictStateImmutability: true
       }
-    })
+    }),
+    MatCardModule
   ],
   providers: [],
 })
