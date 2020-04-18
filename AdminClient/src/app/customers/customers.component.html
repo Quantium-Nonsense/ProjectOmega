@@ -1,33 +1,33 @@
 <div class="full-body">
-  <div class="container"
+  <div
        fxLayout
        fxLayout.xs="column"
        fxLayoutAlign="start start"
        fxLayoutGap="10%"
        fxLayoutGap.xs="5%">
 
-    <div fxFlexFill>
-      <table mat-table [dataSource]="customers">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let customer">{{customer.name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef>Category</th>
-          <td mat-cell *matCellDef="let customer">{{customer.category}}</td>
-        </ng-container>
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef>Email</th>
-          <td mat-cell *matCellDef="let customer">{{customer.email}}</td>
-        </ng-container>
-
-        <!--todo: move this into .ts temporary now so i can just sleep-->
-        <tr mat-header-row *matHeaderRowDef="['name', 'category', 'email']"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['name', 'category', 'email'];"></tr>
-      </table>
-    </div>
-
+    <table fxFlexFill mat-table [dataSource]="customers">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let customer">{{customer.name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Category</th>
+        <td mat-cell *matCellDef="let customer">{{customer.category}}</td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let customer">{{customer.email}}</td>
+      </ng-container>
+      <ng-container matColumnDef="country">
+        <th mat-header-cell *matHeaderCellDef>Country</th>
+        <td mat-cell *matCellDef="let customer">{{customer.country}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+    </table>
   </div>
+
 
   <div class="container"
        fxLayout

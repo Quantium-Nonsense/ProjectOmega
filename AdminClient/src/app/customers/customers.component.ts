@@ -1,12 +1,7 @@
-import {Component, Inject, OnInit, Output} from '@angular/core';
-import { Customer } from '../customer';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
-import { CustomersService } from '../customers.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { SelectionModel } from '@angular/cdk/collections';
+import { Component, OnInit, Output } from '@angular/core';
 import { delay } from 'rxjs/operators';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogConfig } from '@angular/material/dialog';
-import { DialogBodyComponent} from './dialog-body/dialog-body.component';
+import { Customer } from '../customer';
+import { CustomersService } from '../customers.service';
 
 @Component({
   selector: 'app-customers',
@@ -15,6 +10,7 @@ import { DialogBodyComponent} from './dialog-body/dialog-body.component';
 })
 export class CustomersComponent implements OnInit {
 
+  displayColumns: string[] = ['name', 'category', 'email', 'country'];
   customers: Customer[];
   inputName: string;
   @Output() data;
