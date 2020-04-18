@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { AppState } from '../reducers';
+import { State } from '../reducers';
 import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
 import * as AuthActions from './store/auth.actions';
 import { AuthState } from './store/auth.reducer';
@@ -35,7 +35,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     public loadingSpinnerService: LoadingSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<AppState>,
+    private store: Store<State>,
     private snackBar: MatSnackBar,
   ) {
 

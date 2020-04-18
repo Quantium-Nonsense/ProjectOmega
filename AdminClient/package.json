@@ -25,6 +25,7 @@
     "@auth0/angular-jwt": "^4.0.0",
     "@ngrx/effects": "^9.1.0",
     "@ngrx/store": "^9.1.0",
+    "@ngrx/store-devtools": "^9.1.0",
     "json-server": "^0.16.1",
     "rxjs": "^6.5.5",
     "tslib": "^1.11.1",

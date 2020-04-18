@@ -6,14 +6,14 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { routes } from '../app-routing.module';
-import { AppState } from '../reducers';
+import { State } from '../reducers';
 import { TestModule } from '../shared/test/test.module';
 import { AuthComponent } from './auth.component';
 
 describe('AuthPage', () => {
   let component: AuthComponent;
   let fixture: ComponentFixture<AuthComponent>;
-  let mockStore: MockStore<AppState>;
+  let mockStore: MockStore<State>;
   let mockRouter: Router;
 
   // Mocked services for auth page

@@ -13,6 +13,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 // Components imported
@@ -24,6 +25,7 @@ import { CustomersComponent } from './customers/customers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { appReducer, metaReducers } from './reducers';
 import { SharedModule } from './shared/shared.module';
+import { UserEffects } from './user/store/user.effects';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -40,7 +42,10 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     BrowserModule,
     SharedModule,
     BrowserAnimationsModule,
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([
+      AuthEffects,
+      UserEffects
+    ]),
     FormsModule,
     JwtModule.forRoot({
       config: {
@@ -59,7 +64,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
         strictStateImmutability: true
       }
     }),
-    MatCardModule
+    MatCardModule,
+    !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [],
 })
