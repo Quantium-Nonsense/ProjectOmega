@@ -31,10 +31,3 @@ EXPOSE 5000
     #Then in the ENTRYPOINT we run the main class by specifying the classpath
     #VM: Run the jar file
 ENTRYPOINT ["java","-cp","com/project/omega/*:lib/*:.","com.project.Application"]
-
-
-
-
-
-MAINTAINER 5110@omega.com
-
