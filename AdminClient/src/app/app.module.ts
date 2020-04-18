@@ -1,5 +1,6 @@
 // Modules imported
 import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from '@auth0/angular-jwt';
 import { NgModule } from '@angular/core';
@@ -60,7 +61,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
         strictStateImmutability: true
       }
     }),
-    MatCardModule
+    MatCardModule,
+    MatTableModule
   ],
   providers: [],
 })

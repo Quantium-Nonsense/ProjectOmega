@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { Customer } from './customer';
 import { CUSTOMERS } from './mock-customers';
 import {Observable, of, pipe} from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +12,7 @@ export class CustomersService {
   constructor() { }
 
   newID(): number {
-    const hashId = uuidv4();
-    return hashId;
+    return 1;
   }
 
   getCustomers(): Observable<Customer[]> {
