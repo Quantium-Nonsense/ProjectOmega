@@ -55,14 +55,14 @@ public class JwtAuthenticationController {
     @Autowired
     private MessageSource messages;
 
-    @PostMapping(value = "/authenticate")
+    @PostMapping(value = "/api/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         LOGGER.debug("Authentication for JwtRequest: {}", authenticationRequest);
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
         return ResponseEntity.ok(new JwtResponse(authenticationService.createJWTToken(authenticationRequest)));
     }
 
-    @PostMapping(value = "/registration", headers = "Accept=application/json")
+    @PostMapping(value = "/api/registration", headers = "Accept=application/json")
     public ResponseEntity createUser(@RequestBody UserDTO user) throws DuplicateUserException, Exception {
         LOGGER.debug("User Registration Process: {}", user);
 
@@ -83,7 +83,7 @@ public class JwtAuthenticationController {
     }
 
     @SuppressWarnings("unchecked")
-    @GetMapping("/confirmRegistration")
+    @GetMapping("/api/confirmRegistration")
     public ResponseEntity confirmRegistration(@RequestParam("token") final String token) {
         final String information = userService.validateVerificationToken(token);
         if (information.equals("valid")) {
@@ -101,7 +101,7 @@ public class JwtAuthenticationController {
     }
 
     @SuppressWarnings("unchecked")
-    @GetMapping("/resendRegistrationToken")
+    @GetMapping("/api/resendRegistrationToken")
     public ResponseEntity resendRegistrationToken(@RequestParam("token") final String existingToken) {
         Token newVerificationToken = userService.generateNewVerificationToken(existingToken);
         final User user = userService.getUser(newVerificationToken.getToken());
@@ -113,7 +113,7 @@ public class JwtAuthenticationController {
 
     /*To be Used When the User DOES NOT remember their password*/
     @SuppressWarnings("unchecked")
-    @PostMapping(value = "/resetPassword", headers = "Accept=application/json")
+    @PostMapping(value = "/api/resetPassword", headers = "Accept=application/json")
     public ResponseEntity resetUserPassword(@RequestParam("email") final String userEmail) {
         final User user = userService.findUserByEmail(userEmail);
         Properties properties = null;
@@ -128,7 +128,7 @@ public class JwtAuthenticationController {
     }
 
     /*To be User When User KNOWS his password*/
-    @PostMapping(value = "/updatePassword", headers = "Accept=application/json")
+    @PostMapping(value = "/api/updatePassword", headers = "Accept=application/json")
     @SuppressWarnings("unchecked")
     public ResponseEntity changeUserPassword(@Valid PasswordDTO passwordDto) {
         final User user = userService.findUserByEmail(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
@@ -143,7 +143,7 @@ public class JwtAuthenticationController {
         return new ResponseEntity(new GenericResponse(messages.getMessage("message.updatePasswordSuc", null, null)), HttpStatus.CREATED);
     }
 
-    @GetMapping("/changePassword")
+    @GetMapping("/api/changePassword")
     public String showChangePasswordPage(@RequestParam("id") final long id, @RequestParam("token") final String token) {
         final String result = userService.validatePasswordResetToken(id, token);
         if (result != null) {
