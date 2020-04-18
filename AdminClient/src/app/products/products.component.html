@@ -1,19 +1,54 @@
-<div fxLayout="row">
-  <h2>Products</h2>
+<div fxLayout="row" fxLayoutAlign="space-between" xmlns="">
+  <div>
+    <h2>Products</h2>
+  </div>
+  <div>
+    <button (click)="handleCreate()" aria-label="New Product" color="primary" mat-mini-fab>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>
-<div fxLayout="row">
-  <div class="mat-elevation-z8">
+<div fxLayout="row" fxLayoutAlign="center">
+  <div class="mat-elevation-z8 w-100">
     <table aria-label="Elements" class="full-width-table" mat-table matSort>
-      <!-- Id Column -->
-      <ng-container matColumnDef="id">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Id</th>
-        <td *matCellDef="let row" mat-cell>{{row.id}}</td>
+      <!-- Supplier Column -->
+      <ng-container matColumnDef="supplier">
+        <th *matHeaderCellDef class="pr-3" mat-header-cell mat-sort-header>Supplier</th>
+        <td *matCellDef="let row" class="pr-3" mat-cell>{{row.supplier}}</td>
       </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Name</th>
-        <td *matCellDef="let row" mat-cell>{{row.name}}</td>
+        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Name</th>
+        <td *matCellDef="let row" class="px-3" mat-cell>{{row.name}}</td>
+      </ng-container>
+
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Description</th>
+        <td *matCellDef="let row" class="px-3 wrap" mat-cell>{{row.description}}</td>
+      </ng-container>
+
+      <!-- Price Column -->
+      <ng-container matColumnDef="price">
+        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Price per Unit</th>
+        <td *matCellDef="let row" class="px-3" mat-cell>€ {{row.price.toFixed(2)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th *matHeaderCellDef class="px-3" mat-header-cell>Actions</th>
+        <td *matCellDef="let row" class="pl-3" mat-cell>
+          <!-- TODO permissions -->
+          <button (click)="handleReadDetails(row.id)" aria-label="Details" color="primary" mat-icon-button>
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button (click)="handleEditDetails(row.id)" aria-label="Edit Product" color="primary" mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button (click)="handleDeleteDetails(row.id)" aria-label="Edit Product" color="primary" mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
       </ng-container>
 
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
@@ -23,8 +58,8 @@
     <mat-paginator #paginator
                    [length]="dataSource?.data.length"
                    [pageIndex]="0"
-                   [pageSizeOptions]="[25, 50, 100, 250]"
-                   [pageSize]="50">
+                   [pageSizeOptions]="[20, 50, 100, 250]"
+                   [pageSize]="20">
     </mat-paginator>
   </div>
 </div>
