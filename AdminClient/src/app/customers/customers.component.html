@@ -1,39 +1,40 @@
-<div class="container"
-     fxLayout
-     fxLayout.xs="column"
-     fxLayoutAlign="start start"
-     fxLayoutGap="10%"
-     fxLayoutGap.xs="5%">
+<div class="full-body">
+  <div class="container"
+       fxLayout
+       fxLayout.xs="column"
+       fxLayoutAlign="start start"
+       fxLayoutGap="10%"
+       fxLayoutGap.xs="5%">
 
-  <div fxFlexFill>
-    <table mat-table [dataSource]="customers">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let customer">{{customer.name}}</td>
-      </ng-container>
-      <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef>Category</th>
-        <td mat-cell *matCellDef="let customer">{{customer.category}}</td>
-      </ng-container>
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let customer">{{customer.email}}</td>
-      </ng-container>
+    <div fxFlexFill>
+      <table mat-table [dataSource]="customers">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let customer">{{customer.name}}</td>
+        </ng-container>
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Category</th>
+          <td mat-cell *matCellDef="let customer">{{customer.category}}</td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let customer">{{customer.email}}</td>
+        </ng-container>
 
-      <!--todo: move this into .ts temporary now so i can just sleep-->
-      <tr mat-header-row *matHeaderRowDef="['name', 'category', 'email']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['name', 'category', 'email'];"></tr>
-    </table>
+        <!--todo: move this into .ts temporary now so i can just sleep-->
+        <tr mat-header-row *matHeaderRowDef="['name', 'category', 'email']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'category', 'email'];"></tr>
+      </table>
+    </div>
+
   </div>
 
-</div>
-
-<div class="container"
-     fxLayout
-     fxLayout.xs="row"
-     fxLayoutAlign="center center"
-     fxLayoutGap="3%"
-     fxLayoutGap.xs="0">
+  <div class="container"
+       fxLayout
+       fxLayout.xs="row"
+       fxLayoutAlign="center center"
+       fxLayoutGap="3%"
+       fxLayoutGap.xs="0">
 
     <div id="buttonLoad">
       <md-button (click)="openLoadRecordDialog()" class="md-raised md-primary">LOAD RECORDS</md-button>
@@ -45,22 +46,19 @@
       <md-button (click)="openUpdateRecordDialog()" class="md-raised md-primary">UPDATE RECORD</md-button>
     </div>
     <div id="buttonDelete">
-    <md-button (click)="openDeleteRecordDialog()" class="md-raised md-primary">DELETE RECORD</md-button>
+      <md-button (click)="openDeleteRecordDialog()" class="md-raised md-primary">DELETE RECORD</md-button>
     </div>
 
-</div>
+  </div>
 
-<div class="container"
-     fxLayout
-     fxLayout.xs="column"
-     fxLayoutAlign="start center"
-     fxLayoutGap="10px"
-     fxLayoutGap.xs="0">
-  <div id="dialogs" fxFill fxFlexOffset="2%" fxFlexOffset.xs="2%">
-    <app-dialog-body [data]="data"></app-dialog-body>
+  <div class="container"
+       fxLayout
+       fxLayout.xs="column"
+       fxLayoutAlign="start center"
+       fxLayoutGap="10px"
+       fxLayoutGap.xs="0">
+    <div id="dialogs" fxFill fxFlexOffset="2%" fxFlexOffset.xs="2%">
+      <app-dialog-body [data]="data"></app-dialog-body>
+    </div>
   </div>
 </div>
-
-
-
-

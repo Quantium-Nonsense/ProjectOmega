@@ -1,27 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Customer } from './customer';
 import { CUSTOMERS } from './mock-customers';
-import {Observable, of, pipe} from 'rxjs';
+import { Observable, of, pipe } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CustomersService {
 
-
-  constructor() { }
+  constructor() {
+  }
 
   newID(): number {
     return 1;
   }
 
   getCustomers(): Observable<Customer[]> {
-    return of(CUSTOMERS)
+    return of(CUSTOMERS);
   }
 
   createCustomerRecord(customer: Customer): Observable<any> {
     CUSTOMERS.push(customer);
-    console.log(CUSTOMERS[CUSTOMERS.length - 1])
+    console.log(CUSTOMERS[CUSTOMERS.length - 1]);
     return of(CUSTOMERS[CUSTOMERS.length - 1]);
   }
 
@@ -31,8 +31,7 @@ export class CustomersService {
       if (idOrName === CUSTOMERS[i].id && CUSTOMERS[i].hasOwnProperty(column)) { // check if the id exists + column is correct
         CUSTOMERS[i][column] = newEntry; // select record by array position then change property base on column
         return of(CUSTOMERS[i]); // observable return here
-      }
-      else if (idOrName === CUSTOMERS[i].name && CUSTOMERS[i].hasOwnProperty(column)) {
+      } else if (idOrName === CUSTOMERS[i].name && CUSTOMERS[i].hasOwnProperty(column)) {
         CUSTOMERS[i][column] = newEntry;
         return of(CUSTOMERS[i]);
       }
@@ -45,8 +44,7 @@ export class CustomersService {
     for (const cust of CUSTOMERS) { // scan customer records
       if (idOrName === CUSTOMERS[CUSTOMERS.indexOf(cust)].id) { // check if the id exists
         return of(CUSTOMERS.splice(CUSTOMERS.indexOf(cust), 1)); // delete entry, observable return
-      }
-      else if (idOrName === CUSTOMERS[CUSTOMERS.indexOf(cust)].name) {
+      } else if (idOrName === CUSTOMERS[CUSTOMERS.indexOf(cust)].name) {
         return of(CUSTOMERS.splice(CUSTOMERS.indexOf(cust), 1));
       }
     }

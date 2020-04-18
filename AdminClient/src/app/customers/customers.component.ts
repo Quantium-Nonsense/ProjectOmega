@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, Output} from '@angular/core';
 import { Customer } from '../customer';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { CustomersService } from '../customers.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -51,5 +51,6 @@ export class CustomersComponent implements OnInit {
 
   openDeleteRecordDialog(): void {
     this.data = 'delete';
+
   }
 }
