@@ -1,27 +1,27 @@
-<mat-sidenav-container>
+<mat-sidenav-container class="h-100">
   <mat-sidenav
     [(opened)]="sideNavOpen"
     mode="over">
-    <div class="container m-3">
-      <button [routerLink]="'/order'" class="w-100" mat-button>
-        <mat-icon>shopping_cart</mat-icon>
+    <mat-action-list class="my-3">
+      <button [routerLink]="'/order'" mat-list-item>
+        <mat-icon class="mr-1">shopping_cart</mat-icon>
         Orders
       </button>
-      <button [routerLink]="'/company'" class="w-100" mat-button>
-        <mat-icon>store</mat-icon>
+      <button [routerLink]="'/company'" mat-list-item>
+        <mat-icon class="mr-1">store</mat-icon>
         Companies
       </button>
-      <button [routerLink]="'/products'" class="w-100" mat-button>
-        <mat-icon>list</mat-icon>
+      <button [routerLink]="'/products'" mat-list-item>
+        <mat-icon class="mr-1">list</mat-icon>
         Products
       </button>
-      <button [routerLink]="'user'" class="w-100" mat-button>
-        <mat-icon>person</mat-icon>
+      <button [routerLink]="'user'" mat-list-item>
+        <mat-icon class="mr-1">person</mat-icon>
         Users
       </button>
-    </div>
+    </mat-action-list>
   </mat-sidenav>
-  <mat-sidenav-content >
+  <mat-sidenav-content>
     <!--Main Page toolbar-->
     <mat-toolbar color="primary">
       <mat-toolbar-row>
