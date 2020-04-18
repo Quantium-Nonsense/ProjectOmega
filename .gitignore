@@ -108,7 +108,6 @@ dist
 .idea/
 
 # Backend stuff to ignore
-Backend/OmegaSpring/.idea
-Backend/OmegaSpring/target
-Backend/OmegaSpring/sprintone.iml
-Backend/OmegaSpring/src/main/java/com/project/omega/authentication/SetupDataLoaderForRoleAndPrivilege.java
+Backend/.idea
+Backend/sprintone.iml
+Backend/target
