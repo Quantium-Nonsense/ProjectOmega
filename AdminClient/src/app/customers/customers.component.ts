@@ -10,7 +10,7 @@ import { CustomersService } from '../customers.service';
 })
 export class CustomersComponent implements OnInit {
 
-  displayColumns: string[] = ['name', 'category', 'email', 'country'];
+  displayColumns: string[] = ['name', 'category', 'email', 'country', 'actions'];
   customers: Customer[];
   inputName: string;
   @Output() data;
