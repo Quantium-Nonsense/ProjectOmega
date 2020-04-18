@@ -1,7 +1,7 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { merge, Observable, of as observableOf } from 'rxjs';
+import { BehaviorSubject, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 // TODO: Replace this with your own data model type
@@ -62,8 +62,8 @@ export class ProductsDataSource extends DataSource<Product> {
   private static instance: ProductsDataSource = null;
 
   data: Product[] = EXAMPLE_DATA;
+  observedData: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>(this.data);
   paginator: MatPaginator;
-
   sort: MatSort;
 
   private constructor() {
@@ -82,6 +82,7 @@ export class ProductsDataSource extends DataSource<Product> {
   public deleteById(id: number): void {
     const index: number = this.data.findIndex((element) => element.id === id);
     this.data.splice(index, 1);
+    this.updateData(this.data);
   }
 
   public getItemById(id: number): Product {
@@ -90,11 +91,13 @@ export class ProductsDataSource extends DataSource<Product> {
 
   public addItem(item: Product): void {
     this.data.push(item);
+    this.updateData(this.data);
   }
 
   public updateItem(item: Product): void {
     const index: number = this.data.findIndex((element) => element.id === item.id);
     this.data[index] = item;
+    this.updateData(this.data);
   }
 
   public getNextId(): number {
@@ -110,7 +113,7 @@ export class ProductsDataSource extends DataSource<Product> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
-      observableOf(this.data),
+      this.observedData,
       this.paginator.page,
       this.sort.sortChange
     ];
@@ -125,6 +128,12 @@ export class ProductsDataSource extends DataSource<Product> {
    * any open connections or free any held resources that were set up during connect.
    */
   disconnect() {
+  }
+
+  private updateData(data: Product[]) {
+    this.data = data;
+    this.observedData.next(data);
+    return data;
   }
 
   /**

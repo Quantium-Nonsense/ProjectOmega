@@ -56,7 +56,7 @@ export class ProductsComponent implements AfterViewInit, OnInit {
     const data = this.dataSource.getItemById(id);
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       width: '500px',
-      data,
+      data: data.name,
     });
 
     dialogRef.afterClosed().subscribe(willDelete => {

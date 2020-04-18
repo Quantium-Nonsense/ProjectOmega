@@ -2,18 +2,24 @@
   <mat-sidenav
     [(opened)]="sideNavOpen"
     mode="over">
-    <button [routerLink]="'/order'" class="w20" mat-button>
-      Orders<mat-icon>shopping_cart</mat-icon>
-    </button>
-    <button [routerLink]="'/company'" class="w20" mat-button>
-      Companies<mat-icon>store</mat-icon>
-    </button>
-    <button [routerLink]="'/products'" class="w20" mat-button>
-      Products<mat-icon>list</mat-icon>
-    </button>
-    <button [routerLink]="'user'" class="w20" mat-button>
-      Users<mat-icon>person</mat-icon>
-    </button>
+    <div class="container m-3">
+      <button [routerLink]="'/order'" class="w-100" mat-button>
+        <mat-icon>shopping_cart</mat-icon>
+        Orders
+      </button>
+      <button [routerLink]="'/company'" class="w-100" mat-button>
+        <mat-icon>store</mat-icon>
+        Companies
+      </button>
+      <button [routerLink]="'/products'" class="w-100" mat-button>
+        <mat-icon>list</mat-icon>
+        Products
+      </button>
+      <button [routerLink]="'user'" class="w-100" mat-button>
+        <mat-icon>person</mat-icon>
+        Users
+      </button>
+    </div>
   </mat-sidenav>
   <mat-sidenav-content >
     <!--Main Page toolbar-->
