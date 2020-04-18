@@ -10,7 +10,7 @@ steps:
 
   - task: Maven@3
     inputs:
-      mavenPomFile: 'Backend/OmegaSpring/pom.xml'
+      mavenPomFile: 'backend/pom.xml'
       goals: 'clean verify'
       publishJUnitResults: false
       javaHomeOption: 'JDKVersion'
@@ -24,8 +24,8 @@ steps:
       containerRegistry: 'omegacr'
       repository: 'prod-backend'
       command: 'buildAndPush'
-      Dockerfile: './Backend/OmegaSpring/Dockerfile'
-      buildContext: './Backend/OmegaSpring'
+      Dockerfile: './backend/Dockerfile'
+      buildContext: './backend'
       tags: |
         latest
         $(Build.BuildId)
@@ -50,7 +50,7 @@ steps:
       namespace: 'default'
       command: 'apply'
       arguments: '-f ./Devops/k8s'
-      
+
   - task: Kubernetes@1
     inputs:
       connectionType: 'Kubernetes Service Connection'
@@ -58,7 +58,7 @@ steps:
       namespace: 'default'
       command: 'set'
       arguments: 'image deployment/backend-deployment2 backend2-api=omegacr.azurecr.io/prod-backend:$(Build.BuildId)'
- 
+
   - task: Kubernetes@1
     inputs:
       connectionType: 'Kubernetes Service Connection'
@@ -66,4 +66,3 @@ steps:
       namespace: 'default'
       command: 'set'
       arguments: 'image deployment/frontend-deployment frontend-adminclient=omegacr.azurecr.io/prod-frontend:$(Build.BuildId)'
- 
