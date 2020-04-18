@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { CompanyModel } from '../models/home/company.model';
-import { AppState } from '../reducers';
+import { State } from '../reducers';
+import { CompanyModel } from '../shared/model/home/company.model';
 import * as CompanyActions from './../company/store/company.actions';
 import * as HomeActions from './store/home.actions';
 
@@ -16,7 +16,7 @@ export class HomePage {
 
   private subscriptions: Subscription;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<State>) {
     this.companies = [];
     this.subscriptions = new Subscription();
   }
@@ -29,11 +29,13 @@ export class HomePage {
       })
     );
 
-    this.store.dispatch(HomeActions.beginLoadingDashboard());
+    if (!this.companies) {
+      this.store.dispatch(HomeActions.beginLoadingDashboard());
+    }
   }
 
   loadCompaniesItems(name: string): void {
-    this.store.dispatch(HomeActions.dashboardCleanUp());
+    // this.store.dispatch(HomeActions.dashboardCleanUp());
     this.store.dispatch(CompanyActions.companySelected({selectedCompany: name}));
   }
 }

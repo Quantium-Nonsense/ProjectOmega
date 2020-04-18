@@ -1,12 +1,38 @@
-<mat-grid-list cols="2" rowHeight="4:1" gutterSize="20px">
-  <mat-grid-tile>Products</mat-grid-tile>
-  <mat-grid-tile>
-    <nav>
-      <a routerLink="/customers">Customers</a>
-    </nav>
-  </mat-grid-tile>
-  <mat-grid-tile>Orders</mat-grid-tile>
-  <mat-grid-tile>Users</mat-grid-tile>
-  <mat-grid-tile>Settings</mat-grid-tile>
-  <mat-grid-tile></mat-grid-tile>
-</mat-grid-list>
+<div
+  class="mat-typography full-body"
+  fxLayout="row wrap"
+  fxLayout.xs="column"
+  fxLayoutAlign="space-between space-between"
+>
+  <mat-card fxFlex="33">
+    <mat-card-header>
+      <mat-card-title>Companies</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mat-body-1">Click here to see all companies</mat-card-content>
+    <mat-card-actions>
+      <button [routerLink]="'/company'" fxFlexFill mat-raised-button color="primary">See all</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card fxFlex="33">
+    <!--Note here: This card should be visible only if the user is admin-->
+    <mat-card-header>
+      <mat-card-title>Users</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mat-body-1">Click here to see all users</mat-card-content>
+    <mat-card-actions>
+      <button [routerLink]="'/user'" fxFlexFill mat-raised-button color="primary">See all</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card fxFlex="33">
+    <mat-card-header>
+      <mat-card-title>Orders</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mat-body-1">Click here to see all orders</mat-card-content>
+    <mat-card-actions>
+      <button [routerLink]="'/order'" fxFlexFill mat-raised-button color="primary">See all</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+

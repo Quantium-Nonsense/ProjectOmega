@@ -1,0 +1,20 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-menu-button></ion-menu-button>
+		</ion-buttons>
+		<ion-buttons class="w2mr2 exclamation-pos" slot="end">
+			<button mat-button [mat-menu-trigger-for]="orderMenu">
+				<mat-icon [matBadge]="displayItemsInBasketIndicator ? '!' : ''">shopping_cart</mat-icon>
+			</button>
+			<mat-menu #orderMenu yPosition="above">
+				<button mat-menu-item (click)="confirmOrder()">Checkout</button>
+				<mat-divider></mat-divider>
+				<button mat-menu-item (click)="resetOrder()">Reset Order</button>
+			</mat-menu>
+		</ion-buttons>
+		<ion-title>
+			{{title}}
+		</ion-title>
+	</ion-toolbar>
+</ion-header>

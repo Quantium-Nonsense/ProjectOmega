@@ -1,4 +1,10 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '../RepClient/src/theme/util';
+
+html,
+body {
+  height: 100%;
+}
 
 body {
   font-family: Roboto, Arial, sans-serif;
@@ -13,4 +19,14 @@ body {
   float: right;
   font-size: 8pt;
   margin: 8px;
+}
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing.dark-backdrop {
+  background: #000;
+  opacity: 0.75 !important;
+}
+
+mat-sidenav {
+  height: 100vh;
+  min-width: 30vw;
 }

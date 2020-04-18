@@ -1,14 +1,6 @@
-<ion-header>
-	<ion-toolbar>
-		<ion-buttons slot="start">
-			<ion-menu-button></ion-menu-button>
-		</ion-buttons>
-		<ion-title>
-			Home
-		</ion-title>
-	</ion-toolbar>
-</ion-header>
+<app-header title="Dashboard">
 
+</app-header>
 <ion-content>
 	<ion-grid>
 		<ion-row id="mainContent" *ngIf="companies; else loading">
@@ -31,27 +23,7 @@
 			</ion-col>
 		</ion-row>
 		<ng-template #loading>
-			<!--Dummy loading diplsay to show the user something is loading-->
-			<ion-row id="loadingElements">
-				<ion-col size="6" *ngFor="let i of [1,2,3,4,5,6,7,8]">
-					<ion-card>
-						<div>
-							<ion-spinner name="dots"></ion-spinner>
-						</div>
-						<ion-card-header>
-							<ion-card-subtitle></ion-card-subtitle>
-							<ion-card-title></ion-card-title>
-						</ion-card-header>
-						<ion-card-content>
-							<p></p>
-						</ion-card-content>
-						<hr>
-						<ion-item>
-						</ion-item>
-					</ion-card>
-				</ion-col>
-			</ion-row>
-
+			<app-list-loader [noOfItems]="4"></app-list-loader>
 		</ng-template>
 	</ion-grid>
 
