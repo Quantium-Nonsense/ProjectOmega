@@ -4,7 +4,6 @@ import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/guads/auth.guard';
 import { CustomersComponent } from './customers/customers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { UserComponent } from './user/user.component';
 
 export const routes: Routes = [
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}, // default path
