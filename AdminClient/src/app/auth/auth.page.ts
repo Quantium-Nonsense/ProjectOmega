@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LoadingController, MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from '../reducers';
+import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
 import * as AuthActions from './store/auth.actions';
 import { AuthState } from './store/auth.reducer';
 
@@ -13,8 +13,7 @@ import { AuthState } from './store/auth.reducer';
   styleUrls: ['./auth.page.scss'],
   templateUrl: './auth.page.html'
 })
-
-export class AuthPage implements OnInit {
+export class AuthPage implements OnInit, OnDestroy {
 
   /**
    * The authentication form
@@ -26,45 +25,43 @@ export class AuthPage implements OnInit {
    */
   private subscriptions = new Subscription();
 
-  /**
-   * This is the loader that was created and currently exists on the page
-   * This variable will be used to dismiss that existing loader
-   */
-  private pageLoader: HTMLIonLoadingElement;
-
   constructor(
-    public menuController: MenuController,
-    public loadingController: LoadingController,
+    public loadingSpinnerService: LoadingSpinnerService,
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
   ) {
 
   }
 
-  ionViewWillEnter(): void {
-    // Disable sideway scroll on log in page
-    this.menuController.enable(false);
+  ngOnInit(): void {
+
+    this.authForm = this.formInitialization();
     this.subscriptions.add(
       this.store.select('auth').subscribe((state: AuthState) => {
         if (state.errorMessage) {
           this.showMessage(state.errorMessage);
         }
-        this.handleLoaderDisplay(state.loading);
+        this.loadingSpinnerService.spin$.next(state.loading);
       })
     );
   }
 
-  ionViewWillLeave(): void {
+  ngOnDestroy(): void {
     // Clean up all subs to avoid memory leak
     this.subscriptions.unsubscribe();
-
-    // Ensure the loader is no longer visible as we are being redirected and that page will display if needed
-    this.pageLoader.dismiss();
   }
 
-  ngOnInit(): void {
-    this.authForm = this.formInitialization();
-  }
+  /**
+   * Displays a message message on the Auth Page as a little toast at the bottom
+   *
+   * @param message The message to display
+   * @param duration The duration for the message
+   */
+  public showMessage = (message: string, duration = 2000): void => {
+    this.snackBar.open(message, undefined, {
+      duration: 2000
+    });
+  };
 
   /**
    * Submit form
@@ -102,17 +99,6 @@ export class AuthPage implements OnInit {
   }
 
   /**
-   * Displays a message message on the Auth Page as a little toast at the bottom
-   * @param message The message to display
-   * @param duration The duration for the message
-   */
-  showMessage = (message: string, duration = 2000): void => {
-    this.snackBar.open(message, undefined, {
-      duration: 2000
-    });
-  }
-
-  /**
    * Returns appropriate error message for email validation
    */
   get emailErrorMessage(): string {
@@ -131,27 +117,6 @@ export class AuthPage implements OnInit {
   get passwordHasError(): boolean {
     return this.authForm.get('password').invalid;
   }
-
-  /**
-   * Decides if page should display the loading spinner
-   * @param shouldBeDisplayed If loader should be displayed
-   */
-  handleLoaderDisplay = (shouldBeDisplayed: boolean): void => {
-    if (!(!shouldBeDisplayed && this.pageLoader)) {
-      if (shouldBeDisplayed) {
-        this.loadingController.create({
-          message: 'Loading...'
-        }).then(loader => {
-          this.pageLoader = loader;
-          this.pageLoader.present();
-        });
-      }
-    } else {
-      this.pageLoader.dismiss();
-
-      return;
-    }
-  };
 
   /**
    * Simply initializes the form to be used with default values and validators

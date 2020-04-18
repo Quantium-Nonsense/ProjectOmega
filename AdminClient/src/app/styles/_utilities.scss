@@ -1,0 +1,86 @@
+// Utilities
+
+$utilities: () !default;
+// stylelint-disable-next-line scss/dollar-variable-default
+$utilities: map-merge(
+      'margin':       responsive: tru       property: margi       class:        values: map-merge($spacers, (auto: auto          'margin-x':       responsive: tru       property: margin-right margin-lef       class: m       values: map-merge($spacers, (auto: auto          'margin-y':       responsive: tru       property: margin-top margin-botto       class: m       values: map-merge($spacers, (auto: auto          'margin-top':       responsive: tru       property: margin-to       class: m       values: map-merge($spacers, (auto: auto          'margin-right':       responsive: tru       property: margin-righ       class: m       values: map-merge($spacers, (auto: auto          'margin-bottom':       responsive: tru       property: margin-botto       class: m       values: map-merge($spacers, (auto: auto          'margin-left':       responsive: tru       property: margin-lef       class: m       values: map-merge($spacers, (auto: auto))       
+      'negative-m      (
+        responsi      ,
+        property      ,
+              ,
+        values: $negativ    ers     ),
+      'negative-mar      (
+        responsi      ,
+        property: margin-right mar      ,
+        c      ,
+        values: $negativ    ers     ),
+      'negative-mar      (
+        responsi      ,
+        property: margin-top margi      ,
+        c      ,
+        values: $negativ    ers     ),
+      'negative-margi      (
+        responsi      ,
+        property: ma      ,
+        c      ,
+        values: $negativ    ers     ),
+      'negative-margin-      (
+        responsi      ,
+        property: marg      ,
+        c      ,
+        values: $negativ    ers     ),
+      'negative-margin-b      (
+        responsi      ,
+        property: margi      ,
+        c      ,
+        values: $negativ    ers     ),
+      'negative-margin      (
+        responsi      ,
+        property: mar      ,
+        c      ,
+        values: $negativ    ers     ),
+      
+        ding': (
+        r      e: true,
+        pr      padding,
+       lass: p,
+            : $    s
+      ),
+          ng-x': (
+        r      e: true,
+        property: padding-rig      ng-left,
+        ass: px,
+            : $    s
+      ),
+          ng-y': (
+        r      e: true,
+        property: padding-top      -bottom,
+        ass: py,
+            : $    s
+      ),
+            -top': (
+        r      e: true,
+        proper      ing-top,
+        ass: pt,
+            : $    s
+      ),
+      'p      ight': (
+        r      e: true,
+        property      g-right,
+        ass: pr,
+            : $    s
+      ),
+      'pa      ttom': (
+        r      e: true,
+        property:      -bottom,
+        ass: pb,
+            : $    s
+      ),
+      '      left': (
+        r      e: true,
+        propert      ng-left,
+        ass: pl,
+            : $  ers     ),
+    ),
+    $utilities
+);
