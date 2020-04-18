@@ -1,0 +1,69 @@
+trigger:
+  batch: true
+  tags:
+    include:
+      - '*'
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'Backend/OmegaSpring/pom.xml'
+      goals: 'clean verify'
+      publishJUnitResults: false
+      javaHomeOption: 'JDKVersion'
+      mavenVersionOption: 'Default'
+      mavenAuthenticateFeed: false
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'omegacr'
+      repository: 'prod-backend'
+      command: 'buildAndPush'
+      Dockerfile: './Backend/OmegaSpring/Dockerfile'
+      buildContext: './Backend/OmegaSpring'
+      tags: |
+        latest
+        $(Build.BuildId)
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'omegacr'
+      repository: 'prod-frontend'
+      command: 'buildAndPush'
+      Dockerfile: './AdminClient/Dockerfile'
+      buildContext: './AdminClient'
+      tags: |
+        latest
+        $(Build.BuildId)
+
+
+
+  - task: Kubernetes@1
+    inputs:
+      connectionType: 'Kubernetes Service Connection'
+      kubernetesServiceEndpoint: 'OmegaCluster-prod'
+      namespace: 'default'
+      command: 'apply'
+      arguments: '-f ./Devops/k8s'
+      
+  - task: Kubernetes@1
+    inputs:
+      connectionType: 'Kubernetes Service Connection'
+      kubernetesServiceEndpoint: 'OmegaCluster-prod'
+      namespace: 'default'
+      command: 'set'
+      arguments: 'image deployment/backend-deployment2 backend2-api=omegacr.azurecr.io/prod-backend:$(Build.BuildId)'
+ 
+  - task: Kubernetes@1
+    inputs:
+      connectionType: 'Kubernetes Service Connection'
+      kubernetesServiceEndpoint: 'OmegaCluster-prod'
+      namespace: 'default'
+      command: 'set'
+      arguments: 'image deployment/frontend-deployment frontend-adminclient=omegacr.azurecr.io/prod-frontend:$(Build.BuildId)'
+ 

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: 'backend-deployment2'
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      component: backend2
+  template:
+    metadata:
+      labels:
+
+        component: backend2
+    spec:
+      containers:
+        - name: backend2-api
+          image: omegacr.azurecr.io/dev-backend
+          ports:
+            - containerPort: 5000
+          env:
+                - name: SECRETS_DB_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: devops2-db
+                      key: spring.datasource.username
+                - name: SECRETS_DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: devops2-db
+                      key: spring.datasource.password
+                - name: SECRETS_DB_URL
+                  valueFrom:
+                      secretKeyRef:
+                       name: devops2-db
+                       key: spring.datasource.url
+
+
+
+
