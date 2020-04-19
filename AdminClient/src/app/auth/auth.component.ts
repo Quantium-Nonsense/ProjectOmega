@@ -81,6 +81,12 @@ export class AuthComponent implements OnInit, OnDestroy {
     });
   };
 
+  ngOnDestroy(): void {
+    // Clean up all subs to avoid memory leak
+    this.subscriptions.unsubscribe();
+    this.loadingSpinnerService.spin$.next(false);
+  }
+
   /**
    * Submit form
    */
@@ -98,12 +104,6 @@ export class AuthComponent implements OnInit, OnDestroy {
    */
   get emailHasError(): boolean {
     return this.authForm.get('email').invalid;
-  }
-
-  ngOnDestroy(): void {
-    // Clean up all subs to avoid memory leak
-    this.subscriptions.unsubscribe();
-    this.loadingSpinnerService.spin$.next(false);
   }
 
   protected isFormValid(): boolean {

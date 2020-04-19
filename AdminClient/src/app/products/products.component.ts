@@ -5,9 +5,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
 
-import { Product, ProductsDataSource } from './products-datasource';
+import { Product, ProductsDataSource } from '../../data/products/products-datasource';
+import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-products',
@@ -41,6 +41,7 @@ export class ProductsComponent implements AfterViewInit, OnInit {
   }
 
   handleReadDetails(id: number) {
+    this.dialog.open;
     this.router.navigate(['./', 'details', id]);
   }
 
