@@ -26,7 +26,7 @@
       }
 
       // Extend each breakpoint which is smaller or equal to the current breakpoint
-      $extend-breakpoint: true;
+      $extend-breakpoint: true; /* stylelint-disable-line order/order */
 
       @each $name, $width in $grid-breakpoints {
         @if ($extend-breakpoint) {

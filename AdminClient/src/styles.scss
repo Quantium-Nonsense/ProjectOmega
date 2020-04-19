@@ -26,6 +26,7 @@ body {
   opacity: 0.75 !important;
 }
 
+/* stylelint-disable-next-line selector-type-no-unknown */
 mat-sidenav {
   height: 100vh;
   min-width: 200px;
