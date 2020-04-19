@@ -13,6 +13,10 @@ export const selectIsLoading: MemoizedSelector<fromApp.State, boolean> = createS
   selectUserState,
   (state: State) => state.loading
 );
+export const selectUsers: MemoizedSelector<fromApp.State, UserModel[]> = createSelector(
+  selectUserState,
+  (state: State) => state.users
+);
 
 const initialState: State = {
   users: null,
@@ -25,6 +29,11 @@ const _userReducer = createReducer(
   on(UserActions.beginLoadingUserPage, (prevState: State) => ({
     ...prevState,
     loading: true
+  })),
+  on(UserActions.usersLoaded, (prevState: State, {users}) => ({
+    ...prevState,
+    users,
+    loading: false
   }))
 );
 
