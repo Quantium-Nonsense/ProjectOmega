@@ -19,9 +19,7 @@ export class ProductDetailsDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ProductDetailsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: Product,
-    @Inject(MAT_DIALOG_DATA) private title: string,
-    @Inject(MAT_DIALOG_DATA) private editable: boolean,
+    @Inject(MAT_DIALOG_DATA) private data: { product: Product, title: string, editable: boolean },
   ) {
     this.suppliers = SuppliersDataSource.getInstance().getAll();
   }
@@ -51,7 +49,7 @@ export class ProductDetailsDialogComponent implements OnInit {
   }
 
   protected get descriptionErrorMessage(): string {
-    const descriptionCtrl = this.productItemForm.get('decsription');
+    const descriptionCtrl = this.productItemForm.get('description');
 
     return descriptionCtrl.hasError('required') ? 'Description is required!' : '';
   }
@@ -68,7 +66,7 @@ export class ProductDetailsDialogComponent implements OnInit {
     }
 
     if (priceCtrl.hasError('pattern')) {
-      return 'Price must be a valid number';
+      return 'Price must be a valid amount with either 0 or 2 decimal places';
     }
 
     if (priceCtrl.hasError('min')) {
@@ -78,6 +76,7 @@ export class ProductDetailsDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.productItemForm = this.formInitialization();
   }
 
   protected isFormValid(): boolean {
@@ -86,42 +85,50 @@ export class ProductDetailsDialogComponent implements OnInit {
 
   private onSaveClick() {
     const newProduct: Product = {
-      id: this.data.id,
+      id: this.data.product ? this.data.product.id : null,
       supplier: this.productItemForm.get('supplier').value.name,
       supplierId: this.productItemForm.get('supplier').value.id,
       name: this.productItemForm.get('name').value,
       description: this.productItemForm.get('description').value,
-      price: this.productItemForm.get('price').value,
+      price: parseFloat(this.productItemForm.get('price').value),
     };
 
     this.dialogRef.close(newProduct);
   }
 
-  private formInitialization = (initialProduct: Product = {
-    id: null,
-    supplier: '',
-    supplierId: null,
-    name: '',
-    description: '',
-    price: null,
-  }): FormGroup => {
+  private formInitialization = (): FormGroup => {
+    const editable = this.data.editable;
+    const initialProduct = this.data.product;
+    console.log(initialProduct);
 
     return new FormGroup({
       supplier: new FormControl(
-        this.suppliers.find((element) => element.id === initialProduct.supplierId),
+        {
+          value: initialProduct ? this.suppliers.find((element) => element.id === initialProduct.supplierId) : '',
+          disabled: !editable,
+        },
         [Validators.required],
       ),
       name: new FormControl(
-        initialProduct.name,
+        {
+          value: initialProduct ? initialProduct.name : '',
+          disabled: !editable,
+        },
         [Validators.required],
       ),
       description: new FormControl(
-        initialProduct.description,
+        {
+          value: initialProduct ? initialProduct.description : '',
+          disabled: !editable,
+        },
         [Validators.required],
       ),
       price: new FormControl(
-        initialProduct.price,
-        [Validators.required, Validators.min(0), Validators.pattern(/\d+(\.\d{2})?/)],
+        {
+          value: initialProduct ? initialProduct.price.toFixed(2) : '',
+          disabled: !editable
+        },
+        [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{2})?$/)],
       )
     });
   };

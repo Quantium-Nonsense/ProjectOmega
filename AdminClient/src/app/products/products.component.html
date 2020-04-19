@@ -39,13 +39,13 @@
         <th *matHeaderCellDef class="px-3" mat-header-cell>Actions</th>
         <td *matCellDef="let row" class="pl-3" mat-cell>
           <!-- TODO permissions -->
-          <button (click)="handleReadDetails(row.id)" aria-label="Details" color="primary" mat-icon-button>
+          <button (click)="handleReadDetails(row)" aria-label="Details" color="primary" mat-icon-button>
             <mat-icon>visibility</mat-icon>
           </button>
-          <button (click)="handleEditDetails(row.id)" aria-label="Edit Product" color="primary" mat-icon-button>
+          <button (click)="handleEditDetails(row)" aria-label="Edit Product" color="primary" mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
-          <button (click)="handleDeleteDetails(row.id)" aria-label="Edit Product" color="primary" mat-icon-button>
+          <button (click)="handleDeleteDetails(row)" aria-label="Edit Product" color="primary" mat-icon-button>
             <mat-icon>delete</mat-icon>
           </button>
         </td>

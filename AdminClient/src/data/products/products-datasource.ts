@@ -78,6 +78,16 @@ export class ProductsDataSource extends DataSource<Product> {
     return this.instance;
   }
 
+  public static equalsWithoutId(product1: Product, product2: Product): boolean {
+    return (
+      product1.supplier === product2.supplier
+      && product1.supplierId === product2.supplierId
+      && product1.name === product2.name
+      && product1.description === product2.description
+      && product1.price === product2.price
+    );
+  }
+
   /* In lieu of backend */
   public deleteById(id: number): void {
     const index: number = this.data.findIndex((element) => element.id === id);
@@ -86,7 +96,7 @@ export class ProductsDataSource extends DataSource<Product> {
   }
 
   public getItemById(id: number): Product {
-    return this.data.filter(element => element.id === id)[0];
+    return this.data.find(element => element.id === id);
   }
 
   public addItem(item: Product): void {
@@ -96,7 +106,10 @@ export class ProductsDataSource extends DataSource<Product> {
 
   public updateItem(item: Product): void {
     const index: number = this.data.findIndex((element) => element.id === item.id);
+    console.log(item);
+    console.log(this.data[index]);
     this.data[index] = item;
+    console.log(this.data[index]);
     this.updateData(this.data);
   }
 

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 
 import { Product, ProductsDataSource } from '../../data/products/products-datasource';
 import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
+import { ProductDetailsDialogComponent } from './product-details-dialog/product-details-dialog.component';
 
 @Component({
   selector: 'app-products',
@@ -40,32 +41,62 @@ export class ProductsComponent implements AfterViewInit, OnInit {
     this.table.dataSource = this.dataSource;
   }
 
-  handleReadDetails(id: number) {
-    this.dialog.open;
-    this.router.navigate(['./', 'details', id]);
+  handleReadDetails(product: Product) {
+    const dialogRef = this.dialog.open(ProductDetailsDialogComponent, {
+      width: '500px',
+      data: {product, title: `Details for ${product.name}`, editable: false}
+    });
   }
 
-  handleEditDetails(id: number) {
-    this.router.navigate(['./', 'edit', id]);
+  handleEditDetails(product: Product) {
+    const dialogRef = this.dialog.open(ProductDetailsDialogComponent, {
+      width: '500px',
+      data: {product, title: `Edit ${product.name}`, editable: true}
+    });
+
+    dialogRef.afterClosed().subscribe(updatedProduct => {
+      if (updatedProduct && !ProductsDataSource.equalsWithoutId(product, updatedProduct)) {
+        this.dataSource.updateItem(updatedProduct);
+        this.snackBar.open(`${updatedProduct.name} was successfully updated`, 'Close', {duration: 3000});
+      } else {
+        this.snackBar.open(`${updatedProduct.name} was not updated as no changes were saved`, 'Close', {duration: 3000});
+      }
+    });
   }
 
   handleCreate() {
-    this.router.navigate(['./', 'new']);
+    const dialogRef = this.dialog.open(ProductDetailsDialogComponent, {
+      width: '500px',
+      data: {
+        product: null,
+        title: 'Create new product',
+        editable: true
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(newProduct => {
+      if (newProduct) {
+        newProduct.id = this.dataSource.getNextId();
+        this.dataSource.addItem(newProduct);
+        this.snackBar.open(`${newProduct.name} was successfully added`, 'Close', {duration: 3000});
+      } else {
+        this.snackBar.open(`${newProduct.name} was not updated as no changes were made`, 'Close', {duration: 3000});
+      }
+    });
   }
 
-  handleDeleteDetails(id: number) {
-    const data = this.dataSource.getItemById(id);
+  handleDeleteDetails(product: Product) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       width: '500px',
-      data: data.name,
+      data: product.name,
     });
 
     dialogRef.afterClosed().subscribe(willDelete => {
       if (willDelete) {
-        this.dataSource.deleteById(id);
-        this.snackBar.open(`${data.name} was successfully deleted`, 'Close', {duration: 3000});
+        this.dataSource.deleteById(product.id);
+        this.snackBar.open(`${product.name} was successfully deleted`, 'Close', {duration: 3000});
       } else {
-        this.snackBar.open(`${data.name} was not deleted`, 'Close', {duration: 3000});
+        this.snackBar.open(`${product.name} was not deleted`, 'Close', {duration: 3000});
       }
     });
   }
