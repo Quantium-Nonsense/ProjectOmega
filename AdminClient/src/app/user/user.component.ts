@@ -46,7 +46,9 @@ export class UserComponent implements OnInit {
   }
 
   filteringAction = (user: UserModel, filterValue: string) => {
-    return user.email.toLowerCase().includes(filterValue) || user.role.toLowerCase().includes(filterValue);
+    return user.email.toLowerCase().includes(filterValue)
+      || user.role.toLowerCase().includes(filterValue)
+      || user.companyId.toLowerCase().includes(filterValue);
   };
 
   editUser(user: UserModel) {

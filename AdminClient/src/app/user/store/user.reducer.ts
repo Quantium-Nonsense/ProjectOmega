@@ -18,7 +18,7 @@ export const selectUsers: MemoizedSelector<fromApp.State, UserModel[]> = createS
   selectUserState,
   (state: State) => state.users
 );
-export const selectFocusedUser:  MemoizedSelector<fromApp.State, UserModel> = createSelector(
+export const selectFocusedUser: MemoizedSelector<fromApp.State, UserModel> = createSelector(
   selectUserState,
   (state: State) => state.focusedUser
 );
@@ -57,6 +57,20 @@ const _userReducer = createReducer(
     loading: false,
     users: newUserList,
     focusedUser: null
+  })),
+  on(UserActions.editUser, (prevState: State) => ({
+    ...prevState,
+    loading: true,
+  })),
+  on(UserActions.showEditUserModal, (prevState: State, {user}) => ({
+    ...prevState,
+    focusedUser: user
+  })),
+  on(UserActions.userSuccessfullyEdited, (prevState, {newUsers}) => ({
+    ...prevState,
+    users: [...newUsers],
+    focusedUser: null,
+    loading: false
   }))
 );
 

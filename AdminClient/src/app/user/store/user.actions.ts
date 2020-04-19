@@ -1,6 +1,16 @@
 import { createAction, props } from '@ngrx/store';
 import { UserModel } from '../../shared/model/user.model';
 
+export const userSuccessfullyEdited = createAction(
+  '[Edit User - Effect] User successfully changed',
+  props<{newUsers: UserModel[]}>()
+);
+
+export const editUser = createAction(
+  '[Edit User - Component] Edit user',
+  props<{user: UserModel}>()
+);
+
 export const userDeleted = createAction(
   '[User - Effect] User deleted',
   props<{ newUserList: UserModel[] }>()

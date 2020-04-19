@@ -10,7 +10,6 @@ import { switchAll } from 'rxjs/operators';
 })
 export class LoadingSpinnerService {
   private spin$: Subject<Observable<boolean>> = new Subject<Observable<boolean>>();
-
   private spinnerTopRef: OverlayRef = this.cdkSpinnerCreate();
 
   constructor(

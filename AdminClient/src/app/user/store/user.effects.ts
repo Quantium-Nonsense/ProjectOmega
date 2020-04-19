@@ -3,16 +3,39 @@ import { MatDialog } from '@angular/material/dialog';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { delay, map, switchMap, take } from 'rxjs/operators';
+import { delay, map, switchMap, take, tap } from 'rxjs/operators';
 import * as fromApp from '../../reducers/index';
 import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
 import { UserModel } from '../../shared/model/user.model';
+import { EditUserComponent } from '../edit-user/edit-user.component';
 import * as UserActions from './user.actions';
 import { selectFocusedUser, selectUsers } from './user.reducer';
 
 @Injectable()
 export class UserEffects {
+
+  editUser$ = createEffect(() => this.actions$.pipe(
+    ofType(UserActions.editUser),
+    switchMap((action: Action & { user: UserModel }) => {
+      let users: UserModel[] = [];
+      this.store.select(selectUsers)
+        .pipe(take(1))
+        .subscribe((oldUsers: UserModel[]) => {
+          users = [...oldUsers];
+          users[oldUsers.findIndex(u => u.id === action.user.id)] = {...action.user};
+        });
+
+      return of(UserActions.userSuccessfullyEdited({newUsers: users})).pipe(delay(2000), tap(() => this.dialog.closeAll()));
+    })
+  ));
+
+  showEditUserModal = createEffect(() => this.actions$.pipe(
+    ofType(UserActions.showEditUserModal),
+    map((action: Action) => this.dialog.open<EditUserComponent, any>(EditUserComponent, {
+      width: '60vw',
+    }))
+  ), {dispatch: false});
 
   deleteUser$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.deleteFocusedUser),
@@ -23,7 +46,7 @@ export class UserEffects {
 
       this.store.select(selectFocusedUser).pipe(take(1)).subscribe(user => currentUser = user);
       this.store.select(selectUsers).pipe(take(1)).subscribe(users => {
-        newUsers = users.filter(u => u.id !== currentUser.id)
+        newUsers = users.filter(u => u.id !== currentUser.id);
       });
 
       return of(UserActions.userDeleted({newUserList: newUsers})).pipe(delay(2000));
