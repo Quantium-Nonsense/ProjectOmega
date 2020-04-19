@@ -3,6 +3,10 @@
     [(opened)]="sideNavOpen"
     mode="over">
     <mat-action-list class="my-3">
+      <button [routerLink]="'/'" mat-list-item>
+        <mat-icon class="mr-1">home</mat-icon>
+        Dashboard
+      </button>
       <button [routerLink]="'/order'" mat-list-item>
         <mat-icon class="mr-1">shopping_cart</mat-icon>
         Orders
