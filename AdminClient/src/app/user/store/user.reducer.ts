@@ -6,6 +6,7 @@ import * as fromApp from './../../reducers/index';
 export interface State {
   users: UserModel[];
   loading: boolean;
+  focusedUser: UserModel;
 }
 
 export const selectUserState = (state: fromApp.State) => state.user;
@@ -17,10 +18,15 @@ export const selectUsers: MemoizedSelector<fromApp.State, UserModel[]> = createS
   selectUserState,
   (state: State) => state.users
 );
+export const selectFocusedUser:  MemoizedSelector<fromApp.State, UserModel> = createSelector(
+  selectUserState,
+  (state: State) => state.focusedUser
+);
 
 const initialState: State = {
   users: null,
-  loading: false
+  loading: false,
+  focusedUser: null
 };
 
 // eslint-disable-next-line no-underscore-dangle
@@ -34,6 +40,23 @@ const _userReducer = createReducer(
     ...prevState,
     users,
     loading: false
+  })),
+  on(
+    UserActions.showDeleteUserDialog,
+    UserActions.showDeleteUserDialog,
+    (prevState, {user}) => ({
+      ...prevState,
+      focusedUser: user
+    })),
+  on(UserActions.deleteFocusedUser, (prevState: State) => ({
+    ...prevState,
+    loading: true
+  })),
+  on(UserActions.userDeleted, (prevState: State, {newUserList}) => ({
+    ...prevState,
+    loading: false,
+    users: newUserList,
+    focusedUser: null
   }))
 );
 

@@ -1,14 +1,62 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import { delay, map, switchMap } from 'rxjs/operators';
+import { delay, map, switchMap, take } from 'rxjs/operators';
+import * as fromApp from '../../reducers/index';
+import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
+import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
 import { UserModel } from '../../shared/model/user.model';
 import * as UserActions from './user.actions';
-import * as fromApp from '../../reducers/index';
+import { selectFocusedUser, selectUsers } from './user.reducer';
 
 @Injectable()
 export class UserEffects {
+
+  deleteUser$ = createEffect(() => this.actions$.pipe(
+    ofType(UserActions.deleteFocusedUser),
+    switchMap((action: Action) => {
+
+      let newUsers: UserModel[] = [];
+      let currentUser: UserModel;
+
+      this.store.select(selectFocusedUser).pipe(take(1)).subscribe(user => currentUser = user);
+      this.store.select(selectUsers).pipe(take(1)).subscribe(users => {
+        newUsers = users.filter(u => u.id !== currentUser.id)
+      });
+
+      return of(UserActions.userDeleted({newUserList: newUsers})).pipe(delay(2000));
+    })
+  ));
+
+  showDeleteUserDialog$ = createEffect(() => this.actions$.pipe(
+    ofType(UserActions.showDeleteUserDialog),
+    map((action: Action & { user: UserModel }) =>
+      this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(PopupDialogComponent, {
+        data: {
+          title: 'Delete user',
+          description: 'Are you sure you want to delete this user?',
+          dialogActions: [
+            {
+              action: () => {
+                this.dialog.closeAll();
+                this.store.dispatch(UserActions.deleteFocusedUser());
+              },
+              text: 'Confirm',
+              color: 'warn'
+            },
+            {
+              action: () => this.dialog.closeAll(),
+              text: 'Cancel',
+              color: 'primary'
+            }
+          ]
+        }
+      }))
+    // Even though this indicates dispatch as false please note that the dispatch action on dialog actions will infact be dispatched
+    // This is due that the modal is the one calling the function and its not contained within this effect
+  ), {dispatch: false});
 
   beginLoadingPage$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.beginLoadingUserPage),
@@ -22,7 +70,8 @@ export class UserEffects {
 
   constructor(
     private store: Store<fromApp.State>,
-    private actions$: Actions
+    private actions$: Actions,
+    public dialog: MatDialog
   ) {
   }
 
@@ -47,3 +96,4 @@ export class UserEffects {
     return mockUsers;
   };
 }
+

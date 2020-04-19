@@ -10,7 +10,7 @@ import * as fromAuth from '../auth/store/auth.reducer';
 import * as fromUser from '../user/store/user.reducer';
 
 export interface State {
-  auth: fromAuth.AuthState;
+  auth: fromAuth.State;
   user: fromUser.State;
 }
 

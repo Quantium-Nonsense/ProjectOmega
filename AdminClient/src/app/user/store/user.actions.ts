@@ -1,6 +1,25 @@
 import { createAction, props } from '@ngrx/store';
 import { UserModel } from '../../shared/model/user.model';
 
+export const userDeleted = createAction(
+  '[User - Effect] User deleted',
+  props<{ newUserList: UserModel[] }>()
+);
+
+export const deleteFocusedUser = createAction(
+  '[User - Effect] Delete focused user'
+);
+
+export const showEditUserModal = createAction(
+  '[User - Page] Show the user edit user modal',
+  props<{ user: UserModel }>()
+);
+
+export const showDeleteUserDialog = createAction(
+  '[User - Page] Show user dialog',
+  props<{ user: UserModel }>()
+);
+
 export const beginLoadingUserPage = createAction(
   '[User - Page] Prepare the page to indicate loading'
 );
@@ -11,5 +30,5 @@ export const loadAllUsers = createAction(
 
 export const usersLoaded = createAction(
   '[User - Effect] Users loaded',
-  props<{users: UserModel[]}>()
+  props<{ users: UserModel[] }>()
 );

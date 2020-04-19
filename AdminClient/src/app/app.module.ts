@@ -24,6 +24,7 @@ import { AuthEffects } from './auth/store/auth.effects';
 import { CustomersComponent } from './customers/customers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { appReducer, metaReducers } from './reducers';
+import { PopupDialogComponent } from './shared/components/popup-dialog/popup-dialog.component';
 import { SharedModule } from './shared/shared.module';
 import { UserEffects } from './user/store/user.effects';
 
@@ -69,4 +70,5 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
   ],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {
+}

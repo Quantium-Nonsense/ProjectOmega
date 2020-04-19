@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import * as fromApp from '../reducers/index';
+import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
 import { UserModel } from '../shared/model/user.model';
 import * as fromUser from './store/user.reducer';
 import * as UserActions from './store/user.actions';
@@ -24,7 +25,8 @@ export class UserComponent implements OnInit {
   private subscription: Subscription;
 
   constructor(
-    private store: Store<fromApp.State>
+    private store: Store<fromApp.State>,
+    private spinnerService: LoadingSpinnerService
   ) {
     this.displayColumns = ['email', 'role', 'companyId', 'actions'];
     this.users = new MatTableDataSource<UserModel>([]);
@@ -34,6 +36,7 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(UserActions.beginLoadingUserPage());
     this.isLoading = this.store.select(fromUser.selectIsLoading);
+    this.spinnerService.observeNext(this.store.select(fromUser.selectIsLoading));
     this.subscription.add(
       this.store.select(fromUser.selectUsers).subscribe(users => {
         this.users.data = users;
@@ -46,4 +49,11 @@ export class UserComponent implements OnInit {
     return user.email.toLowerCase().includes(filterValue) || user.role.toLowerCase().includes(filterValue);
   };
 
+  editUser(user: UserModel) {
+    this.store.dispatch(UserActions.showEditUserModal({user}));
+  }
+
+  deleteUser(user: UserModel) {
+    this.store.dispatch(UserActions.showDeleteUserDialog({user}));
+  }
 }

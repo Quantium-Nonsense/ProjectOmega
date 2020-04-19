@@ -2,36 +2,30 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Injectable } from '@angular/core';
 import { MatSpinner } from '@angular/material/progress-spinner';
-import { Subject } from 'rxjs';
-import { map, scan } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { switchAll } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoadingSpinnerService {
-  public spin$: Subject<boolean> = new Subject();
+  private spin$: Subject<Observable<boolean>> = new Subject<Observable<boolean>>();
 
   private spinnerTopRef: OverlayRef = this.cdkSpinnerCreate();
 
   constructor(
     private overlay: Overlay,
   ) {
-    this.spin$
-      .asObservable()
-      .pipe(
-        map(val => val ? 1 : -1),
-        scan((acc, one) => (acc + one) >= 0 ? acc + one : 0, 0)
-      )
-      .subscribe(
-        (res) => {
-          if (res === 1) {
-            this.showSpinner();
-          } else if (res === 0) {
-            if (this.spinnerTopRef.hasAttached()) {
-              this.stopSpinner();
-            }
+    this.spin$.pipe(switchAll())
+      .subscribe(shouldDisplay => {
+        if (shouldDisplay) {
+          this.showSpinner();
+        } else {
+          if (this.spinnerTopRef.hasAttached()) {
+            this.stopSpinner();
           }
-        });
+        }
+      });
   }
 
   public showSpinner() {
@@ -41,6 +35,10 @@ export class LoadingSpinnerService {
   public stopSpinner() {
     this.spinnerTopRef.detach();
   }
+
+  public observeNext = (newObservable: Observable<boolean>) => {
+    this.spin$.next(newObservable);
+  };
 
   private cdkSpinnerCreate() {
     return this.overlay.create({
