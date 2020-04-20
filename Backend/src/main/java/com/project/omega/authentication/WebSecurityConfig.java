@@ -50,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/authenticate",
                         "/api/registration",
                         "/api/confirmRegistration").permitAll()
+                .antMatchers("/**").hasRole("SUPER_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
