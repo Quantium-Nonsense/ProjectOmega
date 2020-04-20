@@ -4,7 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Product, ProductsDataSource } from '../../data/products/products-datasource';
@@ -28,7 +27,6 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   constructor(
-    private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {
