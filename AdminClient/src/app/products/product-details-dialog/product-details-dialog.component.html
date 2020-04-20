@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
-<div mat-dialog-content>
+<mat-dialog-content>
   <form
     [formGroup]="productItemForm"
     class="max-height"
@@ -48,13 +48,13 @@
       </mat-form-field>
     </div>
   </form>
-</div>
-<div *ngIf="data.editable" fxLayout="row" fxLayoutAlign="space-between" mat-dialog-actions>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="data.editable" align="end">
   <button (click)="onSaveClick()" [disabled]="!isFormValid()" cdkFocusInitial color="primary" mat-raised-button>
     <mat-icon class="mr-1">save</mat-icon>
     Save
   </button>
-</div>
+</mat-dialog-actions>
 
 
 <!--  id: number,
