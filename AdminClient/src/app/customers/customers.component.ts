@@ -1,7 +1,11 @@
-import { Component, OnInit, Output } from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import { delay } from 'rxjs/operators';
 import { Customer } from '../customer';
 import { CustomersService } from '../customers.service';
+import {MatTableDataSource} from '@angular/material/table';
+import {FormControl, FormGroup} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {MatInput} from '@angular/material/input';
 
 @Component({
   selector: 'app-customers',
@@ -11,8 +15,9 @@ import { CustomersService } from '../customers.service';
 export class CustomersComponent implements OnInit {
 
   displayColumns: string[] = ['name', 'category', 'email', 'country', 'actions'];
-  customers: Customer[];
-  inputName: string;
+  // customers: Customer[];
+  customers: MatTableDataSource<Customer>;
+  searchFormControl = new FormControl('');
   @Output() data;
 
   constructor(private customerService: CustomersService) {
@@ -20,11 +25,18 @@ export class CustomersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getData();
+    console.log(this.customers);
   }
 
   getData(): void {
     this.customerService.getCustomers()
-      .pipe(delay(2000)).subscribe(customers => this.customers = customers);
+      .pipe(delay(2000)).subscribe(customers => this.customers = new MatTableDataSource(customers));
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value; // get filter input value
+    this.customers.filter = filterValue.trim().toLowerCase(); // .filter table for value
+    console.log('Filter ran')
   }
 
   updateCustomerRecord(id: number, column: string, newEntry: string): void {
@@ -47,6 +59,5 @@ export class CustomersComponent implements OnInit {
 
   openDeleteRecordDialog(): void {
     this.data = 'delete';
-
   }
 }

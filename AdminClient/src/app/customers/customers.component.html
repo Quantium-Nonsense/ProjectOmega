@@ -3,12 +3,14 @@
     <div
       fxFlex="15"
       fxLayout="row"
-    >
+      fxLayoutGap="10%"
+      fxLayoutGap.xs="3%">
+
       <!--Toolbar-->
-      <button class="w20"  mat-stroked-button (click)="openLoadRecordDialog()">LOAD RECORDS</button>
+      <mat-form-field fxFlexOffset="10%">
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search" [formControl]="searchFormControl">
+      </mat-form-field>
       <button class="w20"  mat-stroked-button (click)="openCreateRecordDialog()">CREATE RECORD</button>
-      <button class="w20"  mat-stroked-button (click)="openUpdateRecordDialog()">UPDATE RECORD</button>
-      <button class="w20"  mat-stroked-button (click)="openDeleteRecordDialog()">DELETE RECORD</button>
 
     </div>
     <div
