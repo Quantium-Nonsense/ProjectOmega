@@ -4,6 +4,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { of } from 'rxjs';
 import { delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import * as fromApp from '../../reducers/index';
 import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
@@ -58,20 +59,20 @@ export class UserEffects {
     map((action: Action & { user: UserModel }) =>
       this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(PopupDialogComponent, {
         data: {
-          title: 'Delete user',
-          description: 'Are you sure you want to delete this user?',
+          title: environment.common.DELETE_USER_BUTTON_TEXT,
+          description: environment.common.DELETE_DIALOG_CONFIRM_TEXT,
           dialogActions: [
             {
               action: () => {
                 this.dialog.closeAll();
                 this.store.dispatch(UserActions.deleteFocusedUser());
               },
-              text: 'Confirm',
+              text: environment.common.CONFIRMATION_TEXT,
               color: 'warn'
             },
             {
               action: () => this.dialog.closeAll(),
-              text: 'Cancel',
+              text: environment.common.CANCELLATION_TEXT,
               color: 'primary'
             }
           ]

@@ -3,6 +3,7 @@
   class="mrl1"
   fxLayout="row wrap"
   fxLayoutAlign="start start"
+  *ngIf="users"
 >
   <app-table-filter fxFlexFill [dataSource]="users" [action]="filteringAction"></app-table-filter>
   <table fxFlexFill mat-table [dataSource]="users">
@@ -34,6 +35,5 @@
     <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
     <tr mat-row *matRowDef="let user; columns: displayColumns"></tr>
   </table>
-  <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
-
 </div>
+<mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>

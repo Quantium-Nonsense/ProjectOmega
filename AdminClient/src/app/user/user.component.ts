@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
@@ -19,17 +19,16 @@ export class UserComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   isLoading: Observable<boolean>;
-  users: MatTableDataSource<UserModel>;
+  users: MatTableDataSource<UserModel> = new MatTableDataSource<UserModel>([]);
   displayColumns: string[];
 
   private subscription: Subscription;
 
   constructor(
     private store: Store<fromApp.State>,
-    private spinnerService: LoadingSpinnerService
+    private spinnerService: LoadingSpinnerService,
   ) {
     this.displayColumns = ['email', 'role', 'companyId', 'actions'];
-    this.users = new MatTableDataSource<UserModel>([]);
     this.subscription = new Subscription();
   }
 
@@ -38,11 +37,15 @@ export class UserComponent implements OnInit, OnDestroy {
     this.isLoading = this.store.select(fromUser.selectIsLoading);
     this.spinnerService.observeNext(this.store.select(fromUser.selectIsLoading));
     this.subscription.add(
-      this.store.select(fromUser.selectUsers).subscribe(users => {
+      this.store.select(fromUser.selectUsers).subscribe((users: UserModel[]) => {
+        if (!users) {
+          return;
+        }
         this.users.data = users;
         this.users.paginator = this.paginator;
       })
     );
+
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,7 @@
-<ng-container fxLayout="row wrap">
+<div fxLayout="row wrap">
   <mat-form-field fxFlexFill>
     <mat-label>Filter</mat-label>
-    <input matInput (keyup)="lookup($event)" placeholder="Search">
+    <input id="filterTableInput" matInput (keyup)="lookup($event)" placeholder="Search">
     <ng-content></ng-content>
   </mat-form-field>
-</ng-container>
+</div>
