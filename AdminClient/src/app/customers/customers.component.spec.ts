@@ -38,9 +38,6 @@ describe('CustomersComponent', () => {
     expect(component.customers.data.length).toBe(2);
   });
 
-  it('should remove a customer from a customer collection', () => {
-  });
-
   it('should load dialog data (dialog type)', () => {
     const inputData = 'load';
     component.data = inputData;
