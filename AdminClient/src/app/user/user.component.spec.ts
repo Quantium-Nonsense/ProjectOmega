@@ -112,8 +112,7 @@ describe('UserComponent', () => {
       if (matDialog) {
         await matDialog.close();
       }
-    }
-    catch (e) {
+    } catch (e) {
       // ignore means no dialog is up
     }
   });
@@ -239,5 +238,23 @@ describe('UserComponent', () => {
       expect(tryToFindDeletedUser).toBeFalsy();
     });
 
+  }));
+  it('should delete 5 users', async(() => {
+    component.ngOnInit();
+    const mockUsers = createMockUsers();
+    selectUsers.setResult(mockUsers);
+
+    for (let i = 0; i < 5; i++) {
+      selectFocusedUser.setResult(mockUsers[i]);
+      mockStore.refreshState();
+
+      actions$ = of(UserActions.deleteFocusedUser());
+
+      effects.deleteUser$.subscribe(action => {
+        const tryToFindDeletedUser = action.newUserList.find(u => u.id === mockUsers[i].id);
+        expect(tryToFindDeletedUser).toBeFalsy();
+      });
+
+    }
   }));
 });
