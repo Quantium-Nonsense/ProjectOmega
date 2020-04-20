@@ -18,6 +18,7 @@ import { UserModel } from '../shared/model/user.model';
 import { SharedModule } from '../shared/shared.module';
 import * as fromApp from './../reducers/index';
 import { UserEffects } from './store/user.effects';
+import { selectFocusedUser, selectUsers } from './store/user.reducer';
 import * as fromUsers from './store/user.reducer';
 import { UserComponent } from './user.component';
 import * as UserActions from './store/user.actions';
@@ -29,7 +30,7 @@ describe('UserComponent', () => {
     for (let i = 0; i < 50; i++) {
       mockUsers.push(
         new UserModel(
-          (Math.random() * 153000).toString(),
+          (i).toString(),
           `bla${i}@bla.com`,
           `longasspass${i}`,
           ['Admin', 'Rep'][Math.floor(Math.random() * 2)],
@@ -48,6 +49,7 @@ describe('UserComponent', () => {
   let mockStore: MockStore<fromApp.State>;
   let mockUsersSelector: MemoizedSelector<fromUsers.State, UserModel[]>;
   let mockIsLoadingSelector: MemoizedSelector<fromUsers.State, boolean>;
+  let mockUserSelector: MemoizedSelector<fromUsers.State, UserModel>;
   let effects: UserEffects;
   let actions$: Observable<Action>;
 
@@ -95,9 +97,26 @@ describe('UserComponent', () => {
       false
     );
 
+    mockUserSelector = mockStore.overrideSelector(
+      fromUsers.selectFocusedUser,
+      createMockUsers()[5]
+    );
+
     mockStore.refreshState();
     fixture.detectChanges();
   }));
+
+  afterEach(async () => {
+    try {
+      const matDialog = await documentLoader.getHarness(MatDialogHarness);
+      if (matDialog) {
+        await matDialog.close();
+      }
+    }
+    catch (e) {
+      // ignore means no dialog is up
+    }
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -172,6 +191,53 @@ describe('UserComponent', () => {
     const dialogHostText = await dialogHost.text();
 
     expect(dialog).toBeTruthy();
-    expect(dialogHostText.includes(environment.common.DELETE_DIALOG_CONFIRM_TEXT))
+    expect(dialogHostText.includes(environment.common.DELETE_DIALOG_CONFIRM_TEXT));
   });
+
+  it('should show edit user modal', async () => {
+    component.ngOnInit();
+    actions$ = of(UserActions.showEditUserModal);
+    effects.showEditUserModal$.subscribe(); // no dispatch
+
+    fixture.detectChanges();
+
+    const dialog: MatDialogHarness = await documentLoader.getHarness(MatDialogHarness);
+    expect(dialog).toBeTruthy();
+  });
+
+  it('should edit user', async(() => {
+    component.ngOnInit();
+    const mockUsers = createMockUsers();
+    selectUsers.setResult(mockUsers);
+    mockStore.refreshState();
+
+    actions$ = of(UserActions.editUser({
+      user: {
+        ...mockUsers[5],
+        email: 'changed@email.com',
+        companyId: 'Company 1',
+      }
+    }));
+
+    effects.editUser$.subscribe(action => {
+      expect(action.newUsers[5].email).toEqual('changed@email.com');
+    });
+
+  }));
+
+  it('should delete user', async(() => {
+    component.ngOnInit();
+    const mockUsers = createMockUsers();
+    selectUsers.setResult(mockUsers);
+    selectFocusedUser.setResult(mockUsers[5]);
+    mockStore.refreshState();
+
+    actions$ = of(UserActions.deleteFocusedUser());
+
+    effects.deleteUser$.subscribe(action => {
+      const tryToFindDeletedUser = action.newUserList.find(u => u.id === mockUsers[5].id);
+      expect(tryToFindDeletedUser).toBeFalsy();
+    });
+
+  }));
 });

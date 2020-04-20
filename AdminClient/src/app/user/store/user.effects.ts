@@ -21,9 +21,10 @@ export class UserEffects {
     switchMap((action: Action & { user: UserModel }) => {
       let users: UserModel[] = [];
       this.store.select(selectUsers)
-        .pipe(take(1))
+        .pipe(take(1)) // Dispose subscription after operation is done
         .subscribe((oldUsers: UserModel[]) => {
-          users = [...oldUsers];
+          users = [...oldUsers]; // The old users before updating
+          // Assign old user's index to the edited user
           users[oldUsers.findIndex(u => u.id === action.user.id)] = {...action.user};
         });
 
@@ -31,7 +32,7 @@ export class UserEffects {
     })
   ));
 
-  showEditUserModal = createEffect(() => this.actions$.pipe(
+  showEditUserModal$ = createEffect(() => this.actions$.pipe(
     ofType(UserActions.showEditUserModal),
     map((action: Action) => this.dialog.open<EditUserComponent, any>(EditUserComponent, {
       width: '60vw',
