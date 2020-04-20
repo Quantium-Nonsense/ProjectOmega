@@ -24,9 +24,12 @@ import { PopupDialogComponent } from './components/popup-dialog/popup-dialog.com
     MatButtonModule,
   ],
   exports: [
-    CommonModule,
-    TableFilterComponent,
     FlexLayoutModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    MatButtonModule,
   ],
 
 })

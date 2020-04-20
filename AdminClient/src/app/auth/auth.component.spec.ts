@@ -33,8 +33,9 @@ describe('AuthPage', () => {
             auth: {
               errorMessage: null,
               loading: false,
-              user: null
-            }
+              user: null,
+            },
+            user: null
           }
         }),
         {provide: MatSnackBar, useValue: mockSnackbar},
@@ -64,7 +65,8 @@ describe('AuthPage', () => {
         loading: false,
         user: null,
         returnUrl: '',
-      }
+      },
+      user: null
     });
 
     mockStore.refreshState();
@@ -76,7 +78,7 @@ describe('AuthPage', () => {
   }));
 
   it('Should present loader when form submitted', async(() => {
-    spyOn(component.loadingSpinnerService.spin$, 'next'); // Spy on function
+    spyOn(component.loadingSpinnerService, 'showSpinner'); // Spy on function
 
     component.ngOnInit();
 
@@ -86,14 +88,15 @@ describe('AuthPage', () => {
         loading: true,
         user: null,
         returnUrl: '',
-      }
+      },
+      user: null
     });
 
     mockStore.refreshState();
     fixture.detectChanges();
 
     fixture.whenStable().then(() => {
-      expect(component.loadingSpinnerService.spin$.next).toHaveBeenCalled();
+      expect(component.loadingSpinnerService.showSpinner).toHaveBeenCalled();
     });
 
   }));

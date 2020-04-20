@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
@@ -14,7 +14,7 @@ import * as UserActions from './store/user.actions';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
@@ -43,6 +43,10 @@ export class UserComponent implements OnInit {
         this.users.paginator = this.paginator;
       })
     );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   filteringAction = (user: UserModel, filterValue: string) => {

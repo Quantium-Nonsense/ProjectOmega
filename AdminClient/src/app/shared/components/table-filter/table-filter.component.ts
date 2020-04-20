@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, Input } from '@angular/core';
+import { AfterContentInit, Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './table-filter.component.html',
   styleUrls: ['./table-filter.component.scss']
 })
-export class TableFilterComponent implements AfterContentInit {
+export class TableFilterComponent implements OnInit, AfterContentInit {
   /**
    * The predicate on how to filter the rows
    * The function must return a boolean
@@ -24,6 +24,9 @@ export class TableFilterComponent implements AfterContentInit {
    * A filter input for mat Table the predicate function takes by default an all lower case value of the input
    */
   constructor() {
+  }
+
+  ngOnInit(): void {
   }
 
   ngAfterContentInit(): void {

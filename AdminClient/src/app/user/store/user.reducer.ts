@@ -20,7 +20,11 @@ export const selectUsers: MemoizedSelector<fromApp.State, UserModel[]> = createS
 );
 export const selectFocusedUser: MemoizedSelector<fromApp.State, UserModel> = createSelector(
   selectUserState,
-  (state: State) => state.focusedUser
+  (state: State) => {
+    if (state) {
+      return state.focusedUser;
+    }
+  }
 );
 
 const initialState: State = {
