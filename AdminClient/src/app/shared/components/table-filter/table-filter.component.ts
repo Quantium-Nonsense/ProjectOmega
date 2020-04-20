@@ -10,8 +10,17 @@ export class TableFilterComponent implements DoCheck {
   private setDataSource: MatTableDataSource<any>;
 
   /**
+   * Label for input field
+   *
+   * @default 'Filter'
+   */
+  @Input() label: string = 'Filter';
+
+  /**
    * The predicate on how to filter the rows
    * The function must return a boolean
+   *
+   * @returns boolean
    */
   @Input() action: <T>(data: T, filterValue: string) => boolean = () => false;
 
@@ -21,6 +30,12 @@ export class TableFilterComponent implements DoCheck {
    * to ensure a table exists
    */
   @Input() dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
+
+  /**
+   * How should the form label be displayed
+   */
+  @Input() appearance: 'fill' | 'outline' | 'standard' = 'fill';
+
   /**
    * A filter input for mat Table the predicate function takes by default an all lower case value of the input
    */
@@ -33,7 +48,6 @@ export class TableFilterComponent implements DoCheck {
       this.dataSource.filterPredicate = (data, value) => this.action(data, value);
     }
   }
-
 
   lookup(value: Event) {
     const filterValue = (value.target as HTMLInputElement).value;
