@@ -19,9 +19,6 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @ManyToMany(mappedBy = "roles")
-//    private Collection<User> users;
-
     @ManyToMany
     @JoinTable(name = "roles_privileges",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
@@ -31,11 +28,9 @@ public class Role {
     private String name;
 
     public Role() {
-        super();
     }
 
     public Role(final String name) {
-        super();
         this.name = name;
     }
 
@@ -54,14 +49,6 @@ public class Role {
     public void setName(final String name) {
         this.name = name;
     }
-
-//    public Collection<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(final Collection<User> users) {
-//        this.users = users;
-//    }
 
     public Collection<Privilege> getPrivileges() {
         return privileges;

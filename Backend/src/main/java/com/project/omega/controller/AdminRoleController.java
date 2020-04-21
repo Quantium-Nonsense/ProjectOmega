@@ -44,7 +44,7 @@ public class AdminRoleController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteRoleById(@PathVariable(value = "id") Long id)  {
         AdminRoles iRole = roleService.deleteRoleById(id);
-        return new ResponseEntity(iRole, HttpStatus.GONE);
+        return new ResponseEntity(iRole, HttpStatus.OK);
     }
 
 }

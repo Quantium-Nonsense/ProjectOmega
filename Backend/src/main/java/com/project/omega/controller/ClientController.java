@@ -49,7 +49,7 @@ public class ClientController {
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteClient(@PathVariable(value = "id") Long id) throws ClientNotFoundException {
         Optional<Client> client = clientService.deleteClientById(id);
-        return new ResponseEntity(client, HttpStatus.GONE);
+        return new ResponseEntity(client, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update/{id}")

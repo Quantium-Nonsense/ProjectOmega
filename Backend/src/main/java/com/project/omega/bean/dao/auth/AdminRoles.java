@@ -30,7 +30,6 @@ public class AdminRoles {
     }
 
     public AdminRoles(final String name) {
-        super();
         this.name = name;
     }
 
