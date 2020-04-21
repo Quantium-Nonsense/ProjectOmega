@@ -9,6 +9,7 @@ export const routes: Routes = [
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'}, // default path
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'customers', component: CustomersComponent, canActivate: [AuthGuard]},
+  {path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule), canActivate: [AuthGuard]},
   {path: 'auth', component: AuthComponent},
   // Add additional routes here as needed
 ];

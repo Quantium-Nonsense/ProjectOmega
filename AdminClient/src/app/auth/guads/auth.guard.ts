@@ -13,7 +13,7 @@ import * as AuthActions from '../store/auth.actions';
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtHelperService: JwtHelperService,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.State>
   ) {
   }
 

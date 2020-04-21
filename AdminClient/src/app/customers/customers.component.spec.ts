@@ -1,4 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 
 import { CustomersComponent } from './customers.component';
 import {MatTableDataSource} from '@angular/material/table';
@@ -10,7 +11,11 @@ describe('CustomersComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CustomersComponent]
+
+      declarations: [ CustomersComponent ],
+      providers: [
+        provideMockStore()
+      ]
     })
     .compileComponents();
   }));

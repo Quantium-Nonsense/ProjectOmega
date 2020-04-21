@@ -1,14 +1,14 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { AppState } from '../../reducers';
+import { State } from '../../reducers';
 import { TestModule } from '../../shared/test/test.module';
 
 import { LoadingSpinnerService } from './loading-spinner.service';
 
 describe('LoadingSpinnerService', () => {
   let service: LoadingSpinnerService;
-  let mockStore: MockStore<AppState>;
+  let mockStore: MockStore<State>;
 
   beforeEach(() => {
     // const mockOverlay = createMockOverlay();
