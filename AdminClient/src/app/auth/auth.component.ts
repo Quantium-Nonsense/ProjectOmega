@@ -3,8 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { merge, Subscription } from 'rxjs';
-import { map, mergeAll } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { State } from '../reducers';
 import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
 import * as AuthActions from './store/auth.actions';
@@ -54,10 +53,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    // Clean up all subs to avoid memory leak
-    this.subscriptions.unsubscribe();
-  }
   /**
    * Returns appropriate error message for password validation
    *
@@ -85,6 +80,11 @@ export class AuthComponent implements OnInit, OnDestroy {
       duration: 2000
     });
   };
+
+  ngOnDestroy(): void {
+    // Clean up all subs to avoid memory leak
+    this.subscriptions.unsubscribe();
+  }
 
   /**
    * Submit form
