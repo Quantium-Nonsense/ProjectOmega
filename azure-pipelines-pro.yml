@@ -9,7 +9,7 @@ steps:
 
   - task: Maven@3
     inputs:
-      mavenPomFile: 'backend/pom.xml'
+      mavenPomFile: 'Backend/pom.xml'
       goals: 'clean verify'
       publishJUnitResults: false
       javaHomeOption: 'JDKVersion'
@@ -23,8 +23,8 @@ steps:
       containerRegistry: 'omegacr'
       repository: 'prod-backend'
       command: 'buildAndPush'
-      Dockerfile: './backend/Dockerfile'
-      buildContext: './backend'
+      Dockerfile: './Backend/Dockerfile'
+      buildContext: './Backend'
       tags: |
         latest
         $(Build.BuildId)
