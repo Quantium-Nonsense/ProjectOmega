@@ -1,6 +1,6 @@
-import { Customer} from './customer';
+import { CustomerModel} from './models/customers/customer.model';
 
-export const CUSTOMERS: Customer[] = [
+export const CUSTOMERS: CustomerModel[] = [
   { id: 1, name: 'Bang Pharmaceuticals', category: 'Business', telephone: '02079460674', email: 'lmywelle@bangpharma.com',
     website: 'https://www.bangpharmaceuticals.com', contact: 'Lidia Mywelle', address: '23 Lost Drove', townOrCity: 'London',
     county: 'Greater London', country: 'England', postcode: 'N12 9LR'},

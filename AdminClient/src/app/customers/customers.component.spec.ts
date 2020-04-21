@@ -3,7 +3,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 
 import { CustomersComponent } from './customers.component';
 import {MatTableDataSource} from '@angular/material/table';
-import {Customer} from '../customer';
+import {CustomerModel} from '../models/customers/customer.model';
 
 describe('CustomersComponent', () => {
   let component: CustomersComponent;
@@ -37,7 +37,7 @@ describe('CustomersComponent', () => {
     const customer2 = {id: 2, name: 'b', category: 'b', telephone: 'b', email: 'b',
       website: 'b', contact: 'b', address: 'b', townOrCity: 'b',
       county: 'b', country: 'b', postcode: 'b'};
-    let customers: Customer[] = [];
+    let customers: CustomerModel[] = [];
     customers.push(customer, customer2);
     component.customers = new MatTableDataSource(customers);
     expect(component.customers.data.length).toBe(2);

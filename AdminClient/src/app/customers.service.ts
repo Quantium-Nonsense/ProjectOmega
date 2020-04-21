@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Customer } from './customer';
+import { CustomerModel } from './models/customers/customer.model';
 import { CUSTOMERS } from './mock-customers';
 import { Observable, of, pipe } from 'rxjs';
 
@@ -15,11 +15,11 @@ export class CustomersService {
     return 1;
   }
 
-  getCustomers(): Observable<Customer[]> {
+  getCustomers(): Observable<CustomerModel[]> {
     return of(CUSTOMERS);
   }
 
-  createCustomerRecord(customer: Customer): Observable<any> {
+  createCustomerRecord(customer: CustomerModel): Observable<any> {
     CUSTOMERS.push(customer);
     console.log(CUSTOMERS[CUSTOMERS.length - 1]);
     return of(CUSTOMERS[CUSTOMERS.length - 1]);

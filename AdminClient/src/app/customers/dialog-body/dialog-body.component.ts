@@ -1,6 +1,6 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Customer} from '../../customer';
+import {CustomerModel} from '../../models/customers/customer.model';
 import {CUSTOMERS} from '../../mock-customers';
 import {CustomersService} from '../../customers.service';
 import {CustomersComponent} from '../customers.component';
@@ -63,7 +63,7 @@ export class DialogBodyComponent implements OnInit {
     console.warn(this.dialogForm.value);
 
       if (this.data === 'create') { // create customer
-        const customer: Customer =
+        const customer: CustomerModel =
           {
             id: this.customerService.newID(),
             name: this.dialogForm.get('dialogName').value.toString(),

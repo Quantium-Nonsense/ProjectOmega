@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import { delay } from 'rxjs/operators';
-import { Customer } from '../customer';
+import { CustomerModel } from '../models/customers/customer.model';
 import { CustomersService } from '../customers.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -15,8 +15,8 @@ import {MatInput} from '@angular/material/input';
 export class CustomersComponent implements OnInit {
 
   displayColumns: string[] = ['name', 'category', 'email', 'country', 'actions'];
-  // customers: Customer[];
-  customers: MatTableDataSource<Customer>;
+  // customers: CustomerModel[];
+  customers: MatTableDataSource<CustomerModel>;
   searchFormControl = new FormControl('');
   @Output() data;
 
