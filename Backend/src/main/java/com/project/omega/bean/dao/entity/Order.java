@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.project.omega.bean.dao.entity.OrderProduct;
 import com.project.omega.bean.dao.entity.User;
+import com.project.omega.enums.OrderStatus;
 import lombok.Builder;
 
 import javax.persistence.*;
@@ -44,7 +45,8 @@ public class Order implements Serializable {
     private User user;
 
     @NotBlank
-    private String status;
+    @Enumerated
+    private OrderStatus status;
 
     @Transient
     public Double getTotalOrderPrice() {
@@ -56,7 +58,7 @@ public class Order implements Serializable {
         return sum;
     }
 
-    public Order(Long id, LocalDate dateCreated, @Valid List<OrderProduct> orderProducts, @Valid User user, @NotBlank String status) {
+    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, User user, OrderStatus status) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.orderProducts = orderProducts;
@@ -88,11 +90,11 @@ public class Order implements Serializable {
     public void setOrderProducts(List<OrderProduct> orderProducts) {
         this.orderProducts = orderProducts;
     }
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

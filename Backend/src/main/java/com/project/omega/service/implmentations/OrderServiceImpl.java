@@ -2,6 +2,7 @@ package com.project.omega.service.implmentations;
 
 
 import com.project.omega.bean.dao.entity.Order;
+import com.project.omega.enums.OrderStatus;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.repository.OrderRepository;
 import com.project.omega.service.interfaces.OrderService;
@@ -22,7 +23,7 @@ public class OrderServiceImpl implements OrderService {
 
     public Order createOrder(Order order) {
         order.setDateCreated(LocalDate.now());
-        order.setStatus("created");
+        order.setStatus(OrderStatus.PLACED);
         orderRepository.save(order);
         return order;
     }

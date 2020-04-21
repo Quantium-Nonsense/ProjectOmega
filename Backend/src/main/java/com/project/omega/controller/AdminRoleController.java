@@ -46,7 +46,6 @@ public class AdminRoleController {
         AdminRoles iRole = roleService.deleteRoleById(id);
         return new ResponseEntity(iRole, HttpStatus.OK);
     }
-
 }
 
 

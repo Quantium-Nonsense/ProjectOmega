@@ -26,7 +26,6 @@ public class ClientController {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-
     @PostMapping(value = "/create", headers = "Accept=application/json")
     public ResponseEntity<Client> createClient(@RequestBody Client client) {
         Client newClient = clientService.createClient(client);
@@ -34,7 +33,7 @@ public class ClientController {
     }
 
     @GetMapping(value = "/get")
-    public ResponseEntity<Client> GetAllClients() throws NoRecordsFoundException {
+    public ResponseEntity<Client> getAllClients() throws NoRecordsFoundException {
         List<Client> clients = clientService.getAllClients();
         return new ResponseEntity(clients, HttpStatus.OK);
     }
