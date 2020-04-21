@@ -84,7 +84,6 @@ export class AuthComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // Clean up all subs to avoid memory leak
     this.subscriptions.unsubscribe();
-    this.loadingSpinnerService.spin$.next(false);
   }
 
   /**
