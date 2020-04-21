@@ -2,23 +2,16 @@ package com.project.omega.bean.dao.entity;
 
 import com.fasterxml.jackson.annotation.*;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.project.omega.bean.dao.entity.OrderProduct;
-import com.project.omega.bean.dao.entity.User;
 import com.project.omega.enums.OrderStatus;
 import lombok.Builder;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 
 
 @Entity
@@ -39,12 +32,10 @@ public class Order implements Serializable {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<OrderProduct> orderProducts;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @Valid
-    private User user;
+    @NotNull
+    private Long userId;
 
-    @NotBlank
+    @NotNull
     @Enumerated
     private OrderStatus status;
 
@@ -58,11 +49,11 @@ public class Order implements Serializable {
         return sum;
     }
 
-    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, User user, OrderStatus status) {
+    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, Long userId, OrderStatus status) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.orderProducts = orderProducts;
-        this.user = user;
+        this.userId = userId;
         this.status = status;
     }
 
@@ -99,12 +90,12 @@ public class Order implements Serializable {
         this.status = status;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
 
