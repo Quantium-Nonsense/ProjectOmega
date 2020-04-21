@@ -1,10 +1,13 @@
-export interface CustomerModel {
-  id: number;
-  name: string;
-  contactNumber: string,
-  description: string,
-  email: string,
-  firstName: string,
-  lastName: string,
-  notes: string
+export class CustomerModel {
+
+	constructor(
+		public id: number,
+		public companyName: string,
+		public contactNumber: string,
+		public description: string,
+		public email: string,
+		public firstName: string,
+		public lastName: string,
+		public  notes: string) {
+	}
 }

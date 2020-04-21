@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CustomerModel } from './models/customers/customer.model';
-import { CUSTOMERS } from './mock-customers';
 import { Observable, of, pipe } from 'rxjs';
-
+let CUSTOMERS = undefined;
 @Injectable({
   providedIn: 'root'
 })

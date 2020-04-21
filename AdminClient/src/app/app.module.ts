@@ -26,48 +26,50 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {appReducer, metaReducers} from './reducers';
 import {SharedModule} from './shared/shared.module';
 import {UserEffects} from './user/store/user.effects';
+import {CustomersEffects} from './customers/store/customers.effects';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DashboardComponent,
-  ],
-  bootstrap: [AppComponent],
-  imports: [
-    AppRoutingModule,
-    AuthModule,
-    BrowserModule,
-    SharedModule,
-    BrowserAnimationsModule,
-    EffectsModule.forRoot([
-      AuthEffects,
-      UserEffects
-    ]),
-    FormsModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: getToken
-      }
-    }),
-    MatToolbarModule,
-    MatButtonModule,
-    MatGridListModule,
-    MatIconModule,
-    MatSidenavModule,
-    StoreModule.forRoot(appReducer, {
-      metaReducers,
-      runtimeChecks: {
-        strictActionImmutability: true,
-        strictStateImmutability: true
-      }
-    }),
-    MatCardModule,
-    MatListModule,
-    !environment.production ? StoreDevtoolsModule.instrument() : []
-  ],
-  providers: [],
+	declarations: [
+		AppComponent,
+		DashboardComponent
+	],
+	bootstrap: [AppComponent],
+	imports: [
+		AppRoutingModule,
+		AuthModule,
+		BrowserModule,
+		SharedModule,
+		BrowserAnimationsModule,
+		EffectsModule.forRoot([
+			AuthEffects,
+			UserEffects,
+			CustomersEffects
+		]),
+		FormsModule,
+		JwtModule.forRoot({
+			config: {
+				tokenGetter: getToken
+			}
+		}),
+		MatToolbarModule,
+		MatButtonModule,
+		MatGridListModule,
+		MatIconModule,
+		MatSidenavModule,
+		StoreModule.forRoot(appReducer, {
+			metaReducers,
+			runtimeChecks: {
+				strictActionImmutability: true,
+				strictStateImmutability: true
+			}
+		}),
+		MatCardModule,
+		MatListModule,
+		!environment.production ? StoreDevtoolsModule.instrument() : []
+	],
+	providers: []
 })
 export class AppModule {
 }
