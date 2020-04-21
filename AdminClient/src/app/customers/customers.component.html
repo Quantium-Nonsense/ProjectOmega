@@ -1,77 +1,107 @@
-<div class="full-body">
-  <div fxLayout="column">
+<div fxLayout="column">
     <div
-      fxFlex="15"
-      fxLayout="row"
-      fxLayoutGap="10%"
-      fxLayoutGap.xs="3%">
+            fxFlex="15"
+            fxLayout="row"
+            fxLayoutGap="10%"
+            fxLayoutGap.xs="3%">
 
-      <!--Toolbar-->
-      <mat-form-field fxFlexOffset="10%">
-        <input matInput (keyup)="applyFilter($event)" placeholder="Search" [formControl]="searchFormControl">
-      </mat-form-field>
-      <button class="w20"  mat-stroked-button (click)="openCreateRecordDialog()">CREATE RECORD</button>
+        <!--Toolbar-->
+        <mat-form-field fxFlexOffset="10%">
+            <input matInput
+                   (keyup)="applyFilter($event)"
+                   placeholder="Search"
+                   [formControl]="searchFormControl">
+        </mat-form-field>
+        <button class="w20"
+                mat-stroked-button
+                (click)="openCreateRecordDialog()">CREATE RECORD
+        </button>
 
     </div>
     <div
-      fxFlex="85"
-      fxLayout
-      fxLayout.xs="column"
-      fxLayoutAlign="start start"
-      fxLayoutGap="10%"
-      fxLayoutGap.xs="5%">
+            fxFlex="85"
+            fxLayout
+            fxLayout.xs="column"
+            fxLayoutAlign="start start"
+            fxLayoutGap="10%"
+            fxLayoutGap.xs="5%">
 
-      <table fxFlexFill mat-table [dataSource]="customers">
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let customer">{{customer.name}}</td>
-        </ng-container>
-        <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef>Category</th>
-          <td mat-cell *matCellDef="let customer">{{customer.category}}</td>
-        </ng-container>
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef>Email</th>
-          <td mat-cell *matCellDef="let customer">{{customer.email}}</td>
-        </ng-container>
-        <ng-container matColumnDef="country">
-          <th mat-header-cell *matHeaderCellDef>Country</th>
-          <td mat-cell *matCellDef="let customer">{{customer.country}}</td>
-        </ng-container>
+        <table fxFlexFill
+               mat-table
+               [dataSource]="customers">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell
+                    *matHeaderCellDef>Name
+                </th>
+                <td mat-cell
+                    *matCellDef="let customer">{{customer.name}}</td>
+            </ng-container>
+            <ng-container matColumnDef="category">
+                <th mat-header-cell
+                    *matHeaderCellDef>Category
+                </th>
+                <td mat-cell
+                    *matCellDef="let customer">{{customer.category}}</td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+                <th mat-header-cell
+                    *matHeaderCellDef>Email
+                </th>
+                <td mat-cell
+                    *matCellDef="let customer">{{customer.email}}</td>
+            </ng-container>
+            <ng-container matColumnDef="country">
+                <th mat-header-cell
+                    *matHeaderCellDef>Country
+                </th>
+                <td mat-cell
+                    *matCellDef="let customer">{{customer.country}}</td>
+            </ng-container>
 
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
-          <td mat-cell *matCellDef="let row">
-            <button mat-icon-button><mat-icon>edit</mat-icon></button>
-            <button mat-icon-button><mat-icon>delete</mat-icon></button>
-          </td>
-        </ng-container>
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell
+                    *matHeaderCellDef>Actions
+                </th>
+                <td mat-cell
+                    *matCellDef="let row">
+                    <button mat-icon-button>
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button>
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
-      </table>
+            <tr mat-header-row
+                *matHeaderRowDef="displayColumns"></tr>
+            <tr mat-row
+                *matRowDef="let row; columns: displayColumns;"></tr>
+        </table>
     </div>
-  </div>
+</div>
 
 
-  <div class="container"
-       fxLayout
-       fxLayout.xs="row"
-       fxLayoutAlign="center center"
-       fxLayoutGap="3%"
-       fxLayoutGap.xs="0">
+<div class="container"
+     fxLayout
+     fxLayout.xs="row"
+     fxLayoutAlign="center center"
+     fxLayoutGap="3%"
+     fxLayoutGap.xs="0">
 
 
-  </div>
+</div>
 
-  <div class="container"
-       fxLayout
-       fxLayout.xs="column"
-       fxLayoutAlign="start center"
-       fxLayoutGap="10px"
-       fxLayoutGap.xs="0">
-    <div id="dialogs" fxFill fxFlexOffset="2%" fxFlexOffset.xs="2%">
-      <app-dialog-body [data]="data"></app-dialog-body>
+<div class="container"
+     fxLayout
+     fxLayout.xs="column"
+     fxLayoutAlign="start center"
+     fxLayoutGap="10px"
+     fxLayoutGap.xs="0">
+    <div id="dialogs"
+         fxFill
+         fxFlexOffset="2%"
+         fxFlexOffset.xs="2%">
+        <app-dialog-body [data]="data"></app-dialog-body>
     </div>
-  </div>
 </div>

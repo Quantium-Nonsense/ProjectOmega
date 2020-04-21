@@ -28,7 +28,6 @@ import { TableFilterComponent } from './components/table-filter/table-filter.com
     MatTableModule,
     MatPaginatorModule,
     MatIconModule
-
   ],
   exports: [
     FlexLayoutModule,
