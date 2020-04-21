@@ -1,21 +1,27 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { Action, createReducer, createSelector, on } from '@ngrx/store';
 import { User } from '../../models/auth/user.model';
 import * as AuthActions from './auth.actions';
+import * as fromApp from '../../reducers/index';
 
-export interface AuthState {
+export interface State {
   user: User;
   errorMessage: string;
   loading: boolean;
   returnUrl: string;
 }
 
-const initialState: AuthState = {
-  errorMessage: undefined,
+const initialState: State = {
+  errorMessage: null,
   loading: false,
-  user: undefined,
+  user: null,
   returnUrl: ''
 };
 
+export const selectAuth = (state: fromApp.State) => state.auth;
+export const selectIsLoading = createSelector(
+  selectAuth,
+  (state: State) => state.loading
+);
 const _authReducer = createReducer(
   initialState,
   on(AuthActions.loginRejected, (prevState, {errorMessage}) => ({
@@ -27,13 +33,18 @@ const _authReducer = createReducer(
   ),
   on(AuthActions.loginAttempt, prevState => ({
     ...prevState,
-    errorMessage: undefined,
+    errorMessage: null,
     loading: true
   })),
   on(AuthActions.loginInitiated, (prevState, {returnUrl}) => ({
     ...prevState,
     returnUrl,
+  })),
+  on(AuthActions.loginSuccessful, (prevState: State) => ({
+    ...prevState,
+    loading: false,
+    errorMessage: null
   }))
 );
 
-export const authReducer = (state: AuthState | undefined, action: Action): AuthState => _authReducer(state, action);
+export const authReducer = (state: State | undefined, action: Action): State => _authReducer(state, action);

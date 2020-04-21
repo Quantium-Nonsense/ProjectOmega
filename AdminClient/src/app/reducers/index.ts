@@ -7,13 +7,16 @@ import {
 } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 import * as fromAuth from '../auth/store/auth.reducer';
+import * as fromUser from '../user/store/user.reducer';
 
-export interface AppState {
-  auth: fromAuth.AuthState;
+export interface State {
+  auth: fromAuth.State;
+  user: fromUser.State;
 }
 
-export const appReducer: ActionReducerMap<AppState> = {
-  auth: fromAuth.authReducer
+export const appReducer: ActionReducerMap<State> = {
+  auth: fromAuth.authReducer,
+  user: fromUser.userReducer
 };
 
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
@@ -24,4 +27,4 @@ export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
     return reducer(state, action);
   };
 
-export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [debug] : [];
+export const metaReducers: MetaReducer<State>[] = !environment.production ? [debug] : [];
