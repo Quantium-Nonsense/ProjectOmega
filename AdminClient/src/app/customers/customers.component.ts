@@ -1,14 +1,12 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
-import {delay} from 'rxjs/operators';
+import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
 import {CustomerModel} from '../models/customers/customer.model';
-import {CustomersService} from '../customers.service';
 import {MatTableDataSource} from '@angular/material/table';
-import {FormControl, FormGroup} from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
-import {MatInput} from '@angular/material/input';
 import {Store} from '@ngrx/store';
 import * as fromApp from '../reducers/index';
+import * as fromCustomers from './store/customers.reducer';
 import * as CustomerActions from './store/customers.actions';
+import {Subscription} from 'rxjs';
+import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
 	selector: 'app-customers',
@@ -16,37 +14,27 @@ import * as CustomerActions from './store/customers.actions';
 	styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
 	displayColumns: string[] = ['name', 'category', 'email', 'country', 'actions'];
-	// customers: CustomerModel[];
 	customers: MatTableDataSource<CustomerModel>;
-	searchFormControl = new FormControl('');
-	@Output() data;
+
+	private subscription: Subscription;
 
 	constructor(
 		private store: Store<fromApp.State>
 	) {
+		this.subscription = new Subscription();
+		this.customers = new MatTableDataSource<CustomerModel>([]);
 	}
 
 	ngOnInit(): void {
 		this.store.dispatch(CustomerActions.beginLoadingCustomers());
-	}
-
-	applyFilter(event: Event) {
-		const filterValue = (event.target as HTMLInputElement).value; // get filter input value
-		this.customers.filter = filterValue.trim().toLowerCase(); // .filter table for value
-		console.log('Filter ran');
-	}
-
-	openCreateRecordDialog(): void {
-		this.data = 'create';
-	}
-
-	openUpdateRecordDialog(): void {
-		this.data = 'update';
-	}
-
-	openDeleteRecordDialog(): void {
-		this.data = 'delete';
+		this.subscription.add(
+			this.store.select(fromCustomers.selectAllCustomers).subscribe(customers => {
+				this.customers.data = customers;
+				this.customers.paginator = this.paginator
+			})
+		);
 	}
 }

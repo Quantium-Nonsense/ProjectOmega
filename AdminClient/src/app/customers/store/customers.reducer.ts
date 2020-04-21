@@ -21,6 +21,10 @@ export const selectIsLoading = createSelector(
 	selectCustomersState,
 	(state: State) => state.loading
 );
+export const selectAllCustomers = createSelector(
+	selectCustomersState,
+	(state: State) => state.customers
+);
 
 const reducer = createReducer(
 	initialState,
