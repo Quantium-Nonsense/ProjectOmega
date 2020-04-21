@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { AppState } from '../../reducers';
+import { State } from '../../reducers';
 
 import { AuthGuard } from './auth.guard';
 import createSpy = jasmine.createSpy;
