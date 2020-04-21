@@ -50,7 +50,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/authenticate",
                         "/api/registration",
                         "/api/confirmRegistration").permitAll()
-                .antMatchers("/**").hasRole("SUPER_ADMIN")
+                .antMatchers("/api/user/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+                .antMatchers("/api/product/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+                .antMatchers("/api/product/get",
+                        "/api/product/{id}",
+                        "/api/product/lt/**",
+                        "/api/product/gt/**",
+                        "/api/product/eq/**",
+                        "/api/product/search/{name}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
+                .antMatchers("/api/order/**").hasRole("SUPER_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

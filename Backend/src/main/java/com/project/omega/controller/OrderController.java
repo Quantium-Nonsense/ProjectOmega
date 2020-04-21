@@ -34,7 +34,6 @@ import java.util.Set;
 @RestController
 @RequestMapping(value = "/api/order")
 public class OrderController {
-
     @Autowired
     OrderService orderService;
     @Autowired
@@ -47,7 +46,8 @@ public class OrderController {
     ClientService clientService;
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity<Order> create(@RequestBody OrderForm form) throws ProductNotFoundException, ClientNotFoundException, NoRecordsFoundException, UserNotFoundException {
+    public ResponseEntity<Order> create(@RequestBody OrderForm form) throws ProductNotFoundException,
+            ClientNotFoundException, NoRecordsFoundException, UserNotFoundException {
         List<OrderProductDto> formDtos = form.getProductOrders();
 
         validateProductsExistence(formDtos);
@@ -102,7 +102,6 @@ public class OrderController {
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
-    //Product Existence Validation method
     private void validateProductsExistence(List<OrderProductDto> orderProducts) throws ProductNotFoundException {
         List<OrderProductDto> list = new ArrayList<>();
         for (OrderProductDto op : orderProducts) {
@@ -110,13 +109,11 @@ public class OrderController {
                 list.add(op);
             }
         }
-
         if (!CollectionUtils.isEmpty(list)) {
-            new ResourceNotFoundException("Product not found");
+            new ProductNotFoundException("Product not found");
         }
     }
 
-    /// Class for form received from Front-End
     public static class OrderForm implements Serializable {
 
         private List<OrderProductDto> productOrders;
@@ -130,45 +127,12 @@ public class OrderController {
             this.user = user;
         }
 
-
         public List<OrderProductDto> getProductOrders() {
-
             return productOrders;
         }
 
         public void setProductOrders(List<OrderProductDto> productOrders) {
-
             this.productOrders = productOrders;
         }
     }
-
-
-//
-//    public static class ClientForm implements Serializable {
-//
-//        private FormDTO OrderClient;
-//
-//        public FormDTO getClientOrders() {
-//            return OrderClient;
-//            }
-//        }
-//
-//    @GetMapping(value = "/get")
-//    @ResponseStatus(HttpStatus.OK)
-//    public @NotNull Iterable<Order> list() {
-//        return this.orderService.getAllOrders();
-//    }
-//
-//
-//    @PutMapping (value = "update/{id}/")
-//    public ResponseEntity updateStatus(@PathVariable (value="id") Long id, @RequestBody Order order){
-//        Order newOrder =orderService.updateOrder(order);
-//        return new ResponseEntity(order, HttpStatus.OK);
-//    }
-//    @GetMapping (value = "/get")
-//
-//    OrderClient orderClient = orderClientService.create(new OrderClient(order, userService.getUserById(formdtos2.getUser().getId()),
-//            clientService.getClientById(formdtos2.getClient().getId())));
-//
-//    order.setOrderClient(orderClient);
 }
