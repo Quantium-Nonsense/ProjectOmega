@@ -16,4 +16,4 @@ spec:
         - name: frontend-adminclient
           image: omegacr.azurecr.io/dev-frontend
           ports:
-            - containerPort: 4200
+            - containerPort: 80
