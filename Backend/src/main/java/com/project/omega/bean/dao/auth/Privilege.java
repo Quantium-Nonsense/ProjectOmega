@@ -14,7 +14,6 @@ public class Privilege {
     private String name;
 
     public Privilege() {
-        super();
     }
 
     public Privilege(final String name) {

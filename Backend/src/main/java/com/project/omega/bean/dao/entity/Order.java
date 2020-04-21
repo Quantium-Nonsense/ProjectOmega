@@ -69,6 +69,7 @@ public class Order implements Serializable {
     public Order() {
 
     }
+
     public Long getId() {
         return id;
     }
@@ -101,7 +102,6 @@ public class Order implements Serializable {
     public User getUser() {
         return user;
     }
-
 
     public void setUser(User user) {
         this.user = user;
