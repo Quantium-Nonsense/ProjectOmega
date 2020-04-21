@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 import { delay, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import * as AuthActions from '../store/auth.actions';
-import { AuthState } from './auth.reducer';
+import { State } from './auth.reducer';
 
 @Injectable()
 export class AuthEffects {
@@ -31,7 +31,7 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private router: Router,
-    private store$: Store<AuthState>,
+    private store$: Store<State>,
   ) {
   }
 

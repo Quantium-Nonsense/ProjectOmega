@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  dashboardItems = ['Products, Customers, Orders, Users, Settings']
+  dashboardItems = ['Products, Customers, Orders, Users, Settings'];
 
   constructor() { }
 

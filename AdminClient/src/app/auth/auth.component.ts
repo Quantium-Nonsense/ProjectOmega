@@ -3,11 +3,12 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { AppState } from '../reducers';
+import { merge, Subscription } from 'rxjs';
+import { map, mergeAll } from 'rxjs/operators';
+import { State } from '../reducers';
 import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
 import * as AuthActions from './store/auth.actions';
-import { AuthState } from './store/auth.reducer';
+import * as fromAuth from './store/auth.reducer';
 
 @Component({
   selector: 'app-auth',
@@ -35,7 +36,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     public loadingSpinnerService: LoadingSpinnerService,
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store<AppState>,
+    private store: Store<State>,
     private snackBar: MatSnackBar,
   ) {
 
@@ -43,16 +44,20 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authForm = this.formInitialization();
+    this.loadingSpinnerService.observeNext(this.store.select(fromAuth.selectIsLoading));
     this.subscriptions.add(
-      this.store.select('auth').subscribe((state: AuthState) => {
+      this.store.select('auth').subscribe((state: fromAuth.State) => {
         if (state.errorMessage) {
           this.showMessage(state.errorMessage);
         }
-        this.loadingSpinnerService.spin$.next(state.loading);
       })
     );
   }
 
+  ngOnDestroy(): void {
+    // Clean up all subs to avoid memory leak
+    this.subscriptions.unsubscribe();
+  }
   /**
    * Returns appropriate error message for password validation
    *
@@ -98,12 +103,6 @@ export class AuthComponent implements OnInit, OnDestroy {
    */
   get emailHasError(): boolean {
     return this.authForm.get('email').invalid;
-  }
-
-  ngOnDestroy(): void {
-    // Clean up all subs to avoid memory leak
-    this.subscriptions.unsubscribe();
-    this.loadingSpinnerService.spin$.next(false);
   }
 
   protected isFormValid(): boolean {

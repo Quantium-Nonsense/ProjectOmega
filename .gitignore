@@ -106,4 +106,9 @@ dist
 # Ignore idea
 .idea/*
 .idea/
-/.idea
+
+# Backend stuff to ignore
+Backend/.idea
+Backend/sprintone.iml
+Backend/target
+Backend/src/main/resources/application.properties
