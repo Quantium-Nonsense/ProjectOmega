@@ -1,18 +1,11 @@
 // Modules imported
-
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
-import { BrowserModule } from '@angular/platform-browser';
-import { JwtModule } from '@auth0/angular-jwt';
-
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button'; // <-- NgModel lives here
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -24,28 +17,25 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { AuthEffects } from './auth/store/auth.effects';
-import { appReducer, metaReducers } from './reducers';
-import { SharedModule } from './shared/shared.module';
-
 // Components imported
 import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
+
+import { AuthEffects } from './auth/store/auth.effects';
 import { CustomersComponent } from './customers/customers.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { DialogBodyComponent } from './customers/dialog-body/dialog-body.component';
+import { appReducer, metaReducers } from './reducers';
+import { SharedModule } from './shared/shared.module';
+import { UserEffects } from './user/store/user.effects';
+
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
 @NgModule({
-
-    declarations: [
-        AppComponent,
-        DashboardComponent,
-        CustomersComponent,
-        DialogBodyComponent
-    ],
+  declarations: [
+    AppComponent,
+    DashboardComponent,
+    CustomersComponent,
+  ],
   bootstrap: [AppComponent],
   imports: [
     AppRoutingModule,
@@ -76,14 +66,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
       }
     }),
     MatCardModule,
-
-    MatTableModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatInputModule
-
+    MatListModule
     !environment.production ? StoreDevtoolsModule.instrument() : []
-
   ],
   providers: [],
 })
