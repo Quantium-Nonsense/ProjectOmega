@@ -34,6 +34,12 @@ spec:
                       secretKeyRef:
                        name: devops2-db
                        key: spring.datasource.url
+                - name: SECRETS_JWT
+                  valueFrom:
+                      secretKeyRef:
+                        name: devops2-db
+                        key: jwt.secret
+
 
 
 

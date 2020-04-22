@@ -57,7 +57,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/product/lt/**",
                         "/api/product/gt/**",
                         "/api/product/eq/**",
-                        "/api/product/search/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
+                        "/api/product/search/**",
+                        "/api/product/supplier/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
+                .antMatchers("/api/supplier/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+                .antMatchers("/api/supplier/get",
+                        "/api/supplier/{id}",
+                        "/api/supplier/{companyName}}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
                 .antMatchers("/api/order/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
                 .antMatchers("/api/client/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
                 .antMatchers("/api/client/get",

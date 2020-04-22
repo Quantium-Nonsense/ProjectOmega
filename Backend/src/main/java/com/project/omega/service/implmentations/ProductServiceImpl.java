@@ -1,11 +1,15 @@
 package com.project.omega.service.implmentations;
 
 import com.project.omega.bean.dao.entity.Product;
+import com.project.omega.bean.dao.entity.Supplier;
+import com.project.omega.bean.dto.ProductDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 
 import com.project.omega.exceptions.ProductNotFoundException;
 import com.project.omega.repository.ProductRepository;
+import com.project.omega.repository.SupplierRepository;
 import com.project.omega.service.interfaces.ProductService;
+import com.project.omega.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -22,9 +26,19 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
 
     @Autowired
+    SupplierService supplierService;
+
+    @Autowired
     MessageSource messages;
 
-    public Product createProduct(Product product) {
+    public Product createProduct(ProductDTO productDTO) throws NoRecordsFoundException {
+        Supplier supplier = supplierService.getSupplierById(productDTO.getSupplierId());
+        Product product = new Product.ProductBuilder()
+                .setName(productDTO.getName())
+                .setDescription(productDTO.getDescription())
+                .setPrice(productDTO.getPrice())
+                .setSupplier(supplier)
+                .build();
         productRepository.save(product);
         return product;
     }
@@ -97,5 +111,13 @@ public class ProductServiceImpl implements ProductService {
         }
         productRepository.deleteById(id);
         return product.get();
+    }
+
+    public List<Product> getProductsBySupplier(Long id) throws NoRecordsFoundException {
+        List<Product> products = productRepository.findBySupplier_Id(id);
+        if(products.isEmpty()) {
+            throw new NoRecordsFoundException(messages.getMessage("message.noProducts", null, null));
+        }
+        return products;
     }
 }
