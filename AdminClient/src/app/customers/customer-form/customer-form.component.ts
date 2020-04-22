@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
-import {CustomerModel} from '../../models/customers/customer.model';
 import * as fromApp from '../../reducers/index';
 import {Store} from '@ngrx/store';
 import * as fromCustomers from '../store/customers.reducer';
 import * as CustomerActions from '../store/customers.actions';
 import {MatDialogRef} from '@angular/material/dialog';
+import {Observable, Subscription} from 'rxjs';
 
 @Component({
 	selector: 'app-customer-form',
@@ -14,16 +14,24 @@ import {MatDialogRef} from '@angular/material/dialog';
 })
 export class CustomerFormComponent implements OnInit {
 	customerForm: FormGroup;
-	selectedCustomer: CustomerModel;
+	isLoading: Observable<boolean>;
+
+	private sub: Subscription;
 
 	constructor(
 		private store$: Store<fromApp.State>,
 		private dialogRef: MatDialogRef<CustomerFormComponent>
 	) {
+		this.sub = new Subscription();
+		this.customerForm = this.initializeForm();
 	}
 
 	ngOnInit(): void {
-		this.customerForm = this.initializeForm();
+		this.isLoading = this.store$.select(fromCustomers.selectIsLoading);
+		this.sub.add(
+			this.store$.select(fromCustomers.selectIsLoading)
+			    .subscribe(isLoading => isLoading ? this.customerForm.disable() : this.customerForm.enable())
+		);
 		this.store$.select(fromCustomers.selectSelectedCustomer).subscribe(customer => {
 			if (customer) {
 				this.companyName.setValue(customer.companyName);
@@ -130,7 +138,18 @@ export class CustomerFormComponent implements OnInit {
 	}
 
 	submitForm() {
-		this.store$.dispatch(CustomerActions.editCustomer())
+		this.store$.dispatch(CustomerActions.editCustomer({
+			editedCustomer: {
+				id: null,
+				notes: this.notes.value,
+				lastName: this.lastName.value,
+				firstName: this.firstName.value,
+				email: this.email.value,
+				description: this.description.value,
+				contactNumber: this.contactNumber.value,
+				companyName: this.companyName.value
+			}
+		}));
 	}
 
 	cancel() {

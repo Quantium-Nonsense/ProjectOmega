@@ -43,7 +43,10 @@ const reducer = createReducer(
 		loading: false,
 		customers
 	})),
-	on(CustomerActions.deleteCustomer, (prevState: State) => ({
+	on(
+		CustomerActions.deleteCustomer,
+		CustomerActions.editCustomer,
+		(prevState: State) => ({
 		...prevState,
 		loading: true
 	})),
@@ -54,11 +57,14 @@ const reducer = createReducer(
 			...prevState,
 			selectedCustomer: customer
 		})),
-	on(CustomerActions.customerDeletedSuccess, (prevState: State, {newCustomers}) => ({
+	on(
+		CustomerActions.customerDeletedSuccess,
+		CustomerActions.editCustomerSuccess,
+		(prevState: State, {newCustomers}) => ({
 		...prevState,
 		loading: false,
 		customers: newCustomers
-	}))
+	})),
 );
 
 export const customerReducer = (state: State | undefined, action: Action) => reducer(state, action);

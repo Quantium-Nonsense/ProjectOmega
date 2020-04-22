@@ -18,7 +18,7 @@ export class CustomersEffects {
 
 	editCustomer$ = createEffect(() => this.actions$.pipe(
 		ofType(CustomerActions.editCustomer),
-		switchMap((action: Action) => of(this.editCustomer()).pipe(
+		switchMap((action: Action & { editedCustomer: CustomerModel }) => of(this.editCustomer(action.editedCustomer)).pipe(
 			delay(2000),
 			tap(() => this.dialog.closeAll())
 		))
@@ -119,7 +119,22 @@ export class CustomersEffects {
 		return CustomerActions.customerDeletedSuccess({newCustomers});
 	}
 
-	private editCustomer(): Action {
-		return null;
+	private editCustomer(editedCustomer: CustomerModel): Action {
+		let allCustomers: CustomerModel[] = [];
+		let customerToEdit: CustomerModel;
+
+		this.store.select(fromCustomers.selectSelectedCustomer)
+		    .pipe(take(1))
+		    .subscribe(customer => customerToEdit = customer);
+		this.store.select(fromCustomers.selectAllCustomers)
+		    .pipe(take(1))
+		    .subscribe(customers => allCustomers = [...customers]);
+
+		allCustomers[allCustomers.findIndex(c => c.id === customerToEdit.id)] = {
+			...editedCustomer,
+			id: customerToEdit.id
+		};
+
+		return CustomerActions.editCustomerSuccess({newCustomers: allCustomers});
 	}
 }

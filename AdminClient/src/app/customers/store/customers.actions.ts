@@ -2,12 +2,13 @@ import {createAction, props} from '@ngrx/store';
 import {CustomerModel} from '../../models/customers/customer.model';
 
 export const editCustomer = createAction(
-	'[Customers - Effects] Edit selected customer'
+	'[Customers - Effects] Edit selected customer',
+	props<{ editedCustomer: CustomerModel }>()
 );
 
 export const editCustomerSuccess = createAction(
 	'[Customers - Effects] Edit customer successfully',
-	props<{newCustomers: CustomerModel[]}>()
+	props<{ newCustomers: CustomerModel[] }>()
 );
 
 export const customerDeletedSuccess = createAction(

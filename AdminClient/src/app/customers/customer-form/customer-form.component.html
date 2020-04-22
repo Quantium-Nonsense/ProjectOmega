@@ -1,10 +1,11 @@
 <h2 mat-dialog-title>Edit user</h2>
-<button class="close" mat-icon-button (click)="cancel()">
+<button class="close"
+        mat-icon-button
+        (click)="cancel()">
     <mat-icon>cancel</mat-icon>
 </button>
-<form
-        class="h20"
-        [formGroup]="customerForm"
+<form class="h20"
+      [formGroup]="customerForm"
 >
     <div fxLayout="row">
         <mat-form-field
@@ -140,10 +141,14 @@
     </div>
 </form>
 <mat-dialog-actions>
-    <button mat-stroked-button
+    <button color="primary"
+            [disabled]="isLoading | async"
+            mat-stroked-button
             (click)="submitForm()">Confirm
     </button>
-    <button mat-stroked-button
+    <button color="warn"
+            [disabled]="isLoading | async"
+            mat-stroked-button
             (click)="cancel()">Cancel
     </button>
 </mat-dialog-actions>
