@@ -1,4 +1,5 @@
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading | async"></mat-progress-bar>
+<app-table-filter [dataSource]="customers" [action]="filterActions"></app-table-filter>
 <div class="w20"
      fxLayout="column">
     <table fxFlexFill
@@ -54,17 +55,3 @@
     </mat-paginator>
 </div>
 
-
-<div class="container"
-     fxLayout
-     fxLayout.xs="column"
-     fxLayoutAlign="start center"
-     fxLayoutGap="10px"
-     fxLayoutGap.xs="0">
-    <div id="dialogs"
-         fxFill
-         fxFlexOffset="2%"
-         fxFlexOffset.xs="2%">
-        <app-dialog-body [data]="data"></app-dialog-body>
-    </div>
-</div>

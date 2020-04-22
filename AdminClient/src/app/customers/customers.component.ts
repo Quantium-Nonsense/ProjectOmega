@@ -14,7 +14,7 @@ import {MatPaginator} from '@angular/material/paginator';
 	styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+	@ViewChild(MatPaginator) paginator: MatPaginator;
 
 	displayColumns: string[] = ['companyName', 'email', 'contactNumber', 'actions'];
 	customers: MatTableDataSource<CustomerModel>;
@@ -36,16 +36,26 @@ export class CustomersComponent implements OnInit {
 		this.subscription.add(
 			this.store.select(fromCustomers.selectAllCustomers).subscribe(customers => {
 				this.customers.data = customers;
-				this.customers.paginator = this.paginator
+				this.customers.paginator = this.paginator;
 			})
 		);
 	}
 
 	deleteCustomer(customer: CustomerModel) {
-		this.store.dispatch(CustomerActions.showDeleteCustomerDialog({customer}))
+		this.store.dispatch(CustomerActions.showDeleteCustomerDialog({customer}));
 	}
 
 	editCustomer(customer: CustomerModel) {
-		this.store.dispatch(CustomerActions.showEditCustomerDialog({customer}))
+		this.store.dispatch(CustomerActions.showEditCustomerDialog({customer}));
+	}
+
+	filterActions(customer: CustomerModel, filterValue: string): boolean {
+		return customer.companyName.toLowerCase().includes(filterValue)
+			|| customer.contactNumber.includes(filterValue)
+			|| customer.description.toLowerCase().includes(filterValue)
+			|| customer.email.toLowerCase().includes(filterValue)
+			|| customer.firstName.toLowerCase().includes(filterValue)
+			|| customer.lastName.toLowerCase().includes(filterValue)
+			|| customer.notes.toLowerCase().includes(filterValue);
 	}
 }
