@@ -101,6 +101,12 @@ public class OrderController {
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity updateOrderById (@PathVariable (value ="id") Long id, @RequestBody Order update) throws NoRecordsFoundException {
+        Order order = orderService.updateOrderById (id, update);
+        return new ResponseEntity(order, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{id}")
     public ResponseEntity fetchOrderById(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
         Order order = orderService.getOrderById(id);

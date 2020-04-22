@@ -48,24 +48,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
+    public Order updateOrderById (Long id, Order order) throws NoRecordsFoundException {
+    if (!orderRepository.existsById(id)){
+        throw new NoRecordsFoundException("order" + id + "not Found");
+    }
+        orderRepository.save(order);
+        return order;
 
-//    public Optional<Order> getOrderById (Long id) throws NoRecordsFoundException {
-//        Optional<Order> order = orderRepository.findById(id);
-//        if (!order.isPresent()){
-//            throw new NoRecordsFoundException("order" + id + "not Found");
-//        }
-//            return order;
-//            }
-
-
-            public Order updateOrderStatus (Long id, Order order) throws NoRecordsFoundException {
-            if (!orderRepository.existsById(id)){
-                throw new NoRecordsFoundException("order" + id + "not Found");
             }
-                orderRepository.save(order);
-                return order;
-
-                    }
 
 }
 

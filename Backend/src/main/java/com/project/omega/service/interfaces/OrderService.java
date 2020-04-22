@@ -7,10 +7,11 @@ import java.util.Optional;
 
 
 public interface OrderService {
+
     Order createOrder(Order order);
     Order getOrderById(Long id) throws NoRecordsFoundException;
-
-    Order updateOrder(Order order);
-
+    Order updateOrder(Order order) throws NoRecordsFoundException;
     Iterable<Order> getAllOrders();
-}
+    Order updateOrderById (Long id, Order order) throws NoRecordsFoundException;
+
+    }
