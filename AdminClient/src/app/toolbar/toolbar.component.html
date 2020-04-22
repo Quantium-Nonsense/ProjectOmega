@@ -1,8 +1,21 @@
 <mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <button (click)="sideNavOpen = !sideNavOpen" mat-button>
+    <mat-toolbar-row fxLayout="row">
+        <button fxFlex="5" (click)="sideNavOpen = !sideNavOpen" mat-button>
             <mat-icon>menu</mat-icon>
         </button>
-        <span id="title">{{title}}</span>
+        <span fxFlex="5" id="title">{{title}}</span>
+        <span fxFlex></span>
+        <div *ngIf="isCustomerPage">
+            <button mat-icon-button
+                    [matMenuTriggerFor]="customerActionMenu">
+                <mat-icon>person_add</mat-icon>
+            </button>
+
+            <mat-menu
+		        #customerActionMenu="matMenu">
+                <button mat-menu-item>Settings</button>
+                <button mat-menu-item>Help</button>
+            </mat-menu>
+        </div>
     </mat-toolbar-row>
 </mat-toolbar>

@@ -1,7 +1,10 @@
 <mat-progress-bar mode="indeterminate"
                   *ngIf="isLoading | async"></mat-progress-bar>
 <app-table-filter [dataSource]="customers"
-                  [action]="filterActions"></app-table-filter>
+                  [action]="filterActions">
+
+</app-table-filter>
+
 <div class="w20"
      fxLayout="column">
     <table fxFlexFill
