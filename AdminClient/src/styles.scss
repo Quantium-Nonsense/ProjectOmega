@@ -1,6 +1,5 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-
 html,
 body {
   height: 100%;
@@ -276,13 +275,14 @@ $sides: t, r, l, b; // top, right, left, bottom
 }
 
 .cdk-overlay-pane.customerDialog {
-  position: relative!important;
+  position: relative !important;
 }
+
 .close.mat-icon-button {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 5px;
   line-height: 14px;
   min-width: auto;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
