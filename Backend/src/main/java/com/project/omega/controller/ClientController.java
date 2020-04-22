@@ -38,7 +38,7 @@ public class ClientController {
         return new ResponseEntity(clients, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/get/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity getClient(@PathVariable(value = "id") Long id) throws ClientNotFoundException, NoRecordsFoundException {
         Client client = clientService.getClientById(id);
         return new ResponseEntity(client, HttpStatus.OK);
