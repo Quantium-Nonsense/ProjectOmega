@@ -2,6 +2,7 @@ package com.project.omega.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.entity.Product;
+import com.project.omega.bean.dto.ProductDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.ProductNotFoundException;
 import com.project.omega.service.interfaces.ProductService;
@@ -21,7 +22,7 @@ public class ProductController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity createProduct(@RequestBody Product product) {
+    public ResponseEntity createProduct(@RequestBody ProductDTO product) throws NoRecordsFoundException {
         Product newProduct = productService.createProduct(product);
         return new ResponseEntity(newProduct, HttpStatus.CREATED);
     }
@@ -72,6 +73,12 @@ public class ProductController {
     public ResponseEntity updateById(@PathVariable(value = "id") Long id, @RequestBody Product update) throws Exception {
         Product product = productService.updateProductById(id, update);
         return new ResponseEntity(product, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/supplier/{id}")
+    public ResponseEntity getBySupplierId(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
+        List<Product> products = productService.getProductsBySupplier(id);
+        return new ResponseEntity(products, HttpStatus.OK);
     }
 }
 

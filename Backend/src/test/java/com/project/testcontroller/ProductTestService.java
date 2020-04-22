@@ -2,8 +2,10 @@ package com.project.testcontroller;
 
 import com.project.OmegaApplicationTests;
 import com.project.omega.bean.dao.entity.Product;
+import com.project.omega.bean.dto.ProductDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.ProductNotFoundException;
+import com.project.omega.helper.TestingConstant;
 import com.project.omega.repository.ProductRepository;
 import com.project.omega.service.implmentations.ProductServiceImpl;
 import com.project.omega.service.interfaces.ProductService;
@@ -19,6 +21,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,12 +43,11 @@ public class ProductTestService extends OmegaApplicationTests {
         Product product = new Product.ProductBuilder()
                 .setId(1L)
                 .setName("Fockittol")
-                .setDescription("Effectively eliminates all the f*ucks given about anything.")
+                .setDescription("Cure")
                 .setPrice(420)
                 .build();
         Mockito.when(productRepository.save(Mockito.any(Product.class))).thenReturn(product);
         Mockito.when(productRepository.findAll()).thenReturn(Stream.of(product).collect(Collectors.toList()));
-        Assert.assertEquals("Fockittol", productService.createProduct(product).getName());
         Assert.assertEquals(1, productService.getAllProducts().size());
     }
 
@@ -183,5 +185,17 @@ public class ProductTestService extends OmegaApplicationTests {
         Assert.assertEquals(1, productService.getProductsEqualPrice(420).size());
         Assert.assertEquals(1, productService.getProductsAbovePrice(300).size());
         Assert.assertEquals(1, productService.getProductsBelowPrice(300).size());
+    }
+
+    @Test
+    public void productSupplierIntegrationTest_Negative()  throws Exception {
+        List<Product> empty = new ArrayList<>();
+
+        Mockito.when(productRepository.findBySupplier_Id(Mockito.anyLong())).thenReturn(empty);
+        try {
+            productService.getProductsBySupplier(1L);
+        } catch (Exception e) {
+            Assert.assertEquals(0, productRepository.findBySupplier_Id(1L).size());
+        }
     }
 }
