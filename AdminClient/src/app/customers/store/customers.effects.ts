@@ -15,6 +15,15 @@ import {selectAllCustomers} from './customers.reducer';
 
 @Injectable()
 export class CustomersEffects {
+
+	editCustomer$ = createEffect(() => this.actions$.pipe(
+		ofType(CustomerActions.editCustomer),
+		switchMap((action: Action) => of(this.editCustomer()).pipe(
+			delay(2000),
+			tap(() => this.dialog.closeAll())
+		))
+	));
+
 	deleteCustomer$ = createEffect(() => this.actions$.pipe(
 		ofType(CustomerActions.deleteCustomer),
 		switchMap((action: Action) => of(this.deleteCustomer()).pipe(
@@ -66,6 +75,7 @@ export class CustomersEffects {
 	private showDeleteDialog(customer: CustomerModel) {
 		this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(PopupDialogComponent, {
 			data: {
+				isDisabled: this.store.select(fromCustomers.selectIsLoading),
 				title: environment.common.DELETE_CUSTOMER_TITLE,
 				description: environment.common.DELETE_CUSTOMER_CONFIRM_TEXT,
 				dialogActions: [
@@ -94,6 +104,10 @@ export class CustomersEffects {
 
 		const newCustomers = allCustomers.filter(customer => customer.id !== currentCustomer.id);
 
-		return CustomerActions.customerDeletedSuccess({newCustomers})
+		return CustomerActions.customerDeletedSuccess({newCustomers});
+	}
+
+	private editCustomer(): Action {
+
 	}
 }

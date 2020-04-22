@@ -8,7 +8,6 @@ import { PopupDialogDataModel } from '../../model/popup-dialog-data.model';
   styleUrls: ['./popup-dialog.component.scss']
 })
 export class PopupDialogComponent {
-
   constructor(@Inject(MAT_DIALOG_DATA) public data: PopupDialogDataModel) {
 
   }
