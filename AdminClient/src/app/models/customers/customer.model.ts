@@ -8,6 +8,6 @@ export class CustomerModel {
 		public email: string,
 		public firstName: string,
 		public lastName: string,
-		public  notes: string) {
+		public notes: string) {
 	}
 }

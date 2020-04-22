@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import * as CustomerActions from './customers.actions';
-import {delay, map, switchMap, take, tap, withLatestFrom} from 'rxjs/operators';
-import {Action, select, Store} from '@ngrx/store';
-import {of, pipe} from 'rxjs';
+import {delay, map, switchMap, take, tap} from 'rxjs/operators';
+import {Action, Store} from '@ngrx/store';
+import {of} from 'rxjs';
 import {CustomerModel} from '../../models/customers/customer.model';
 import {MatDialog} from '@angular/material/dialog';
 import {PopupDialogDataModel} from '../../shared/model/popup-dialog-data.model';
@@ -11,7 +11,7 @@ import * as fromApp from '../../reducers/index';
 import {PopupDialogComponent} from '../../shared/components/popup-dialog/popup-dialog.component';
 import {environment} from '../../../environments/environment';
 import * as fromCustomers from './customers.reducer';
-import {selectAllCustomers} from './customers.reducer';
+import {CustomerFormComponent} from '../customer-form/customer-form.component';
 
 @Injectable()
 export class CustomersEffects {
@@ -37,7 +37,19 @@ export class CustomersEffects {
 		switchMap((action: Action) => of(this.createDummyCustomers()).pipe(delay(2000)))
 	));
 
-	showDeleteUserDialog$ = createEffect(() => this.actions$.pipe(
+	showEditCustomerDialog$ = createEffect(() => this.actions$.pipe(
+		ofType(CustomerActions.showEditCustomerDialog),
+		map((action: Action & { customer: CustomerModel }) => this.dialog.open<CustomerFormComponent>(
+			CustomerFormComponent,
+			{
+				width: '66vw',
+				height: '66vh',
+				panelClass: 'customerDialog'
+			}
+		))
+	), {dispatch: false});
+
+	showDeleteCustomerDialog$ = createEffect(() => this.actions$.pipe(
 		ofType(CustomerActions.showDeleteCustomerDialog),
 		map((action: Action & { customer: CustomerModel }) => this.showDeleteDialog(action.customer))
 	), {dispatch: false});
@@ -108,6 +120,6 @@ export class CustomersEffects {
 	}
 
 	private editCustomer(): Action {
-
+		return null;
 	}
 }
