@@ -66,7 +66,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
       }
     }),
     MatCardModule,
-    MatListModule
+    MatListModule,
     !environment.production ? StoreDevtoolsModule.instrument() : []
   ],
   providers: [],
