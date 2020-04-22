@@ -5,7 +5,7 @@ import {Store} from '@ngrx/store';
 import * as fromApp from '../reducers/index';
 import * as fromCustomers from './store/customers.reducer';
 import * as CustomerActions from './store/customers.actions';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {MatPaginator} from '@angular/material/paginator';
 
 @Component({
@@ -16,25 +16,36 @@ import {MatPaginator} from '@angular/material/paginator';
 export class CustomersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-	displayColumns: string[] = ['name', 'category', 'email', 'country', 'actions'];
+	displayColumns: string[] = ['companyName', 'email', 'contactNumber', 'actions'];
 	customers: MatTableDataSource<CustomerModel>;
+	isLoading: Observable<boolean>;
 
 	private subscription: Subscription;
 
 	constructor(
 		private store: Store<fromApp.State>
 	) {
+		this.isLoading = new Observable<boolean>();
 		this.subscription = new Subscription();
 		this.customers = new MatTableDataSource<CustomerModel>([]);
 	}
 
 	ngOnInit(): void {
 		this.store.dispatch(CustomerActions.beginLoadingCustomers());
+		this.isLoading = this.store.select(fromCustomers.selectIsLoading);
 		this.subscription.add(
 			this.store.select(fromCustomers.selectAllCustomers).subscribe(customers => {
 				this.customers.data = customers;
 				this.customers.paginator = this.paginator
 			})
 		);
+	}
+
+	deleteCustomer(customer: CustomerModel) {
+		this.store.dispatch(CustomerActions.showDeleteCustomerDialog({customer}))
+	}
+
+	editCustomer(customer: CustomerModel) {
+		this.store.dispatch(CustomerActions.showEditCustomerDialog({customer}))
 	}
 }

@@ -61,7 +61,7 @@ export class UserEffects {
       this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(PopupDialogComponent, {
         data: {
           title: environment.common.DELETE_USER_BUTTON_TEXT,
-          description: environment.common.DELETE_DIALOG_CONFIRM_TEXT,
+          description: environment.common.DELETE_USER_CONFIRM_TEXT,
           dialogActions: [
             {
               action: () => {

@@ -5,12 +5,14 @@ import * as fromApp from '../../reducers/index';
 
 export interface State {
 	loading: boolean,
-	customers: CustomerModel[]
+	customers: CustomerModel[],
+	selectedCustomer: CustomerModel
 }
 
 const initialState: State = {
 	loading: false,
-	customers: null
+	customers: null,
+	selectedCustomer: null
 };
 
 export const selectCustomersState = createFeatureSelector<fromApp.State, State>(
@@ -25,6 +27,10 @@ export const selectAllCustomers = createSelector(
 	selectCustomersState,
 	(state: State) => state.customers
 );
+export const selectSelectedCustomer = createSelector(
+	selectCustomersState,
+	(state: State) => state.selectedCustomer
+);
 
 const reducer = createReducer(
 	initialState,
@@ -36,6 +42,22 @@ const reducer = createReducer(
 		...prevState,
 		loading: false,
 		customers
+	})),
+	on(CustomerActions.deleteCustomer, (prevState: State) => ({
+		...prevState,
+		loading: true
+	})),
+	on(
+		CustomerActions.showDeleteCustomerDialog,
+		CustomerActions.showEditCustomerDialog,
+		(prevState: State, {customer}) => ({
+			...prevState,
+			selectedCustomer: customer
+		})),
+	on(CustomerActions.customerDeletedSuccess, (prevState: State, {newCustomers}) => ({
+		...prevState,
+		loading: false,
+		customers: newCustomers
 	}))
 );
 
