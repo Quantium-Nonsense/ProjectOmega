@@ -29,7 +29,8 @@ import {MatMenu, MatMenuModule} from '@angular/material/menu';
 		MatTableModule,
 		MatPaginatorModule,
 		MatIconModule,
-		MatMenuModule
+		MatMenuModule,
+
 	],
 	exports: [
 		FlexLayoutModule,

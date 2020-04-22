@@ -34,7 +34,7 @@ export class CustomersEffects {
 
 	loadAllCustomers$ = createEffect(() => this.actions$.pipe(
 		ofType(CustomerActions.beginLoadingCustomers),
-		switchMap((action: Action) => of(this.createDummyCustomers()).pipe(delay(2000)))
+		switchMap((action: Action) => of(this.customersLoadedAfter()).pipe(delay(2000)))
 	));
 
 	showEditCustomerDialog$ = createEffect(() => this.actions$.pipe(
@@ -66,7 +66,7 @@ export class CustomersEffects {
 	 *
 	 * @returns CustomerModel[]
 	 */
-	createDummyCustomers = (): Action & { customers: CustomerModel[] } => {
+	createDummyCustomers = ():CustomerModel[]  => {
 		const dummyCustomers: CustomerModel[] = [];
 		for (let i = 0; i < 50; i++) {
 			dummyCustomers.push({
@@ -80,10 +80,13 @@ export class CustomersEffects {
 				notes: 'bla and mac bla'
 			});
 		}
-
-		return CustomerActions.customersLoaded({customers: dummyCustomers});
+		return dummyCustomers;
 	};
 
+	private customersLoadedAfter() {
+		const customers = this.createDummyCustomers();
+		return CustomerActions.customersLoaded({customers})
+	}
 	private showDeleteDialog(customer: CustomerModel) {
 		this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(PopupDialogComponent, {
 			data: {

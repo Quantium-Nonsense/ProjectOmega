@@ -35,6 +35,9 @@ export class CustomersComponent implements OnInit {
 		this.isLoading = this.store.select(fromCustomers.selectIsLoading);
 		this.subscription.add(
 			this.store.select(fromCustomers.selectAllCustomers).subscribe(customers => {
+				if (!customers) {
+					return;
+				}
 				this.customers.data = customers;
 				this.customers.paginator = this.paginator;
 			})

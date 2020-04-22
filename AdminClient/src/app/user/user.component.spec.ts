@@ -188,7 +188,7 @@ describe('UserComponent', () => {
     const dialogHostText = await dialogHost.text();
 
     expect(dialog).toBeTruthy();
-    expect(dialogHostText.includes(environment.common.DELETE_DIALOG_CONFIRM_TEXT));
+    expect(dialogHostText.includes(environment.common.DELETE_USER_CONFIRM_TEXT));
   });
 
   it('should show edit user modal', async () => {
