@@ -1,31 +1,31 @@
-import { TestBed, async } from '@angular/core/testing';
-import { AppComponent } from './app.component';
+import {TestBed, async, ComponentFixture} from '@angular/core/testing';
+import {AppComponent} from './app.component';
+import {HarnessLoader} from '@angular/cdk/testing';
+import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import {MatToolbar} from '@angular/material/toolbar';
+import {MatMenuHarness} from '@angular/material/menu/testing';
 
 describe('AppComponent', () => {
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-    }).compileComponents();
-  }));
+	let loader: HarnessLoader;
+	let fixture: ComponentFixture<AppComponent>;
+    let component: AppComponent
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  });
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+			declarations: [
+				AppComponent
+			]
+		}).compileComponents();
 
-  it('should have as title "OmegaSys"', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('OmegaSys');
-  });
+		fixture = TestBed.createComponent(AppComponent);
+		loader = TestbedHarnessEnvironment.loader(fixture);
+		component = fixture.componentInstance;
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('#title').textContent).toContain('OmegaSys');
-  });
+	}));
+
+	it('should create the app', () => {
+		const app = fixture.debugElement.componentInstance;
+		expect(app).toBeTruthy();
+	});
+
 });

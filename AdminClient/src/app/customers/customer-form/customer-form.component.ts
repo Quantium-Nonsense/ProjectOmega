@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as fromApp from '../../reducers/index';
 import {Store} from '@ngrx/store';
@@ -12,7 +12,7 @@ import {Observable, Subscription} from 'rxjs';
 	templateUrl: './customer-form.component.html',
 	styleUrls: ['./customer-form.component.scss']
 })
-export class CustomerFormComponent implements OnInit {
+export class CustomerFormComponent implements OnInit, OnDestroy {
 	customerForm: FormGroup;
 	isLoading: Observable<boolean>;
 
@@ -43,6 +43,10 @@ export class CustomerFormComponent implements OnInit {
 				this.notes.setValue(customer.notes);
 			}
 		});
+	}
+
+	ngOnDestroy(): void {
+		this.sub.unsubscribe();
 	}
 
 	initializeForm = (): FormGroup => {
@@ -155,4 +159,5 @@ export class CustomerFormComponent implements OnInit {
 	cancel() {
 		this.dialogRef.close();
 	}
+
 }

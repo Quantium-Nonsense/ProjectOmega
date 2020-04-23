@@ -12,6 +12,7 @@ import {MatTableModule} from '@angular/material/table';
 import {PopupDialogComponent} from './components/popup-dialog/popup-dialog.component';
 import {TableFilterComponent} from './components/table-filter/table-filter.component';
 import {MatMenu, MatMenuModule} from '@angular/material/menu';
+import {CdkTextareaAutosize, TextFieldModule} from '@angular/cdk/text-field';
 
 @NgModule({
 	declarations: [
@@ -30,6 +31,8 @@ import {MatMenu, MatMenuModule} from '@angular/material/menu';
 		MatPaginatorModule,
 		MatIconModule,
 		MatMenuModule,
+		TextFieldModule,
+
 
 	],
 	exports: [
@@ -44,7 +47,8 @@ import {MatMenu, MatMenuModule} from '@angular/material/menu';
 		MatTableModule,
 		MatPaginatorModule,
 		MatIconModule,
-		MatMenuModule
+		MatMenuModule,
+		TextFieldModule
 	]
 
 })

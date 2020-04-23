@@ -58,7 +58,11 @@ describe('CustomersComponent', () => {
 					   MatDialogHarness,
 					   provideMockStore({
 						   initialState: {
-							   customers: null
+							   customers: {
+								   selectedCustomer: null,
+								   loading: false,
+								   customers: null
+							   } as fromCustomers.State
 						   }
 					   }),
 					   provideMockActions(() => actions$),
@@ -66,7 +70,7 @@ describe('CustomersComponent', () => {
 				   ],
 				   imports: [
 					   SharedModule,
-					   NoopAnimationsModule
+					   NoopAnimationsModule,
 				   ]
 			   })
 			   .compileComponents();
@@ -97,6 +101,8 @@ describe('CustomersComponent', () => {
 			fromCustomers.selectSelectedCustomer,
 			undefined
 		);
+
+		mockStore.refreshState();
 	});
 
 	it('should create', () => {
@@ -139,7 +145,7 @@ describe('CustomersComponent', () => {
 	});
 
 	// Commented out as Cdk export is having issues with angular 9+
-	/* it('should show edit customer dialog on showEditCustomerDialog dispatch', async () => {
+	 it('should show edit customer dialog on showEditCustomerDialog dispatch', async () => {
 	 const selectedCustomer = createDummyCustomers()[0];
 	 actions$ = of(CustomerActions.showEditCustomerDialog({customer: selectedCustomer}));
 
@@ -150,5 +156,5 @@ describe('CustomersComponent', () => {
 	 const dialogText = await dialogHost.text();
 
 	 expect(dialogText.includes(environment.common.CONFIRMATION_TEXT)); // Check confirm button exists
-	 });*/
+	 });
 });
