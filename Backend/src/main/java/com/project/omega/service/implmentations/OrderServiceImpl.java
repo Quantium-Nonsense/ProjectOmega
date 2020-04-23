@@ -7,6 +7,7 @@ import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.repository.OrderRepository;
 import com.project.omega.service.interfaces.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,10 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
 
 
+    @Autowired
+    MessageSource messages;
+
+
     public Order createOrder(Order order) {
         order.setDateCreated(LocalDate.now());
         order.setStatus(OrderStatus.PLACED);
@@ -32,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(Long id) throws NoRecordsFoundException {
             Optional<Order> order = orderRepository.findById(id);
             if (!order.isPresent()){
-                throw new NoRecordsFoundException("Order with id" + id + " not found");
+                throw new NoRecordsFoundException(messages.getMessage("orderNotFound" , null, null));
             }
             return order.get();
     }
@@ -50,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
 
     public Order updateOrderById (Long id, Order order) throws NoRecordsFoundException {
     if (!orderRepository.existsById(id)){
-        throw new NoRecordsFoundException("order" + id + "not Found");
+        throw new NoRecordsFoundException(messages.getMessage("orderNotFound" , null, null));
     }
         orderRepository.save(order);
         return order;
