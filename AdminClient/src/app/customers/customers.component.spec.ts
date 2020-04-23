@@ -76,6 +76,16 @@ describe('CustomersComponent', () => {
 			   .compileComponents();
 	}));
 
+	afterEach(async () => {
+		try {
+			const matDialog = await documentLoader.getHarness(MatDialogHarness)
+			await matDialog.close();
+		}
+		catch (e) {
+			// Ignore as this just means not found
+		}
+	});
+
 	beforeEach(() => {
 		fixture = TestBed.createComponent(CustomersComponent);
 		component = fixture.componentInstance;
@@ -122,16 +132,16 @@ describe('CustomersComponent', () => {
 		expect(tableRows.length).toBe(10); // Due to paginator
 	});
 
-	it('should load all customers when landing on dashboard', () => {
+	it('should load all customers when landing on dashboard', async(() => {
 		actions$ = of(CustomerActions.beginLoadingCustomers());
 		const dummyCustomers = createDummyCustomers();
 		spyOn(effects, 'createDummyCustomers').and.callThrough().and.returnValue(dummyCustomers);
 		effects.loadAllCustomers$.subscribe(action => {
 			expect(action).toEqual(CustomerActions.customersLoaded({customers: dummyCustomers}));
 		});
-	});
+	}));
 
-	it('should show delete custoemr dialog on showDeleteCustomerDialog dispatch', async () => {
+	it('should show delete customer dialog on showDeleteCustomerDialog dispatch', async () => {
 		const selectedCustomer = createDummyCustomers()[0];
 		actions$ = of(CustomerActions.showDeleteCustomerDialog({customer: selectedCustomer}));
 
@@ -144,7 +154,6 @@ describe('CustomersComponent', () => {
 		expect(dialogText.includes(environment.common.DELETE_CUSTOMER_CONFIRM_TEXT)).toBeTrue();
 	});
 
-	// Commented out as Cdk export is having issues with angular 9+
 	 it('should show edit customer dialog on showEditCustomerDialog dispatch', async () => {
 	 const selectedCustomer = createDummyCustomers()[0];
 	 actions$ = of(CustomerActions.showEditCustomerDialog({customer: selectedCustomer}));
@@ -155,6 +164,6 @@ describe('CustomersComponent', () => {
 	 const dialogHost = await dialog.host();
 	 const dialogText = await dialogHost.text();
 
-	 expect(dialogText.includes(environment.common.CONFIRMATION_TEXT)); // Check confirm button exists
+	 expect(dialogText.includes(environment.common.CONFIRMATION_TEXT)).toBeTrue(); // Check confirm button exists
 	 });
 });

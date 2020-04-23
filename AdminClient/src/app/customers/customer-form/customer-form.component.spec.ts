@@ -4,7 +4,6 @@ import {CustomerFormComponent} from './customer-form.component';
 import {provideMockStore} from '@ngrx/store/testing';
 import {MatDialogHarness} from '@angular/material/dialog/testing';
 import {MatDialogRef} from '@angular/material/dialog';
-import loader from '@angular-devkit/build-angular/src/angular-cli-files/plugins/single-test-transform';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 
