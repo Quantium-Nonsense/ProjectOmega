@@ -1,14 +1,14 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSort} from '@angular/material/sort';
+import {MatTable} from '@angular/material/table';
+import {Subscription} from 'rxjs';
 
-import { Product, ProductsDataSource } from '../../data/products/products-datasource';
-import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
-import { ProductDetailsDialogComponent } from './product-details-dialog/product-details-dialog.component';
+import {Product, ProductsDataSource} from '../../data/products/products-datasource';
+import {DeleteDialogComponent} from '../shared/delete-dialog/delete-dialog.component';
+import {ProductDetailsDialogComponent} from './product-details-dialog/product-details-dialog.component';
 
 @Component({
   selector: 'app-products',

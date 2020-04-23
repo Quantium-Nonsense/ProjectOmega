@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Product } from '../../../data/products/products-datasource';
-import { Supplier, SuppliersDataSource } from '../../../data/supplier/supplier-datasource';
+import {Component, Inject, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Product} from '../../../data/products/products-datasource';
+import {Supplier, SuppliersDataSource} from '../../../data/supplier/supplier-datasource';
 
 @Component({
   selector: 'app-details-dialog',

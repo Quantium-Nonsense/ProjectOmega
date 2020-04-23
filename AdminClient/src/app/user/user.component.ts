@@ -1,11 +1,11 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {Store} from '@ngrx/store';
+import {Observable, Subscription} from 'rxjs';
 import * as fromApp from '../reducers/index';
-import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
-import { UserModel } from '../shared/model/user.model';
+import {LoadingSpinnerService} from '../services/loading-spinner/loading-spinner.service';
+import {UserModel} from '../shared/model/user/user.model';
 import * as fromUser from './store/user.reducer';
 import * as UserActions from './store/user.actions';
 

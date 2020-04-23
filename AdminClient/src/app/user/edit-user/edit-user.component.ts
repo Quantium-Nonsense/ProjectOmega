@@ -1,10 +1,9 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import {AfterContentInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Store} from '@ngrx/store';
+import {Subscription} from 'rxjs';
+import {take} from 'rxjs/operators';
 import * as fromApp from '../../reducers/index';
-import { UserModel } from '../../shared/model/user.model';
 import * as fromUser from '../../user/store/user.reducer';
 import * as UserActions from './../store/user.actions';
 

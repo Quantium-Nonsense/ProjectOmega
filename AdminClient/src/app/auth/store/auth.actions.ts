@@ -1,4 +1,4 @@
-import { createAction, props } from '@ngrx/store';
+import {createAction, props} from '@ngrx/store';
 
 export const loginInitiated = createAction(
   '[Authentication - Guard] Guard began authentication protocol',

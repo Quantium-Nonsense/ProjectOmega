@@ -28,6 +28,7 @@ import {SharedModule} from './shared/shared.module';
 import {UserEffects} from './user/store/user.effects';
 import {CustomersEffects} from './customers/store/customers.effects';
 import {ToolbarComponent} from './toolbar/toolbar.component';
+import {SuppliersEffects} from './supplier/store/suppliers.effects';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -35,7 +36,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 	declarations: [
 		AppComponent,
 		DashboardComponent,
-		ToolbarComponent
+		ToolbarComponent,
 	],
 	bootstrap: [AppComponent],
 	imports: [
@@ -47,7 +48,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 		EffectsModule.forRoot([
 			AuthEffects,
 			UserEffects,
-			CustomersEffects
+			CustomersEffects,
+			SuppliersEffects
 		]),
 		FormsModule,
 		JwtModule.forRoot({

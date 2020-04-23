@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { State } from '../reducers';
-import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Store} from '@ngrx/store';
+import {Subscription} from 'rxjs';
+import {State} from '../reducers';
+import {LoadingSpinnerService} from '../services/loading-spinner/loading-spinner.service';
 import * as AuthActions from './store/auth.actions';
 import * as fromAuth from './store/auth.reducer';
 
@@ -135,8 +135,9 @@ export class AuthComponent implements OnInit, OnDestroy {
    * Simply initializes the form to be used with default values and validators
    *
    * A big note for this class is that the Form state is not stored in the global store object state
-   * The reason behind this is that a form state that has not been submitted is a very localized state and should NOT be shared
-   * Between components thus does not belong in the global app store state, rather when a form is submitted then use the app store
+   * The reason behind this is that a form state that has not been submitted is a very localized state and should NOT
+   * be shared Between components thus does not belong in the global app store state, rather when a form is submitted
+   * then use the app store
    *
    * @returns the form with initialized fields
    */

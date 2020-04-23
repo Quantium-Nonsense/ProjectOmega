@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatTableDataSource } from '@angular/material/table';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {MatTableDataSource} from '@angular/material/table';
 
-import { TableFilterComponent } from './table-filter.component';
+import {TableFilterComponent} from './table-filter.component';
 
 describe('TableFilterComponent', () => {
   let component: TableFilterComponent;

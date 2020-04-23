@@ -12,7 +12,7 @@ import {MockStore, provideMockStore} from '@ngrx/store/testing';
 import {Observable, of} from 'rxjs';
 import {environment} from '../../environments/environment';
 import {LoadingSpinnerService} from '../services/loading-spinner/loading-spinner.service';
-import {UserModel} from '../shared/model/user.model';
+import {UserModel} from '../shared/model/user/user.model';
 import {SharedModule} from '../shared/shared.module';
 import * as fromApp from './../reducers/index';
 import {UserEffects} from './store/user.effects';

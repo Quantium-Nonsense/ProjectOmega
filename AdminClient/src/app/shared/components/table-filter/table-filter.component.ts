@@ -1,5 +1,5 @@
-import { AfterContentInit, Component, DoCheck, Input, OnChanges, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import {Component, DoCheck, Input} from '@angular/core';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-table-filter',
@@ -14,7 +14,7 @@ export class TableFilterComponent implements DoCheck {
    *
    * @default 'Filter'
    */
-  @Input() label: string = 'Filter';
+  @Input() label = 'Filter';
 
   /**
    * The predicate on how to filter the rows

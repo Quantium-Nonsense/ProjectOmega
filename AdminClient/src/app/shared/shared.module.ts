@@ -11,8 +11,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatTableModule} from '@angular/material/table';
 import {PopupDialogComponent} from './components/popup-dialog/popup-dialog.component';
 import {TableFilterComponent} from './components/table-filter/table-filter.component';
-import {MatMenu, MatMenuModule} from '@angular/material/menu';
-import {CdkTextareaAutosize, TextFieldModule} from '@angular/cdk/text-field';
+import {MatMenuModule} from '@angular/material/menu';
+import {TextFieldModule} from '@angular/cdk/text-field';
 
 @NgModule({
 	declarations: [

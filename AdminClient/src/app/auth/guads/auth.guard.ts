@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {JwtHelperService} from '@auth0/angular-jwt';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environments/environment';
 import * as fromApp from '../../reducers';
 import * as AuthActions from '../store/auth.actions';
 

@@ -1,9 +1,7 @@
-import {TestBed, async, ComponentFixture} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {AppComponent} from './app.component';
 import {HarnessLoader} from '@angular/cdk/testing';
 import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {MatToolbar} from '@angular/material/toolbar';
-import {MatMenuHarness} from '@angular/material/menu/testing';
 
 describe('AppComponent', () => {
 	let loader: HarnessLoader;
