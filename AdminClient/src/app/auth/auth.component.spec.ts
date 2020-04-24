@@ -34,8 +34,7 @@ describe('AuthPage', () => {
 							errorMessage: null,
 							loading: false,
 							user: null
-						},
-						user: null
+						}
 					}
 				}),
 				{provide: MatSnackBar, useValue: mockSnackbar}
@@ -65,10 +64,8 @@ describe('AuthPage', () => {
 				loading: false,
 				user: null,
 				returnUrl: ''
-			},
-			user: null,
-			customers: null
-		});
+			}
+		} as State);
 
 		mockStore.refreshState();
 		fixture.detectChanges();
@@ -89,10 +86,8 @@ describe('AuthPage', () => {
 				loading: true,
 				user: null,
 				returnUrl: ''
-			},
-			user: null,
-			customers: null
-		});
+			}
+		} as State);
 
 		mockStore.refreshState();
 		fixture.detectChanges();

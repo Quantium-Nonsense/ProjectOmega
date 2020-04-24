@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import * as fromApp from '../reducers/index';
 import {Store} from '@ngrx/store';
 import * as ClientActions from './store/suppliers.actions';
@@ -14,7 +14,7 @@ import * as SupplierActions from './store/suppliers.actions';
 	templateUrl: './suppliers.component.html',
 	styleUrls: ['./supplier.component.scss']
 })
-export class SupplierComponent implements OnInit {
+export class SupplierComponent implements OnInit, OnDestroy {
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 
 	isLoading: Observable<boolean>;
@@ -40,6 +40,10 @@ export class SupplierComponent implements OnInit {
 				this.suppliers.paginator = this.paginator;
 			})
 		);
+	}
+
+	ngOnDestroy(): void {
+		this.sub.unsubscribe();
 	}
 
 

@@ -1,25 +1,40 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SupplierFormComponent } from './supplier-form.component';
+import {SupplierFormComponent} from './supplier-form.component';
+import {provideMockStore} from '@ngrx/store/testing';
+import {MatDialogHarness} from '@angular/material/dialog/testing';
+import {MatDialogRef} from '@angular/material/dialog';
 
 describe('SupplierFormComponent', () => {
-  let component: SupplierFormComponent;
-  let fixture: ComponentFixture<SupplierFormComponent>;
+	let component: SupplierFormComponent;
+	let fixture: ComponentFixture<SupplierFormComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ SupplierFormComponent ]
-    })
-    .compileComponents();
-  }));
+	beforeEach(async(() => {
+		TestBed.configureTestingModule({
+				   declarations: [SupplierFormComponent],
+				   providers: [
+					   provideMockStore({
+						   initialState: {
+							   suppliers: {}
+						   }
+					   }),
+					   MatDialogHarness,
+					   {
+						   provide: MatDialogRef,
+						   useValue: jasmine.createSpyObj(MatDialogRef, ['open', 'close'])
+					   }
+				   ]
+			   })
+			   .compileComponents();
+	}));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SupplierFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+	beforeEach(() => {
+		fixture = TestBed.createComponent(SupplierFormComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });
