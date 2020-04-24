@@ -106,8 +106,6 @@ public class SetupDataLoaderForRoleAndPrivilege implements ApplicationListener<C
         User user = userRepository.findByEmail(email);
         if (user == null) {
             user = new User.UserBuilder()
-                    .setFirstName(firstName)
-                    .setLastName(lastName)
                     .setEmail(email)
                     .setPassword(passwordEncoder.encode(password))
                     .build();

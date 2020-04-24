@@ -91,8 +91,6 @@ public class UserServiceImpl implements UserService {
         }
         User u = new User.UserBuilder()
                 .setId(id)
-                .setFirstName(userDetails.getFirstName())
-                .setLastName(userDetails.getLastName())
                 .setEmail(userDetails.getEmail())
                 .setPassword(userDetails.getPassword())
                 .setRoles(userDetails.getRoles())

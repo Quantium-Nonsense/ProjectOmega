@@ -30,9 +30,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -79,7 +77,12 @@ public class JwtAuthenticationController {
 
         userService.createVerificationTokenForUser(jwtToken, newUser);
 
-        return new ResponseEntity(newUser, HttpStatus.CREATED);
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("roles", newUser.getRoles());
+        userMap.put("email", newUser.getEmail());
+        userMap.put("id", newUser.getId());
+
+        return new ResponseEntity(userMap, HttpStatus.CREATED);
     }
 
     @SuppressWarnings("unchecked")

@@ -75,6 +75,9 @@ public class JwtUserDetailsService implements UserDetailsService {
             throw new DuplicateUserException(messages.getMessage("UniqueUsername.user.username", null, null));
         }
         Collection<Role> assignedRoles = user.getRoles();
+        if(assignedRoles == null) {
+            assignedRoles = new ArrayList<>();
+        }
         if (assignedRoles.isEmpty()) {
             assignedRoles.add(roleService.findByName(RoleBasedConstant.DEFAULT_USER_ROLE));
         }
