@@ -1,5 +1,4 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-//@import '../RepClient/src/theme/util';
 
 html,
 body {
@@ -24,4 +23,266 @@ body {
 .cdk-overlay-backdrop.cdk-overlay-backdrop-showing.dark-backdrop {
   background: #000;
   opacity: 0.75 !important;
+}
+
+$maxIteration: 20;
+
+@for $i from 1 through $maxIteration {
+
+  .w#{$i} {
+    width: $i * 5%;
+  }
+
+  .h#{$i} {
+    height: $i * 5%;
+  }
+
+  .pt#{$i} {
+    padding-top: $i * 1%;
+  }
+
+  .pb#{$i} {
+    padding-bottom: $i * 1%;
+  }
+
+  .pr#{$i} {
+    padding-right: $i * 1%;
+  }
+
+  .pl#{$i} {
+    padding-left: $i * 1%;
+  }
+  // Margins
+  .m#{$i} {
+    margin: $i * 1%;
+  }
+
+  .mt#{$i} {
+    margin-top: $i * 1%;
+  }
+
+  .mb#{$i} {
+    margin-bottom: $i * 1%;
+  }
+
+  .mr#{$i} {
+    margin-right: $i * 1%;
+  }
+
+  .ml#{$i} {
+    margin-left: $i * 1%;
+  }
+}
+
+$paddings: pt, pr, pl, pb;
+$margins: mt, mr, ml, mb;
+
+$sides: t, r, l, b; // top, right, left, bottom
+
+@for $i from 1 through $maxIteration {
+  @for $j from 1 through $maxIteration {
+    @each $padding in $paddings {
+      .w#{$i}#{$padding}#{$j} {
+        @extend .#{$padding}#{$j};
+        @extend .w#{$i};
+      }
+      .h#{$i}#{$padding}#{$i} {
+        @extend .#{$padding}#{$j};
+        @extend .h#{$i};
+      }
+    }
+
+    @each $margin in $margins {
+      .w#{$i}#{$margin}#{$j} {
+        @extend .#{$margin}#{$j};
+        @extend .w#{$i};
+      }
+      .h#{$i}#{$margin}#{$j} {
+        @extend .#{$margin}#{$j};
+        @extend .h#{$i};
+      }
+    }
+  }
+}
+
+@for $i from 1 through $maxIteration {
+  // Combine the margins for two sides per class
+  @each $side in $sides {
+    @if $side != t {
+      .mt#{$side}#{$i} {
+        @if $side == r {
+          margin-right: $i * 1%;
+
+          @extend .mt#{$i};
+        }
+
+        @if $side == b {
+          margin-bottom: $i * 1%;
+
+          @extend .mt#{$i};
+        }
+
+        @if $side == l {
+          margin-left: $i * 1%;
+
+          @extend .mt#{$i};
+        }
+      }
+      .pt#{$side}#{$i} {
+        @if $side == r {
+          padding-right: $i * 1%;
+
+          @extend .pt#{$i};
+        }
+
+        @if $side == b {
+          padding-bottom: $i * 1%;
+
+          @extend .pt#{$i};
+        }
+
+        @if $side == l {
+          padding-left: $i * 1%;
+
+          @extend .pt#{$i};
+        }
+      }
+    }
+
+    @if $side != b {
+      .mb#{$side}#{$i} {
+        @if $side == r {
+          margin-right: $i * 1%;
+
+          @extend .mb#{$i};
+        }
+
+        @if $side == t {
+          margin-top: $i * 1%;
+
+          @extend .mb#{$i};
+        }
+
+        @if $side == l {
+          margin-left: $i * 1%;
+
+          @extend .mb#{$i};
+        }
+      }
+      .pb#{$side}#{$i} {
+        @if $side == r {
+          padding-right: $i * 1%;
+
+          @extend .pb#{$i};
+        }
+
+        @if $side == t {
+          padding-top: $i * 1%;
+
+          @extend .pb#{$i};
+        }
+
+        @if $side == l {
+          padding-left: $i * 1%;
+
+          @extend .pb#{$i};
+        }
+      }
+    }
+
+    @if $side != l {
+      .ml#{$side}#{$i} {
+        @if $side == r {
+          margin-right: $i * 1%;
+
+          @extend .ml#{$i};
+        }
+
+        @if $side == t {
+          margin-top: $i * 1%;
+
+          @extend .ml#{$i};
+        }
+
+        @if $side == b {
+          margin-bottom: $i * 1%;
+
+          @extend .ml#{$i};
+        }
+      }
+      .pl#{$side}#{$i} {
+        @if $side == r {
+          padding-right: $i * 1%;
+
+          @extend .pl#{$i};
+        }
+
+        @if $side == t {
+          padding-top: $i * 1%;
+
+          @extend .pl#{$i};
+        }
+
+        @if $side == b {
+          padding-bottom: $i * 1%;
+
+          @extend .pl#{$i};
+        }
+      }
+    }
+
+    @if $side != r {
+      .mr#{$side}#{$i} {
+        @if $side == l {
+          margin-left: $i * 1%;
+
+          @extend .mr#{$i};
+        }
+
+        @if $side == t {
+          margin-top: $i * 1%;
+
+          @extend .mr#{$i};
+        }
+
+        @if $side == b {
+          margin-bottom: $i * 1%;
+
+          @extend .mr#{$i};
+        }
+      }
+      .pr#{$side}#{$i} {
+        @if $side == l {
+          padding-left: $i * 1%;
+
+          @extend .pr#{$i};
+        }
+
+        @if $side == t {
+          padding-top: $i * 1%;
+
+          @extend .pr#{$i};
+        }
+
+        @if $side == b {
+          padding-bottom: $i * 1%;
+
+          @extend .pr#{$i};
+        }
+      }
+    }
+  }
+}
+
+.cdk-overlay-pane.customerDialog {
+  position: relative !important;
+}
+
+.close.mat-icon-button {
+  line-height: 14px;
+  min-width: auto;
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
