@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-sass-guidelines"
+  ],
+  "rules": {
+    "value-keyword-case": null,
+    "at-extend-no-missing-placeholder": false,
+    "no-empty-source": null,
+    "max-empty-lines": 2,
+    "selector-type-no-unknown": null,
+
+  }
+}
