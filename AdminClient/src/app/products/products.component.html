@@ -9,6 +9,12 @@
   </div>
 </div>
 <div fxLayout="row" fxLayoutAlign="center">
+  <app-table-filter [action]="filterActions"
+                    [dataSource]="dataSource.data" class="w-100">
+
+  </app-table-filter>
+</div>
+<div fxLayout="row" fxLayoutAlign="center">
   <div class="mat-elevation-z8 w-100">
     <table aria-label="Elements" class="full-width-table" mat-table matSort>
       <!-- Supplier Column -->

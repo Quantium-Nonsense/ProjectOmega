@@ -5,17 +5,22 @@
         </button>
         <span fxFlex="5" id="title">{{title}}</span>
         <span fxFlex></span>
-        <div *ngIf="isCustomerPage">
-            <button mat-icon-button
-                    [matMenuTriggerFor]="customerActionMenu">
-                <mat-icon>person_add</mat-icon>
-            </button>
+        <div>
+          <button mat-icon-button
+                  [matMenuTriggerFor]="userActionMenu">
+            <mat-icon>person</mat-icon>
+          </button>
 
-            <mat-menu
-		        #customerActionMenu="matMenu">
-                <button mat-menu-item>Settings</button>
-                <button mat-menu-item>Help</button>
-            </mat-menu>
+          <mat-menu
+            #userActionMenu="matMenu">
+            <button mat-menu-item>Settings</button>
+            <button mat-menu-item>Help</button>
+            <mat-divider></mat-divider>
+            <button (click)="handleLogout()" mat-menu-item>Log Out</button>
+          </mat-menu>
         </div>
     </mat-toolbar-row>
 </mat-toolbar>
+<mat-progress-bar *ngIf="showProgressBar | async"
+                  mode="indeterminate"></mat-progress-bar>
+

@@ -1,20 +1,21 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import * as fromApp from '../../reducers/index';
-import {Store} from '@ngrx/store';
-import * as fromCustomers from '../store/customers.reducer';
+import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import * as CustomerActions from '../store/customers.actions';
-import {MatDialogRef} from '@angular/material/dialog';
-import {Observable, Subscription} from 'rxjs';
+import * as fromCustomers from '../store/customers.reducer';
 
 @Component({
-	selector: 'app-customer-form',
-	templateUrl: './customer-form.component.html',
-	styleUrls: ['./customer-form.component.scss']
+  selector: 'app-customer-form',
+  templateUrl: './customer-form.component.html',
+  styleUrls: ['./customer-form.component.scss']
 })
 export class CustomerFormComponent implements OnInit, OnDestroy {
-	customerForm: FormGroup;
-	isLoading: Observable<boolean>;
+  customerForm: FormGroup;
+  isLoading: Observable<boolean>;
 
 	private sub: Subscription;
 
@@ -142,19 +143,20 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 	}
 
 	submitForm() {
-		this.store$.dispatch(CustomerActions.editCustomer({
-			editedCustomer: {
-				id: null,
-				notes: this.notes.value,
-				lastName: this.lastName.value,
-				firstName: this.firstName.value,
-				email: this.email.value,
-				description: this.description.value,
-				contactNumber: this.contactNumber.value,
-				companyName: this.companyName.value
+    this.store$.dispatch(ToolbarActions.beginProgressBar());
+    this.store$.dispatch(CustomerActions.editCustomer({
+      editedCustomer: {
+        id: null,
+        notes: this.notes.value,
+        lastName: this.lastName.value,
+        firstName: this.firstName.value,
+        email: this.email.value,
+        description: this.description.value,
+        contactNumber: this.contactNumber.value,
+        companyName: this.companyName.value
 			}
 		}));
-	}
+  }
 
 	cancel() {
 		this.dialogRef.close();

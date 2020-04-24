@@ -1,43 +1,48 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { State } from '../reducers';
+import * as ToolbarActions from './store/toolbar.actions';
+import * as fromToolbar from './store/toolbar.reducer';
 
 @Component({
-	selector: 'app-toolbar',
-	templateUrl: './toolbar.component.html',
-	styleUrls: ['./toolbar.component.scss']
+  selector: 'app-toolbar',
+  templateUrl: './toolbar.component.html',
+  styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
-	@Input() title: string;
+  @Input() title: string;
+  @Output() sideNavOpenChange = new EventEmitter();
+  private showProgressBar: Observable<boolean>;
 
-	@Input()
-	get sideNavOpen(): boolean {
-		// eslint-disable-next-line no-underscore-dangle
-		return this._sideNavOpen;
-	}
+  constructor(
+    private router: Router,
+    private store: Store<State>,
+  ) {
+    this.showProgressBar = new Observable<boolean>();
+  }
 
-	set sideNavOpen(value) {
-		// eslint-disable-next-line no-underscore-dangle
-		this._sideNavOpen = value;
-		this.sideNavOpenChange.emit(this._sideNavOpen);
-	}
+  private _sideNavOpen: boolean;
 
-	@Output() sideNavOpenChange = new EventEmitter();
+  @Input()
+  get sideNavOpen(): boolean {
+    // eslint-disable-next-line no-underscore-dangle
+    return this._sideNavOpen;
+  }
 
-	isCustomerPage: boolean;
+  set sideNavOpen(value) {
+    // eslint-disable-next-line no-underscore-dangle
+    this._sideNavOpen = value;
+    this.sideNavOpenChange.emit(this._sideNavOpen);
+  }
 
-	private _sideNavOpen: boolean;
+  ngOnInit(): void {
+    this.showProgressBar = this.store.select(fromToolbar.selectShowProgressBar);
+  }
 
-	constructor(
-		private router: Router
-	) {
-	}
-
-	ngOnInit(): void {
-		this.router.events.subscribe(value => {
-			if (value instanceof NavigationEnd) {
-				this.isCustomerPage = value.url.includes('customers');
-			}
-		});
-	}
+  handleLogout(): void {
+    this.store.dispatch(ToolbarActions.logoutAttempt());
+  }
 
 }
