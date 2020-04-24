@@ -48,26 +48,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/authenticate",
-                        "/api/registration",
                         "/api/confirmRegistration").permitAll()
-                .antMatchers("/api/user/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
-                .antMatchers("/api/product/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+                .antMatchers("/api/registration").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
+                .antMatchers("/api/user/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
+                .antMatchers("/api/product/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
                 .antMatchers("/api/product/get",
                         "/api/product/{id}",
                         "/api/product/lt/**",
                         "/api/product/gt/**",
                         "/api/product/eq/**",
                         "/api/product/search/**",
-                        "/api/product/supplier/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
-                .antMatchers("/api/supplier/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+                        "/api/product/supplier/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")
+                .antMatchers("/api/supplier/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
                 .antMatchers("/api/supplier/get",
                         "/api/supplier/{id}",
-                        "/api/supplier/{companyName}}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
-                .antMatchers("/api/order/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
-                .antMatchers("/api/client/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
+                        "/api/supplier/{companyName}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")
+                .antMatchers("/api/order/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")
+                .antMatchers("/api/client/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
                 .antMatchers("/api/client/get",
                         "/api/client/{id}",
-                        "/api/client/{update}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP")
+                        "/api/client/{update}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
