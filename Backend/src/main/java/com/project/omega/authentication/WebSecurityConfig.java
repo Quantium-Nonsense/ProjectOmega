@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/authenticate",
                         "/api/confirmRegistration").permitAll()
-                .antMatchers("/api/registration").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
+                .antMatchers("/api/registration").hasAnyRole("SUPER_ADMIN", "ADMIN")
                 .antMatchers("/api/user/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
                 .antMatchers("/api/product/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
                 .antMatchers("/api/product/get",

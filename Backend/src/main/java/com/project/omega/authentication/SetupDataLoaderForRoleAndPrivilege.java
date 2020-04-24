@@ -56,13 +56,20 @@ public class SetupDataLoaderForRoleAndPrivilege implements ApplicationListener<C
         final List<Privilege> adminPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege));
         final List<Privilege> userPrivileges = new ArrayList<Privilege>(Arrays.asList(readPrivilege, passwordPrivilege));
 
-        createRoleIfNotFound(RoleBasedConstant.DEFAULT_USER_ROLE, adminPrivileges);
-        createRoleIfNotFound("ROLE_SUPER_ADMIN", adminPrivileges);
-        createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-        createRoleIfNotFound("ROLE_REP", userPrivileges);
+        createRoleIfNotFound(RoleBasedConstant.DEFAULT_USER, adminPrivileges);
+        Role role = createRoleIfNotFound(RoleBasedConstant.SUPER_ADMIN, adminPrivileges);
+        createRoleIfNotFound(RoleBasedConstant.ADMIN, adminPrivileges);
+        createRoleIfNotFound(RoleBasedConstant.REP, userPrivileges);
 
         // == create initial user
-        //createUserIfNotFound("test@test.com", "Test", "Test", "test", new ArrayList<Role>(Arrays.asList(adminRole)));
+        createUserIfNotFound("alex.karp475@gmail.com", "Nonsense", new ArrayList<Role>(Arrays.asList(role)));
+        createUserIfNotFound("harryspitsillides@hotmail.com", "Nonsense", new ArrayList<Role>(Arrays.asList(role)));
+        createUserIfNotFound("kaylesh.patel@live.co.uk", "Nonsense", new ArrayList<Role>(Arrays.asList(role)));
+        createUserIfNotFound("dutta_ari@yahoo.in", "Nonsense", new ArrayList<Role>(Arrays.asList(role)));
+        createUserIfNotFound("markscamilleri@gmail.com", "Nonsense", new ArrayList<Role>(Arrays.asList(role)));
+        createUserIfNotFound("khalil.alhabal@gmail.com", "Nonsense", new ArrayList<Role>(Arrays.asList(role)));
+        createUserIfNotFound("lixiaozhe.society@gmail.com", "Nonsense", new ArrayList<Role>(Arrays.asList(role)));
+        createUserIfNotFound("dominikwas@outlook.com", "Nonsense", new ArrayList<Role>(Arrays.asList(role)));
 
         alreadySetup = true;
     }
@@ -101,7 +108,7 @@ public class SetupDataLoaderForRoleAndPrivilege implements ApplicationListener<C
     }
 
     @Transactional
-    private final User createUserIfNotFound(final String email, final String firstName, final String lastName,
+    private final User createUserIfNotFound(final String email,
                                             final String password, final Collection<Role> roles) {
         User user = userRepository.findByEmail(email);
         if (user == null) {
