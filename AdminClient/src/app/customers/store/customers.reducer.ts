@@ -59,7 +59,7 @@ const reducer = createReducer(
 		})),
 	on(
 		CustomerActions.customerDeletedSuccess,
-		CustomerActions.editCustomerSuccess,
+		CustomerActions.editSupplierSuccess,
 		(prevState: State, {newCustomers}) => ({
 		...prevState,
 		loading: false,

@@ -138,6 +138,6 @@ export class CustomersEffects {
 			id: customerToEdit.id
 		};
 
-		return CustomerActions.editCustomerSuccess({newCustomers: allCustomers});
+		return CustomerActions.editSupplierSuccess({newCustomers: allCustomers});
 	}
 }

@@ -10,4 +10,5 @@ export class SupplierModel {
 		public notes: string
 	) {
 	}
+
 }

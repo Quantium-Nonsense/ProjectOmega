@@ -6,7 +6,7 @@ export const editCustomer = createAction(
 	props<{ editedCustomer: CustomerModel }>()
 );
 
-export const editCustomerSuccess = createAction(
+export const editSupplierSuccess = createAction(
 	'[Customers - Effects] Edit customer successfully',
 	props<{ newCustomers: CustomerModel[] }>()
 );

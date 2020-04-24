@@ -1,0 +1,84 @@
+<mat-progress-bar mode="indeterminate"
+                  *ngIf="isLoading | async"></mat-progress-bar>
+<app-table-filter [dataSource]="suppliers"
+                  [action]="filterActions">
+
+</app-table-filter>
+
+<div class="w20"
+     fxLayout="column">
+    <table fxFlexFill
+           mat-table
+           [dataSource]="suppliers">
+        <ng-container matColumnDef="companyName">
+            <th mat-header-cell
+                *matHeaderCellDef>Name
+            </th>
+            <td mat-cell
+                *matCellDef="let supplier">{{supplier.companyName}}</td>
+        </ng-container>
+        <ng-container matColumnDef="contactNumber">
+            <th mat-header-cell
+                *matHeaderCellDef>Contact Number
+            </th>
+            <td mat-cell
+                *matCellDef="let supplier">{{supplier.contactNumber}}</td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+            <th mat-header-cell
+                *matHeaderCellDef>Email
+            </th>
+            <td mat-cell
+                *matCellDef="let supplier">{{supplier.email}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstName">
+            <th mat-header-cell
+                *matHeaderCellDef>First name
+            </th>
+            <td mat-cell
+                *matCellDef="let supplier">{{supplier.firstName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+            <th mat-header-cell
+                *matHeaderCellDef>Last name
+            </th>
+            <td mat-cell
+                *matCellDef="let supplier">{{supplier.lastName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell
+                *matHeaderCellDef>Actions
+            </th>
+            <td mat-cell
+                *matCellDef="let row">
+                <button [disabled]="isLoading | async"
+                        (click)="editSupplier(row)"
+                        color="primary"
+                        mat-icon-button>
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button [disabled]="isLoading | async"
+                        (click)="deleteSupplier(row)"
+                        color="primary"
+                        mat-icon-button>
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row
+            *matHeaderRowDef="displayCols"></tr>
+        <tr mat-row
+            *matRowDef="let row; columns: displayCols;"></tr>
+    </table>
+    <mat-paginator [length]="100"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   showFirstLastButtons
+    >
+    </mat-paginator>
+</div>
+

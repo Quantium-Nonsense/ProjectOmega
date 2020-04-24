@@ -28,6 +28,11 @@ export class DashboardComponent implements OnInit {
             title: 'Customers',
             content: 'Click here to see all customers',
             url: '/customers'
+        },
+        {
+            title: 'Suppliers',
+            content: 'Click here to see all clients',
+            url: '/suppliers'
         }
     ];
 

@@ -32,8 +32,6 @@ import {TextFieldModule} from '@angular/cdk/text-field';
 		MatIconModule,
 		MatMenuModule,
 		TextFieldModule,
-
-
 	],
 	exports: [
 		FlexLayoutModule,

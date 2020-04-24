@@ -9,14 +9,14 @@ export interface State {
 	auth: fromAuth.State;
 	user: fromUser.State;
 	customers: fromCustomers.State,
-	clients: fromClients.State
+	suppliers: fromClients.State
 }
 
 export const appReducer: ActionReducerMap<State> = {
 	auth: fromAuth.authReducer,
 	user: fromUser.userReducer,
 	customers: fromCustomers.customerReducer,
-	clients: fromClients.clientReducer
+	suppliers: fromClients.clientReducer
 };
 
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
