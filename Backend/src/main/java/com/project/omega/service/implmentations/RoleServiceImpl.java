@@ -6,6 +6,8 @@ import com.project.omega.service.interfaces.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -15,6 +17,21 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findByName(String name) {
         return roleRepository.findByName(name);
+    }
+
+    @Override
+    public Role findById(Long id) {
+        return roleRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleRepository.findAll();
+    }
+
+    @Override
+    public void deleteRoleById(Long id) {
+        roleRepository.deleteById(id);
     }
 
     @Override

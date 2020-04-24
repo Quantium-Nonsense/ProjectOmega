@@ -79,7 +79,7 @@ public class JwtUserDetailsService implements UserDetailsService {
             assignedRoles = new ArrayList<>();
         }
         if (assignedRoles.isEmpty()) {
-            assignedRoles.add(roleService.findByName(RoleBasedConstant.DEFAULT_USER_ROLE));
+            assignedRoles.add(roleService.findByName(RoleBasedConstant.DEFAULT_USER));
         }
         User registeredUser = bindUser(user, assignedRoles);
         return registeredUser;

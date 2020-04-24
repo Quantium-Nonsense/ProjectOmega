@@ -2,7 +2,7 @@ package com.project.omega.service.implmentations;
 
 import com.project.omega.bean.dao.auth.AdminRoles;
 import com.project.omega.bean.dao.auth.Privilege;
-import com.project.omega.bean.dto.IRoleUTO;
+import com.project.omega.bean.dto.RoleDTO;
 import com.project.omega.exceptions.NoRolesCreatedException;
 import com.project.omega.helper.PrivilegeValidator;
 import com.project.omega.repository.AdminRoleRepository;
@@ -36,9 +36,9 @@ public class AdminRoleServiceImpl implements AdminRoleService {
     }
 
     @Override
-    public AdminRoles create(IRoleUTO iRoleUTO) {
-        LOGGER.debug("Creating Roles with information: {}", iRoleUTO);
-        Collection<Privilege> privilegeList = iRoleUTO.getPrivileges();
+    public AdminRoles create(RoleDTO roleDTO) {
+        LOGGER.debug("Creating Roles with information: {}", roleDTO);
+        Collection<Privilege> privilegeList = roleDTO.getPrivileges();
         for (Privilege privilege : privilegeList) {
             boolean validator = PrivilegeValidator.privilegeValidator(privilege.getName());
             if (validator) {
@@ -48,7 +48,7 @@ public class AdminRoleServiceImpl implements AdminRoleService {
             }
         }
         AdminRoles iRoles = new AdminRoles.AdminRolesBuilder()
-                .setName(iRoleUTO.getName())
+                .setName(roleDTO.getName())
                 .setPrivileges(privilegeList)
                 .build();
         adminRoleRepository.save(iRoles);
