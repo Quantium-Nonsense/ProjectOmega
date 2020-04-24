@@ -28,6 +28,7 @@ import {SharedModule} from './shared/shared.module';
 import {UserEffects} from './user/store/user.effects';
 import {CustomersEffects} from './customers/store/customers.effects';
 import {ToolbarComponent} from './toolbar/toolbar.component';
+import {ToolbarEffects} from './toolbar/store/toolbar.effects';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -47,7 +48,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 		EffectsModule.forRoot([
 			AuthEffects,
 			UserEffects,
-			CustomersEffects
+			CustomersEffects,
+			ToolbarEffects
 		]),
 		FormsModule,
 		JwtModule.forRoot({
