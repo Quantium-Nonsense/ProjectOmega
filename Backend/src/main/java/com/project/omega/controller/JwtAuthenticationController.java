@@ -7,6 +7,7 @@ import com.project.omega.bean.dao.auth.Token;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.PasswordDTO;
 import com.project.omega.bean.dto.UserDTO;
+import com.project.omega.bean.dto.UserResponse;
 import com.project.omega.exceptions.DuplicateUserException;
 import com.project.omega.exceptions.InvalidOldPasswordException;
 import com.project.omega.helper.GenericResponse;
@@ -77,10 +78,7 @@ public class JwtAuthenticationController {
 
         userService.createVerificationTokenForUser(jwtToken, newUser);
 
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("roles", newUser.getRoles());
-        userMap.put("email", newUser.getEmail());
-        userMap.put("id", newUser.getId());
+        UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
 
         return new ResponseEntity(userMap, HttpStatus.CREATED);
     }

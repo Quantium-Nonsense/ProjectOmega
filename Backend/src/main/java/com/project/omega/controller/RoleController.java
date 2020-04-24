@@ -1,6 +1,5 @@
 package com.project.omega.controller;
 
-import com.project.omega.bean.dao.auth.AdminRoles;
 import com.project.omega.bean.dao.auth.Role;
 import com.project.omega.service.interfaces.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
