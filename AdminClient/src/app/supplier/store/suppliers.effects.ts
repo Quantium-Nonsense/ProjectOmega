@@ -11,9 +11,6 @@ import {SupplierFormComponent} from '../supplier-form/supplier-form.component';
 import {PopupDialogComponent} from '../../shared/components/popup-dialog/popup-dialog.component';
 import {PopupDialogDataModel} from '../../shared/model/popup-dialog-data.model';
 import * as fromSuppliers from './suppliers.reducer';
-import {CustomerModel} from '../../models/customers/customer.model';
-import * as fromCustomers from '../../customers/store/customers.reducer';
-import * as CustomerActions from '../../customers/store/customers.actions';
 
 @Injectable()
 export class SuppliersEffects {
