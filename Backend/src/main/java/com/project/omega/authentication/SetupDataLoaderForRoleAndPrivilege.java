@@ -84,18 +84,6 @@ public class SetupDataLoaderForRoleAndPrivilege implements ApplicationListener<C
         return privilege;
     }
 
-    private final AdminRoles createAdminRoleIfNotFound(String name, Collection<Privilege> privileges) {
-        AdminRoles role = adminRoleRepository.findByName(name);
-        if (role == null) {
-            role = new AdminRoles.AdminRolesBuilder()
-                    .setName(name)
-                    .setPrivileges(privileges)
-                    .build();
-        }
-        role = adminRoleRepository.save(role);
-        return role;
-    }
-
     @Transactional
     private final Role createRoleIfNotFound(final String name, final Collection<Privilege> privileges) {
         Role role = roleRepository.findByName(name);
