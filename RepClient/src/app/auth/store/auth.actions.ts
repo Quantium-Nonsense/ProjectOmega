@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { UserModel } from '../../shared/model/auth/user.model';
 
 export const loginRejected = createAction(
   '[Authentication - Guard] Guard rejected redirect',
@@ -7,7 +8,7 @@ export const loginRejected = createAction(
 
 export const loginAttempt = createAction(
   '[Authentication - Page] Attempting to log in',
-  props<{ email: string, password: string }>()
+  props<{ user: UserModel }>()
 );
 
 export const loginSuccessful = createAction(

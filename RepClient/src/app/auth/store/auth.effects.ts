@@ -1,32 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { of, pipe } from 'rxjs';
-import { delay, map, switchMap, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { delay, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import * as AuthActions from '../store/auth.actions';
+import { UserModel } from '../../shared/model/auth/user.model';
+import { ApiEndpointCreatorService } from '../../services/api-endpoint-creator.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class AuthEffects {
   loginRejected$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.loginRejected),
-    tap(() => this.router.navigateByUrl('/auth'))
+      ofType(AuthActions.loginRejected),
+      tap(() => this.router.navigateByUrl('/auth'))
   ), {dispatch: false});
 
   loginAttempt$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(AuthActions.loginAttempt),
-      switchMap(
-        action => of(this.storeJwt()).pipe(delay(2000), tap(() => this.redirectToHome()))
-      )
-    ));
+      () => this.actions$.pipe(
+          ofType(AuthActions.loginAttempt),
+          switchMap((action: Action & { user }) => this.attemptLogin(action.user))
+      ));
 
   constructor(
-    private actions$: Actions,
-    private router: Router,
-    public loadingController: LoadingController
+      private http: HttpClient,
+      private apiEndPoints: ApiEndpointCreatorService,
+      private actions$: Actions,
+      private router: Router
   ) {
   }
 
@@ -45,4 +46,8 @@ export class AuthEffects {
   private redirectToHome = () => {
     this.router.navigateByUrl('/home');
   };
+
+  private attemptLogin(user: UserModel) {
+    return this.http.post<{token: string}>(this.apiEndPoints.loginEndPoint)
+  }
 }

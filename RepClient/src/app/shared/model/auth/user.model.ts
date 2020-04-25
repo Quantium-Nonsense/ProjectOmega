@@ -1,6 +1,10 @@
-export class User {
+export class UserModel {
   constructor(
-    public email: string,
-    public roles: string[]) {
+      public id: string,
+      public firstName: string,
+      public lastName: string,
+      public email: string,
+      public password: string,
+      public roles: string[]) {
   }
 }
