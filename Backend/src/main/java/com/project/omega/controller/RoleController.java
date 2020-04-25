@@ -28,13 +28,13 @@ public class RoleController {
         return new ResponseEntity(roles, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/get/{name}", headers = "Accept=application/json")
+    @GetMapping(value = "/{name}", headers = "Accept=application/json")
     public ResponseEntity getRoleByName(@PathVariable(value = "name") String name) {
         Role role = roleService.findByName(name);
         return new ResponseEntity(role, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteRoleById(@PathVariable(value = "id") Long id)  {
         roleService.deleteRoleById(id);
         return new ResponseEntity(HttpStatus.OK);
