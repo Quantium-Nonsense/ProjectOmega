@@ -1,19 +1,18 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import {Store} from '@ngrx/store';
-import {Observable, Subscription} from 'rxjs';
-import {CustomerModel} from '../models/customers/customer.model';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { CustomerModel } from '../models/customers/customer.model';
 import * as fromApp from '../reducers/index';
 import * as ToolbarActions from '../toolbar/store/toolbar.actions';
 import * as CustomerActions from './store/customers.actions';
 import * as fromCustomers from './store/customers.reducer';
 
-
 @Component({
-	selector: 'app-customers',
-	templateUrl: './customers.component.html',
-	styleUrls: ['./customers.component.scss']
+  selector: 'app-customers',
+  templateUrl: './customers.component.html',
+  styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
 	@ViewChild(MatPaginator) paginator: MatPaginator;
@@ -52,12 +51,12 @@ export class CustomersComponent implements OnInit {
 	}
 
 	deleteCustomer(customer: CustomerModel) {
-		this.store$.dispatch(CustomerActions.showDeleteCustomerDialog({customer}));
-	}
+    this.store$.dispatch(CustomerActions.showDeleteCustomerDialog({customer}));
+  }
 
 	editCustomer(customer: CustomerModel) {
-		this.store$.dispatch(CustomerActions.showEditCustomerDialog({customer}));
-	}
+    this.store$.dispatch(CustomerActions.showEditCustomerDialog({customer}));
+  }
 
 	filterActions(customer: CustomerModel, filterValue: string): boolean {
 		return customer.companyName.toLowerCase().includes(filterValue)

@@ -39,21 +39,21 @@ export class CustomersEffects {
 	));
 
 	showEditCustomerDialog$ = createEffect(() => this.actions$.pipe(
-		ofType(CustomerActions.showEditCustomerDialog),
-		map((action: Action & { customer: CustomerModel }) => this.dialog.open<CustomerFormComponent>(
-			CustomerFormComponent,
-			{
-				width: '66vw',
-				height: '66vh',
-				panelClass: 'customerDialog'
-			}
-		))
-	), {dispatch: false});
+    ofType(CustomerActions.showEditCustomerDialog),
+    map((action: Action & { customer: CustomerModel }) => this.dialog.open<CustomerFormComponent>(
+      CustomerFormComponent,
+      {
+        width: '66vw',
+        height: '66vh',
+        panelClass: 'customerDialog'
+      }
+    ))
+  ), {dispatch: false});
 
-	showDeleteCustomerDialog$ = createEffect(() => this.actions$.pipe(
-		ofType(CustomerActions.showDeleteCustomerDialog),
-		map((action: Action & { customer: CustomerModel }) => this.showDeleteDialog(action.customer))
-	), {dispatch: false});
+  showDeleteCustomerDialog$ = createEffect(() => this.actions$.pipe(
+    ofType(CustomerActions.showDeleteCustomerDialog),
+    map((action: Action & { customer: CustomerModel }) => this.showDeleteDialog(action.customer))
+  ), {dispatch: false});
 
 	constructor(
 		private store: Store<fromApp.State>,
@@ -85,10 +85,10 @@ export class CustomersEffects {
 	};
 
 	private customersLoadedAfter() {
-		const customers = this.createDummyCustomers();
+    const customers = this.createDummyCustomers();
     this.store.dispatch(ToolbarActions.stopProgressBar());
-		return CustomerActions.customersLoaded({customers})
-	}
+    return CustomerActions.customersLoaded({customers});
+  }
 	private showDeleteDialog(customer: CustomerModel) {
 		this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(PopupDialogComponent, {
 			data: {
@@ -116,17 +116,17 @@ export class CustomersEffects {
 	}
 
 	private deleteCustomer(): Action {
-		let currentCustomer: CustomerModel = null;
-		let allCustomers: CustomerModel[] = [];
+    let currentCustomer: CustomerModel = null;
+    let allCustomers: CustomerModel[] = [];
 
-		this.store.select(fromCustomers.selectAllCustomers).pipe(take(1)).subscribe(customers => allCustomers = customers);
-		this.store.select(fromCustomers.selectSelectedCustomer).pipe(take(1)).subscribe(customer => currentCustomer = customer);
+    this.store.select(fromCustomers.selectAllCustomers).pipe(take(1)).subscribe(customers => allCustomers = customers);
+    this.store.select(fromCustomers.selectSelectedCustomer).pipe(take(1)).subscribe(customer => currentCustomer = customer);
 
-		const newCustomers = allCustomers.filter(customer => customer.id !== currentCustomer.id);
+    const newCustomers = allCustomers.filter(customer => customer.id !== currentCustomer.id);
 
     this.store.dispatch(ToolbarActions.stopProgressBar());
-		return CustomerActions.customerDeletedSuccess({newCustomers});
-	}
+    return CustomerActions.customerDeletedSuccess({newCustomers});
+  }
 
 	private editCustomer(editedCustomer: CustomerModel): Action {
 		let allCustomers: CustomerModel[] = [];
@@ -135,16 +135,16 @@ export class CustomersEffects {
 		this.store.select(fromCustomers.selectSelectedCustomer)
 		    .pipe(take(1))
 		    .subscribe(customer => customerToEdit = customer);
-		this.store.select(fromCustomers.selectAllCustomers)
-		    .pipe(take(1))
-		    .subscribe(customers => allCustomers = [...customers]);
+    this.store.select(fromCustomers.selectAllCustomers)
+      .pipe(take(1))
+      .subscribe(customers => allCustomers = [...customers]);
 
-		allCustomers[allCustomers.findIndex(c => c.id === customerToEdit.id)] = {
-			...editedCustomer,
-			id: customerToEdit.id
-		};
+    allCustomers[allCustomers.findIndex(c => c.id === customerToEdit.id)] = {
+      ...editedCustomer,
+      id: customerToEdit.id
+    };
 
     this.store.dispatch(ToolbarActions.stopProgressBar());
-		return CustomerActions.editCustomerSuccess({newCustomers: allCustomers});
-	}
+    return CustomerActions.editCustomerSuccess({newCustomers: allCustomers});
+  }
 }

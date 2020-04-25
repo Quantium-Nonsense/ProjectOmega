@@ -14,7 +14,10 @@ import * as fromToolbar from './store/toolbar.reducer';
 export class ToolbarComponent implements OnInit {
   @Input() title: string;
   @Output() sideNavOpenChange = new EventEmitter();
+
   private showProgressBar: Observable<boolean>;
+
+  private _sideNavOpen: boolean;
 
   constructor(
     private router: Router,
@@ -22,8 +25,6 @@ export class ToolbarComponent implements OnInit {
   ) {
     this.showProgressBar = new Observable<boolean>();
   }
-
-  private _sideNavOpen: boolean;
 
   @Input()
   get sideNavOpen(): boolean {
