@@ -5,4 +5,6 @@ import com.project.omega.bean.dao.auth.Privilege;
 
 public interface PrivilegeService {
     Privilege findByName(String name);
+
+    void create(Privilege privilege);
 }
