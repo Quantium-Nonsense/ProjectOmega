@@ -8,18 +8,17 @@ import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.UserNotFoundException;
+import com.project.omega.helper.RoleBasedConstant;
 import com.project.omega.helper.TokenConstants;
 import com.project.omega.repository.UserRepository;
-import com.project.omega.service.interfaces.AuthenticationService;
-import com.project.omega.service.interfaces.PasswordResetTokenService;
-import com.project.omega.service.interfaces.TokenService;
-import com.project.omega.service.interfaces.UserService;
+import com.project.omega.service.interfaces.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +29,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -39,6 +39,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     TokenService tokenService;
@@ -61,8 +64,18 @@ public class UserServiceImpl implements UserService {
 
     public List<User> getAllUsers() throws NoRecordsFoundException {
         List<User> users = (List) userRepository.findAll();
+        List<User> finalUsers;
         if (users.isEmpty()) {
             throw new NoRecordsFoundException(messages.getMessage("message.noRecords", null, null));
+        }
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authorities = currentUser.getAuthorities().stream().collect(Collectors.toList());
+        boolean isAdmin = authorities.stream().anyMatch(a -> a.getAuthority().equals(RoleBasedConstant.ADMIN) &&
+                a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER));
+        if(isAdmin) {
+            finalUsers = users.stream().filter(u ->
+                    !u.getRoles().contains(roleService.findByName(RoleBasedConstant.SUPER_ADMIN))).collect(Collectors.toList());
+            return finalUsers;
         }
         return users;
     }
