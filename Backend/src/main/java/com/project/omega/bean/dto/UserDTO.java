@@ -13,17 +13,6 @@ public class UserDTO {
     @ValidPassword
     private String password;
     private Collection<Role> roles;
-    @NotNull
-    @Size(min = 1)
-    private String matchingPassword;
-
-    public String getMatchingPassword() {
-        return matchingPassword;
-    }
-
-    public void setMatchingPassword(String matchingPassword) {
-        this.matchingPassword = matchingPassword;
-    }
 
     public String getEmail() {
         return email;

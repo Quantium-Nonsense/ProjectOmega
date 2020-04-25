@@ -7,7 +7,6 @@ import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.exceptions.DuplicateUserException;
 import com.project.omega.helper.RoleBasedConstant;
 import com.project.omega.repository.UserRepository;
-import com.project.omega.service.interfaces.AdminRoleService;
 import com.project.omega.service.interfaces.RoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,9 +36,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     private PasswordEncoder bcryptEncoder;
 
     @Autowired
-    private AdminRoleService adminRoleService;
-
-    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -56,18 +52,6 @@ public class JwtUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
-    /*
-     * This method is a Service Layer Method which is @Autowired within JWTAuthenticationController. The createUser(UserDTO user), accepts
-     * the parameters passed in through the UserDTO object, the UserDTO object has 3 parameter - email, password and Collection<Roles>. We
-     * extract the values and if there are no roles passed in the UserDTO Object a default role - DEFAULT_USER_ROLE is added and then the User
-     * is saved in the USER TABLE.
-     *
-     * NOTE : The DEFAULT_USER_ROLE will already be available in the AdminRoles table, if not then create it. This way, the service method will always
-     * return a ROLE Object.
-     *
-     * NOTE: The roles and assigned privileges corresponding to AdminRoles would be created by the respective Admins of the business.
-     * */
-
     public User createUser(UserDTO user) throws DuplicateUserException {
         LOGGER.debug("Creating user account with information: {}", user);
         String email = user.getEmail();
@@ -75,8 +59,11 @@ public class JwtUserDetailsService implements UserDetailsService {
             throw new DuplicateUserException(messages.getMessage("UniqueUsername.user.username", null, null));
         }
         Collection<Role> assignedRoles = user.getRoles();
+        if(assignedRoles == null) {
+            assignedRoles = new ArrayList<>();
+        }
         if (assignedRoles.isEmpty()) {
-            assignedRoles.add(roleService.findByName(RoleBasedConstant.DEFAULT_USER_ROLE));
+            assignedRoles.add(roleService.findByName(RoleBasedConstant.DEFAULT_USER));
         }
         User registeredUser = bindUser(user, assignedRoles);
         return registeredUser;
