@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -5,10 +6,9 @@ import { Action } from '@ngrx/store';
 import { of } from 'rxjs';
 import { delay, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import * as AuthActions from '../store/auth.actions';
-import { UserModel } from '../../shared/model/auth/user.model';
 import { ApiEndpointCreatorService } from '../../services/api-endpoint-creator.service';
-import { HttpClient } from '@angular/common/http';
+import { UserModel } from '../../shared/model/auth/user.model';
+import * as AuthActions from '../store/auth.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -48,6 +48,6 @@ export class AuthEffects {
   };
 
   private attemptLogin(user: UserModel) {
-    return this.http.post<{token: string}>(this.apiEndPoints.loginEndPoint)
+    return this.http.post<{token: string}>(this.apiEndPoints.loginEndPoint);
   }
 }
