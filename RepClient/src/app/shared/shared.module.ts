@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -44,7 +45,9 @@ import { ListLoaderComponent } from './component/list-loader/list-loader.compone
     MatBadgeModule,
     MatIconModule,
     MatSnackBarModule,
-    AddRemoveItemComponent
+    AddRemoveItemComponent,
+    HttpClientModule
+
   ],
   entryComponents: [
     ListDisplayBottomSheetComponent
