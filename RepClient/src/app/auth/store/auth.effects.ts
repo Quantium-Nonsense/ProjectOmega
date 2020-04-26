@@ -96,7 +96,6 @@ export class AuthEffects {
     return AuthActions.loginSuccessful({user});
   }
 
-
   private presentSpinner(): void {
     this.spinnerRef = this.createSpinnerRef();
     this.spinnerRef.attach(new ComponentPortal(MatSpinner));
