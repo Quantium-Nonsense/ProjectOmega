@@ -1,48 +1,39 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { LoadingController } from '@ionic/angular';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { catchError, delay, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiEndpointCreatorService } from '../../services/api-endpoint-creator.service';
 import { UserModel } from '../../shared/model/auth/user.model';
 import { JwtToken } from '../../shared/model/dto/JwtToken';
-import { PrivilegeModel } from '../../shared/model/dto/privilege.model';
 import * as AuthActions from '../store/auth.actions';
 
 @Injectable()
 export class AuthEffects {
   spinnerRef: OverlayRef;
 
+  successfulLogin$ = createEffect(
+      () => this.actions$.pipe(
+          ofType(AuthActions.loginSuccessful),
+          tap(() => this.redirectToHome())
+      ), {dispatch: false}
+  );
+
   hideSpinner$ = createEffect(() => this.actions$.pipe(
       ofType(AuthActions.hideSpinner),
-      tap(() => {
-        if (this.spinnerRef) {
-          this.spinnerRef.detach();
-        }
-      })
+      tap(() => this.hideSpinner())
   ), {dispatch: false});
 
   showSpinner$ = createEffect(() => this.actions$.pipe(
       ofType(AuthActions.showSpinner),
-      tap(() => {
-        this.spinnerRef = this.overlay.create({
-          hasBackdrop: true,
-          backdropClass: 'dark-backdrop',
-          positionStrategy: this.overlay.position()
-                                .global()
-                                .centerHorizontally()
-                                .centerVertically()
-        });
-        this.spinnerRef.attach(new ComponentPortal(MatSpinner));
-      })
+      tap(() => this.presentSpinner())
   ), {dispatch: false});
 
   loginRejected$ = createEffect(() => this.actions$.pipe(
@@ -58,7 +49,17 @@ export class AuthEffects {
           switchMap((action: Action & { email: string, password: string }) =>
               this.attemptLogin(action.email, action.password).pipe(
                   map(httpResult => this.handleTokenReturn(httpResult)),
-                  catchError(error => of(AuthActions.loginRejected({errorMessage: 'Wrong email or password'})))
+                  catchError((error: HttpErrorResponse) => {
+                    if (error.status === 404 || error.status === 500) {
+                      return of(AuthActions.loginRejected({
+                        errorMessage: 'Failed to connect to the server, please try again'
+                      }));
+                    }
+
+                    return of(AuthActions.loginRejected({
+                      errorMessage: 'Wrong email or password, please try again'
+                    }));
+                  })
               ))
       ));
 
@@ -88,6 +89,33 @@ export class AuthEffects {
     const decodedToken: JwtToken = this.jwtHelper.decodeToken(JSON.stringify(httpResult.token));
     localStorage.setItem(environment.ACCESS_TOKEN, JSON.stringify(httpResult.token));
 
-    return AuthActions.loginSuccessful();
+    user.id = decodedToken.id;
+    user.roles = decodedToken.roles;
+    user.email = decodedToken.email;
+
+    return AuthActions.loginSuccessful({user});
+  }
+
+
+  private presentSpinner(): void {
+    this.spinnerRef = this.createSpinnerRef();
+    this.spinnerRef.attach(new ComponentPortal(MatSpinner));
+  }
+
+  private createSpinnerRef(): OverlayRef {
+    return this.overlay.create({
+      hasBackdrop: true,
+      backdropClass: 'dark-backdrop',
+      positionStrategy: this.overlay.position()
+                            .global()
+                            .centerHorizontally()
+                            .centerVertically()
+    });
+  }
+
+  private hideSpinner(): void {
+    if (this.spinnerRef) {
+      this.spinnerRef.detach();
+    }
   }
 }

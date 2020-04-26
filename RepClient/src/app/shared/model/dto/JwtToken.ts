@@ -1,4 +1,4 @@
-import { PrivilegeModel } from './privilege.model';
+import { RoleModel } from './role.model';
 
 /**
  * This is the user that is returned after decoding the jwt token
@@ -8,9 +8,9 @@ export class JwtToken {
   exp: string;
   iat: string;
   email: string;
-  roles: PrivilegeModel[];
+  roles: RoleModel;
 
-  constructor(id: string, exp: string, iat: string, email: string, roles: PrivilegeModel[]) {
+  constructor(id: string, exp: string, iat: string, email: string, roles: RoleModel) {
     this.id = id;
     this.exp = exp;
     this.iat = iat;

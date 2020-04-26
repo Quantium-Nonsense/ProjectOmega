@@ -28,7 +28,6 @@ export class AuthGuard implements CanActivate {
       | Promise<boolean | UrlTree>
       | boolean
       | UrlTree {
-    console.log('in guard');
     const canRedirect = this.isAuthenticated();
     if (!canRedirect) {
       this.store$.dispatch(AuthActions.loginRejected({errorMessage: 'Session expired or not logged in. Please log-in again.'}));
@@ -50,9 +49,13 @@ export class AuthGuard implements CanActivate {
       token = this.jwtHelperService.decodeToken(localStorage.getItem(environment.ACCESS_TOKEN));
     } catch (e) {
       // Failed to decode either invalid or null
+      if (!environment.production) {
+        console.warn('AuthGuard rejected redirect due to failure of decoding token');
+      }
+
       return false;
     }
 
-    return this.jwtHelperService.isTokenExpired();
+    return this.jwtHelperService.isTokenExpired(localStorage.getItem(environment.ACCESS_TOKEN), Number(token.exp));
   };
 }

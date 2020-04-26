@@ -46,6 +46,12 @@ const _authReducer = createReducer(
       ...prevState,
       errorMessage: undefined,
       loading: true
+    })),
+    on(AuthActions.loginSuccessful, (prevState: State, {user}) => ({
+      ...prevState,
+      user,
+      errorMessage: undefined,
+      loading: false
     }))
 );
 
