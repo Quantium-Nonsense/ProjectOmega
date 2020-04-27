@@ -12,7 +12,7 @@ import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiEndpointCreatorService } from '../../services/api-endpoint-creator.service';
 import { UserModel } from '../../shared/model/auth/user.model';
-import { JwtToken } from '../../shared/model/dto/JwtToken';
+import { JwtToken } from '../../shared/model/dto/jwt-token';
 import * as AuthActions from '../store/auth.actions';
 
 @Injectable()

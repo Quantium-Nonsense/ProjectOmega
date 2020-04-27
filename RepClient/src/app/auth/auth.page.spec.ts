@@ -199,7 +199,7 @@ describe('AuthPage', () => {
     expect(mockRouter.navigateByUrl).toHaveBeenCalled();
   });
 
-  it('should show spinner', async () => {
+  it('should show spinner',  () => {
     // todo: in the future we want to wrap the spinner in a component that when loading is true attaches this
     spyOn(effects, 'presentSpinner').and.callThrough();
 

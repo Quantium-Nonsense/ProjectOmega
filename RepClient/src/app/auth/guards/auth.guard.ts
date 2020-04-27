@@ -7,7 +7,7 @@ import { map, take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import * as fromApp from '../../reducers';
 import { UserModel } from '../../shared/model/auth/user.model';
-import { JwtToken } from '../../shared/model/dto/JwtToken';
+import { JwtToken } from '../../shared/model/dto/jwt-token';
 import * as AuthActions from '../store/auth.actions';
 import * as fromAuth from '../store/auth.reducer';
 

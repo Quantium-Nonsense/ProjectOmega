@@ -37,7 +37,7 @@ export class AuthPage implements OnInit {
   async ionViewWillEnter(): Promise<void> {
     // Disable sideway scroll on log in page
     await this.menuController.enable(false);
-    this.subscriptions.add(this.store.select(fromAuth.selectIsLoading).subscribe(async loading => {
+    this.subscriptions.add(this.store.select(fromAuth.selectIsLoading).subscribe(loading => {
       if (loading) {
         this.store.dispatch(AuthActions.showSpinner());
       } else {
@@ -51,7 +51,7 @@ export class AuthPage implements OnInit {
     }));
   }
 
-  async ionViewWillLeave(): Promise<void> {
+  ionViewWillLeave(): void {
     // Clean up all subs to avoid memory leak
     this.subscriptions.unsubscribe();
 
