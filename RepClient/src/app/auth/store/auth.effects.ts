@@ -50,9 +50,10 @@ export class AuthEffects {
               this.attemptLogin(action.email, action.password).pipe(
                   map(httpResult => this.handleTokenReturn(httpResult)),
                   catchError((error: HttpErrorResponse) => {
+                    console.log(error);
                     if (error.status === 404 || error.status === 500) {
                       return of(AuthActions.loginRejected({
-                        errorMessage: 'Failed to connect to the server, please try again'
+                        errorMessage: environment.common.FAILED_LOGIN_SERVER
                       }));
                     }
 
@@ -73,34 +74,39 @@ export class AuthEffects {
   ) {
   }
 
-  private redirectToHome = () => {
-    this.router.navigateByUrl('/home');
-  };
-
-  private attemptLogin(email: string, password: string): Observable<{ token: string }> {
+  attemptLogin(email: string, password: string): Observable<{ token: string }> {
     return this.http.post<{ token: string }>(this.apiEndPoints.loginEndPoint, {
       email,
       password
     });
   }
 
-  private handleTokenReturn(httpResult: { token: string }): Action {
+  handleTokenReturn(httpResult: { token: string }): Action {
+    const user = this.decodeToken(httpResult.token);
+
+    return AuthActions.loginSuccessful({user});
+  }
+
+  decodeToken(token: string): UserModel {
     const user = new UserModel();
-    const decodedToken: JwtToken = this.jwtHelper.decodeToken(JSON.stringify(httpResult.token));
-    localStorage.setItem(environment.ACCESS_TOKEN, JSON.stringify(httpResult.token));
+    const decodedToken: JwtToken = this.jwtHelper.decodeToken(JSON.stringify(token));
+    localStorage.setItem(environment.ACCESS_TOKEN, JSON.stringify(token));
 
     user.id = decodedToken.id;
     user.roles = decodedToken.roles;
     user.email = decodedToken.email;
 
-    return AuthActions.loginSuccessful({user});
+    return user;
   }
 
-
-  private presentSpinner(): void {
+  presentSpinner(): void {
     this.spinnerRef = this.createSpinnerRef();
     this.spinnerRef.attach(new ComponentPortal(MatSpinner));
   }
+
+  private redirectToHome = () => {
+    this.router.navigateByUrl('/home');
+  };
 
   private createSpinnerRef(): OverlayRef {
     return this.overlay.create({
