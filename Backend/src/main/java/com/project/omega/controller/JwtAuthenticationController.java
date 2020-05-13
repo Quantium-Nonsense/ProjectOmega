@@ -7,6 +7,7 @@ import com.project.omega.bean.dao.auth.Token;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.PasswordDTO;
 import com.project.omega.bean.dto.UserDTO;
+import com.project.omega.bean.dto.UserResponse;
 import com.project.omega.exceptions.DuplicateUserException;
 import com.project.omega.exceptions.InvalidOldPasswordException;
 import com.project.omega.helper.GenericResponse;
@@ -30,9 +31,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -79,7 +78,9 @@ public class JwtAuthenticationController {
 
         userService.createVerificationTokenForUser(jwtToken, newUser);
 
-        return new ResponseEntity(newUser, HttpStatus.CREATED);
+        UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
+
+        return new ResponseEntity(userMap, HttpStatus.CREATED);
     }
 
     @SuppressWarnings("unchecked")

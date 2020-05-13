@@ -4,7 +4,7 @@ import com.project.omega.bean.dao.auth.Privilege;
 
 import java.util.Collection;
 
-public class IRoleUTO {
+public class RoleDTO {
 
     private String name;
 
