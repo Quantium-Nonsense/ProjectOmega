@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { LoadingController, MenuController } from '@ionic/angular';
+import { MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as fromApp from './../reducers/index';
 import * as AuthActions from './store/auth.actions';
 import * as fromAuth from './store/auth.reducer';

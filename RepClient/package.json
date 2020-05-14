@@ -34,9 +34,10 @@
     "@ionic/angular": "^5.0.5",
     "@ngrx/effects": "^9.0.0",
     "@ngrx/store": "^9.0.0",
-    "lodash": "^4.17.15",
     "cordova-android": "8.1.0",
     "core-js": "^2.5.4",
+    "lodash": "^4.17.15",
+    "quantium_testing": "0.1.16",
     "rxjs": "~6.5.1",
     "tslib": "^1.11.1",
     "zone.js": "~0.10.2"

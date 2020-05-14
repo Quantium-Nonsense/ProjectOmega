@@ -3,13 +3,10 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } fro
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import * as fromApp from '../../reducers';
-import { UserModel } from '../../shared/model/auth/user.model';
 import { JwtToken } from '../../shared/model/dto/jwt-token';
 import * as AuthActions from '../store/auth.actions';
-import * as fromAuth from '../store/auth.reducer';
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +53,6 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    return this.jwtHelperService.isTokenExpired(localStorage.getItem(environment.ACCESS_TOKEN), Number(token.exp));
+    return !this.jwtHelperService.isTokenExpired(localStorage.getItem(environment.ACCESS_TOKEN));
   };
 }
