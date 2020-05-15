@@ -4,14 +4,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { MatRowHarness, MatTableHarness } from '@angular/material/table/testing';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { UserModel } from '../shared/model/user.model';
-import { SharedModule } from '../shared/shared.module';
 import { TestModule } from '../shared/test/test.module';
 import * as fromApp from './../reducers/index';
 import * as UserActions from './store/user.actions';
@@ -68,8 +66,7 @@ describe('UserComponent', () => {
                UserEffects
              ],
              imports: [
-               NoopAnimationsModule,
-               SharedModule
+               TestModule
              ]
            })
            .compileComponents();
