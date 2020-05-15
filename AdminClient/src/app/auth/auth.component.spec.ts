@@ -38,7 +38,7 @@ describe('AuthPage', () => {
             user: null
           }
         }),
-        {provide: MatSnackBar, useValue: mockSnackbar}
+        { provide: MatSnackBar, useValue: mockSnackbar }
       ],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA]
 		}).compileComponents();
