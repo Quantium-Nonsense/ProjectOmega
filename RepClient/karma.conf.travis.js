@@ -34,7 +34,7 @@ module.exports = function (config) {
 				base: 'ChromeHeadless',
 				flags: [
 					'--no-sandbox',
-					'--code-coverage',
+					'--code-coverage=true',
 					'--no-progress',
 					'--no-watch'
 				],
