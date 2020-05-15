@@ -30,9 +30,9 @@ module.exports = function (config) {
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
         flags: ['--no-sandbox'],
-        browserDisconnectTimeout: 10000,
+        browserDisconnectTimeout: 100000,
         browserDisconnectTolerance: 3,
-        browserNoActivityTimeout: 60000,
+        browserNoActivityTimeout: 600000,
       }
     },
     singleRun: false
