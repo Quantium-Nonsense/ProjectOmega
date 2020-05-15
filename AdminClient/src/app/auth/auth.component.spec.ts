@@ -1,23 +1,23 @@
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {By} from '@angular/platform-browser';
-import {Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
-import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {routes} from '../app-routing.module';
-import {State} from '../reducers';
-import {TestModule} from '../shared/test/test.module';
-import {AuthComponent} from './auth.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { routes } from '../app-routing.module';
+import { State } from '../reducers';
+import { TestModule } from '../shared/test/test.module';
+import { AuthComponent } from './auth.component';
 
 describe('AuthPage', () => {
-	let component: AuthComponent;
-	let fixture: ComponentFixture<AuthComponent>;
-	let mockStore: MockStore<State>;
-	let mockRouter: Router;
+  let component: AuthComponent;
+  let fixture: ComponentFixture<AuthComponent>;
+  let mockStore: MockStore<State>;
+  let mockRouter: Router;
 
-	// Mocked services for auth page
-	const mockSnackbar = jasmine.createSpyObj<MatSnackBar>(['open']);
+  // Mocked services for auth page
+  const mockSnackbar = jasmine.createSpyObj<MatSnackBar>(['open']);
 
 	// mock definitions
 	mockSnackbar.open.and.callThrough();
@@ -28,18 +28,18 @@ describe('AuthPage', () => {
 			imports: [TestModule, RouterTestingModule.withRoutes(routes)],
 			providers: [
 				AuthComponent,
-				provideMockStore({
-					initialState: {
-						auth: {
-							errorMessage: null,
-							loading: false,
-							user: null
-						},
-						user: null
-					}
-				}),
-				{provide: MatSnackBar, useValue: mockSnackbar}
-			],
+        provideMockStore({
+          initialState: {
+            auth: {
+              errorMessage: null,
+              loading: false,
+              user: null
+            },
+            user: null
+          }
+        }),
+        {provide: MatSnackBar, useValue: mockSnackbar}
+      ],
 			schemas: [CUSTOM_ELEMENTS_SCHEMA]
 		}).compileComponents();
 
@@ -60,15 +60,16 @@ describe('AuthPage', () => {
 		component.ngOnInit();
 
 		mockStore.setState({
-			auth: {
-				errorMessage: 'Some Error message',
-				loading: false,
-				user: null,
-				returnUrl: ''
-			},
-			user: null,
-			customers: null
-		});
+      toolbar: null,
+      auth: {
+        errorMessage: 'Some Error message',
+        loading: false,
+        user: null,
+        returnUrl: ''
+      },
+      user: null,
+      customers: null
+    });
 
 		mockStore.refreshState();
 		fixture.detectChanges();
@@ -84,15 +85,16 @@ describe('AuthPage', () => {
 		component.ngOnInit();
 
 		mockStore.setState({
-			auth: {
-				errorMessage: null,
-				loading: true,
-				user: null,
-				returnUrl: ''
-			},
-			user: null,
-			customers: null
-		});
+      toolbar: null,
+      auth: {
+        errorMessage: null,
+        loading: true,
+        user: null,
+        returnUrl: ''
+      },
+      user: null,
+      customers: null
+    });
 
 		mockStore.refreshState();
 		fixture.detectChanges();

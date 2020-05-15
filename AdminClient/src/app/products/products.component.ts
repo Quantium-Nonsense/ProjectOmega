@@ -4,10 +4,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 
 import { MockProductsAPI } from '../../data/products/products-data';
 import { ProductModel } from '../models/products/products.model';
+import * as fromApp from '../reducers';
 import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
 import { ProductDetailsDialogComponent } from './product-details-dialog/product-details-dialog.component';
 
@@ -32,6 +34,7 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
   private productsObservable: Observable<ProductModel[]>;
 
   constructor(
+    private store$: Store<fromApp.State>,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
   ) {
@@ -39,7 +42,6 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngOnInit() {
     this.productsObservable = this.productsAPI.getAllAsObservable();
-
     this.subscriptions.add(
       this.productsObservable.subscribe(productsList => {
         this.dataSource.data = productsList;

@@ -7,20 +7,24 @@
         <mat-icon class="mr-1">home</mat-icon>
         Dashboard
       </button>
-      <button [routerLink]="'/order'" mat-list-item>
+      <button [routerLink]="'/customers'" mat-list-item>
+        <mat-icon class="mr-1">local_shipping</mat-icon>
+        Customers
+      </button>
+      <button [routerLink]="'/orders'" mat-list-item>
         <mat-icon class="mr-1">shopping_cart</mat-icon>
         Orders
       </button>
-      <button [routerLink]="'/company'" mat-list-item>
+      <button [routerLink]="'/suppliers'" mat-list-item>
         <mat-icon class="mr-1">store</mat-icon>
-        Companies
+        Suppliers
       </button>
       <button [routerLink]="'/products'" mat-list-item>
         <mat-icon class="mr-1">list</mat-icon>
         Products
       </button>
-      <button [routerLink]="'/user'" mat-list-item>
-        <mat-icon class="mr-1">person</mat-icon>
+      <button [routerLink]="'/users'" mat-list-item>
+        <mat-icon class="mr-1">people</mat-icon>
         Users
       </button>
     </mat-action-list>
