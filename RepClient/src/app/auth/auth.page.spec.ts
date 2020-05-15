@@ -224,7 +224,6 @@ describe('AuthPage', () => {
   });
 
   it('should show spinner', () => {
-    // todo: in the future we want to wrap the spinner in a component that when loading is true attaches this
     spyOn(effects, 'presentSpinner').and.callThrough();
 
     actions$ = of(AuthActions.showSpinner());
@@ -240,4 +239,5 @@ describe('AuthPage', () => {
     effects.successfulLogin$.subscribe();
     expect(mockRouter.navigateByUrl).toHaveBeenCalled();
   });
+
 });

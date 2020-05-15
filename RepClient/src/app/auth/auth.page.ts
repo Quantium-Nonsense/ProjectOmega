@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MenuController } from '@ionic/angular';
@@ -14,12 +14,14 @@ import * as fromAuth from './store/auth.reducer';
   templateUrl: './auth.page.html'
 })
 
-export class AuthPage implements OnInit {
+export class AuthPage implements OnInit, OnDestroy {
 
   /**
    * The authentication form
    */
   protected authForm: FormGroup;
+  private isLoading: boolean;
+  private errorMsg: string;
 
   /**
    * Holds all the subscriptions that will need to be cleaned up when a view swaps
@@ -31,34 +33,38 @@ export class AuthPage implements OnInit {
       private store: Store<fromApp.State>,
       private snackBar: MatSnackBar
   ) {
+  }
 
+  ngOnInit(): void {
+    // Subscribe to observables
+    this.subscriptions.add(this.store.select(fromAuth.selectIsLoading).subscribe(loading => {
+      this.isLoading = loading;
+    }));
+    this.subscriptions.add(this.store.select(fromAuth.selectErrorMessage).subscribe(error => {
+      this.errorMsg = error;
+    }));
+    this.authForm = this.formInitialization();
   }
 
   async ionViewWillEnter(): Promise<void> {
     // Disable sideway scroll on log in page
     await this.menuController.enable(false);
-    this.subscriptions.add(this.store.select(fromAuth.selectIsLoading).subscribe(loading => {
-      if (loading) {
-        this.store.dispatch(AuthActions.showSpinner());
-      } else {
-        this.store.dispatch(AuthActions.hideSpinner());
-      }
-    }));
-    this.subscriptions.add(this.store.select(fromAuth.selectErrorMessage).subscribe(error => {
-      if (error) {
-        this.showMessage(error);
-      }
-    }));
+    if (this.isLoading) {
+      this.showSpinner();
+    } else {
+      this.hideSpinner();
+    }
+    if (this.errorMsg) {
+      this.showMessage(this.errorMsg);
+    }
   }
 
   ionViewWillLeave(): void {
     // Clean up all subs to avoid memory leak
-    this.subscriptions.unsubscribe();
-
   }
 
-  ngOnInit(): void {
-    this.authForm = this.formInitialization();
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   /**
@@ -69,6 +75,20 @@ export class AuthPage implements OnInit {
       email: this.authForm.get('email').value as string,
       password: this.authForm.get('password').value as string
     }));
+  }
+
+  /**
+   * Dispatches action to show spinner
+   */
+  showSpinner(): void {
+    this.store.dispatch(AuthActions.showSpinner());
+  }
+
+  /**
+   * Dispatch an action to hide spinner
+   */
+  hideSpinner(): void {
+    this.store.dispatch(AuthActions.hideSpinner());
   }
 
   /**
