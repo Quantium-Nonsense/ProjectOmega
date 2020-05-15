@@ -10,7 +10,7 @@
     "start:live": "ionic capacitor run --livereload",
     "start:android": "ionic capacitor run android",
     "build": "ng build",
-    "test": "ng test",
+    "test": "ng test --karmaConfig=karma.conf.js",
     "test:coverage": "ng test --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
     "e2e": "ng e2e"
