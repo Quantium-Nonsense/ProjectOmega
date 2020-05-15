@@ -24,15 +24,22 @@ module.exports = function (config) {
 		port: 9876,
 		colors: true,
 		logLevel: config.LOG_INFO,
-		autoWatch: false,
-		browsers: ['ChromeHeadless'],
+		autoWatch: true,
+		browsers: ['Chrome'],
 		browserDisconnectTimeout: 100000,
 		browserDisconnectTolerance: 3,
 		browserNoActivityTimeout: 600000,
-		flags: [
-			'--no-sandbox',
-			'--code-coverage'
-		],
+		customLaunchers: {
+			ChromeHeadlessCI: {
+				base: 'ChromeHeadless',
+				flags: [
+					'--no-sandbox',
+					'--code-coverage',
+					'--no-progress',
+					'--no-watch'
+				],
+			}
+		},
 		singleRun: false
 	});
 };

@@ -11,7 +11,7 @@
     "start:android": "ionic capacitor run android",
     "build": "ng build",
     "test": "ng test --karmaConfig=karma.conf.js",
-    "test:travis": "ng test --karmaConfig=karma.conf.travis.js",
+    "test:travis": "ng test --karmaConfig=karma.conf.travis.js --browsers=ChromeHeadlessCI",
     "test:coverage": "ng test --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
     "e2e": "ng e2e"
