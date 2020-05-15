@@ -24,20 +24,15 @@ module.exports = function (config) {
 		port: 9876,
 		colors: true,
 		logLevel: config.LOG_INFO,
-		autoWatch: true,
-		browsers: ['Chrome'],
-		customLaunchers: {
-			ChromeHeadlessCI: {
-				base: 'ChromeHeadless',
-				flags: [
-					'--no-sandbox',
-					'--code-coverage'
-				],
-				browserDisconnectTimeout: 100000,
-				browserDisconnectTolerance: 3,
-				browserNoActivityTimeout: 600000
-			}
-		},
+		autoWatch: false,
+		browsers: ['ChromeHeadless'],
+		browserDisconnectTimeout: 100000,
+		browserDisconnectTolerance: 3,
+		browserNoActivityTimeout: 600000,
+		flags: [
+			'--no-sandbox',
+			'--code-coverage'
+		],
 		singleRun: false
 	});
 };

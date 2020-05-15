@@ -24,7 +24,7 @@ jobs:
       node_js:
         - "12.16"
       before_install: cd RepClient/
-      script: npm run test
+      script: npm run test:travis
       after_success: npx codecov
 #    - name: Backend Tests
 #      language: java
