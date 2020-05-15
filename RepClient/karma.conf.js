@@ -29,7 +29,10 @@ module.exports = function (config) {
     customLaunchers: {
       ChromeHeadlessCI: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox']
+        flags: ['--no-sandbox'],
+        browserDisconnectTimeout: 10000,
+        browserDisconnectTolerance: 3,
+        browserNoActivityTimeout: 60000,
       }
     },
     singleRun: false
