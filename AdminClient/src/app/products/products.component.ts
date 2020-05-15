@@ -51,7 +51,7 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
   }
-
+eslint
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
@@ -60,7 +60,7 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ProductDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
-      data: {product, title: `Details for ${product.name}`, editable: false}
+      data: { product, title: `Details for ${product.name}`, editable: false }
     });
   }
 
@@ -68,16 +68,16 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ProductDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
-      data: {product, title: `Edit ${product.name}`, editable: true}
+      data: { product, title: `Edit ${product.name}`, editable: true }
     });
 
     this.subscriptions.add(
       dialogRef.afterClosed().subscribe(updatedProduct => {
         if (updatedProduct && !updatedProduct.equalsWithoutId(product)) {
           this.productsAPI.updateItem(updatedProduct);
-          this.snackBar.open(`${updatedProduct.name} was successfully updated`, 'Close', {duration: 3000});
+          this.snackBar.open(`${updatedProduct.name} was successfully updated`, 'Close', { duration: 3000 });
         } else {
-          this.snackBar.open(`${updatedProduct.name} was not updated as no changes were saved`, 'Close', {duration: 3000});
+          this.snackBar.open(`${updatedProduct.name} was not updated as no changes were saved`, 'Close', { duration: 3000 });
         }
       })
     );
@@ -99,9 +99,9 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
         if (newProduct) {
           newProduct.id = this.productsAPI.getNextId();
           this.productsAPI.addItem(newProduct);
-          this.snackBar.open(`${newProduct.name} was successfully added`, 'Close', {duration: 3000});
+          this.snackBar.open(`${newProduct.name} was successfully added`, 'Close', { duration: 3000 });
         } else {
-          this.snackBar.open(`${newProduct.name} was not updated as no changes were made`, 'Close', {duration: 3000});
+          this.snackBar.open(`${newProduct.name} was not updated as no changes were made`, 'Close', { duration: 3000 });
         }
       })
     );
@@ -117,9 +117,9 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
       dialogRef.afterClosed().subscribe(willDelete => {
         if (willDelete) {
           this.productsAPI.deleteById(product.id);
-          this.snackBar.open(`${product.name} was successfully deleted`, 'Close', {duration: 3000});
+          this.snackBar.open(`${product.name} was successfully deleted`, 'Close', { duration: 3000 });
         } else {
-          this.snackBar.open(`${product.name} was not deleted`, 'Close', {duration: 3000});
+          this.snackBar.open(`${product.name} was not deleted`, 'Close', { duration: 3000 });
         }
       })
     );
