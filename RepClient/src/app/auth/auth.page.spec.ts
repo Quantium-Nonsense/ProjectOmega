@@ -80,9 +80,16 @@ describe('AuthPage', () => {
         MatSnackBarHarness,
         AuthEffects,
         provideMockActions(() => actions$),
-        provideMockStore({
+        provideMockStore<fromApp.State>({
           initialState: {
-            auth: {}
+            order: undefined,
+            home: undefined,
+            company: undefined,
+            auth: {
+              loading: false,
+              errorMessage: undefined,
+              user: undefined
+            }
           }
         })
       ],
@@ -100,7 +107,6 @@ describe('AuthPage', () => {
 
     // Override selectors
     mockSelectErrorMessage = mockStore.overrideSelector(fromAuth.selectErrorMessage, undefined);
-    mockSelectIsLoading = mockStore.overrideSelector(fromAuth.selectIsLoading, false);
     mockSelectUser = mockStore.overrideSelector(fromAuth.selectUser, undefined);
 
     mockStore.refreshState();
@@ -240,4 +246,17 @@ describe('AuthPage', () => {
     expect(mockRouter.navigateByUrl).toHaveBeenCalled();
   });
 
+  it('should dispatch spinner action', () => {
+    component.ngOnInit();
+    component.ionViewWillEnter();
+
+    spyOn(component, 'startSpinner').and.callThrough();
+
+    mockStore.refreshState();
+    fixture.detectChanges();
+
+    mockStore.refreshState();
+    fixture.detectChanges();
+    expect(component.startSpinner).toHaveBeenCalled();
+  });
 });

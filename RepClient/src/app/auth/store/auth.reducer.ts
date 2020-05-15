@@ -38,8 +38,7 @@ const _authReducer = createReducer(
     initialState,
     on(AuthActions.loginRejected, (prevState, {errorMessage}) => ({
           ...prevState,
-          errorMessage,
-          loading: false
+          errorMessage
         })
     ),
     on(AuthActions.loginAttempt, prevState => ({
@@ -50,9 +49,15 @@ const _authReducer = createReducer(
     on(AuthActions.loginSuccessful, (prevState: State, {user}) => ({
       ...prevState,
       user,
-      errorMessage: undefined,
+      errorMessage: undefined
+    })),
+    on(AuthActions.isLoading, prevState => ({
+      ...prevState,
+      loading: true
+    })),
+    on(AuthActions.loadingComplete, prevState => ({
+      ...prevState,
       loading: false
-    }))
-);
+    })));
 
 export const authReducer = (state: State | undefined, action: Action): State => _authReducer(state, action);

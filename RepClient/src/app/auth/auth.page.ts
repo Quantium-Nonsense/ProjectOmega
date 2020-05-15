@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MenuController } from '@ionic/angular';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import * as fromApp from './../reducers/index';
 import * as AuthActions from './store/auth.actions';
@@ -19,9 +19,7 @@ export class AuthPage implements OnInit, OnDestroy {
   /**
    * The authentication form
    */
-  protected authForm: FormGroup;
-  private isLoading: boolean;
-  private errorMsg: string;
+  authForm: FormGroup;
 
   /**
    * Holds all the subscriptions that will need to be cleaned up when a view swaps
@@ -37,11 +35,17 @@ export class AuthPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Subscribe to observables
-    this.subscriptions.add(this.store.select(fromAuth.selectIsLoading).subscribe(loading => {
-      this.isLoading = loading;
+    this.subscriptions.add(this.store.pipe(select((fromAuth.selectIsLoading))).subscribe(loading => {
+      if (loading) {
+        this.startSpinner();
+      } else {
+        this.stopSpinner();
+      }
     }));
-    this.subscriptions.add(this.store.select(fromAuth.selectErrorMessage).subscribe(error => {
-      this.errorMsg = error;
+    this.subscriptions.add(this.store.pipe(select(fromAuth.selectErrorMessage)).subscribe(error => {
+      if (error) {
+        this.showMessage(error);
+      }
     }));
     this.authForm = this.formInitialization();
   }
@@ -49,14 +53,6 @@ export class AuthPage implements OnInit, OnDestroy {
   async ionViewWillEnter(): Promise<void> {
     // Disable sideway scroll on log in page
     await this.menuController.enable(false);
-    if (this.isLoading) {
-      this.showSpinner();
-    } else {
-      this.hideSpinner();
-    }
-    if (this.errorMsg) {
-      this.showMessage(this.errorMsg);
-    }
   }
 
   ionViewWillLeave(): void {
@@ -71,6 +67,7 @@ export class AuthPage implements OnInit, OnDestroy {
    * Submit form
    */
   protected onSubmit(): void {
+    this.store.dispatch(AuthActions.isLoading());
     this.store.dispatch(AuthActions.loginAttempt({
       email: this.authForm.get('email').value as string,
       password: this.authForm.get('password').value as string
@@ -80,14 +77,14 @@ export class AuthPage implements OnInit, OnDestroy {
   /**
    * Dispatches action to show spinner
    */
-  showSpinner(): void {
+  startSpinner(): void {
     this.store.dispatch(AuthActions.showSpinner());
   }
 
   /**
    * Dispatch an action to hide spinner
    */
-  hideSpinner(): void {
+  stopSpinner(): void {
     this.store.dispatch(AuthActions.hideSpinner());
   }
 

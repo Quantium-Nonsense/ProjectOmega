@@ -48,18 +48,25 @@ export class AuthEffects {
           ofType(AuthActions.loginAttempt),
           switchMap((action: Action & { email: string, password: string }) =>
               this.attemptLogin(action.email, action.password).pipe(
-                  map(httpResult => this.handleTokenReturn(httpResult)),
+                  switchMap(httpResult => {
+                    return [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()];
+                  }),
                   catchError((error: HttpErrorResponse) => {
-                    console.log(error);
                     if (error.status === 404 || error.status === 500) {
-                      return of(AuthActions.loginRejected({
-                        errorMessage: environment.common.FAILED_LOGIN_SERVER
-                      }));
+                      return switchMap(() => [
+                        AuthActions.loginRejected({
+                          errorMessage: environment.common.FAILED_LOGIN_SERVER
+                        }),
+                        AuthActions.loadingComplete()
+                      ]);
                     }
 
-                    return of(AuthActions.loginRejected({
-                      errorMessage: 'Wrong email or password, please try again'
-                    }));
+                    return switchMap(() => [
+                      AuthActions.loginRejected({
+                        errorMessage: 'Wrong email or password, please try again'
+                      }),
+                      AuthActions.loadingComplete()
+                    ]);
                   })
               ))
       ));
