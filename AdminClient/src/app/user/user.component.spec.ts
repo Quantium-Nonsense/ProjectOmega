@@ -4,12 +4,14 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { MatRowHarness, MatTableHarness } from '@angular/material/table/testing';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { UserModel } from '../shared/model/user.model';
+import { SharedModule } from '../shared/shared.module';
 import { TestModule } from '../shared/test/test.module';
 import * as fromApp from './../reducers/index';
 import * as UserActions from './store/user.actions';
@@ -24,12 +26,12 @@ describe('UserComponent', () => {
 
     for (let i = 0; i < 50; i++) {
       mockUsers.push(
-        new UserModel(
-          (i).toString(),
-          `bla${i}@bla.com`,
-          `longasspass${i}`,
-          ['Admin', 'Rep'][Math.floor(Math.random() * 2)],
-          'Company 1'));
+          new UserModel(
+              (i).toString(),
+              `bla${ i }@bla.com`,
+              `longasspass${ i }`,
+              ['Admin', 'Rep'][Math.floor(Math.random() * 2)],
+              'Company 1'));
     }
 
     return mockUsers;
@@ -50,26 +52,27 @@ describe('UserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [UserComponent],
-      providers: [
-        MatDialogHarness,
-        provideMockStore({
-          initialState: {
-            user: {
-              loading: false,
-              focusedUser: null,
-              users: []
-            }
-          } as fromApp.State
-        }),
-        provideMockActions(() => actions$),
-        UserEffects,
-      ],
-      imports: [
-        TestModule,
-      ]
-    })
-      .compileComponents();
+             declarations: [UserComponent],
+             providers: [
+               MatDialogHarness,
+               provideMockStore({
+                 initialState: {
+                   user: {
+                     loading: false,
+                     focusedUser: null,
+                     users: []
+                   }
+                 } as fromApp.State
+               }),
+               provideMockActions(() => actions$),
+               UserEffects
+             ],
+             imports: [
+               NoopAnimationsModule,
+               SharedModule
+             ]
+           })
+           .compileComponents();
     fixture = TestBed.createComponent(UserComponent);
     component = fixture.componentInstance;
 
@@ -80,18 +83,18 @@ describe('UserComponent', () => {
     effects = TestBed.inject<UserEffects>(UserEffects);
 
     mockUsersSelector = mockStore.overrideSelector(
-      fromUsers.selectUsers,
-      []
+        fromUsers.selectUsers,
+        []
     );
 
     mockIsLoadingSelector = mockStore.overrideSelector(
-      fromUsers.selectIsLoading,
-      false
+        fromUsers.selectIsLoading,
+        false
     );
 
     mockUserSelector = mockStore.overrideSelector(
-      fromUsers.selectFocusedUser,
-      createMockUsers()[5]
+        fromUsers.selectFocusedUser,
+        createMockUsers()[5]
     );
 
     mockStore.refreshState();
@@ -136,8 +139,8 @@ describe('UserComponent', () => {
     // Define predicate to filter role, company and email
     component.filteringAction = (user: UserModel, filterValue: string) => {
       return user.email.toLowerCase().includes(filterValue)
-        || user.role.toLowerCase().includes(filterValue)
-        || user.companyId.toLowerCase().includes(filterValue);
+          || user.role.toLowerCase().includes(filterValue)
+          || user.companyId.toLowerCase().includes(filterValue);
     };
 
     component.ngOnInit();
@@ -197,7 +200,7 @@ describe('UserComponent', () => {
       user: {
         ...mockUsers[5],
         email: 'changed@email.com',
-        companyId: 'Company 1',
+        companyId: 'Company 1'
       }
     }));
 
