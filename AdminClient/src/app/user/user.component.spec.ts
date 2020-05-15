@@ -4,7 +4,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
 import { MatRowHarness, MatTableHarness } from '@angular/material/table/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -68,7 +67,6 @@ describe('UserComponent', () => {
       ],
       imports: [
         TestModule,
-        NoopAnimationsModule
       ]
     })
       .compileComponents();

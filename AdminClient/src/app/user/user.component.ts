@@ -16,7 +16,7 @@ import * as fromUser from './store/user.reducer';
 })
 export class UserComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   users: MatTableDataSource<UserModel> = new MatTableDataSource<UserModel>([]);
   displayColumns: string[];
@@ -63,10 +63,10 @@ export class UserComponent implements OnInit, OnDestroy {
   };
 
   editUser(user: UserModel) {
-    this.store.dispatch(UserActions.showEditUserModal({user}));
+    this.store.dispatch(UserActions.showEditUserModal({ user }));
   }
 
   deleteUser(user: UserModel) {
-    this.store.dispatch(UserActions.showDeleteUserDialog({user}));
+    this.store.dispatch(UserActions.showDeleteUserDialog({ user }));
   }
 }
