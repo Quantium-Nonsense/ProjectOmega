@@ -28,6 +28,7 @@ import {SharedModule} from './shared/shared.module';
 import {UserEffects} from './user/store/user.effects';
 import {CustomersEffects} from './customers/store/customers.effects';
 import {ToolbarComponent} from './toolbar/toolbar.component';
+import { ManagementComponent } from './management/management.component';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -35,7 +36,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 	declarations: [
 		AppComponent,
 		DashboardComponent,
-		ToolbarComponent
+		ToolbarComponent,
+		ManagementComponent
 	],
 	bootstrap: [AppComponent],
 	imports: [
