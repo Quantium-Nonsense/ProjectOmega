@@ -1,17 +1,18 @@
-import {Component, OnInit, ViewChild, ViewChildren} from '@angular/core';
-import {CustomerModel} from '../models/customers/customer.model';
-import {MatTableDataSource} from '@angular/material/table';
-import {Store} from '@ngrx/store';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { CustomerModel } from '../models/customers/customer.model';
 import * as fromApp from '../reducers/index';
-import * as fromCustomers from './store/customers.reducer';
+import * as ToolbarActions from '../toolbar/store/toolbar.actions';
 import * as CustomerActions from './store/customers.actions';
-import {Observable, Subscription} from 'rxjs';
-import {MatPaginator} from '@angular/material/paginator';
+import * as fromCustomers from './store/customers.reducer';
 
 @Component({
-	selector: 'app-customers',
-	templateUrl: './customers.component.html',
-	styleUrls: ['./customers.component.scss']
+  selector: 'app-customers',
+  templateUrl: './customers.component.html',
+  styleUrls: ['./customers.component.scss']
 })
 export class CustomersComponent implements OnInit {
 	@ViewChild(MatPaginator) paginator: MatPaginator;
@@ -23,7 +24,7 @@ export class CustomersComponent implements OnInit {
 	private subscription: Subscription;
 
 	constructor(
-		private store: Store<fromApp.State>
+		private store$: Store<fromApp.State>
 	) {
 		this.isLoading = new Observable<boolean>();
 		this.subscription = new Subscription();
@@ -31,13 +32,18 @@ export class CustomersComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.store.dispatch(CustomerActions.beginLoadingCustomers());
-		this.isLoading = this.store.select(fromCustomers.selectIsLoading);
+		this.store$.dispatch(ToolbarActions.beginProgressBar());
+		this.store$.dispatch(CustomerActions.beginLoadingCustomers());
+
 		this.subscription.add(
-			this.store.select(fromCustomers.selectAllCustomers).subscribe(customers => {
-				if (!customers) {
-					return;
+			this.store$.select(fromCustomers.selectIsLoading).subscribe(isLoading => {
+				if (!isLoading) {
+					this.store$.dispatch(ToolbarActions.stopProgressBar());
 				}
+			})
+		);
+		this.subscription.add(
+			this.store$.select(fromCustomers.selectAllCustomers).subscribe(customers => {
 				this.customers.data = customers;
 				this.customers.paginator = this.paginator;
 			})
@@ -45,12 +51,12 @@ export class CustomersComponent implements OnInit {
 	}
 
 	deleteCustomer(customer: CustomerModel) {
-		this.store.dispatch(CustomerActions.showDeleteCustomerDialog({customer}));
-	}
+    this.store$.dispatch(CustomerActions.showDeleteCustomerDialog({customer}));
+  }
 
 	editCustomer(customer: CustomerModel) {
-		this.store.dispatch(CustomerActions.showEditCustomerDialog({customer}));
-	}
+    this.store$.dispatch(CustomerActions.showEditCustomerDialog({customer}));
+  }
 
 	filterActions(customer: CustomerModel, filterValue: string): boolean {
 		return customer.companyName.toLowerCase().includes(filterValue)
@@ -60,5 +66,9 @@ export class CustomersComponent implements OnInit {
 			|| customer.firstName.toLowerCase().includes(filterValue)
 			|| customer.lastName.toLowerCase().includes(filterValue)
 			|| customer.notes.toLowerCase().includes(filterValue);
+	}
+
+	handleCreate() {
+		alert('To be implemented');
 	}
 }

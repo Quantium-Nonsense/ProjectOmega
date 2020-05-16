@@ -1,6 +1,12 @@
-export class User {
+import { RoleModel } from '../dto/role.model';
+
+export class UserModel {
   constructor(
-    public email: string,
-    public roles: string[]) {
+      public id?: string,
+      public firstName?: string,
+      public lastName?: string,
+      public email?: string,
+      public password?: string,
+      public roles?: RoleModel) {
   }
 }

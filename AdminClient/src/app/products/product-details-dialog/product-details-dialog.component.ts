@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Product } from '../../../data/products/products-datasource';
 import { Supplier, SuppliersDataSource } from '../../../data/supplier/supplier-datasource';
+import { ProductModel } from '../../models/products/products.model';
 
 @Component({
   selector: 'app-details-dialog',
@@ -19,7 +19,7 @@ export class ProductDetailsDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ProductDetailsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: { product: Product, title: string, editable: boolean },
+    @Inject(MAT_DIALOG_DATA) private data: { product: ProductModel, title: string, editable: boolean },
   ) {
     this.suppliers = SuppliersDataSource.getInstance().getAll();
   }
@@ -84,14 +84,14 @@ export class ProductDetailsDialogComponent implements OnInit {
   }
 
   private onSaveClick() {
-    const newProduct: Product = {
-      id: this.data.product ? this.data.product.id : null,
-      supplier: this.productItemForm.get('supplier').value.name,
-      supplierId: this.productItemForm.get('supplier').value.id,
-      name: this.productItemForm.get('name').value,
-      description: this.productItemForm.get('description').value,
-      price: parseFloat(this.productItemForm.get('price').value),
-    };
+    const newProduct = new ProductModel(
+      this.data.product ? this.data.product.id : null,
+      this.productItemForm.get('supplier').value.name,
+      this.productItemForm.get('supplier').value.id,
+      this.productItemForm.get('name').value,
+      this.productItemForm.get('description').value,
+      parseFloat(this.productItemForm.get('price').value)
+    );
 
     this.dialogRef.close(newProduct);
   }
@@ -99,7 +99,6 @@ export class ProductDetailsDialogComponent implements OnInit {
   private formInitialization = (): FormGroup => {
     const editable = this.data.editable;
     const initialProduct = this.data.product;
-    console.log(initialProduct);
 
     return new FormGroup({
       supplier: new FormControl(
