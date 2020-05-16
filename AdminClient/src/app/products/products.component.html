@@ -9,8 +9,14 @@
   </div>
 </div>
 <div fxLayout="row" fxLayoutAlign="center">
+  <app-table-filter [action]="handleFilter"
+                    [dataSource]="dataSource" class="w-100">
+
+  </app-table-filter>
+</div>
+<div fxLayout="row" fxLayoutAlign="center">
   <div class="mat-elevation-z8 w-100">
-    <table aria-label="Elements" class="full-width-table" mat-table matSort>
+    <table aria-label="Elements" class="w-100" mat-table matSort>
       <!-- Supplier Column -->
       <ng-container matColumnDef="supplier">
         <th *matHeaderCellDef class="pr-3" mat-header-cell mat-sort-header>Supplier</th>
@@ -59,7 +65,9 @@
                    [length]="dataSource?.data.length"
                    [pageIndex]="0"
                    [pageSizeOptions]="[20, 50, 100, 250]"
-                   [pageSize]="20">
+                   [pageSize]="20"
+                   showFirstLastButtons
+    >
     </mat-paginator>
   </div>
 </div>

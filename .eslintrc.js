@@ -112,7 +112,6 @@ module.exports = {
                 ],
                 "id-match": "error",
                 "import/no-deprecated": "warn",
-                "import/order": "off",
                 "jsdoc/no-types": "error",
                 "jsdoc/require-param-type": "off", //conflicts with jsdoc/no-types
                 "jsdoc/require-returns-type": "off", //conflicts with jsdoc/no-types
@@ -182,6 +181,10 @@ module.exports = {
                 "no-unused-labels": "error",
                 "no-var": "error",
                 "object-shorthand": "error",
+                "object-curly-spacing": [
+                    "error",
+                    "always"
+                ],
                 "one-var": [
                     "error",
                     "never"
