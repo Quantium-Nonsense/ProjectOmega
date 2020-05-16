@@ -23,3 +23,11 @@ export const showSpinner = createAction(
 export const hideSpinner = createAction(
     '[Authentication - Page] Hide spinner'
 );
+
+export const isLoading = createAction(
+    '[Authentication - Page] Page is loading'
+);
+
+export const loadingComplete = createAction(
+    '[Authentication - Page] Page completed loading'
+);
