@@ -18,3 +18,7 @@ export const loginAttempt = createAction(
 export const loginSuccessful = createAction(
   '[Authentication - Page] Successful Authentication',
 );
+
+export const logoutSuccessful = createAction(
+  '[Logout] - Success',
+);

@@ -7,6 +7,7 @@ module.exports = function (config) {
 		frameworks: ['jasmine', '@angular-devkit/build-angular'],
 		plugins: [
 			require('karma-jasmine'),
+			require('karma-coverage'),
 			require('karma-chrome-launcher'),
 			require('karma-jasmine-html-reporter'),
 			require('karma-coverage-istanbul-reporter'),
@@ -20,18 +21,26 @@ module.exports = function (config) {
 			reports: ['html', 'lcovonly', 'text-summary'],
 			fixWebpackSourcePaths: true
 		},
-		reporters: ['progress', 'kjhtml'],
+		reporters: ['progress', 'kjhtml', 'coverage'],
 		port: 9876,
 		colors: true,
 		logLevel: config.LOG_INFO,
 		autoWatch: true,
 		browsers: ['Chrome'],
+		browserDisconnectTimeout: 100000,
+		browserDisconnectTolerance: 3,
+		browserNoActivityTimeout: 600000,
 		customLaunchers: {
 			ChromeHeadlessCI: {
 				base: 'ChromeHeadless',
-				flags: ['--no-sandbox']
+				flags: [
+					'--no-sandbox',
+					'--code-coverage=true',
+					'--no-progress',
+					'--no-watch'
+				]
 			}
 		},
-		singleRun: false,
+		singleRun: true
 	});
 };
