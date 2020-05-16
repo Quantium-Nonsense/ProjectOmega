@@ -48,9 +48,8 @@ export class AuthEffects {
           ofType(AuthActions.loginAttempt),
           switchMap((action: Action & { email: string, password: string }) =>
               this.attemptLogin(action.email, action.password).pipe(
-                  switchMap(httpResult => {
-                    return [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()];
-                  }),
+                  switchMap(httpResult =>
+                    [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()]),
                   catchError((error: HttpErrorResponse) => {
                     if (error.status === 404 || error.status === 500) {
                       return switchMap(() => [

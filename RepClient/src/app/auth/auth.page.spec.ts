@@ -12,8 +12,14 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { PreparedFunction, QuantiumTesting, Stage, StringDefinition, StringDefinitionValue } from 'quantium_testing';
-import { StageSingle } from 'quantium_testing/lib/QuantiumTester/definitions/stage/Stage.single';
+import {
+  AssertionVariable, BooleanBranchDescriptor,
+  PreparedFunction,
+  QuantiumTesting, SingleStage,
+  Stage,
+  StringDefinition,
+  StringDefinitionValue, VariableDescriptor
+} from 'quantium_testing';
 import { TestValidatorActions } from 'quantium_testing/lib/QuantiumTester/test-validator/test-validator';
 import { Observable, of, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -108,6 +114,7 @@ describe('AuthPage', () => {
     // Override selectors
     mockSelectErrorMessage = mockStore.overrideSelector(fromAuth.selectErrorMessage, undefined);
     mockSelectUser = mockStore.overrideSelector(fromAuth.selectUser, undefined);
+    mockSelectIsLoading = mockStore.overrideSelector(fromAuth.selectIsLoading, false);
 
     mockStore.refreshState();
     fixture.detectChanges();
@@ -136,7 +143,7 @@ describe('AuthPage', () => {
       q.expose(text, 'snackBarActualMessage');
     }, ['toastMessage']));
     q.setValidationRules(TestValidatorActions.MATCH_EXACTLY);
-    await q.withAsyncAssertExposed('snackBarActualMessage', 'toastMessage', true, 30);
+    await q.withAsyncAssertExposed('snackBarActualMessage', 'toastMessage', true, 20);
     expect(q.failedAssertions.length).toBe(0);
   });
 
@@ -146,7 +153,7 @@ describe('AuthPage', () => {
 
     const q = new QuantiumTesting(1);
     q.inferAndCreateInner(createMockUser(), 'user');
-    q.setStaging(new StageSingle('setupSpies', user => {
+    q.setStaging(new SingleStage('setupSpies', user => {
       // Override functions in a way to indicate success
       spyOn(effects, 'attemptLogin').and.callThrough().and.returnValue(of({token: ''}));
       spyOn(effects, 'decodeToken').and.callThrough().and.returnValue(user);
@@ -246,17 +253,39 @@ describe('AuthPage', () => {
     expect(mockRouter.navigateByUrl).toHaveBeenCalled();
   });
 
-  it('should dispatch spinner action', () => {
+  it('should dispatch spinner action and stop spinner action according to loading', () => {
+  /*  const qTester = new QuantiumTesting();
+    const startSpinnerSpy = spyOn(component, 'startSpinner').and.callThrough();
+    const stopSpinnerSpy = spyOn(component, 'startSpinner').and.callThrough();
+
+    qTester.setStaging(
+        new StageSingle('init', () => {
+          component.ngOnInit();
+          component.ionViewWillEnter();
+          startSpinnerSpy.calls.reset();
+          stopSpinnerSpy.calls.reset();
+        }, null)
+    );
+    qTester.setAssertionVariable(new AssertionVariable(
+        'isLoading',
+        new PreparedFunction(loading => {
+          mockStore.overrideSelector(fromAuth.selectIsLoading, loading);
+        }, ['loading'])
+    ));
+    qTester.setDescriptorForVariable(
+        'isLoading',
+        new VariableDescriptor(
+            new BooleanBranchDescriptor(
+                startSpinnerSpy.calls.count() === 1,
+                stopSpinnerSpy.calls.count() === 1))
+    );
+    mockStore.refreshState();
+    fixture.detectChanges();
+
     component.ngOnInit();
     component.ionViewWillEnter();
 
-    spyOn(component, 'startSpinner').and.callThrough();
-
-    mockStore.refreshState();
-    fixture.detectChanges();
-
-    mockStore.refreshState();
-    fixture.detectChanges();
     expect(component.startSpinner).toHaveBeenCalled();
+*/
   });
 });
