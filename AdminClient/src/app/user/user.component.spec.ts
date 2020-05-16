@@ -1,25 +1,22 @@
-import {HarnessLoader} from '@angular/cdk/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MatDialogHarness} from '@angular/material/dialog/testing';
-import {MatInputHarness} from '@angular/material/input/testing';
-import {MatProgressBarHarness} from '@angular/material/progress-bar/testing';
-import {MatRowHarness, MatTableHarness} from '@angular/material/table/testing';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {provideMockActions} from '@ngrx/effects/testing';
-import {Action, MemoizedSelector} from '@ngrx/store';
-import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {Observable, of} from 'rxjs';
-import {environment} from '../../environments/environment';
-import {LoadingSpinnerService} from '../services/loading-spinner/loading-spinner.service';
-import {UserModel} from '../shared/model/user.model';
-import {SharedModule} from '../shared/shared.module';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { MatInputHarness } from '@angular/material/input/testing';
+import { MatRowHarness, MatTableHarness } from '@angular/material/table/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { Action, MemoizedSelector } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { Observable, of } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { UserModel } from '../shared/model/user.model';
+import { TestModule } from '../shared/test/test.module';
 import * as fromApp from './../reducers/index';
-import {UserEffects} from './store/user.effects';
-import * as fromUsers from './store/user.reducer';
-import {selectFocusedUser, selectUsers} from './store/user.reducer';
-import {UserComponent} from './user.component';
 import * as UserActions from './store/user.actions';
+import { UserEffects } from './store/user.effects';
+import * as fromUsers from './store/user.reducer';
+import { selectFocusedUser, selectUsers } from './store/user.reducer';
+import { UserComponent } from './user.component';
 
 describe('UserComponent', () => {
   const createMockUsers = (): UserModel[] => {
@@ -27,12 +24,12 @@ describe('UserComponent', () => {
 
     for (let i = 0; i < 50; i++) {
       mockUsers.push(
-        new UserModel(
-          (i).toString(),
-          `bla${i}@bla.com`,
-          `longasspass${i}`,
-          ['Admin', 'Rep'][Math.floor(Math.random() * 2)],
-          'Company 1'));
+          new UserModel(
+              (i).toString(),
+              `bla${ i }@bla.com`,
+              `longasspass${ i }`,
+              ['Admin', 'Rep'][Math.floor(Math.random() * 2)],
+              'Company 1'));
     }
 
     return mockUsers;
@@ -51,31 +48,28 @@ describe('UserComponent', () => {
   let effects: UserEffects;
   let actions$: Observable<Action>;
 
-  const spinnerServiceSpy: jasmine.SpyObj<LoadingSpinnerService> = jasmine.createSpyObj(LoadingSpinnerService, ['observeNext']);
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [UserComponent],
-      providers: [
-        MatDialogHarness,
-        {provide: LoadingSpinnerService, useValue: spinnerServiceSpy},
-        provideMockStore({
-          initialState: {
-            user: {
-              loading: false,
-              focusedUser: null,
-              users: []
-            }
-          } as fromApp.State
-        }),
-        provideMockActions(() => actions$),
-        UserEffects,
-      ],
-      imports: [
-        SharedModule,
-        NoopAnimationsModule
-      ]
-    })
-      .compileComponents();
+             declarations: [UserComponent],
+             providers: [
+               MatDialogHarness,
+               provideMockStore({
+                 initialState: {
+                   user: {
+                     loading: false,
+                     focusedUser: null,
+                     users: []
+                   }
+                 } as fromApp.State
+               }),
+               provideMockActions(() => actions$),
+               UserEffects
+             ],
+             imports: [
+               TestModule
+             ]
+           })
+           .compileComponents();
     fixture = TestBed.createComponent(UserComponent);
     component = fixture.componentInstance;
 
@@ -86,18 +80,18 @@ describe('UserComponent', () => {
     effects = TestBed.inject<UserEffects>(UserEffects);
 
     mockUsersSelector = mockStore.overrideSelector(
-      fromUsers.selectUsers,
-      []
+        fromUsers.selectUsers,
+        []
     );
 
     mockIsLoadingSelector = mockStore.overrideSelector(
-      fromUsers.selectIsLoading,
-      false
+        fromUsers.selectIsLoading,
+        false
     );
 
     mockUserSelector = mockStore.overrideSelector(
-      fromUsers.selectFocusedUser,
-      createMockUsers()[5]
+        fromUsers.selectFocusedUser,
+        createMockUsers()[5]
     );
 
     mockStore.refreshState();
@@ -119,20 +113,11 @@ describe('UserComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should begin loading when component initializes', async(() => {
+  it('should begin loading when component initializes', async () => {
     component.ngOnInit();
     actions$ = of(UserActions.beginLoadingUserPage());
     effects.beginLoadingPage$.subscribe(action => expect(action).toEqual(UserActions.loadAllUsers()));
-  }));
-
-  it('should present spinner when loading anything', async(() => {
-    component.ngOnInit();
-    mockIsLoadingSelector.setResult(true);
-    mockStore.refreshState();
-    fixture.detectChanges();
-    const progressBar = loader.getHarness(MatProgressBarHarness);
-    expect(progressBar).toBeTruthy();
-  }));
+  });
 
   it('should esure table displays rows', async () => {
     component.ngOnInit();
@@ -151,8 +136,8 @@ describe('UserComponent', () => {
     // Define predicate to filter role, company and email
     component.filteringAction = (user: UserModel, filterValue: string) => {
       return user.email.toLowerCase().includes(filterValue)
-        || user.role.toLowerCase().includes(filterValue)
-        || user.companyId.toLowerCase().includes(filterValue);
+          || user.role.toLowerCase().includes(filterValue)
+          || user.companyId.toLowerCase().includes(filterValue);
     };
 
     component.ngOnInit();
@@ -212,7 +197,7 @@ describe('UserComponent', () => {
       user: {
         ...mockUsers[5],
         email: 'changed@email.com',
-        companyId: 'Company 1',
+        companyId: 'Company 1'
       }
     }));
 
