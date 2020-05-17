@@ -1,1 +1,87 @@
-<p>customers works!</p>
+<div fxLayout="row" fxLayoutAlign="space-between" xmlns="">
+  <div>
+    <h2>Customers</h2>
+  </div>
+  <div>
+    <button (click)="handleCreate()" aria-label="New Customer" color="primary" mat-mini-fab>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="center">
+  <app-table-filter [action]="filterActions"
+                    [dataSource]="customers" class="w-100">
+
+  </app-table-filter>
+</div>
+<div fxLayout="row" fxLayoutAlign="center">
+  <div class="mat-elevation-z8 w-100">
+    <table class="w-100"
+           mat-table
+           [dataSource]="customers">
+      <ng-container matColumnDef="companyName">
+        <th *matHeaderCellDef
+            class="pr-3"
+            mat-header-cell>Name
+        </th>
+        <td *matCellDef="let customer"
+            class="pr-3"
+            mat-cell>{{customer.companyName}}</td>
+      </ng-container>
+      <ng-container matColumnDef="contactNumber">
+        <th *matHeaderCellDef
+            class="px-3"
+            mat-header-cell>Contact Number
+        </th>
+        <td *matCellDef="let customer"
+            class="px-3"
+            mat-cell>{{customer.contactNumber}}</td>
+      </ng-container>
+      <ng-container matColumnDef="email">
+        <th *matHeaderCellDef
+            class="px-3"
+            mat-header-cell>Email
+        </th>
+        <td *matCellDef="let customer"
+            class="px-3"
+            mat-cell>{{customer.email}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th *matHeaderCellDef
+            class="px-3"
+            mat-header-cell>Actions
+        </th>
+        <td *matCellDef="let row"
+            class="pl-3"
+            mat-cell>
+          <button (click)="editCustomer(row)"
+                  [disabled]="isLoading | async"
+                  color="primary"
+                  mat-icon-button>
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button (click)="deleteCustomer(row)"
+                  [disabled]="isLoading | async"
+                  color="primary"
+                  mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr *matHeaderRowDef="displayColumns"
+          mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayColumns;"
+          mat-row></tr>
+    </table>
+
+    <mat-paginator #paginator
+                   [length]="100"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   showFirstLastButtons
+    >
+    </mat-paginator>
+  </div>
+</div>

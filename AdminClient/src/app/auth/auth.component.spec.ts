@@ -33,12 +33,12 @@ describe('AuthPage', () => {
             auth: {
               errorMessage: null,
               loading: false,
-              user: null,
+              user: null
             },
             user: null
           }
         }),
-        {provide: MatSnackBar, useValue: mockSnackbar},
+        {provide: MatSnackBar, useValue: mockSnackbar}
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
@@ -60,13 +60,15 @@ describe('AuthPage', () => {
     component.ngOnInit();
 
     mockStore.setState({
+      toolbar: null,
       auth: {
         errorMessage: 'Some Error message',
         loading: false,
         user: null,
-        returnUrl: '',
+        returnUrl: ''
       },
-      user: null
+      user: null,
+      customers: null
     });
 
     mockStore.refreshState();
@@ -83,13 +85,15 @@ describe('AuthPage', () => {
     component.ngOnInit();
 
     mockStore.setState({
+      toolbar: null,
       auth: {
         errorMessage: null,
         loading: true,
         user: null,
-        returnUrl: '',
+        returnUrl: ''
       },
-      user: null
+      user: null,
+      customers: null
     });
 
     mockStore.refreshState();

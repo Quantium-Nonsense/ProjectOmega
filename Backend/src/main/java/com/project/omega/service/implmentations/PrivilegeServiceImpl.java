@@ -18,4 +18,9 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     public Privilege findByName(String name) {
         return privilegeRepository.findByName(name);
     }
+
+    @Override
+    public void create(Privilege privilege) {
+        privilegeRepository.save(privilege);
+    }
 }

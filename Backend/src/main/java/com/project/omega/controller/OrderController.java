@@ -20,6 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -52,13 +56,14 @@ public class OrderController {
 
         validateProductsExistence(formDtos);
 
-        User user = userService.getUserById(
-                form.getUser().getId());
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = ((UserDetails)principal).getUsername();
+            User user = userService.findUserByEmail(username);
+            Long userId = user.getId();
 
         Order order = new Order();
 
-
-        order.setUser(user);
+        order.setUserId(userId);
 
         order = orderService.createOrder(order);
 
@@ -117,15 +122,6 @@ public class OrderController {
     public static class OrderForm implements Serializable {
 
         private List<OrderProductDto> productOrders;
-        private User user;
-
-        public User getUser() {
-            return user;
-        }
-
-        public void setUser(User user) {
-            this.user = user;
-        }
 
         public List<OrderProductDto> getProductOrders() {
             return productOrders;

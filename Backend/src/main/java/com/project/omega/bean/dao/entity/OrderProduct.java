@@ -46,7 +46,7 @@ public class OrderProduct implements Serializable{
     @Transient
     public Client getClient() {
 
-        return this.pk.getClient();
+        return this.pk.getClient ();
     }
 
     @Transient

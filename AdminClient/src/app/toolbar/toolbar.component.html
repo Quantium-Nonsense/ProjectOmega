@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row fxLayout="row">
+        <button fxFlex="5" (click)="sideNavOpen = !sideNavOpen" mat-button>
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span fxFlex="5" id="title">{{title}}</span>
+        <span fxFlex></span>
+        <div>
+          <button mat-icon-button
+                  [matMenuTriggerFor]="userActionMenu">
+            <mat-icon>person</mat-icon>
+          </button>
+
+          <mat-menu
+            #userActionMenu="matMenu">
+            <!--            <button mat-menu-item>Settings</button>-->
+            <!--            <button mat-menu-item>Help</button>-->
+            <!--            <mat-divider></mat-divider>-->
+            <button (click)="handleLogout()" mat-menu-item>Log Out</button>
+          </mat-menu>
+        </div>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-progress-bar *ngIf="showProgressBar | async"
+                  mode="indeterminate"></mat-progress-bar>
+
