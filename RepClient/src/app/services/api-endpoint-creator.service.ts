@@ -15,14 +15,18 @@ export class ApiEndpointCreatorService {
   /**
    * Returns the end point to log in the user
    */
-  get registerEndPoint(): string {
+  get register(): string {
     return `${ this.endPoint }/registration`;
+  }
+
+  get allCompanies(): string {
+    return `${ this.endPoint }/supplier/get`;
   }
 
   /**
    * returns the login end point
    */
-  get loginEndPoint(): string {
+  get login(): string {
     return `${ this.endPoint }/authenticate`;
   }
 }
