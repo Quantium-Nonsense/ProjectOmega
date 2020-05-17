@@ -11,43 +11,46 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
+import { BrowserModule } from '@angular/platform-browser';
 import { PopupDialogComponent } from './components/popup-dialog/popup-dialog.component';
 import { TableFilterComponent } from './components/table-filter/table-filter.component';
 
 @NgModule({
-	declarations: [
-		TableFilterComponent,
-		PopupDialogComponent
-	],
-	imports: [
-		FlexLayoutModule,
-		CommonModule,
-		MatFormFieldModule,
-		MatInputModule,
-		MatDialogModule,
-		MatButtonModule,
-		MatProgressBarModule,
-		MatTableModule,
-		MatPaginatorModule,
-		MatIconModule,
-		MatMenuModule,
-		TextFieldModule,
-	],
-	exports: [
-		FlexLayoutModule,
-		CommonModule,
-		TableFilterComponent,
-		MatFormFieldModule,
-		MatInputModule,
-		MatDialogModule,
-		MatButtonModule,
-		MatProgressBarModule,
-		MatTableModule,
-		MatPaginatorModule,
-		MatIconModule,
-		MatMenuModule,
-		TextFieldModule
-	]
+  declarations: [
+    TableFilterComponent,
+    PopupDialogComponent
+  ],
+  imports: [
+    FlexLayoutModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatMenuModule,
+    BrowserModule,
+    TextFieldModule
+  ],
+  exports: [
+    FlexLayoutModule,
+    CommonModule,
+    BrowserModule,
+    TableFilterComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatMenuModule,
+    TextFieldModule
+  ]
 
 })
 export class SharedModule {
