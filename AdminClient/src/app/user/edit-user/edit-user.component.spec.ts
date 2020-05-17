@@ -1,45 +1,51 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {provideMockStore} from '@ngrx/store/testing';
+import { CommonModule } from '@angular/common';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
+import { provideMockStore } from '@ngrx/store/testing';
 
-import {EditUserComponent} from './edit-user.component';
-import {MatDialogHarness} from '@angular/material/dialog/testing';
-import {HarnessLoader} from '@angular/cdk/testing';
+import { EditUserComponent } from './edit-user.component';
+import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
 
 describe('EditUserComponent', () => {
-	let component: EditUserComponent;
-	let fixture: ComponentFixture<EditUserComponent>;
+  let component: EditUserComponent;
+  let fixture: ComponentFixture<EditUserComponent>;
 
-	let loader: HarnessLoader;
-	let documentLoader: HarnessLoader;
+  let loader: HarnessLoader;
+  let documentLoader: HarnessLoader;
 
-	beforeEach(async(() => {
-		TestBed.configureTestingModule({
-				   declarations: [
-					   EditUserComponent
-				   ],
-				   providers: [
-					   provideMockStore()
-				   ]
-			   })
-			   .compileComponents();
-	}));
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+             declarations: [
+               EditUserComponent
+             ],
+             providers: [
+               provideMockStore()
+             ],
+             imports: [
+               BrowserModule,
+               CommonModule
+             ]
+           })
+           .compileComponents();
+  });
 
-	afterAll(async () => {
-		try {
-			const matDialog = await documentLoader.getHarness(MatDialogHarness);
-			await matDialog.close();
-		} catch (e) {
-			// Ignore as this just means not found
-		}
-	});
+  afterAll(async () => {
+    try {
+      const matDialog = await documentLoader.getHarness(MatDialogHarness);
+      await matDialog.close();
+    } catch (e) {
+      // Ignore as this just means not found
+    }
+  });
 
-	beforeEach(() => {
-		fixture = TestBed.createComponent(EditUserComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
+  beforeEach(() => {
+    fixture = TestBed.createComponent(EditUserComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
-	it('should create', () => {
-		expect(component).toBeTruthy();
-	});
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

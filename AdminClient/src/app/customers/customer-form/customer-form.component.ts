@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as fromApp from '../../reducers/index';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import * as CustomerActions from '../store/customers.actions';
@@ -15,7 +15,7 @@ import * as fromCustomers from '../store/customers.reducer';
 })
 export class CustomerFormComponent implements OnInit, OnDestroy {
   customerForm: FormGroup;
-  isLoading: Observable<boolean>;
+  isLoading: boolean;
 
 	private sub: Subscription;
 
@@ -28,10 +28,16 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
-		this.isLoading = this.store$.select(fromCustomers.selectIsLoading);
 		this.sub.add(
 			this.store$.select(fromCustomers.selectIsLoading)
-			    .subscribe(isLoading => isLoading ? this.customerForm.disable() : this.customerForm.enable())
+			    .subscribe(isLoading => {
+			    	this.isLoading = isLoading;
+					if (isLoading) {
+						this.customerForm.disable();
+					} else {
+						this.customerForm.enable();
+					}
+				})
 		);
 		this.store$.select(fromCustomers.selectSelectedCustomer).subscribe(customer => {
 			if (customer) {
