@@ -1,23 +1,23 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { MatTableHarness } from '@angular/material/table/testing';
 import { BrowserModule } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { Observable, of } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { CustomerModel } from '../models/customers/customer.model';
+import * as fromApp from '../reducers';
+import { SharedModule } from '../shared/shared.module';
 
 import { CustomersComponent } from './customers.component';
-import { HarnessLoader } from '@angular/cdk/testing';
-import * as fromApp from '../reducers';
-import { Observable, of } from 'rxjs';
-import { Action, MemoizedSelector } from '@ngrx/store';
-import { CustomersEffects } from './store/customers.effects';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { CustomerModel } from '../models/customers/customer.model';
-import * as fromCustomers from './store/customers.reducer';
-import { MatTableHarness } from '@angular/material/table/testing';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { MatDialogHarness } from '@angular/material/dialog/testing';
-import { SharedModule } from '../shared/shared.module';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import * as CustomerActions from './store/customers.actions';
-import { environment } from '../../environments/environment';
+import { CustomersEffects } from './store/customers.effects';
+import * as fromCustomers from './store/customers.reducer';
 
 describe('CustomersComponent', () => {
   let component: CustomersComponent;
@@ -144,7 +144,9 @@ describe('CustomersComponent', () => {
 
   it('should show delete customer dialog on showDeleteCustomerDialog dispatch', async () => {
     const selectedCustomer = createDummyCustomers()[0];
-    actions$ = of(CustomerActions.showDeleteCustomerDialog({customer: selectedCustomer}));
+    actions$ = of(CustomerActions.showDeleteCustomerDialog({
+      customer: selectedCustomer
+    }));
 
     effects.showDeleteCustomerDialog$.subscribe(); // No dispatch
 
