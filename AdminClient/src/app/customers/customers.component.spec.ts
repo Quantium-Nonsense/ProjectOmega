@@ -52,7 +52,7 @@ describe('CustomersComponent', () => {
     return dummyCustomers;
   };
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
              declarations: [CustomersComponent],
              providers: [
@@ -76,7 +76,7 @@ describe('CustomersComponent', () => {
              ]
            })
            .compileComponents();
-  }));
+  });
 
   afterEach(async () => {
     try {
@@ -133,14 +133,14 @@ describe('CustomersComponent', () => {
     expect(tableRows.length).toBe(10); // Due to paginator
   });
 
-  it('should load all customers when landing on dashboard', async(() => {
+  it('should load all customers when landing on dashboard', () => {
     actions$ = of(CustomerActions.beginLoadingCustomers());
     const dummyCustomers = createDummyCustomers();
     spyOn(effects, 'createDummyCustomers').and.callThrough().and.returnValue(dummyCustomers);
     effects.loadAllCustomers$.subscribe(action => {
       expect(action).toEqual(CustomerActions.customersLoaded({customers: dummyCustomers}));
     });
-  }));
+  });
 
   it('should show delete customer dialog on showDeleteCustomerDialog dispatch', async () => {
     const selectedCustomer = createDummyCustomers()[0];
