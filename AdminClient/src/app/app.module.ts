@@ -29,6 +29,7 @@ import {UserEffects} from './user/store/user.effects';
 import {CustomersEffects} from './customers/store/customers.effects';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import { ManagementComponent } from './management/management.component';
+import {MatRippleModule} from "@angular/material/core";
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -40,39 +41,40 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 		ManagementComponent
 	],
 	bootstrap: [AppComponent],
-	imports: [
-		AppRoutingModule,
-		AuthModule,
-		BrowserModule,
-		SharedModule,
-		BrowserAnimationsModule,
-		EffectsModule.forRoot([
-			AuthEffects,
-			UserEffects,
-			CustomersEffects
-		]),
-		FormsModule,
-		JwtModule.forRoot({
-			config: {
-				tokenGetter: getToken
-			}
-		}),
-		MatToolbarModule,
-		MatButtonModule,
-		MatGridListModule,
-		MatIconModule,
-		MatSidenavModule,
-		StoreModule.forRoot(appReducer, {
-			metaReducers,
-			runtimeChecks: {
-				strictActionImmutability: true,
-				strictStateImmutability: true
-			}
-		}),
-		MatCardModule,
-		MatListModule,
-		!environment.production ? StoreDevtoolsModule.instrument() : []
-	],
+  imports: [
+    AppRoutingModule,
+    AuthModule,
+    BrowserModule,
+    SharedModule,
+    BrowserAnimationsModule,
+    EffectsModule.forRoot([
+      AuthEffects,
+      UserEffects,
+      CustomersEffects
+    ]),
+    FormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: getToken
+      }
+    }),
+    MatToolbarModule,
+    MatButtonModule,
+    MatGridListModule,
+    MatIconModule,
+    MatSidenavModule,
+    StoreModule.forRoot(appReducer, {
+      metaReducers,
+      runtimeChecks: {
+        strictActionImmutability: true,
+        strictStateImmutability: true
+      }
+    }),
+    MatCardModule,
+    MatListModule,
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    MatRippleModule
+  ],
 	providers: []
 })
 export class AppModule {

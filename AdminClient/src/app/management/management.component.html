@@ -1,1 +1,13 @@
-<p>management works!</p>
+<p>works!</p>
+<mat-list role="list">
+  <mat-list-item (click)="openDialog()" role="listitem" *ngFor="let customer of customers">
+    {{customer.companyName}}
+  </mat-list-item>
+</mat-list>
+
+
+
+
+
+
+
