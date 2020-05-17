@@ -12,7 +12,7 @@ describe('EditUserComponent', () => {
   let loader: HarnessLoader;
   let documentLoader: HarnessLoader;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
              declarations: [
                EditUserComponent
@@ -22,7 +22,7 @@ describe('EditUserComponent', () => {
              ]
            })
            .compileComponents();
-  }));
+  });
 
   afterAll(async () => {
     try {
