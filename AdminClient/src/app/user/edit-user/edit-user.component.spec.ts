@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
 import { provideMockStore } from '@ngrx/store/testing';
 
 import { EditUserComponent } from './edit-user.component';
@@ -19,6 +21,10 @@ describe('EditUserComponent', () => {
              ],
              providers: [
                provideMockStore()
+             ],
+             imports: [
+               BrowserModule,
+               CommonModule
              ]
            })
            .compileComponents();
