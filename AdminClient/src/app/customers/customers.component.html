@@ -56,13 +56,11 @@
             class="pl-3"
             mat-cell>
           <button (click)="editCustomer(row)"
-                  [disabled]="isLoading | async"
                   color="primary"
                   mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
           <button (click)="deleteCustomer(row)"
-                  [disabled]="isLoading | async"
                   color="primary"
                   mat-icon-button>
             <mat-icon>delete</mat-icon>
