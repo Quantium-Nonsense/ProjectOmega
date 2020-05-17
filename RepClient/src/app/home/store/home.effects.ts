@@ -21,6 +21,10 @@ export class HomeEffects {
   ) {
   }
 
+  getAllCompanies() {
+
+  }
+
   /**
    * Fires the action to indicate dashboard has loaded
    */
