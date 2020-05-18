@@ -52,28 +52,4 @@ export class HomeEffects {
       }
     });
   }
-
-  /**
-   * Fires the action to indicate dashboard has loaded
-   */
-  getDummyCompanies = (): Action => {
-    const companies = this.createDummyCompanies();
-
-    return HomeActions.showCompanies({companies});
-  };
-
-  /**
-   * Creates 4 dummy companies
-   */
-  createDummyCompanies = (): SupplierModel[] => {
-    const imageUrl = 'assets/shapes.svg';
-    const companies: SupplierModel[] = [];
-
-    for (let i = 0; i < 4; i++) {
-      companies.push(new SupplierModel(`Company ${ i }`, imageUrl, `Some fantastic company called ${ i }!`));
-    }
-
-    return companies;
-  };
-
 }

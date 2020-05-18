@@ -19,7 +19,7 @@ export const selectHome = (state: fromApp.State) => state.home;
 
 export const selectAllCompaniesNames = createSelector(
     selectHome,
-    (state: State) => state.companies.map(c => c.name)
+    (state: State) => state.companies.map(c => c.companyName)
 );
 
 const _homeReducer = createReducer<State>(

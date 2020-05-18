@@ -28,7 +28,7 @@ export const selectItemsByCompany: MemoizedSelector<fromApp.State, ItemsByCompan
   fromHome.selectHome,
   (orderState: State, companyState: fromHome.State) => {
     const itemsByCompany: ItemsByCompanyModel[] = [];
-    const compNames = companyState.companies ? companyState.companies.map(c => c.name) : [];
+    const compNames = companyState.companies ? companyState.companies.map(c => c.companyName) : [];
 
     for (const company of compNames) {
       const companyInOrder: OrderItemModel = orderState.items
