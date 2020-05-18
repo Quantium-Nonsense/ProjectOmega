@@ -135,36 +135,44 @@ public class Client implements Serializable{
             return id;
         }
 
-        public void setId(Long id) {
+        public ClientBuilder setId(Long id) {
             this.id = id;
+            return this;
         }
-        
-        public void setFirst_name(String first_name) {
+
+        public ClientBuilder setFirst_name(String first_name) {
             this.first_name = first_name;
+            return this;
         }
 
-        public void setLast_name(String last_name) {
+        public ClientBuilder setLast_name(String last_name) {
             this.last_name = last_name;
+            return this;
         }
 
-        public void setDescription(String description) {
+        public ClientBuilder setDescription(String description) {
             this.description = description;
+            return this;
         }
 
-        public void setCompanyName(String companyName) {
+        public ClientBuilder setCompanyName(String companyName) {
             this.companyName = companyName;
+            return this;
         }
 
-        public void setEmail(String email) {
+        public ClientBuilder setEmail(String email) {
             this.email = email;
+            return this;
         }
 
-        public void setContactNumber(String contactNumber) {
+        public ClientBuilder setContactNumber(String contactNumber) {
             this.contactNumber = contactNumber;
+            return this;
         }
 
-        public void setNotes(String notes) {
+        public ClientBuilder setNotes(String notes) {
             this.notes = notes;
+            return this;
         }
 
         public Client build() {
