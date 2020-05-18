@@ -194,6 +194,10 @@ public class Client implements Serializable{
         public void setNotes(String notes) {
             this.notes = notes;
         }
+
+        public Client build() {
+            return new Client(id, first_name, last_name, description, companyName, email, contactNumber, notes);
+        }
     }
 
 
