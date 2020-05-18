@@ -72,7 +72,7 @@ export class SuppliersEffects {
 
   loadAllSuppliers$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.beginLoadingSuppliers),
-      switchMap((action: Action) => of(this.loadAllSuppliers()).pipe(delay(2000)))
+      switchMap((action: Action) => null)
       )
   );
 
@@ -81,25 +81,6 @@ export class SuppliersEffects {
       private actions$: Actions,
       private store$: Store<fromApp.State>
   ) {
-  }
-
-  createDummySuppliers() {
-    const dummySuppliers: SupplierModel[] = [];
-
-    for (let i = 0; i < 50; i++) {
-      dummySuppliers.push({
-        companyName: `Company ${ i }`,
-        contactNumber: `${ i.toString().repeat(9) }`,
-        description: `Some amazing company ${ i }`,
-        email: `bla${ i }@bla.com`,
-        firstName: `first name ${ i }`,
-        lastName: `last name ${ i }`,
-        id: `${ i }`,
-        notes: `look at me i am note ${ i } FEAR ME!`
-      });
-    }
-
-    return dummySuppliers;
   }
 
   loadAllSuppliers(): Action {
