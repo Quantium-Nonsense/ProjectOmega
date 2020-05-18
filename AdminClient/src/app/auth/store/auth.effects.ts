@@ -1,12 +1,14 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { delay, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { Action } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { ApiPathService } from '../../services/api-path.service';
+import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import * as AuthActions from '../store/auth.actions';
-import { State } from './auth.reducer';
 
 @Injectable()
 export class AuthEffects {
@@ -19,21 +21,40 @@ export class AuthEffects {
   loginAttempt$ = createEffect(
       () => this.actions$.pipe(
           ofType(AuthActions.loginAttempt),
-          withLatestFrom(this.store$),
-          switchMap(
-              ([action, storeState]) => of(this.storeJwt()).pipe(delay(2000), tap(
-                  // @ts-ignore
-                  () => this.redirectToPreviousUrl(storeState.auth.returnUrl)) // Strangely, it's storing the state
-                                                                               // under 'auth'
-              )
-          )
+          switchMap((action: Action & { email: string, password: string }) => {
+            return this.login(action.email, action.password).pipe(
+                switchMap((token: { token: string }) => {
+                  return [this.storeJwt(token), ToolbarActions.stopProgressBar()];
+                }),
+                catchError((error: HttpErrorResponse) => {
+                  if (error.status === 400) {
+                    return [
+                        AuthActions.hasError({ error: 'Wrong email or password please try again' }),
+                        ToolbarActions.stopProgressBar()
+                    ];
+                  }
+                  return [
+                    AuthActions.hasError({ error: `Something went wrong ${error.message}` }),
+                    ToolbarActions.stopProgressBar()
+                  ];
+                })
+            );
+          })
       ));
 
   constructor(
       private actions$: Actions,
       private router: Router,
-      private store$: Store<State>
+      private apiPath: ApiPathService,
+      private http: HttpClient
   ) {
+  }
+
+  login(email: string, password: string): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(this.apiPath.loginEndPoint, {
+      email,
+      password
+    });
   }
 
   /**
@@ -41,11 +62,8 @@ export class AuthEffects {
    *
    * @returns an action saying login was successful
    */
-  private storeJwt = (): Action => {
-    localStorage.setItem(environment.ACCESS_TOKEN, 'I AM A JWT TOKEN FEAR ME MORTAL!');
-
-    // Use the below for testing failed authentication error message
-    // return AuthActions.loginSuccessful({errorMessage: 'I HAVE DENIED YOU ACCESS MORTAL FEAR ME!'});
+  private storeJwt = (token: { token: string }): Action => {
+    localStorage.setItem(environment.ACCESS_TOKEN, token.token);
 
     return AuthActions.loginSuccessful();
   };
