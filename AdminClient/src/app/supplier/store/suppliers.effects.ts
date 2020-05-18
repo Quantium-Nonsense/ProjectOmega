@@ -102,7 +102,7 @@ export class SuppliersEffects {
     return dummySuppliers;
   }
 
-  loadAllClients(): Action {
+  loadAllSuppliers(): Action {
     const allSuppliers = this.createDummyClients();
 
     return SupplierActions.allSuppliersLoaded({ suppliers: allSuppliers });
