@@ -59,7 +59,7 @@ export class AuthEffects {
                         AuthActions.loadingComplete()
                       ];
                     }
-
+                    console.log(error);
                     return [
                       AuthActions.loginRejected({
                         errorMessage: 'Wrong email or password, please try again'
@@ -88,6 +88,7 @@ export class AuthEffects {
   }
 
   handleTokenReturn(httpResult: { token: string }): Action {
+    console.log(`From handle token token is:  ${httpResult.token}`);
     const user = this.decodeToken(httpResult.token);
 
     return AuthActions.loginSuccessful({user});

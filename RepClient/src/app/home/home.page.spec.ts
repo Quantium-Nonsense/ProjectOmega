@@ -70,7 +70,7 @@ describe('HomePage', () => {
 
     actions$ = of(HomeActions.beginLoadingDashboard()); // Mock dashboard first action
     effects.dashboardBeginLoading$.subscribe(action => {
-      expect(action).toEqual(HomeActions.dashboardLoaded({companies: mockCompanies()}));
+      expect(action).toEqual(HomeActions.showCompanies({companies: mockCompanies()}));
       expect(effects.createDummyCompanies).toHaveBeenCalled();
     });
   }));
