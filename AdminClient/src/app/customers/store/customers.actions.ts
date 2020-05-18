@@ -6,7 +6,7 @@ export const editCustomer = createAction(
     props<{ editedCustomer: CustomerModel }>()
 );
 
-export const editSupplierSuccess = createAction(
+export const editCustomerSuccess = createAction(
     '[Customers - Effects] Edit customer successfully',
     props<{ newCustomers: CustomerModel[] }>()
 );
@@ -39,7 +39,3 @@ export const deleteCustomer = createAction(
     '[Customer - Effects] Delete selected user'
 );
 
-export const editCustomerSuccess = createAction(
-    '[Customer - Effects] Edit Customer success',
-    props<{ newCustomers: CustomerModel[] }>()
-);

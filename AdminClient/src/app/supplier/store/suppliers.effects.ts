@@ -55,7 +55,7 @@ export class SuppliersEffects {
             }
         );
       })
-  ), {dispatch: false});
+  ), { dispatch: false });
 
   showEditSupplierDialog$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.showEditSupplier),
@@ -68,9 +68,9 @@ export class SuppliersEffects {
             }
         );
       })
-  ), {dispatch: false});
+  ), { dispatch: false });
 
-  loadAllClients$ = createEffect(() => this.actions$.pipe(
+  loadAllSuppliers$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.beginLoadingSuppliers),
       switchMap((action: Action) => of(this.loadAllClients()).pipe(delay(2000)))
       )
@@ -105,16 +105,17 @@ export class SuppliersEffects {
   loadAllClients(): Action {
     const allSuppliers = this.createDummyClients();
 
-    return SupplierActions.allSuppliersLoaded({suppliers: allSuppliers});
+    return SupplierActions.allSuppliersLoaded({ suppliers: allSuppliers });
   };
 
-  private editCustomer(editedSupplier: SupplierModel): Action {
+  private editSupplier(editedSupplier: SupplierModel): Action {
     let allSuppliers: SupplierModel[] = [];
     let supplierToEdit: SupplierModel;
 
     this.store$.select(fromSuppliers.selectFocusedSupplier)
         .pipe(take(1))
         .subscribe(supplier => supplierToEdit = supplier);
+
     this.store$.select(fromSuppliers.selectAllSuppliers)
         .pipe(take(1))
         .subscribe(suppliers => allSuppliers = [...suppliers]);
@@ -124,7 +125,7 @@ export class SuppliersEffects {
       id: supplierToEdit.id
     };
 
-    return SupplierActions.editSupplierSuccess({suppliers: allSuppliers});
+    return SupplierActions.editSupplierSuccess({ suppliers: allSuppliers });
   }
 
   private deleteSupplier(): Action {
@@ -133,13 +134,14 @@ export class SuppliersEffects {
 
     this.store$.select(fromSuppliers.selectAllSuppliers)
         .pipe(take(1))
-        .subscribe(suppliers => allSuppliers = suppliers);
+        .subscribe(s => allSuppliers = s);
+
     this.store$.select(fromSuppliers.selectFocusedSupplier)
         .pipe(take(1))
         .subscribe(supplier => currentSupplier = supplier);
 
     const suppliers = allSuppliers.filter(customer => customer.id !== currentSupplier.id);
 
-    return SupplierActions.deleteSupplierSuccess({suppliers});
+    return SupplierActions.deleteSupplierSuccess({ suppliers });
   }
 }
