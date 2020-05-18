@@ -35,7 +35,7 @@ export const selectFocusedSupplier = createSelector(
 );
 
 // eslint-disable-next-line no-underscore-dangle
-const _clientReducer: ActionReducer<State, Action> = createReducer(
+const _supplierReducer: ActionReducer<State, Action> = createReducer(
 	initialState,
 	on(SupplierActions.beginLoadingSuppliers, (prevState: State) => ({
 		...prevState,
@@ -71,4 +71,4 @@ const _clientReducer: ActionReducer<State, Action> = createReducer(
 	)
 );
 
-export const clientReducer = (state: State | undefined, action: Action) => _clientReducer(state, action);
+export const supplierReducer = (state: State | undefined, action: Action) => _supplierReducer(state, action);
