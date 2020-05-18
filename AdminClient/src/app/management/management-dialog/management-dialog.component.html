@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Customer Settings{{data.representative}}</h1>
+<div mat-dialog-content>
+  <p>Assigned Representative</p>
+
+  <mat-form-field>
+    <mat-label>e.g.: Connor Bigham</mat-label>
+    <input matInput [(ngModel)]="data.representative">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="cancel()">No Thanks</button>
+  <button mat-button (click)="confirm()" cdkFocusInitial>Ok</button>
+</div>
