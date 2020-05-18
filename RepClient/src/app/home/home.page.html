@@ -4,18 +4,32 @@
 <ion-content>
 	<ion-grid>
 		<ion-row id="mainContent" *ngIf="companies; else loading">
-			<ion-col size="6" *ngFor="let company of companies">
+			<!--In case companies are not undefined but empty-->
+			<ion-col size="12" *ngIf="companies.length === 0">
 				<ion-card>
-					<img [src]="company.imageUrl" alt=""/>
 					<ion-card-header>
 						<ion-card-subtitle></ion-card-subtitle>
-						<ion-card-title>{{company.name}}</ion-card-title>
+						<ion-card-title>No Suppliers registered yet</ion-card-title>
+					</ion-card-header>
+					<ion-card-content>
+						<p>We couldnt find any suppliers registered with you yet pelase contact your administrator
+						to add them!</p>
+					</ion-card-content>
+					<hr>
+				</ion-card>
+			</ion-col>
+			<ion-col size="6" *ngFor="let company of companies">
+				<ion-card>
+					<!--<img [src]="company.imageUrl" alt=""/>-->
+					<ion-card-header>
+						<ion-card-subtitle></ion-card-subtitle>
+						<ion-card-title>{{company.companyName}}</ion-card-title>
 					</ion-card-header>
 					<ion-card-content>
 						<p>{{company.description}}</p>
 					</ion-card-content>
 					<hr>
-					<ion-item (click)="loadCompaniesItems(company.name)">
+					<ion-item (click)="loadCompaniesItems(company.companyName)">
 						<ion-icon name="wifi" slot="start"></ion-icon>
 						<ion-label>Click me!</ion-label>
 					</ion-item>
