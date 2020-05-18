@@ -128,7 +128,7 @@ export class CompanyPage implements OnInit {
               this.store.dispatch(CompanyActions.companySelected({selectedCompany}));
             },
             listLabels: [
-              ...lastState.companies.map(c => c.name)
+              ...lastState.companies.map(c => c.companyName)
             ]
           }
         }
