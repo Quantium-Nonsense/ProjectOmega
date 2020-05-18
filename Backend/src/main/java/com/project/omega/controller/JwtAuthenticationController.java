@@ -34,7 +34,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin
 public class JwtAuthenticationController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 

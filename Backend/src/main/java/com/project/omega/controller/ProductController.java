@@ -5,6 +5,7 @@ import com.project.omega.bean.dao.entity.Product;
 import com.project.omega.bean.dto.ProductDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.ProductNotFoundException;
+import com.project.omega.exceptions.SupplierNotFoundException;
 import com.project.omega.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/api/product")
 public class ProductController {
     @Autowired
@@ -22,7 +24,7 @@ public class ProductController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity createProduct(@RequestBody ProductDTO product) throws NoRecordsFoundException {
+    public ResponseEntity createProduct(@RequestBody ProductDTO product) throws SupplierNotFoundException {
         Product newProduct = productService.createProduct(product);
         return new ResponseEntity(newProduct, HttpStatus.CREATED);
     }
