@@ -83,7 +83,7 @@ export class SuppliersEffects {
   ) {
   }
 
-  createDummyClients() {
+  createDummySuppliers() {
     const dummySuppliers: SupplierModel[] = [];
 
     for (let i = 0; i < 50; i++) {
