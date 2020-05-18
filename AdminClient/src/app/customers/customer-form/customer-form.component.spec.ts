@@ -1,11 +1,11 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { provideMockStore } from '@ngrx/store/testing';
 
-import {CustomerFormComponent} from './customer-form.component';
-import {provideMockStore} from '@ngrx/store/testing';
-import {MatDialogHarness} from '@angular/material/dialog/testing';
-import {MatDialogRef} from '@angular/material/dialog';
-import {HarnessLoader} from '@angular/cdk/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import { CustomerFormComponent } from './customer-form.component';
 
 describe('CustomerFormComponent', () => {
 	let component: CustomerFormComponent;
@@ -14,7 +14,7 @@ describe('CustomerFormComponent', () => {
 	let loader: HarnessLoader;
 	let documentLoader: HarnessLoader;
 
-	beforeEach(async(() => {
+	beforeEach(() => {
 		TestBed.configureTestingModule({
 				   declarations: [CustomerFormComponent],
 				   providers: [
@@ -31,7 +31,7 @@ describe('CustomerFormComponent', () => {
 				   ]
 			   })
 			   .compileComponents();
-	}));
+	});
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(CustomerFormComponent);
