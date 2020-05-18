@@ -26,8 +26,12 @@ public class SupplierController {
 
     @GetMapping(value = "/get")
     public ResponseEntity getAllSuppliers() throws NoRecordsFoundException {
-        List<Supplier> companies = supplierService.getAllSuppliers();
-        return new ResponseEntity(companies, HttpStatus.OK);
+        try{
+            List<Supplier> companies = supplierService.getAllSuppliers();
+            return new ResponseEntity(companies, HttpStatus.OK);
+        } catch (NoRecordsFoundException e){
+            return new ResponseEntity([], HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{id}")
