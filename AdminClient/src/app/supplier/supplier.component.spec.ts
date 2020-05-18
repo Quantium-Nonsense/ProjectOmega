@@ -3,7 +3,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 
 import { SupplierComponent } from './supplier.component';
 
-describe('ClientsComponent', () => {
+describe('SupplierComponent', () => {
   let component: SupplierComponent;
   let fixture: ComponentFixture<SupplierComponent>;
 
