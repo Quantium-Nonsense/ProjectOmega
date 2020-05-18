@@ -14,7 +14,7 @@ import * as fromSuppliers from './suppliers.reducer';
 
 @Injectable()
 export class SuppliersEffects {
-  deleteCustomer$ = createEffect(() => this.actions$.pipe(
+  deleteSupplier$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.deleteSupplier),
       switchMap((action: Action) => of(this.deleteSupplier()).pipe(
           delay(2000),
