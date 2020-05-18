@@ -5,9 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { State } from '../reducers';
-import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
 import * as AuthActions from './store/auth.actions';
 import * as fromAuth from './store/auth.reducer';
+import * as ToolbarActions from './../toolbar/store/toolbar.actions';
 
 @Component({
   selector: 'app-auth',
@@ -32,7 +32,6 @@ export class AuthComponent implements OnInit, OnDestroy {
   private returnUrl: string;
 
   constructor(
-      public loadingSpinnerService: LoadingSpinnerService,
       private route: ActivatedRoute,
       private router: Router,
       private store: Store<State>,
@@ -43,7 +42,6 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authForm = this.formInitialization();
-    this.loadingSpinnerService.observeNext(this.store.select(fromAuth.selectIsLoading));
     this.subscriptions.add(
         this.store.select('auth').subscribe((state: fromAuth.State) => {
           if (state.errorMessage) {
@@ -90,6 +88,7 @@ export class AuthComponent implements OnInit, OnDestroy {
    * Submit form
    */
   protected onSubmit(): void {
+    this.store.dispatch(ToolbarActions.beginProgressBar());
     this.store.dispatch(AuthActions.loginAttempt({
       email: this.authForm.get('email').value as string,
       password: this.authForm.get('password').value as string
