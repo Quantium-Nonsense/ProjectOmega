@@ -14,9 +14,12 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,6 +31,9 @@ public class ClientTestService extends OmegaApplicationTests {
 
     @InjectMocks
     ClientService clientService = new ClientServiceImpl();
+
+    @Autowired
+    MessageSource messages;
 
     @Test
     public void createClientTest() throws NoRecordsFoundException {
@@ -50,12 +56,41 @@ public class ClientTestService extends OmegaApplicationTests {
 
     @Test
     public void getAllClientsTest_Positive() throws NoRecordsFoundException {
-        
+        Client client_one = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirst_name("John")
+                .setLast_name("Doe")
+                .setDescription("Buys lots of things")
+                .setCompanyName("Lloyds")
+                .setEmail("a@a.com")
+                .setContactNumber("02088273729")
+                .setNotes("that's a random phone number")
+                .build();
+        Client client_two = new Client.ClientBuilder()
+                .setId(2L)
+                .setFirst_name("Jane")
+                .setLast_name("Smith")
+                .setDescription("Doesn't buy much")
+                .setCompanyName("Sdyoll")
+                .setEmail("b@b.com")
+                .setContactNumber("02088747643")
+                .setNotes("that's another random phone number")
+                .build();
+        Mockito.when(clientRepository.findAll()).thenReturn(Stream.of(client_one, client_two).collect(Collectors.toList()));
+        Assert.assertEquals(2, clientService.getAllClients().size());
+        Assert.assertTrue(clientService.getAllClients().contains(client_two));
+        Assert.assertTrue(clientService.getAllClients().contains(client_one));
     }
 
     @Test
     public void getAllClientsTest_Negative() throws NoRecordsFoundException {
-
+        Mockito.when(clientRepository.findAll()).thenReturn(new ArrayList<Client>());
+        try {
+            clientService.getAllClients();
+        } catch (NoRecordsFoundException e) {
+            Assert.assertTrue(clientRepository.findAll().isEmpty());
+            Assert.assertTrue(e.getMessage().equals(messages.getMessage("message.noRecords", null, null)));
+        }
     }
 
     @Test
