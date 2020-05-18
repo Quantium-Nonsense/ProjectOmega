@@ -1,7 +1,7 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {AppComponent} from './app.component';
-import {HarnessLoader} from '@angular/cdk/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
 	let loader: HarnessLoader;

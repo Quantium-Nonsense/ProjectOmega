@@ -36,6 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/api/order")
 public class OrderController {
     @Autowired
@@ -102,7 +103,7 @@ public class OrderController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity fetchOrderById(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
+    public ResponseEntity fetchOrderById(@PathVariable(value = "id") Long id) throws OrderNotFoundException {
         Order order = orderService.getOrderById(id);
         return new ResponseEntity(order, HttpStatus.OK);
     }

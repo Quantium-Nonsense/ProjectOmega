@@ -1,22 +1,22 @@
-import {ActionReducer, ActionReducerMap, MetaReducer} from '@ngrx/store';
-import {environment} from '../../environments/environment';
+import { ActionReducer, ActionReducerMap, MetaReducer } from '@ngrx/store';
+import { environment } from '../../environments/environment';
 import * as fromAuth from '../auth/store/auth.reducer';
-import * as fromUser from '../user/store/user.reducer';
 import * as fromCustomers from '../customers/store/customers.reducer';
-import * as fromClients from '../supplier/store/suppliers.reducer';
+import * as fromToolbar from '../toolbar/store/toolbar.reducer';
+import * as fromUser from '../user/store/user.reducer';
 
 export interface State {
-	auth: fromAuth.State;
-	user: fromUser.State;
-	customers: fromCustomers.State,
-	suppliers: fromClients.State
+  auth: fromAuth.State;
+  user: fromUser.State;
+  customers: fromCustomers.State;
+  toolbar: fromToolbar.State;
 }
 
 export const appReducer: ActionReducerMap<State> = {
-	auth: fromAuth.authReducer,
-	user: fromUser.userReducer,
-	customers: fromCustomers.customerReducer,
-	suppliers: fromClients.clientReducer
+  auth: fromAuth.authReducer,
+  user: fromUser.userReducer,
+  customers: fromCustomers.customerReducer,
+  toolbar: fromToolbar.toolbarReducer,
 };
 
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>

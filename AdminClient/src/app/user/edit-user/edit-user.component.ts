@@ -65,7 +65,7 @@ export class EditUserComponent implements OnInit, AfterContentInit, OnDestroy {
     return this.userForm.get('email').invalid;
   }
 
-  protected isFormValid(): boolean {
+  isFormValid(): boolean {
     return this.userForm.valid;
   }
 

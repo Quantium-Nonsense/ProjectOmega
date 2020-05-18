@@ -1,13 +1,13 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import {Store} from '@ngrx/store';
-import {Observable, Subscription} from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import * as fromApp from '../reducers/index';
-import {LoadingSpinnerService} from '../services/loading-spinner/loading-spinner.service';
-import {UserModel} from '../shared/model/user/user.model';
-import * as fromUser from './store/user.reducer';
+import { UserModel } from '../shared/model/user.model';
+import * as ToolbarActions from '../toolbar/store/toolbar.actions';
 import * as UserActions from './store/user.actions';
+import * as fromUser from './store/user.reducer';
 
 @Component({
   selector: 'app-user',
@@ -16,9 +16,8 @@ import * as UserActions from './store/user.actions';
 })
 export class UserComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  isLoading: Observable<boolean>;
   users: MatTableDataSource<UserModel> = new MatTableDataSource<UserModel>([]);
   displayColumns: string[];
 
@@ -26,16 +25,21 @@ export class UserComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store<fromApp.State>,
-    private spinnerService: LoadingSpinnerService,
   ) {
     this.displayColumns = ['email', 'role', 'companyId', 'actions'];
     this.subscription = new Subscription();
   }
 
   ngOnInit(): void {
+    this.store.dispatch(ToolbarActions.beginProgressBar());
     this.store.dispatch(UserActions.beginLoadingUserPage());
-    this.isLoading = this.store.select(fromUser.selectIsLoading);
-    this.spinnerService.observeNext(this.store.select(fromUser.selectIsLoading));
+    this.subscription.add(
+      this.store.select(fromUser.selectIsLoading).subscribe(isLoading => {
+        if (!isLoading) {
+          this.store.dispatch(ToolbarActions.stopProgressBar());
+        }
+      })
+    );
     this.subscription.add(
       this.store.select(fromUser.selectUsers).subscribe((users: UserModel[]) => {
         if (!users) {
@@ -59,10 +63,10 @@ export class UserComponent implements OnInit, OnDestroy {
   };
 
   editUser(user: UserModel) {
-    this.store.dispatch(UserActions.showEditUserModal({user}));
+    this.store.dispatch(UserActions.showEditUserModal({ user }));
   }
 
   deleteUser(user: UserModel) {
-    this.store.dispatch(UserActions.showDeleteUserDialog({user}));
+    this.store.dispatch(UserActions.showDeleteUserDialog({ user }));
   }
 }
