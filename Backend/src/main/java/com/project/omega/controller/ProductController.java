@@ -42,26 +42,46 @@ public class ProductController {
     }
 
     @GetMapping(value = "/gt/{price}")
-    public ResponseEntity getByPriceGt(@PathVariable(value = "price") int price) throws NoRecordsFoundException {
-        List<Product> products = productService.getProductsAbovePrice(price);
+    public ResponseEntity getByPriceGt(@PathVariable(value = "price") int price) {
+        List<Product> products = null;
+        try {
+            products = productService.getProductsAbovePrice(price);
+        } catch (NoRecordsFoundException e) {
+            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+        }
         return new ResponseEntity(products, HttpStatus.OK);
     }
 
     @GetMapping(value = "/lt/{price}")
-    public ResponseEntity getByPriceLt(@PathVariable(value = "price") int price) throws NoRecordsFoundException {
-        List<Product> products = productService.getProductsBelowPrice(price);
+    public ResponseEntity getByPriceLt(@PathVariable(value = "price") int price) {
+        List<Product> products = null;
+        try {
+            products = productService.getProductsBelowPrice(price);
+        } catch (NoRecordsFoundException e) {
+            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+        }
         return new ResponseEntity(products, HttpStatus.OK);
     }
 
     @GetMapping(value = "/eq/{price}")
-    public ResponseEntity getByPriceEq(@PathVariable(value = "price") int price) throws NoRecordsFoundException {
-        List<Product> products = productService.getProductsEqualPrice(price);
+    public ResponseEntity getByPriceEq(@PathVariable(value = "price") int price) {
+        List<Product> products = null;
+        try {
+            products = productService.getProductsEqualPrice(price);
+        } catch (NoRecordsFoundException e) {
+            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+        }
         return new ResponseEntity(products, HttpStatus.OK);
     }
 
     @GetMapping(value = "/search/{name}")
-    public ResponseEntity getBySearchQuery(@PathVariable(value = "name") String name) throws NoRecordsFoundException {
-        List<Product> products = productService.getProductsBySearchQuery(name);
+    public ResponseEntity getBySearchQuery(@PathVariable(value = "name") String name) {
+        List<Product> products = null;
+        try {
+            products = productService.getProductsBySearchQuery(name);
+        } catch (NoRecordsFoundException e) {
+            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+        }
         return new ResponseEntity(products, HttpStatus.OK);
     }
 
@@ -78,8 +98,13 @@ public class ProductController {
     }
 
     @GetMapping(value = "/supplier/{id}")
-    public ResponseEntity getBySupplierId(@PathVariable(value = "id") Long id) throws NoRecordsFoundException {
-        List<Product> products = productService.getProductsBySupplier(id);
+    public ResponseEntity getBySupplierId(@PathVariable(value = "id") Long id) {
+        List<Product> products = null;
+        try {
+            products = productService.getProductsBySupplier(id);
+        } catch (NoRecordsFoundException e) {
+            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+        }
         return new ResponseEntity(products, HttpStatus.OK);
     }
 }

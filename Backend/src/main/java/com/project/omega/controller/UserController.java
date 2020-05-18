@@ -27,8 +27,13 @@ public class UserController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping(value = "/get")
-    public ResponseEntity getUsers() throws NoRecordsFoundException {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity getUsers() {
+        List<User> users = null;
+        try {
+            users = userService.getAllUsers();
+        } catch (NoRecordsFoundException e) {
+            return ResponseEntity.status(HttpStatus.OK).body("No users found.");
+        }
         List<UserResponse> u = users.stream().map(user -> {
            UserResponse r = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
            return r;
