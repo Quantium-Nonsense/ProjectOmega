@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import * as fromApp from '../reducers/index';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import * as fromSuppliers from './store/suppliers.reducer';
-import { MatTableDataSource } from '@angular/material/table';
+import * as fromApp from '../reducers/index';
 import { SupplierModel } from '../shared/model/supplier/supplier.model';
-import { MatPaginator } from '@angular/material/paginator';
 import * as SupplierActions from './store/suppliers.actions';
+import * as fromSuppliers from './store/suppliers.reducer';
 
 @Component({
   selector: 'app-suppliers',
@@ -55,10 +55,10 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   editSupplier(supplier: SupplierModel) {
-    this.store$.dispatch(SupplierActions.showEditSupplier({ focusedSupplier: supplier }));
+    this.store$.dispatch(SupplierActions.showEditSupplier({focusedSupplier: supplier}));
   }
 
   deleteSupplier(supplier: SupplierModel) {
-    this.store$.dispatch(SupplierActions.showDeleteSupplier({ focusedSupplier: supplier }));
+    this.store$.dispatch(SupplierActions.showDeleteSupplier({focusedSupplier: supplier}));
   }
 }
