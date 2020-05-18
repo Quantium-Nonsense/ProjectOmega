@@ -10,11 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.ArrayList;
 
-@CrossOrigin
 @RestController
 @RequestMapping(value = "/api/supplier")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SupplierController {
     @Autowired
     SupplierService supplierService;
@@ -26,13 +25,9 @@ public class SupplierController {
     }
 
     @GetMapping(value = "/get")
-    public ResponseEntity getAllSuppliers() {
-        try{
-            List<Supplier> companies = supplierService.getAllSuppliers();
-            return new ResponseEntity(companies, HttpStatus.OK);
-        } catch (NoRecordsFoundException e){
-            return new ResponseEntity(new ArrayList<Supplier>(), HttpStatus.OK);
-        }
+    public ResponseEntity getAllSuppliers() throws NoRecordsFoundException {
+        List<Supplier> companies = supplierService.getAllSuppliers();
+        return new ResponseEntity(companies, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
