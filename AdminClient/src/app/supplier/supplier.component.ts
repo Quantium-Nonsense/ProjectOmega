@@ -10,7 +10,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import * as SupplierActions from './store/suppliers.actions';
 
 @Component({
-  selector: 'app-clients',
+  selector: 'app-suppliers',
   templateUrl: './suppliers.component.html',
   styleUrls: ['./supplier.component.scss']
 })
