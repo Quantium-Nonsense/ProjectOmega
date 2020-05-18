@@ -11,7 +11,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
-import { BrowserModule } from '@angular/platform-browser';
 import { PopupDialogComponent } from './components/popup-dialog/popup-dialog.component';
 import { TableFilterComponent } from './components/table-filter/table-filter.component';
 
@@ -32,13 +31,11 @@ import { TableFilterComponent } from './components/table-filter/table-filter.com
     MatPaginatorModule,
     MatIconModule,
     MatMenuModule,
-    BrowserModule,
     TextFieldModule
   ],
   exports: [
     FlexLayoutModule,
     CommonModule,
-    BrowserModule,
     TableFilterComponent,
     MatFormFieldModule,
     MatInputModule,
