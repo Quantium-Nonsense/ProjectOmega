@@ -30,7 +30,7 @@ public class SupplierController {
             List<Supplier> companies = supplierService.getAllSuppliers();
             return new ResponseEntity(companies, HttpStatus.OK);
         } catch (NoRecordsFoundException e){
-            return new ResponseEntity([], HttpStatus.OK);
+            return new ResponseEntity(new ArrayList<Supplier>(), HttpStatus.OK);
         }
     }
 
