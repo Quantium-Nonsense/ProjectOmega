@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { selectCompany } from '../company/store/company.reducer';
 import { selectAllCompaniesNames } from '../home/store/home.reducer';
 import * as fromHome from '../home/store/home.reducer';
-import { CompanyModel } from '../shared/model/home/company.model';
+import { SupplierModel } from '../shared/model/home/supplier.model';
 import { ItemsByCompanyModel } from '../shared/model/order/items-by-company.model';
 import * as CompanyActions from './../company/store/company.actions';
 import * as fromApp from './../reducers/index';

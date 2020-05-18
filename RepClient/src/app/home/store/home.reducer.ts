@@ -1,10 +1,10 @@
 import { Action, createReducer, createSelector, on } from '@ngrx/store';
 import * as fromApp from '../../reducers/index';
-import { CompanyModel } from '../../shared/model/home/company.model';
+import { SupplierModel } from '../../shared/model/home/supplier.model';
 import * as HomeActions from './home.actions';
 
 export interface State {
-  companies: CompanyModel[];
+  companies: SupplierModel[];
   errorMessage: string;
   loading: boolean;
 }

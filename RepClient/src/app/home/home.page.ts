@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { State } from '../reducers';
-import { CompanyModel } from '../shared/model/home/company.model';
+import { SupplierModel } from '../shared/model/home/supplier.model';
 import * as CompanyActions from './../company/store/company.actions';
 import * as HomeActions from './store/home.actions';
 
@@ -12,7 +12,7 @@ import * as HomeActions from './store/home.actions';
   templateUrl: 'home.page.html'
 })
 export class HomePage {
-  companies: CompanyModel[];
+  companies: SupplierModel[];
 
   private subscriptions: Subscription;
 

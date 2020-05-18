@@ -6,7 +6,7 @@ import { Action } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { catchError, delay, map, switchMap } from 'rxjs/operators';
 import { ApiEndpointCreatorService } from '../../services/api-endpoint-creator.service';
-import { CompanyModel } from '../../shared/model/home/company.model';
+import { SupplierModel } from '../../shared/model/home/supplier.model';
 import * as HomeActions from './home.actions';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class HomeEffects {
       ofType(HomeActions.beginLoadingDashboard),
       switchMap(
           (action: Action) => this.getAllCompanies().pipe(
-              switchMap((companies: CompanyModel[]) =>
+              switchMap((companies: SupplierModel[]) =>
                   [HomeActions.showCompanies({companies}), HomeActions.dashboardDoneLoading()]),
               catchError((error: HttpErrorResponse) => {
                 return [
@@ -45,8 +45,8 @@ export class HomeEffects {
   ) {
   }
 
-  getAllCompanies(): Observable<CompanyModel[]> {
-    return this.http.get<CompanyModel[]>(this.endPoints.allCompanies, {
+  getAllCompanies(): Observable<SupplierModel[]> {
+    return this.http.get<SupplierModel[]>(this.endPoints.allCompanies, {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -66,12 +66,12 @@ export class HomeEffects {
   /**
    * Creates 4 dummy companies
    */
-  createDummyCompanies = (): CompanyModel[] => {
+  createDummyCompanies = (): SupplierModel[] => {
     const imageUrl = 'assets/shapes.svg';
-    const companies: CompanyModel[] = [];
+    const companies: SupplierModel[] = [];
 
     for (let i = 0; i < 4; i++) {
-      companies.push(new CompanyModel(`Company ${ i }`, imageUrl, `Some fantastic company called ${ i }!`));
+      companies.push(new SupplierModel(`Company ${ i }`, imageUrl, `Some fantastic company called ${ i }!`));
     }
 
     return companies;
