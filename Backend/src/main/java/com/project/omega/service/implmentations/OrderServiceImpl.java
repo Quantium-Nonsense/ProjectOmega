@@ -33,10 +33,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderById(Long id) throws NoRecordsFoundException {
+    public Order getOrderById(Long id) throws OrderNotFoundException {
             Optional<Order> order = orderRepository.findById(id);
             if (!order.isPresent()){
-                throw new NoRecordsFoundException(messages.getMessage("message.orderNotFound" , null, null));
+                throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
             }
             return order.get();
     }
@@ -52,9 +52,9 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    public Order updateOrderById (Long id, Order order) throws NoRecordsFoundException {
+    public Order updateOrderById (Long id, Order order) throws OrderNotFoundException {
       if (!orderRepository.existsById(id)) {
-        throw new NoRecordsFoundException(messages.getMessage("message.orderNotFound" , null, null));
+        throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
       }
         orderRepository.save(order);
         return order;
