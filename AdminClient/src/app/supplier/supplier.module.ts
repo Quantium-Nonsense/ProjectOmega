@@ -12,7 +12,7 @@ import { SupplierComponent } from './supplier.component';
   imports: [
     SharedModule,
     SupplierRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class SupplierModule {

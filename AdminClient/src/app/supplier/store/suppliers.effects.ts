@@ -1,13 +1,17 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
 import * as fromApp from '../../reducers/index';
+import { ApiPathService } from '../../services/api-path.service';
 import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
+import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import { SupplierFormComponent } from '../supplier-form/supplier-form.component';
 import * as SupplierActions from './suppliers.actions';
 import * as fromSuppliers from './suppliers.reducer';
@@ -28,6 +32,16 @@ export class SuppliersEffects {
         return of(this.editSupplier(action.editedSupplier)).pipe(delay(2000));
       })
   ));
+
+  showErrorMessage$ = createEffect(
+      () => this.actions$.pipe(
+          ofType(SupplierActions.showErrorMessage),
+          map((action: Action & { error: string }) => {
+            this.toast.open(`An error has occurred: ${ action.error }`, null, {
+              duration: 3000
+            });
+          })
+      ), { dispatch: false });
 
   showDeleteSupplierDialog$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.showDeleteSupplier),
@@ -72,22 +86,34 @@ export class SuppliersEffects {
 
   loadAllSuppliers$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.beginLoadingSuppliers),
-      switchMap((action: Action) => null)
-      )
+      switchMap((action: Action) => this.httpGetAllSuppliers().pipe(
+          switchMap(suppliers => [
+            SupplierActions.allSuppliersLoaded({ suppliers }),
+            ToolbarActions.stopProgressBar()
+          ]),
+          catchError((error: HttpErrorResponse) => {
+            return [
+              ToolbarActions.stopProgressBar(),
+              SupplierActions.showErrorMessage({ error: error.message })
+            ];
+          })
+      )))
   );
 
   constructor(
       private dialog: MatDialog,
       private actions$: Actions,
+      private http: HttpClient,
+      private toast: MatSnackBar,
+      private endPoint: ApiPathService,
       private store$: Store<fromApp.State>
   ) {
   }
 
-  loadAllSuppliers(): Action {
-    const allSuppliers = this.createDummySuppliers();
-
-    return SupplierActions.allSuppliersLoaded({ suppliers: allSuppliers });
+  httpGetAllSuppliers(): Observable<SupplierModel[]> {
+    return this.http.get<SupplierModel[]>(this.endPoint.allSuppliers);
   };
+
 
   private editSupplier(editedSupplier: SupplierModel): Action {
     let allSuppliers: SupplierModel[] = [];

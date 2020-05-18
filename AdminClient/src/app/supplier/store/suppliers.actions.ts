@@ -1,6 +1,11 @@
 import { createAction, props } from '@ngrx/store';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 
+export const showErrorMessage = createAction(
+    '[Suppliers - Effects] Has error message to show',
+    props<{ error: string }>()
+);
+
 export const beginLoadingSuppliers = createAction(
     '[Suppliers - Component] Begin loading all suppliers'
 );

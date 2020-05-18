@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import * as fromApp from '../reducers/index';
 import { SupplierModel } from '../shared/model/supplier/supplier.model';
+import * as ToolbarActions from '../toolbar/store/toolbar.actions';
 import * as SupplierActions from './store/suppliers.actions';
 import * as fromSuppliers from './store/suppliers.reducer';
 
@@ -31,6 +32,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Load all supplier
+    this.store$.dispatch(ToolbarActions.beginProgressBar());
     this.store$.dispatch(SupplierActions.beginLoadingSuppliers());
     this.isLoading = this.store$.select(fromSuppliers.selectIsLoading);
     this.sub.add(
@@ -47,11 +49,13 @@ export class SupplierComponent implements OnInit, OnDestroy {
 
 
   filterActions(data: SupplierModel, filterValue: string): boolean {
-    return data.email.toLowerCase().includes(filterValue)
-        || data.notes.toLowerCase().includes(filterValue)
-        || data.lastName.toLowerCase().includes(filterValue)
-        || data.firstName.toLowerCase().includes(filterValue)
-        || data.description.toLowerCase().includes(filterValue);
+    if (data && filterValue) {
+      return data.email.toLowerCase().includes(filterValue)
+             || data.notes.toLowerCase().includes(filterValue)
+             || data.lastName.toLowerCase().includes(filterValue)
+             || data.firstName.toLowerCase().includes(filterValue)
+             || data.description.toLowerCase().includes(filterValue);
+    }
   }
 
   editSupplier(supplier: SupplierModel) {

@@ -1,5 +1,6 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +23,7 @@ import { TableFilterComponent } from './components/table-filter/table-filter.com
   imports: [
     FlexLayoutModule,
     CommonModule,
+    HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
@@ -34,6 +36,7 @@ import { TableFilterComponent } from './components/table-filter/table-filter.com
     TextFieldModule
   ],
   exports: [
+    HttpClientModule,
     FlexLayoutModule,
     CommonModule,
     TableFilterComponent,

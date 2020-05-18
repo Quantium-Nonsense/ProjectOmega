@@ -41,15 +41,14 @@ const _supplierReducer: ActionReducer<State, Action> = createReducer(
       ...prevState,
       loading: true
     })),
-    on(SupplierActions.allSuppliersLoaded, (prevState: State, {suppliers}) => ({
+    on(SupplierActions.allSuppliersLoaded, (prevState: State, { suppliers }) => ({
       ...prevState,
-      loading: false,
       suppliers
     })),
     on(
         SupplierActions.showEditSupplier,
         SupplierActions.showDeleteSupplier,
-        (prevState: State, {focusedSupplier}) => ({
+        (prevState: State, { focusedSupplier }) => ({
           ...prevState,
           focusedSupplier
         })),
@@ -63,7 +62,7 @@ const _supplierReducer: ActionReducer<State, Action> = createReducer(
     on(
         SupplierActions.editSupplierSuccess,
         SupplierActions.deleteSupplierSuccess,
-        (prevState: State, {suppliers}) => ({
+        (prevState: State, { suppliers }) => ({
           ...prevState,
           loading: false,
           suppliers

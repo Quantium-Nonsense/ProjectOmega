@@ -22,13 +22,14 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 
 import { AuthEffects } from './auth/store/auth.effects';
+import { CustomersEffects } from './customers/store/customers.effects';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { appReducer, metaReducers } from './reducers';
 import { SharedModule } from './shared/shared.module';
-import { UserEffects } from './user/store/user.effects';
-import { CustomersEffects } from './customers/store/customers.effects';
-import { ToolbarComponent } from './toolbar/toolbar.component';
+import { SuppliersEffects } from './supplier/store/suppliers.effects';
 import { ToolbarEffects } from './toolbar/store/toolbar.effects';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { UserEffects } from './user/store/user.effects';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -49,7 +50,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
       AuthEffects,
       UserEffects,
       CustomersEffects,
-      ToolbarEffects
+      ToolbarEffects,
+      SuppliersEffects
     ]),
     FormsModule,
     JwtModule.forRoot({
