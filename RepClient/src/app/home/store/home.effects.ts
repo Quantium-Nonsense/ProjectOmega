@@ -18,11 +18,6 @@ export class HomeEffects {
               switchMap((companies: CompanyModel[]) =>
                   [HomeActions.showCompanies({companies}), HomeActions.dashboardDoneLoading()]),
               catchError((error: HttpErrorResponse) => {
-                if (error.status === 400) {
-                  // Appreantly apis return error if its succesful but no records so we need to account for that
-                  return [HomeActions.showCompanies({companies: []})];
-                }
-
                 return [
                   HomeActions.dashboardDoneLoading(),
                   HomeActions.dashboardHasError({error: error.message})
@@ -51,7 +46,12 @@ export class HomeEffects {
   }
 
   getAllCompanies(): Observable<CompanyModel[]> {
-    return this.http.get<CompanyModel[]>(this.endPoints.allCompanies);
+    return this.http.get<CompanyModel[]>(this.endPoints.allCompanies, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
   }
 
   /**
