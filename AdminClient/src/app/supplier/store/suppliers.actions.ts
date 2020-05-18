@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 
 export const beginLoadingSuppliers = createAction(
-    '[Suppliers - Component] Load all suppliers'
+    '[Suppliers - Component] Begin loading all suppliers'
 );
 
 export const allSuppliersLoaded = createAction(
