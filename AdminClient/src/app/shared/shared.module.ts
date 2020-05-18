@@ -15,39 +15,39 @@ import { PopupDialogComponent } from './components/popup-dialog/popup-dialog.com
 import { TableFilterComponent } from './components/table-filter/table-filter.component';
 
 @NgModule({
-	declarations: [
-		TableFilterComponent,
-		PopupDialogComponent
-	],
-	imports: [
-		FlexLayoutModule,
-		CommonModule,
-		MatFormFieldModule,
-		MatInputModule,
-		MatDialogModule,
-		MatButtonModule,
-		MatProgressBarModule,
-		MatTableModule,
-		MatPaginatorModule,
-		MatIconModule,
-		MatMenuModule,
-		TextFieldModule,
-	],
-	exports: [
-		FlexLayoutModule,
-		CommonModule,
-		TableFilterComponent,
-		MatFormFieldModule,
-		MatInputModule,
-		MatDialogModule,
-		MatButtonModule,
-		MatProgressBarModule,
-		MatTableModule,
-		MatPaginatorModule,
-		MatIconModule,
-		MatMenuModule,
-		TextFieldModule
-	]
+  declarations: [
+    TableFilterComponent,
+    PopupDialogComponent
+  ],
+  imports: [
+    FlexLayoutModule,
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatMenuModule,
+    TextFieldModule
+  ],
+  exports: [
+    FlexLayoutModule,
+    CommonModule,
+    TableFilterComponent,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatMenuModule,
+    TextFieldModule
+  ]
 
 })
 export class SharedModule {

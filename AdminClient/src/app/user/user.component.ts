@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import * as fromApp from '../reducers/index';
-import { UserModel } from '../shared/model/user.model';
+import { UserModel } from '../shared/model/user/user.model';
 import * as ToolbarActions from '../toolbar/store/toolbar.actions';
 import * as UserActions from './store/user.actions';
 import * as fromUser from './store/user.reducer';

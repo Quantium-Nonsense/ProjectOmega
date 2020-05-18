@@ -3,7 +3,6 @@ package com.project.omega.controller;
 import com.project.omega.bean.dao.auth.JwtRequest;
 import com.project.omega.bean.dao.auth.JwtResponse;
 import com.project.omega.bean.dao.auth.Privilege;
-import com.project.omega.bean.dao.auth.Token;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.PasswordDTO;
 import com.project.omega.bean.dto.UserDTO;
@@ -74,42 +73,9 @@ public class JwtAuthenticationController {
                 .setPassword(user.getPassword())
                 .build();
 
-        String jwtToken = authenticationService.createJWTToken(jwtRequest);
-
-        userService.createVerificationTokenForUser(jwtToken, newUser);
-
         UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
 
         return new ResponseEntity(userMap, HttpStatus.CREATED);
-    }
-
-    @SuppressWarnings("unchecked")
-    @GetMapping("/api/confirmRegistration")
-    public ResponseEntity confirmRegistration(@RequestParam("token") final String token) {
-        final String information = userService.validateVerificationToken(token);
-        if (information.equals("valid")) {
-            final User user = userService.getUser(token);
-            authenticationWithoutPassword(user);
-            return new ResponseEntity(
-                    new GenericResponse(messages.getMessage("message.accountVerified", null, null)),
-                    HttpStatus.OK);
-        }
-        Properties properties = new Properties();
-        properties.setProperty("message", messages.getMessage("auth.message." + information, null, null));
-        properties.setProperty("expired", String.valueOf("expired".equals(information)));
-        properties.setProperty("token", token);
-        return new ResponseEntity(new GenericResponse(properties), HttpStatus.NOT_FOUND);
-    }
-
-    @SuppressWarnings("unchecked")
-    @GetMapping("/api/resendRegistrationToken")
-    public ResponseEntity resendRegistrationToken(@RequestParam("token") final String existingToken) {
-        Token newVerificationToken = userService.generateNewVerificationToken(existingToken);
-        final User user = userService.getUser(newVerificationToken.getToken());
-        Properties properties = new Properties();
-        properties.setProperty("message", messages.getMessage("message.resendToken", null, null));
-        properties.setProperty("newToken", newVerificationToken.getToken());
-        return new ResponseEntity(new GenericResponse(properties), HttpStatus.OK);
     }
 
     /*To be Used When the User DOES NOT remember their password*/

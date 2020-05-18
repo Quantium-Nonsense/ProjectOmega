@@ -1,4 +1,3 @@
-<h2 mat-dialog-title>Edit user</h2>
 <button class="close"
         mat-icon-button
         (click)="cancel()">
@@ -137,12 +136,12 @@
 </form>
 <mat-dialog-actions>
     <button color="primary"
-            [disabled]="isLoading | async"
+            [disabled]="isLoading"
             mat-stroked-button
             (click)="submitForm()">Confirm
     </button>
     <button color="warn"
-            [disabled]="isLoading | async"
+            [disabled]="isLoading"
             mat-stroked-button
             (click)="cancel()">Cancel
     </button>

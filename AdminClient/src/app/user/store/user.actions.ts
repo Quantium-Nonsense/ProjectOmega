@@ -1,5 +1,5 @@
-import { createAction, props } from '@ngrx/store';
-import { UserModel } from '../../shared/model/user.model';
+import {createAction, props} from '@ngrx/store';
+import {UserModel} from '../../shared/model/user/user.model';
 
 export const userSuccessfullyEdited = createAction(
   '[Edit User - Effect] User successfully changed',
