@@ -25,7 +25,7 @@ export class SuppliersEffects {
   editSupplier$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.editSupplier),
       switchMap((action: Action & { editedSupplier: SupplierModel }) => {
-        return of(this.editCustomer(action.editedSupplier)).pipe(delay(2000));
+        return of(this.editSupplier(action.editedSupplier)).pipe(delay(2000));
       })
   ));
 
@@ -103,7 +103,7 @@ export class SuppliersEffects {
   }
 
   loadAllSuppliers(): Action {
-    const allSuppliers = this.createDummyClients();
+    const allSuppliers = this.createDummySuppliers();
 
     return SupplierActions.allSuppliersLoaded({ suppliers: allSuppliers });
   };
