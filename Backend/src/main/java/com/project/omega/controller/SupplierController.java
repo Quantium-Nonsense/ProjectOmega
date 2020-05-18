@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,7 +32,7 @@ public class SupplierController {
         try {
             companies = supplierService.getAllSuppliers();
         } catch (NoRecordsFoundException e) {
-            return ResponseEntity.status(HttpStatus.OK).body("No suppliers found.");
+            return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity(companies, HttpStatus.OK);
     }

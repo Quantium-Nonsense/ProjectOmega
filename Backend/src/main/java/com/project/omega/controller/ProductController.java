@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,7 +48,7 @@ public class ProductController {
         try {
             products = productService.getProductsAbovePrice(price);
         } catch (NoRecordsFoundException e) {
-            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+            new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity(products, HttpStatus.OK);
     }
@@ -69,7 +70,7 @@ public class ProductController {
         try {
             products = productService.getProductsEqualPrice(price);
         } catch (NoRecordsFoundException e) {
-            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+            return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity(products, HttpStatus.OK);
     }
@@ -80,7 +81,7 @@ public class ProductController {
         try {
             products = productService.getProductsBySearchQuery(name);
         } catch (NoRecordsFoundException e) {
-            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+            return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity(products, HttpStatus.OK);
     }
@@ -103,7 +104,7 @@ public class ProductController {
         try {
             products = productService.getProductsBySupplier(id);
         } catch (NoRecordsFoundException e) {
-            return ResponseEntity.status(HttpStatus.OK).body("No products found.");
+            return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
         }
         return new ResponseEntity(products, HttpStatus.OK);
     }

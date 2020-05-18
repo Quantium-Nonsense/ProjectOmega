@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +33,13 @@ public class UserController {
         try {
             users = userService.getAllUsers();
         } catch (NoRecordsFoundException e) {
-            return ResponseEntity.status(HttpStatus.OK).body("No users found.");
+            return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
         }
         List<UserResponse> u = users.stream().map(user -> {
            UserResponse r = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
            return r;
         }).collect(Collectors.toList());
-        return new ResponseEntity(users, HttpStatus.CREATED);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
