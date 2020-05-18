@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { delay, switchMap, tap, withLatestFrom } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
+import {Action, Store} from '@ngrx/store';
+import {of} from 'rxjs';
+import {delay, switchMap, tap, withLatestFrom} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 import * as AuthActions from '../store/auth.actions';
-import { State } from './auth.reducer';
+import {State} from './auth.reducer';
 
 @Injectable()
 export class AuthEffects {

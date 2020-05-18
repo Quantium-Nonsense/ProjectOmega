@@ -1,5 +1,5 @@
-import {CustomerModel} from '../../models/customers/customer.model';
-import {Action, createFeatureSelector, createReducer, createSelector, on} from '@ngrx/store';
+import { CustomerModel } from '../../models/customers/customer.model';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import * as CustomerActions from './customers.actions';
 import * as fromApp from '../../reducers/index';
 
@@ -38,7 +38,7 @@ const reducer = createReducer(
 		...prevState,
 		loading: true
 	})),
-	on(CustomerActions.customersLoaded, (prevState: State, {customers}) => ({
+	on(CustomerActions.customersLoaded, (prevState: State, { customers }) => ({
 		...prevState,
 		loading: false,
 		customers
@@ -53,14 +53,14 @@ const reducer = createReducer(
 	on(
 		CustomerActions.showDeleteCustomerDialog,
 		CustomerActions.showEditCustomerDialog,
-		(prevState: State, {customer}) => ({
+		(prevState: State, { customer }) => ({
 			...prevState,
 			selectedCustomer: customer
 		})),
 	on(
 		CustomerActions.customerDeletedSuccess,
 		CustomerActions.editCustomerSuccess,
-		(prevState: State, {newCustomers}) => ({
+		(prevState: State, { newCustomers }) => ({
 		...prevState,
 		loading: false,
 		customers: newCustomers

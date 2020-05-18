@@ -12,12 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/api/user")
 public class UserController {
     @Autowired
@@ -26,13 +28,18 @@ public class UserController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @GetMapping(value = "/get")
-    public ResponseEntity getUsers() throws NoRecordsFoundException {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity getUsers() {
+        List<User> users = null;
+        try {
+            users = userService.getAllUsers();
+        } catch (NoRecordsFoundException e) {
+            return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
+        }
         List<UserResponse> u = users.stream().map(user -> {
            UserResponse r = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
            return r;
         }).collect(Collectors.toList());
-        return new ResponseEntity(users, HttpStatus.CREATED);
+        return new ResponseEntity(users, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")

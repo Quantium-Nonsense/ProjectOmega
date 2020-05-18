@@ -6,6 +6,7 @@ import com.project.omega.bean.dto.ProductDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 
 import com.project.omega.exceptions.ProductNotFoundException;
+import com.project.omega.exceptions.SupplierNotFoundException;
 import com.project.omega.repository.ProductRepository;
 import com.project.omega.repository.SupplierRepository;
 import com.project.omega.service.interfaces.ProductService;
@@ -31,7 +32,7 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     MessageSource messages;
 
-    public Product createProduct(ProductDTO productDTO) throws NoRecordsFoundException {
+    public Product createProduct(ProductDTO productDTO) throws SupplierNotFoundException {
         Supplier supplier = supplierService.getSupplierById(productDTO.getSupplierId());
         Product product = new Product.ProductBuilder()
                 .setName(productDTO.getName())
