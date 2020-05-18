@@ -169,7 +169,19 @@ public class ClientTestService extends OmegaApplicationTests {
 
     @Test
     public void deleteClientByIdTest() throws ClientNotFoundException {
-
+        Client client = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirst_name("John")
+                .setLast_name("Doe")
+                .setDescription("Buys lots of things")
+                .setCompanyName("Lloyds")
+                .setEmail("a@a.com")
+                .setContactNumber("02088273729")
+                .setNotes("that's a random phone number")
+                .build();
+        Mockito.when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        clientService.deleteClientById(1L);
+        Mockito.verify(clientRepository, Mockito.times(1)).deleteById(1L);
     }
 
 }
