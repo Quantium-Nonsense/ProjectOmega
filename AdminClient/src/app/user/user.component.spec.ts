@@ -9,7 +9,7 @@ import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { UserModel } from '../shared/model/user.model';
+import { UserModel } from '../shared/model/user/user.model';
 import { TestModule } from '../shared/test/test.module';
 import * as fromApp from './../reducers/index';
 import * as UserActions from './store/user.actions';

@@ -6,14 +6,13 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { routes } from '../app-routing.module';
-import { State } from '../reducers';
 import { TestModule } from '../shared/test/test.module';
 import { AuthComponent } from './auth.component';
 
 describe('AuthPage', () => {
   let component: AuthComponent;
   let fixture: ComponentFixture<AuthComponent>;
-  let mockStore: MockStore<State>;
+  let mockStore: MockStore;
   let mockRouter: Router;
 
   // Mocked services for auth page
@@ -34,11 +33,10 @@ describe('AuthPage', () => {
               errorMessage: null,
               loading: false,
               user: null
-            },
-            user: null
+            }
           }
         }),
-        {provide: MatSnackBar, useValue: mockSnackbar}
+        { provide: MatSnackBar, useValue: mockSnackbar }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
@@ -66,9 +64,7 @@ describe('AuthPage', () => {
         loading: false,
         user: null,
         returnUrl: ''
-      },
-      user: null,
-      customers: null
+      }
     });
 
     mockStore.refreshState();
@@ -79,31 +75,6 @@ describe('AuthPage', () => {
     });
   }));
 
-  it('Should present loader when form submitted', async(() => {
-    spyOn(component.loadingSpinnerService, 'showSpinner'); // Spy on function
-
-    component.ngOnInit();
-
-    mockStore.setState({
-      toolbar: null,
-      auth: {
-        errorMessage: null,
-        loading: true,
-        user: null,
-        returnUrl: ''
-      },
-      user: null,
-      customers: null
-    });
-
-    mockStore.refreshState();
-    fixture.detectChanges();
-
-    fixture.whenStable().then(() => {
-      expect(component.loadingSpinnerService.showSpinner).toHaveBeenCalled();
-    });
-
-  }));
 
   it('should display errors if email is invalid and password not entered', async(() => {
     component.ngOnInit();
