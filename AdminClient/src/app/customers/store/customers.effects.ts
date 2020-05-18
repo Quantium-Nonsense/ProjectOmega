@@ -48,12 +48,12 @@ export class CustomersEffects {
             panelClass: 'customerDialog'
           }
       ))
-  ), {dispatch: false});
+  ), { dispatch: false });
 
   showDeleteCustomerDialog$ = createEffect(() => this.actions$.pipe(
       ofType(CustomerActions.showDeleteCustomerDialog),
       map((action: Action & { customer: CustomerModel }) => this.showDeleteDialog(action.customer))
-  ), {dispatch: false});
+  ), { dispatch: false });
 
   constructor(
       private store: Store<fromApp.State>,
@@ -87,7 +87,7 @@ export class CustomersEffects {
   private customersLoadedAfter() {
     const customers = this.createDummyCustomers();
     this.store.dispatch(ToolbarActions.stopProgressBar());
-    return CustomerActions.customersLoaded({customers});
+    return CustomerActions.customersLoaded({ customers });
   }
 
   private showDeleteDialog(customer: CustomerModel) {
@@ -126,7 +126,7 @@ export class CustomersEffects {
     const newCustomers = allCustomers.filter(customer => customer.id !== currentCustomer.id);
 
     this.store.dispatch(ToolbarActions.stopProgressBar());
-    return CustomerActions.customerDeletedSuccess({newCustomers});
+    return CustomerActions.customerDeletedSuccess({ newCustomers });
   }
 
   private editCustomer(editedCustomer: CustomerModel): Action {
@@ -146,6 +146,6 @@ export class CustomersEffects {
     };
 
     this.store.dispatch(ToolbarActions.stopProgressBar());
-    return CustomerActions.editCustomerSuccess({newCustomers: allCustomers});
+    return CustomerActions.editCustomerSuccess({ newCustomers: allCustomers });
   }
 }
