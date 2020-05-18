@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   /**
    * The authentication form
    */
-  protected authForm: FormGroup;
+  authForm: FormGroup;
 
   /**
    * Holds all the subscriptions that will need to be cleaned up when a view swaps
@@ -56,12 +56,12 @@ export class AuthComponent implements OnInit, OnDestroy {
    *
    * @returns The error message should the password have an error, empty string otherwise
    */
-  protected get passwordErrorMessage(): string {
+  get passwordErrorMessage(): string {
     const passwordCtrl = this.authForm.get('password');
 
     return passwordCtrl.hasError('required')
            ? 'Password is required!'
-           : passwordCtrl.hasError('minlength')
+             : passwordCtrl.hasError('minlength')
              ? 'Password should be at least 7 characters long!'
              : '';
 
@@ -87,7 +87,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   /**
    * Submit form
    */
-  protected onSubmit(): void {
+  onSubmit(): void {
     this.store.dispatch(ToolbarActions.beginProgressBar());
     this.store.dispatch(AuthActions.loginAttempt({
       email: this.authForm.get('email').value as string,
@@ -104,7 +104,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     return this.authForm.get('email').invalid;
   }
 
-  protected isFormValid(): boolean {
+  isFormValid(): boolean {
     return this.authForm.valid;
   }
 
