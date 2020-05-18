@@ -133,7 +133,38 @@ public class ClientTestService extends OmegaApplicationTests {
 
     @Test
     public void updateClientByIdTest() throws ClientNotFoundException {
-
+        Client client = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirst_name("John")
+                .setLast_name("Doe")
+                .setDescription("Buys lots of things")
+                .setCompanyName("Lloyds")
+                .setEmail("a@a.com")
+                .setContactNumber("02088273729")
+                .setNotes("that's a random phone number")
+                .build();
+        Client client_details = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirst_name("John")
+                .setLast_name("Doe")
+                .setDescription("Buys a lot of things")
+                .setCompanyName("Sdyoll")
+                .setEmail("a@b.com")
+                .setContactNumber("02088747643")
+                .setNotes("that's a random phone number")
+                .build();
+        Mockito.when(clientRepository.existsById(1L)).thenReturn(true);
+        Mockito.when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        Mockito.when(clientRepository.save(Mockito.any(Client.class))).thenReturn(client_details);
+        Assert.assertEquals(client.getDescription(), clientService.getClientById(1L).getDescription());
+        Assert.assertEquals(client.getCompanyName(), clientService.getClientById(1L).getCompanyName());
+        Assert.assertEquals(client.getEmail(), clientService.getClientById(1L).getEmail());
+        Assert.assertEquals(client.getContactNumber(), clientService.getClientById(1L).getContactNumber());
+        client_details.setId(null);
+        Assert.assertEquals("Buys a lot of things", clientService.updateClientById(1L, client_details).getDescription());
+        Assert.assertEquals("Sdyoll", clientService.updateClientById(1L, client_details).getCompanyName());
+        Assert.assertEquals("a@b.com", clientService.updateClientById(1L, client_details).getEmail());
+        Assert.assertEquals("02088747643", clientService.updateClientById(1L, client_details).getContactNumber());
     }
 
     @Test
