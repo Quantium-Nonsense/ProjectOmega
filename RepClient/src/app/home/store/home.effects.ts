@@ -17,12 +17,11 @@ export class HomeEffects {
           (action: Action) => this.getAllCompanies().pipe(
               switchMap((companies: SupplierModel[]) =>
                   [HomeActions.showCompanies({companies}), HomeActions.dashboardDoneLoading()]),
-              catchError((error: HttpErrorResponse) => {
-                return [
+              catchError((error: HttpErrorResponse) =>
+                [
                   HomeActions.dashboardDoneLoading(),
                   HomeActions.dashboardHasError({error: error.message})
-                ];
-              })
+                ])
           )
       )
       )
