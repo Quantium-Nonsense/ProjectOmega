@@ -72,7 +72,7 @@ export class SuppliersEffects {
 
   loadAllSuppliers$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.beginLoadingSuppliers),
-      switchMap((action: Action) => of(this.loadAllClients()).pipe(delay(2000)))
+      switchMap((action: Action) => of(this.loadAllSuppliers()).pipe(delay(2000)))
       )
   );
 
