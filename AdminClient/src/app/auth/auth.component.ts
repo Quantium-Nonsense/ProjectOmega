@@ -1,11 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Store} from '@ngrx/store';
-import {Subscription} from 'rxjs';
-import {State} from '../reducers';
-import {LoadingSpinnerService} from '../services/loading-spinner/loading-spinner.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { State } from '../reducers';
+import { LoadingSpinnerService } from '../services/loading-spinner/loading-spinner.service';
 import * as AuthActions from './store/auth.actions';
 import * as fromAuth from './store/auth.reducer';
 
@@ -32,11 +32,11 @@ export class AuthComponent implements OnInit, OnDestroy {
   private returnUrl: string;
 
   constructor(
-    public loadingSpinnerService: LoadingSpinnerService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private store: Store<State>,
-    private snackBar: MatSnackBar,
+      public loadingSpinnerService: LoadingSpinnerService,
+      private route: ActivatedRoute,
+      private router: Router,
+      private store: Store<State>,
+      private snackBar: MatSnackBar
   ) {
 
   }
@@ -45,11 +45,11 @@ export class AuthComponent implements OnInit, OnDestroy {
     this.authForm = this.formInitialization();
     this.loadingSpinnerService.observeNext(this.store.select(fromAuth.selectIsLoading));
     this.subscriptions.add(
-      this.store.select('auth').subscribe((state: fromAuth.State) => {
-        if (state.errorMessage) {
-          this.showMessage(state.errorMessage);
-        }
-      })
+        this.store.select('auth').subscribe((state: fromAuth.State) => {
+          if (state.errorMessage) {
+            this.showMessage(state.errorMessage);
+          }
+        })
     );
   }
 
@@ -62,10 +62,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     const passwordCtrl = this.authForm.get('password');
 
     return passwordCtrl.hasError('required')
-      ? 'Password is required!'
-      : passwordCtrl.hasError('minlength')
-        ? 'Password should be at least 7 characters long!'
-        : '';
+           ? 'Password is required!'
+           : passwordCtrl.hasError('minlength')
+             ? 'Password should be at least 7 characters long!'
+             : '';
 
   }
 
@@ -116,10 +116,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     const emailCtrl = this.authForm.get('email');
 
     return emailCtrl.hasError('required') // Check if email has been filled
-      ? 'Email is required!'
-      : emailCtrl.hasError('email') // If yes check if valid email
-        ? 'Not a valid email'
-        : '';
+           ? 'Email is required!'
+           : emailCtrl.hasError('email') // If yes check if valid email
+             ? 'Not a valid email'
+             : '';
   }
 
   /**
@@ -142,8 +142,8 @@ export class AuthComponent implements OnInit, OnDestroy {
    * @returns the form with initialized fields
    */
   private formInitialization = (): FormGroup =>
-    new FormGroup({
-      email: new FormControl('', [Validators.email, Validators.required]),
-      password: new FormControl('', [Validators.required, Validators.minLength(7)])
-    });
+      new FormGroup({
+        email: new FormControl('', [Validators.email, Validators.required]),
+        password: new FormControl('', [Validators.required, Validators.minLength(7)])
+      });
 }
