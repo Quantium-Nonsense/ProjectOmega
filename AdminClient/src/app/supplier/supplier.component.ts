@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as fromApp from '../reducers/index';
 import { Store } from '@ngrx/store';
-import * as ClientActions from './store/suppliers.actions';
 import { Observable, Subscription } from 'rxjs';
 import * as fromSuppliers from './store/suppliers.reducer';
 import { MatTableDataSource } from '@angular/material/table';
@@ -32,7 +31,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Load all supplier
-    this.store$.dispatch(ClientActions.beginLoadingSuppliers());
+    this.store$.dispatch(SupplierActions.beginLoadingSuppliers());
     this.isLoading = this.store$.select(fromSuppliers.selectIsLoading);
     this.sub.add(
         this.store$.select(fromSuppliers.selectAllSuppliers).subscribe((suppliers: SupplierModel[]) => {
