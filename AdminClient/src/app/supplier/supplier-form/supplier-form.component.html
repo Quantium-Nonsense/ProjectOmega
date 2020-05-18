@@ -1,23 +1,23 @@
-<button class="close"
-        mat-icon-button
-        (click)="cancel()">
+<button (click)="cancel()"
+        class="close"
+        mat-icon-button>
     <mat-icon>cancel</mat-icon>
 </button>
-<form class="h20"
-      [formGroup]="customerForm"
+<form [formGroup]="supplierForm"
+      class="h20"
 >
     <div fxLayout="row">
         <mat-form-field
-                fxFlexFill
                 appearance="fill"
+                fxFlexFill
         >
             <mat-label>Email</mat-label>
             <input
-                    id="formEmailInput"
                     autocomplete="email"
+                    formControlName="email"
+                    id="formEmailInput"
                     matInput
                     placeholder="email@example.com"
-                    formControlName="email"
             />
             <mat-error *ngIf="emailHasError"
                        id="emailError">{{emailErrorMessage}}</mat-error>
@@ -25,15 +25,15 @@
     </div>
     <div fxLayout="row">
         <mat-form-field
-                fxFlexFill
-                class="max-width"
                 appearance="fill"
+                class="max-width"
+                fxFlexFill
         >
             <mat-label>Company name</mat-label>
             <input
+                    formControlName="companyName"
                     id="formCompanyName"
                     matInput
-                    formControlName="companyName"
                     type="text"
             />
             <mat-error *ngIf="companyNameHasError"
@@ -44,15 +44,15 @@
     </div>
     <div fxLayout="row">
         <mat-form-field
-                fxFlexFill
-                class="max-width"
                 appearance="fill"
+                class="max-width"
+                fxFlexFill
         >
             <mat-label>Contact number</mat-label>
             <input
+                    formControlName="contactNumber"
                     id="formCompany"
                     matInput
-                    formControlName="contactNumber"
                     type="text"
             />
             <mat-error *ngIf="contactNumberHasError"
@@ -63,15 +63,15 @@
     </div>
     <div fxLayout="row">
         <mat-form-field
-                fxFlexFill
-                class="max-width"
                 appearance="fill"
+                class="max-width"
+                fxFlexFill
         >
             <mat-label>Description</mat-label>
             <input
+                    formControlName="description"
                     id="formDescription"
                     matInput
-                    formControlName="description"
                     type="text"
             />
             <mat-error *ngIf="descriptionHasError"
@@ -82,15 +82,15 @@
     </div>
     <div fxLayout="row">
         <mat-form-field
-                fxFlexFill
-                class="max-width"
                 appearance="fill"
+                class="max-width"
+                fxFlexFill
         >
             <mat-label>First name</mat-label>
             <input
+                    formControlName="firstName"
                     id="formFirstName"
                     matInput
-                    formControlName="firstName"
                     type="text"
             />
             <mat-error *ngIf="firstNameHasError"
@@ -101,15 +101,15 @@
     </div>
     <div fxLayout="row">
         <mat-form-field
-                fxFlexFill
-                class="max-width"
                 appearance="fill"
+                class="max-width"
+                fxFlexFill
         >
             <mat-label>Last name</mat-label>
             <input
+                    formControlName="lastName"
                     id="formLastName"
                     matInput
-                    formControlName="lastName"
                     type="text"
             />
             <mat-error *ngIf="lastNameHasError"
@@ -120,29 +120,29 @@
     </div>
     <div fxLayout="row">
         <mat-form-field
-                fxFlexFill
-                class="max-width"
                 appearance="fill"
+                class="max-width"
+                fxFlexFill
         >
             <mat-label>Additional notes</mat-label>
             <textarea
+                    formControlName="notes"
                     id="formNotes"
                     matInput
-                    formControlName="notes"
                     type="text">
                 </textarea>
         </mat-form-field>
     </div>
 </form>
 <mat-dialog-actions>
-    <button color="primary"
-            [disabled]="isLoading"
-            mat-stroked-button
-            (click)="submitForm()">Confirm
+    <button (click)="submitForm()"
+            [disabled]="isLoading | async"
+            color="primary"
+            mat-stroked-button>Confirm
     </button>
-    <button color="warn"
-            [disabled]="isLoading"
-            mat-stroked-button
-            (click)="cancel()">Cancel
+    <button (click)="cancel()"
+            [disabled]="isLoading | async"
+            color="warn"
+            mat-stroked-button>Cancel
     </button>
 </mat-dialog-actions>

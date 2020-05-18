@@ -1,8 +1,8 @@
-import { DataSource } from '@angular/cdk/collections';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { BehaviorSubject, merge, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {DataSource} from '@angular/cdk/collections';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {BehaviorSubject, merge, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 // TODO: Replace this with your own data model type
 export interface Supplier {
@@ -77,6 +77,7 @@ export class SuppliersDataSource extends DataSource<Supplier> {
   /**
    * Connect this data source to the table. The table will only update when
    * the returned stream emits new items.
+   *
    * @returns A stream of the items to be rendered.
    */
   connect(): Observable<Supplier[]> {
@@ -109,6 +110,8 @@ export class SuppliersDataSource extends DataSource<Supplier> {
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
+   *
+   * @param data
    */
   private getPagedData(data: Supplier[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
@@ -118,6 +121,8 @@ export class SuppliersDataSource extends DataSource<Supplier> {
   /**
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
+   *
+   * @param data
    */
   private getSortedData(data: Supplier[]) {
     if (!this.sort.active || this.sort.direction === '') {
@@ -136,7 +141,13 @@ export class SuppliersDataSource extends DataSource<Supplier> {
   }
 }
 
-/** Simple sort comparator for example ID/Name columns (for client-side sorting). */
+/**
+ * Simple sort comparator for example ID/Name columns (for client-side sorting).
+ *
+ * @param a
+ * @param b
+ * @param isAsc
+ */
 const compare = (a: string | number, b: string | number, isAsc: boolean) => {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 };

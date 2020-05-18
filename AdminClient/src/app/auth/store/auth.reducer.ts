@@ -1,5 +1,5 @@
-import { Action, createReducer, createSelector, on } from '@ngrx/store';
-import { User } from '../../models/auth/user.model';
+import {Action, createReducer, createSelector, on} from '@ngrx/store';
+import {User} from '../../models/auth/user.model';
 import * as AuthActions from './auth.actions';
 import * as fromApp from '../../reducers/index';
 
