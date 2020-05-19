@@ -100,6 +100,7 @@ public class UserServiceImpl implements UserService {
                 .setEmail(userDetails.getEmail())
                 .setPassword(userDetails.getPassword())
                 .setRoles(userDetails.getRoles())
+                .setEnabled(userDetails.getEnabled())
                 .build();
 
         userRepository.save(u);

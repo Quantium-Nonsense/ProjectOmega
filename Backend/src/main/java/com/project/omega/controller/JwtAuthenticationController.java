@@ -3,12 +3,15 @@ package com.project.omega.controller;
 import com.project.omega.bean.dao.auth.JwtRequest;
 import com.project.omega.bean.dao.auth.JwtResponse;
 import com.project.omega.bean.dao.auth.Privilege;
+import com.project.omega.bean.dao.auth.VerificationToken;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.PasswordDTO;
 import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.bean.dto.UserResponse;
 import com.project.omega.exceptions.DuplicateUserException;
 import com.project.omega.exceptions.InvalidOldPasswordException;
+import com.project.omega.exceptions.TokenExpiredException;
+import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.helper.GenericResponse;
 import com.project.omega.service.JwtUserDetailsService;
 import com.project.omega.service.interfaces.AuthenticationService;
@@ -83,6 +86,26 @@ public class JwtAuthenticationController {
         UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
 
         return new ResponseEntity(userMap, HttpStatus.CREATED);
+    }
+
+    @GetMapping(value = "/confirmRegistration")
+    public String registrationConfirm(@RequestParam("token") String token) throws Exception {
+        VerificationToken verificationToken = tokenService.findByToken(token);
+        if(verificationToken == null) {
+            throw new UserNotFoundException("You are not registered with the service");
+        }
+
+        User user = verificationToken.getUser();
+
+        if(verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime() <= 0) {
+            tokenService.deleteToken(verificationToken);
+            throw new TokenExpiredException("Verification token expired. Contact the service provider to request a new token.");
+        }
+
+        user.setEnabled(true);
+        userService.updateUserById(user.getId(), user);
+
+        return "redirect:login.html";
     }
 
     /*To be Used When the User DOES NOT remember their password*/
