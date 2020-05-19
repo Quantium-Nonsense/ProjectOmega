@@ -114,7 +114,7 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
     this.sub = new Subscription();
     this.supplierForm = this.initializeForm();
     this.sub.add(
-        this.store$.select(fromToolbar.selectShowProgressBar)
+        this.store$.select(fromToolbar.selectIsVisible)
             .subscribe(isLoading => {
               if (isLoading) {
                 this.supplierForm.disable();
@@ -127,6 +127,7 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
     );
     const supplier = this.data.supplier;
     if (supplier) {
+      this.supplierForm.get('id').setValue(supplier.id);
       this.companyName.setValue(supplier.companyName);
       this.contactNumber.setValue(supplier.contactNumber);
       this.description.setValue(supplier.description);
@@ -143,6 +144,7 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
 
   initializeForm = (): FormGroup => {
     return new FormGroup({
+      id: new FormControl(''),
       companyName: new FormControl('', [Validators.required]),
       contactNumber: new FormControl('', [Validators.required]),
       description: new FormControl('', [Validators.required]),
@@ -170,7 +172,7 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
     } else {
       this.store$.dispatch(SupplierActions.editSupplier({
         editedSupplier: {
-          id: null,
+          id: this.supplierForm.get('id').value,
           notes: this.notes.value,
           lastName: this.lastName.value,
           firstName: this.firstName.value,

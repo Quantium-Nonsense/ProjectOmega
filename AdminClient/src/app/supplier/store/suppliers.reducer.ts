@@ -10,7 +10,7 @@ export interface State {
 
 const initialState: State = {
   loading: false,
-  suppliers: null,
+  suppliers: null
 };
 
 export const selectSuppliersState = createFeatureSelector<fromApp.State, State>(
@@ -45,16 +45,7 @@ const _supplierReducer: ActionReducer<State, Action> = createReducer(
         (prevState: State) => ({
           ...prevState,
           loading: true
-        })),
-    on(
-        SupplierActions.editSupplierSuccess,
-        SupplierActions.deleteSupplierSuccess,
-        (prevState: State, { suppliers }) => ({
-          ...prevState,
-          loading: false,
-          suppliers
-        })
-    )
+        }))
 );
 
 export const supplierReducer = (state: State | undefined, action: Action) => _supplierReducer(state, action);

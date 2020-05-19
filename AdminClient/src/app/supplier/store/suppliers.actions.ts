@@ -40,7 +40,7 @@ export const showEditSupplier = createAction(
 
 export const showDeleteSupplier = createAction(
     '[Suppliers - Component] Show delete supplier dialog',
-    props<{ focusedSupplier: SupplierModel }>()
+    props<{ supplier: SupplierModel }>()
 );
 
 export const editSupplier = createAction(
@@ -49,15 +49,14 @@ export const editSupplier = createAction(
 );
 
 export const deleteSupplier = createAction(
-    '[Suppliers - Effects] Delete supplier'
+    '[Suppliers - Effects] Delete supplier',
+    props<{ supplier: SupplierModel }>()
 );
 
 export const editSupplierSuccess = createAction(
-    '[Suppliers - Effects] Edit supplier success',
-    props<{ suppliers: SupplierModel[] }>()
+    '[Suppliers - Effects] Edit supplier success'
 );
 
 export const deleteSupplierSuccess = createAction(
-    '[Suppliers - Effects] Edit supplier success',
-    props<{ suppliers: SupplierModel[] }>()
+    '[Suppliers - Effects] Edit supplier success'
 );

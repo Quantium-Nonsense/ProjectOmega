@@ -4,17 +4,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import * as fromApp from '../../reducers/index';
 import { ApiPathService } from '../../services/api-path.service';
 import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
+import * as fromToolbar from '../../toolbar/store/toolbar.reducer';
 import { SupplierFormComponent } from '../supplier-form/supplier-form.component';
 import * as SupplierActions from './suppliers.actions';
-import * as fromSuppliers from './suppliers.reducer';
 
 @Injectable()
 export class SuppliersEffects {
@@ -30,16 +30,12 @@ export class SuppliersEffects {
       })
   ));
 
-
   showSupplerFailedToCreateMessage$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.newSupplierCreateFailed),
       map((action: Action & { error: string }) => {
-        this.toast.open(`Something went wrong: ${ action.error }`, null, {
-          duration: 3000
-        });
-        this.dialog.closeAll();
+        return SupplierActions.showErrorMessage({ error: action.error });
       })
-  ), { dispatch: false });
+  ));
 
   createSupplier$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.attemptToCreateNewSupplier),
@@ -67,18 +63,60 @@ export class SuppliersEffects {
       })
   ));
 
+  deleteSupplierSucess$ = createEffect(() => this.actions$.pipe(
+      ofType(SupplierActions.deleteSupplierSuccess),
+      switchMap(action => {
+        this.dialog.closeAll();
+        this.toast.open('Supplier deleted successfully!', null, {
+          duration: 3000
+        });
+        return [
+          ToolbarActions.beginProgressBar(),
+          SupplierActions.beginLoadingSuppliers()
+        ];
+      })
+  ));
+
   deleteSupplier$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.deleteSupplier),
-      switchMap((action: Action) => of(this.deleteSupplier()).pipe(
-          delay(2000),
-          tap(() => this.dialog.closeAll())
+      switchMap((action: Action & { supplier: SupplierModel }) =>
+          this.httpDeleteSupplier(action.supplier.id).pipe(
+              switchMap(() => {
+                return [
+                  ToolbarActions.stopProgressBar(),
+                  SupplierActions.deleteSupplierSuccess()
+                ];
+              }),
+              catchError((error) => {
+                return [
+                  ToolbarActions.stopProgressBar(),
+                  SupplierActions.showErrorMessage({ error: error instanceof HttpErrorResponse ? error.message : error })
+                ];
+              })
+          )
       ))
-  ));
+  );
 
   editSupplier$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.editSupplier),
       switchMap((action: Action & { editedSupplier: SupplierModel }) => {
-
+        return this.httpEditSupplier(action.editedSupplier).pipe(
+            switchMap((supplier: SupplierModel) => {
+              this.dialog.closeAll();
+              return [
+                ToolbarActions.stopProgressBar(),
+                SupplierActions.editSupplierSuccess(),
+                SupplierActions.beginLoadingSuppliers()
+              ];
+            }),
+            catchError(error => {
+              this.dialog.closeAll();
+              return [
+                ToolbarActions.stopProgressBar(),
+                SupplierActions.showErrorMessage({ error: error instanceof HttpErrorResponse ? error.message : error })
+              ];
+            })
+        );
       })
   ));
 
@@ -94,7 +132,8 @@ export class SuppliersEffects {
 
   showDeleteSupplierDialog$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.showDeleteSupplier),
-      map((action: Action & { focusedSupplier: SupplierModel }) => {
+      map((action: Action & { supplier: SupplierModel }) => {
+        console.log(action.supplier);
         this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(
             PopupDialogComponent,
             {
@@ -104,7 +143,7 @@ export class SuppliersEffects {
                 dialogActions: [
                   {
                     text: 'Confirm',
-                    action: () => this.store$.dispatch(SupplierActions.deleteSupplier()),
+                    action: () => this.store$.dispatch(SupplierActions.deleteSupplier({ supplier: action.supplier })),
                     color: 'warn'
                   },
                   {
@@ -113,7 +152,7 @@ export class SuppliersEffects {
                     color: 'primary'
                   }
                 ],
-                isDisabled: this.store$.select(fromSuppliers.selectIsLoading)
+                isDisabled: this.store$.select(fromToolbar.selectIsVisible)
               }
             }
         );
@@ -195,31 +234,13 @@ export class SuppliersEffects {
   };
 
 
-  private editSupplier(editedSupplier: SupplierModel): Action {
-    let allSuppliers: SupplierModel[] = [];
-    let supplierToEdit: SupplierModel;
-
-    this.store$.select(fromSuppliers.selectFocusedSupplier)
-        .pipe(take(1))
-        .subscribe(supplier => supplierToEdit = supplier);
-
-
+  private httpEditSupplier(editedSupplier: SupplierModel): Observable<SupplierModel> {
+    return this.http.put<SupplierModel>(this.endPoint.getEditSupplierEndPoint(+editedSupplier.id), {
+      ...editedSupplier
+    });
   }
 
-  private deleteSupplier(): Action {
-    let currentSupplier: SupplierModel = null;
-    let allSuppliers: SupplierModel[] = [];
-
-    this.store$.select(fromSuppliers.selectAllSuppliers)
-        .pipe(take(1))
-        .subscribe(s => allSuppliers = s);
-
-    this.store$.select(fromSuppliers.selectFocusedSupplier)
-        .pipe(take(1))
-        .subscribe(supplier => currentSupplier = supplier);
-
-    const suppliers = allSuppliers.filter(customer => customer.id !== currentSupplier.id);
-
-    return SupplierActions.deleteSupplierSuccess({ suppliers });
+  private httpDeleteSupplier(supplierId) {
+    return this.http.delete(this.endPoint.getDeleteSupplierEndPoint(supplierId));
   }
 }

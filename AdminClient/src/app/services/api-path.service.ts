@@ -23,6 +23,14 @@ export class ApiPathService {
     return `${ this.endPoint }/supplier/create`;
   }
 
+  getEditSupplierEndPoint(supplierId: number) {
+    return `${ this.endPoint }/supplier/update/${ supplierId }`;
+  }
+
+  getDeleteSupplierEndPoint(supplierId: number) {
+    return `${ this.endPoint }/supplier/delete/${ supplierId }`;
+  }
+
   /**
    * returns the login end point
    */

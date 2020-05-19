@@ -4,9 +4,14 @@
 </app-table-filter>
 <div class="w20"
      fxLayout="column">
-    <div fxLayout="row" fxLayoutAlign="space-between" xmlns="">
+    <div fxLayout="row"
+         fxLayoutAlign="space-between"
+         xmlns="">
         <div fxFlexOffset="95">
-            <button (click)="handleCreate()" aria-label="New Product" color="primary" mat-mini-fab>
+            <button (click)="handleCreate()"
+                    aria-label="New Product"
+                    color="primary"
+                    mat-mini-fab>
                 <mat-icon>add</mat-icon>
             </button>
         </div>
@@ -16,6 +21,7 @@
     <table [dataSource]="suppliers"
            fxFlexFill
            mat-table>
+
         <ng-container matColumnDef="companyName">
             <th *matHeaderCellDef
                 mat-header-cell>Name
@@ -74,7 +80,13 @@
                 </button>
             </td>
         </ng-container>
-
+        <ng-container matColumnDef="id">
+            <th [hidden]="true" *matHeaderCellDef
+                mat-header-cell>Id
+            </th>
+            <td [hidden]="true" *matCellDef="let supplier"
+                mat-cell>{{supplier.id}}</td>
+        </ng-container>
         <tr *matHeaderRowDef="displayCols"
             mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayCols;"
