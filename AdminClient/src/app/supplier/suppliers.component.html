@@ -2,9 +2,17 @@
                   [dataSource]="suppliers">
 
 </app-table-filter>
-
 <div class="w20"
      fxLayout="column">
+    <div fxLayout="row" fxLayoutAlign="space-between" xmlns="">
+        <div fxFlexOffset="95">
+            <button (click)="handleCreate()" aria-label="New Product" color="primary" mat-mini-fab>
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div *ngIf="suppliers.data.length === 0"
+         class="mat-typography"><p class="body-1">No suppliers found</p></div>
     <table [dataSource]="suppliers"
            fxFlexFill
            mat-table>
@@ -78,5 +86,6 @@
                    showFirstLastButtons
     >
     </mat-paginator>
+
 </div>
 

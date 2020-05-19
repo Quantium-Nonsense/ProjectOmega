@@ -6,6 +6,10 @@ export const showErrorMessage = createAction(
     props<{ error: string }>()
 );
 
+export const createNewSupplier = createAction(
+    '[Suppliers - Component] Create new supplier'
+);
+
 export const beginLoadingSuppliers = createAction(
     '[Suppliers - Component] Begin loading all suppliers'
 );

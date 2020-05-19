@@ -24,41 +24,41 @@ export class ProductDetailsDialogComponent implements OnInit {
     this.suppliers = SuppliersDataSource.getInstance().getAll();
   }
 
-  protected get supplierHasError(): boolean {
+  get supplierHasError(): boolean {
     return this.productItemForm.get('supplier').invalid;
   }
 
-  protected get supplierErrorMessage(): string {
+  get supplierErrorMessage(): string {
     const supplierCtrl = this.productItemForm.get('supplier');
 
     return supplierCtrl.hasError('required') ? 'Supplier is required!' : '';
   }
 
-  protected get nameHasError(): boolean {
+  get nameHasError(): boolean {
     return this.productItemForm.get('name').invalid;
   }
 
-  protected get nameErrorMessage(): string {
+  get nameErrorMessage(): string {
     const nameCtrl = this.productItemForm.get('name');
 
     return nameCtrl.hasError('required') ? 'Product name is required!' : '';
   }
 
-  protected get descriptionHasError(): boolean {
+  get descriptionHasError(): boolean {
     return this.productItemForm.get('description').invalid;
   }
 
-  protected get descriptionErrorMessage(): string {
+  get descriptionErrorMessage(): string {
     const descriptionCtrl = this.productItemForm.get('description');
 
     return descriptionCtrl.hasError('required') ? 'Description is required!' : '';
   }
 
-  protected get priceHasError(): boolean {
+  get priceHasError(): boolean {
     return this.productItemForm.get('price').invalid;
   }
 
-  protected get priceErrorMessage(): string {
+  get priceErrorMessage(): string {
     const priceCtrl = this.productItemForm.get('price');
 
     if (priceCtrl.hasError('required')) {
@@ -79,7 +79,7 @@ export class ProductDetailsDialogComponent implements OnInit {
     this.productItemForm = this.formInitialization();
   }
 
-  protected isFormValid(): boolean {
+  isFormValid(): boolean {
     return this.productItemForm.valid;
   }
 

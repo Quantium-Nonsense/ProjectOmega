@@ -63,4 +63,8 @@ export class SupplierComponent implements OnInit, OnDestroy {
   deleteSupplier(supplier: SupplierModel) {
     this.store$.dispatch(SupplierActions.showDeleteSupplier({ focusedSupplier: supplier }));
   }
+
+  handleCreate(): void {
+    this.store$.dispatch(SupplierActions.createNewSupplier())
+  }
 }

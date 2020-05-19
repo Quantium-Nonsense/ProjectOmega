@@ -71,6 +71,19 @@ export class SuppliersEffects {
       })
   ), { dispatch: false });
 
+  showCreateSupplierDialog$ = createEffect( () => this.actions$.pipe(
+      ofType(SupplierActions.createNewSupplier),
+      map((action: Action) => {
+        this.dialog.open<SupplierFormComponent, SupplierModel>(SupplierFormComponent,
+            {
+              width: '66vw',
+              height: '66vh',
+              panelClass: 'customerDialog'
+            }
+        );
+      })
+  ), { dispatch: false });
+
   showEditSupplierDialog$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.showEditSupplier),
       map((action: Action & { focusedSupplier: SupplierModel }) => {
