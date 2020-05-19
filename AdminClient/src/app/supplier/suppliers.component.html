@@ -11,7 +11,7 @@
             </button>
         </div>
     </div>
-    <div *ngIf="suppliers.data.length === 0"
+    <div *ngIf="suppliers.data && suppliers.data.length === 0"
          class="mat-typography"><p class="body-1">No suppliers found</p></div>
     <table [dataSource]="suppliers"
            fxFlexFill

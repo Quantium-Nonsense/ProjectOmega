@@ -6,6 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import * as fromApp from '../../reducers';
 import * as SupplierActions from '../../supplier/store/suppliers.actions';
 import * as fromSupplier from '../../supplier/store/suppliers.reducer';
+import * as fromToolbar from '../../toolbar/store/toolbar.reducer';
 
 @Component({
   selector: 'app-supplier-form',
@@ -107,9 +108,8 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isLoading = this.store$.select(fromSupplier.selectIsLoading);
     this.sub.add(
-        this.store$.select(fromSupplier.selectIsLoading)
+        this.store$.select(fromToolbar.selectToolbarState)
             .subscribe(isLoading => isLoading ? this.supplierForm.disable() : this.supplierForm.enable())
     );
     this.sub.add(
