@@ -47,16 +47,10 @@ export class SuppliersEffects {
                 ToolbarActions.stopProgressBar()
               ];
             }),
-            catchError(err => {
-              if (err instanceof HttpErrorResponse) {
-                return [
-                  ToolbarActions.stopProgressBar(),
-                  SupplierActions.newSupplierCreateFailed({ error: err.message })
-                ];
-              }
+            catchError((error: Error) => {
               return [
                 ToolbarActions.stopProgressBar(),
-                SupplierActions.newSupplierCreateFailed({ error: err })
+                SupplierActions.newSupplierCreateFailed({ error: error.message })
               ];
             })
         );

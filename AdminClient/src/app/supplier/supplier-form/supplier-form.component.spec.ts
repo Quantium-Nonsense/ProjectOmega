@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSnackBarHarness } from '@angular/material/snack-bar/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockActions } from '@ngrx/effects/testing';
@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 import { ApiPathService } from '../../services/api-path.service';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
+import * as fromToolbar from '../../toolbar/store/toolbar.reducer';
 import * as SuppliersActions from '../store/suppliers.actions';
 import { SuppliersEffects } from '../store/suppliers.effects';
 import { SupplierFormComponent } from './supplier-form.component';
@@ -41,24 +42,27 @@ describe('SupplierFormComponent', () => {
   let effects: SuppliersEffects;
   let mockStore$: MockStore;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
              declarations: [SupplierFormComponent],
              imports: [
-               NoopAnimationsModule
+               NoopAnimationsModule,
+               MatDialogModule,
+               MatSnackBarModule
              ],
              providers: [
                provideMockStore({
                  initialState: {
-                   suppliers: {}
+                   suppliers: {},
+                   toolbar: {
+                     progressBar: false
+                   } as fromToolbar.State
                  }
                }),
                provideMockActions(() => actions$),
                SuppliersEffects,
-               {
-                 provide: MatDialog,
-                 useValue: MatDialogHarness
-               },
+               MatDialogHarness,
+               MatSnackBarHarness,
                {
                  provide: MatDialogRef,
                  useValue: {}
@@ -72,10 +76,6 @@ describe('SupplierFormComponent', () => {
                  useValue: null
                },
                {
-                 provide: MatSnackBar,
-                 useValue: MatSnackBarHarness
-               },
-               {
                  provide: ApiPathService,
                  useValue: null
                }
@@ -86,7 +86,7 @@ describe('SupplierFormComponent', () => {
     mockStore$ = TestBed.inject(MockStore);
     effects = TestBed.inject(SuppliersEffects);
 
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SupplierFormComponent);
@@ -96,6 +96,24 @@ describe('SupplierFormComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should stop progress bar and show error on error http response', () => {
+    const suppliers = mockSuppliers();
+    const httpSpy = spyOn(effects, 'httpGetAllSuppliers').and.returnValue(
+        cold('--#|', null, 'Bad!')
+    );
+
+    actions$ = hot('-a', {
+      a: SuppliersActions.beginLoadingSuppliers()
+    });
+
+    const expected = hot('---(ab)', {
+      a: ToolbarActions.stopProgressBar(),
+      b: SuppliersActions.showErrorMessage({ error: 'Bad!' })
+    });
+
+    expect(effects.loadAllSuppliers$).toBeObservable(expected);
   });
 
   it('should load all suppliers', () => {
@@ -116,21 +134,4 @@ describe('SupplierFormComponent', () => {
     expect(effects.loadAllSuppliers$).toBeObservable(expected);
   });
 
-  it('should stop progress bar and show error on error http response', () => {
-    const suppliers = mockSuppliers();
-    const httpSpy = spyOn(effects, 'httpGetAllSuppliers').and.returnValue(
-        cold('--#|', null, 'Bad!')
-    );
-
-    actions$ = hot('-a', {
-      a: SuppliersActions.beginLoadingSuppliers()
-    });
-
-    const expected = hot('---(ab)', {
-      a: ToolbarActions.stopProgressBar(),
-      b: SuppliersActions.showErrorMessage({ error: 'Bad!' })
-    });
-
-    expect(effects.loadAllSuppliers$).toBeObservable(expected);
-  });
 });
