@@ -15,8 +15,6 @@ export interface DialogData {
   styleUrls: ['./management.component.scss']
 })
 export class ManagementComponent implements OnInit {
-
-
   customers: CustomerModel[] = [];
   customerRepList: CustomerManagementModel[] = [];
 
@@ -35,13 +33,12 @@ export class ManagementComponent implements OnInit {
 
   }
 
-  openDialog($event): void {
+  openDialog(id: number): void {
 
-    let selectedId = $event.target.id;
-    console.log(selectedId + 'hi');
+    let selectedId = id;
     const dialogRef = this.dialog.open(ManagementDialogComponent, {
       width: '250px',
-      data: {representative: this.customerRepList[0].assignedRepresentative, id: selectedId}
+      data: {representative: this.customerRepList[selectedId].assignedRepresentative, id: selectedId}
     });
 
     dialogRef.afterClosed().subscribe(result => {
