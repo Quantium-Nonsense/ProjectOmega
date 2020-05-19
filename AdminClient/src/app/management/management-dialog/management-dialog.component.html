@@ -9,5 +9,5 @@
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="cancel()">No Thanks</button>
-  <button mat-button (click)="confirm()" cdkFocusInitial>Ok</button>
+  <button mat-button [mat-dialog-close]="data.representative" cdkFocusInitial>Ok</button>
 </div>

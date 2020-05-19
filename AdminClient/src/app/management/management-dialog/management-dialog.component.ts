@@ -12,17 +12,13 @@ export class ManagementDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ManagementDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {} // injection token for data access
 
   ngOnInit(): void {
   }
 
+  // Closes the dialog on cancel button, no data sent to management component
   cancel() {
-    this.dialogRef.close({ data: false }) // send data to parent component
+    this.dialogRef.close();
   }
-
-  confirm() {
-    this.dialogRef.close({ data: true }) // send data to parent component
-  }
-
 }
