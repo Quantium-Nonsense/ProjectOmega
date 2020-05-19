@@ -2,10 +2,10 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as fromApp from '../../reducers';
+import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 import * as SupplierActions from '../../supplier/store/suppliers.actions';
-import * as fromSupplier from '../../supplier/store/suppliers.reducer';
 import * as fromToolbar from '../../toolbar/store/toolbar.reducer';
 
 @Component({
@@ -22,7 +22,10 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
   constructor(
       private store$: Store<fromApp.State>,
       private dialogRef: MatDialogRef<SupplierFormComponent>,
-      @Inject(MAT_DIALOG_DATA) public formType: 'edit' | 'create'
+      @Inject(MAT_DIALOG_DATA) public data: {
+        formType: 'edit' | 'create',
+        supplier: SupplierModel
+      }
   ) {
 
   }
@@ -122,19 +125,16 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
               }
             })
     );
-    this.sub.add(
-        this.store$.select(fromSupplier.selectFocusedSupplier).subscribe(supplier => {
-          if (supplier) {
-            this.companyName.setValue(supplier.companyName);
-            this.contactNumber.setValue(supplier.contactNumber);
-            this.description.setValue(supplier.description);
-            this.email.setValue(supplier.email);
-            this.firstName.setValue(supplier.firstName);
-            this.lastName.setValue(supplier.lastName);
-            this.notes.setValue(supplier.notes);
-          }
-        })
-    );
+    const supplier = this.data.supplier;
+    if (supplier) {
+      this.companyName.setValue(supplier.companyName);
+      this.contactNumber.setValue(supplier.contactNumber);
+      this.description.setValue(supplier.description);
+      this.email.setValue(supplier.email);
+      this.firstName.setValue(supplier.firstName);
+      this.lastName.setValue(supplier.lastName);
+      this.notes.setValue(supplier.notes);
+    }
   }
 
   ngOnDestroy(): void {
@@ -154,7 +154,7 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
   };
 
   submitForm() {
-    if (this.formType === 'create') {
+    if (this.data.formType === 'create') {
       this.store$.dispatch(SupplierActions.attemptToCreateNewSupplier({
         supplier: {
           id: null,

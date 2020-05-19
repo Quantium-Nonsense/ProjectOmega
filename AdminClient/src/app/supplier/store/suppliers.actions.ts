@@ -35,7 +35,7 @@ export const allSuppliersLoaded = createAction(
 
 export const showEditSupplier = createAction(
     '[Suppliers - Component] Show edit supplier dialog',
-    props<{ focusedSupplier: SupplierModel }>()
+    props<{ supplier: SupplierModel }>()
 );
 
 export const showDeleteSupplier = createAction(

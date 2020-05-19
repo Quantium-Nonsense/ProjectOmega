@@ -58,7 +58,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   editSupplier(supplier: SupplierModel) {
-    this.store$.dispatch(SupplierActions.showEditSupplier({ focusedSupplier: supplier }));
+    this.store$.dispatch(SupplierActions.showEditSupplier({ supplier }));
   }
 
   deleteSupplier(supplier: SupplierModel) {

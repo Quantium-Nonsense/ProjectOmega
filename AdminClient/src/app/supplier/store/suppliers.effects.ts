@@ -78,7 +78,7 @@ export class SuppliersEffects {
   editSupplier$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.editSupplier),
       switchMap((action: Action & { editedSupplier: SupplierModel }) => {
-        return of(this.editSupplier(action.editedSupplier)).pipe(delay(2000));
+
       })
   ));
 
@@ -123,12 +123,18 @@ export class SuppliersEffects {
   showCreateSupplierDialog$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.showCreateNewSupplierDialog),
       map((action: Action) => {
-        this.dialog.open<SupplierFormComponent, 'edit' | 'create'>(SupplierFormComponent,
+        this.dialog.open<SupplierFormComponent, {
+          formType: 'edit' | 'create',
+          supplier: SupplierModel
+        }>(SupplierFormComponent,
             {
               width: '66vw',
               height: '66vh',
               panelClass: 'customerDialog',
-              data: 'create'
+              data: {
+                formType: 'create',
+                supplier: null
+              }
             }
         );
       })
@@ -136,13 +142,19 @@ export class SuppliersEffects {
 
   showEditSupplierDialog$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.showEditSupplier),
-      map((action: Action & { focusedSupplier: SupplierModel }) => {
-        this.dialog.open<SupplierFormComponent, 'edit' | 'create'>(SupplierFormComponent,
+      map((action: Action & { supplier: SupplierModel }) => {
+        this.dialog.open<SupplierFormComponent, {
+          formType: 'edit' | 'create',
+          supplier: SupplierModel
+        }>(SupplierFormComponent,
             {
               width: '66vw',
               height: '66vh',
               panelClass: 'customerDialog',
-              data: 'edit'
+              data: {
+                supplier: action.supplier,
+                formType: 'edit'
+              }
             }
         );
       })
@@ -191,16 +203,7 @@ export class SuppliersEffects {
         .pipe(take(1))
         .subscribe(supplier => supplierToEdit = supplier);
 
-    this.store$.select(fromSuppliers.selectAllSuppliers)
-        .pipe(take(1))
-        .subscribe(suppliers => allSuppliers = [...suppliers]);
 
-    allSuppliers[allSuppliers.findIndex(c => c.id === supplierToEdit.id)] = {
-      ...editedSupplier,
-      id: supplierToEdit.id
-    };
-
-    return SupplierActions.editSupplierSuccess({ suppliers: allSuppliers });
   }
 
   private deleteSupplier(): Action {
