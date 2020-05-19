@@ -13,10 +13,10 @@ public class EmailSender {
     @Value("${sendGrid.key}")
     private static String key;
 
-    public static void send(String from, String to, String subject, String content) throws IOException {
-        Email fromUser = new Email(from);
+    public static void send(String to, String subject, String content) throws IOException {
+        Email fromUser = new Email("esrs_omega@gmail.com");
         Email toUser = new Email(to);
-        Content contents = new Content("text/plain", content);
+        Content contents = new Content("text/html", "a href=\"52.177.233.178/api/" + content + "\">Click to confirm registration and login.</a>");
         Mail mail = new Mail(fromUser, subject, toUser, contents);
 
         SendGrid sg = new SendGrid(System.getenv(key));

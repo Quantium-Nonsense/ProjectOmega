@@ -12,6 +12,7 @@ import com.project.omega.exceptions.DuplicateUserException;
 import com.project.omega.exceptions.InvalidOldPasswordException;
 import com.project.omega.exceptions.TokenExpiredException;
 import com.project.omega.exceptions.UserNotFoundException;
+import com.project.omega.helper.EmailSender;
 import com.project.omega.helper.GenericResponse;
 import com.project.omega.service.JwtUserDetailsService;
 import com.project.omega.service.interfaces.AuthenticationService;
@@ -82,6 +83,8 @@ public class JwtAuthenticationController {
 
         String verificationToken = UUID.randomUUID().toString();
         tokenService.saveToken(verificationToken, newUser);
+
+        EmailSender.send(user.getEmail(), "Sign-up confirmation.", "confirmRegistration?token=" + verificationToken);
 
         UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
 
