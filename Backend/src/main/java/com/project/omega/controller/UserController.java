@@ -39,7 +39,7 @@ public class UserController {
            UserResponse r = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
            return r;
         }).collect(Collectors.toList());
-        return new ResponseEntity(users, HttpStatus.OK);
+        return new ResponseEntity(u, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
