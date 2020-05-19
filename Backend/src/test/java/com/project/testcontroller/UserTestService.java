@@ -40,11 +40,13 @@ public class UserTestService extends OmegaApplicationTests {
                 .setId(TestingConstant.TEST_ID_1)
                 .setEmail(TestingConstant.TEST_EMAIL_1)
                 .setPassword(TestingConstant.TEST_PASSWORD)
+                .setEnabled(true)
                 .build();
         User user_two = new User.UserBuilder()
                 .setId(TestingConstant.TEST_ID_2)
                 .setEmail(TestingConstant.TEST_EMAIL_2)
                 .setPassword(TestingConstant.TEST_PASSWORD)
+                .setEnabled(true)
                 .build();
         Mockito.when(userRepository.findAll()).thenReturn(Stream.of(user_one, user_two).collect(Collectors.toList()));
         Mockito.when(userRepository.existsByEmail(Mockito.anyString())).thenReturn(true);
@@ -72,6 +74,7 @@ public class UserTestService extends OmegaApplicationTests {
                 .setId(TestingConstant.TEST_ID_1)
                 .setEmail(TestingConstant.TEST_EMAIL_1)
                 .setPassword(TestingConstant.TEST_PASSWORD)
+                .setEnabled(true)
                 .build();
         Mockito.when(userRepository.findById(TestingConstant.TEST_ID_1)).thenReturn(Optional.of(user_one));
         Assert.assertEquals(user_one.getId(), userService.getUserById(TestingConstant.TEST_ID_1).getId());
@@ -85,6 +88,7 @@ public class UserTestService extends OmegaApplicationTests {
                 .setId(TestingConstant.TEST_ID_1)
                 .setEmail(TestingConstant.TEST_EMAIL_1)
                 .setPassword(TestingConstant.TEST_PASSWORD)
+                .setEnabled(true)
                 .build();
         Mockito.when(userRepository.findById(TestingConstant.TEST_ID_1)).thenReturn(Optional.of(user_one));
         Mockito.when(userRepository.findById(TestingConstant.TEST_ID_2)).thenReturn(Optional.empty());
@@ -104,6 +108,7 @@ public class UserTestService extends OmegaApplicationTests {
                 .setId(TestingConstant.TEST_ID_1)
                 .setEmail(TestingConstant.TEST_EMAIL_1)
                 .setPassword(TestingConstant.TEST_PASSWORD)
+                .setEnabled(true)
                 .build();
         Mockito.when(userRepository.findById(TestingConstant.TEST_ID_1)).thenReturn(Optional.of(user_one));
         userService.deleteUserById(TestingConstant.TEST_ID_1);
@@ -117,11 +122,13 @@ public class UserTestService extends OmegaApplicationTests {
                 .setId(TestingConstant.TEST_ID_1)
                 .setEmail(TestingConstant.TEST_EMAIL_1)
                 .setPassword(TestingConstant.TEST_PASSWORD)
+                .setEnabled(true)
                 .build();
         User user_detail = new User.UserBuilder()
                 .setId(TestingConstant.TEST_ID_1)
                 .setEmail("email")
                 .setPassword("password")
+                .setEnabled(true)
                 .build();
         Mockito.when(userRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(user_one));
         Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user_detail);

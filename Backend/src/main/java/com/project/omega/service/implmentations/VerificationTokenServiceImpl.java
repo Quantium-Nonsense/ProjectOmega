@@ -1,6 +1,7 @@
 package com.project.omega.service.implmentations;
 
 import com.project.omega.bean.dao.auth.VerificationToken;
+import com.project.omega.bean.dao.entity.User;
 import com.project.omega.repository.VerificationTokenRepository;
 import com.project.omega.service.interfaces.VerificationTokenService;
 import org.slf4j.Logger;
@@ -17,9 +18,10 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     private VerificationTokenRepository tokenRepository;
 
     @Override
-    public VerificationToken saveToken(VerificationToken token) {
+    public void saveToken(String token, User user) {
         LOGGER.debug("Saving Token: {}", token);
-        return tokenRepository.save(token);
+        VerificationToken verificationToken = new VerificationToken(token, user);
+        tokenRepository.save(verificationToken);
     }
 
     @Override

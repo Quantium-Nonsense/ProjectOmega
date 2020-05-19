@@ -13,6 +13,7 @@ import com.project.omega.helper.GenericResponse;
 import com.project.omega.service.JwtUserDetailsService;
 import com.project.omega.service.interfaces.AuthenticationService;
 import com.project.omega.service.interfaces.UserService;
+import com.project.omega.service.interfaces.VerificationTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,9 @@ public class JwtAuthenticationController {
     private UserService userService;
 
     @Autowired
+    private VerificationTokenService tokenService;
+
+    @Autowired
     private MessageSource messages;
 
     @PostMapping(value = "/api/authenticate")
@@ -72,6 +76,9 @@ public class JwtAuthenticationController {
                 .setEmail(user.getEmail())
                 .setPassword(user.getPassword())
                 .build();
+
+        String verificationToken = UUID.randomUUID().toString();
+        tokenService.saveToken(verificationToken, newUser);
 
         UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
 

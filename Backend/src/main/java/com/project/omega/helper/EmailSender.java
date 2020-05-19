@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 
-public class EmailService {
+public class EmailSender {
     @Value("${sendGrid.key}")
     private static String key;
 
