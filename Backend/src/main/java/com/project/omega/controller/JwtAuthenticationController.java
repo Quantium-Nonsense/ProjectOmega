@@ -99,12 +99,12 @@ public class JwtAuthenticationController {
         User user = verificationToken.getUser();
 
         if(verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime() <= 0) {
-            tokenService.deleteToken(verificationToken);
             throw new TokenExpiredException("Verification token expired. Contact the service provider to request a new token.");
         }
 
         user.setEnabled(true);
         userService.updateUserById(user.getId(), user);
+        tokenService.deleteToken(verificationToken);
 
         return "redirect:login.html";
     }
