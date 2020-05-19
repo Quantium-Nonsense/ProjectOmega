@@ -1,15 +1,15 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
-import {ProductDetailsDialogComponent} from './product-details-dialog.component';
+import { OrderDetailsDialogComponent } from './order-details-dialog.component';
 
 describe('DetailsDialogComponent', () => {
-  let component: ProductDetailsDialogComponent;
-  let fixture: ComponentFixture<ProductDetailsDialogComponent>;
+  let component: OrderDetailsDialogComponent;
+  let fixture: ComponentFixture<OrderDetailsDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProductDetailsDialogComponent],
+      declarations: [OrderDetailsDialogComponent],
       imports: [
         MatDialogModule,
       ],
@@ -22,7 +22,7 @@ describe('DetailsDialogComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProductDetailsDialogComponent);
+    fixture = TestBed.createComponent(OrderDetailsDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

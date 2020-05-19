@@ -2,14 +2,15 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Supplier, SuppliersDataSource } from '../../../data/supplier/supplier-datasource';
+import { OrderModel } from '../../models/orders/order.model';
 import { ProductModel } from '../../models/products/products.model';
 
 @Component({
   selector: 'app-details-dialog',
-  templateUrl: './product-details-dialog.component.html',
-  styleUrls: ['./product-details-dialog.component.scss']
+  templateUrl: './order-details-dialog.component.html',
+  styleUrls: ['./order-details-dialog.component.scss']
 })
-export class ProductDetailsDialogComponent implements OnInit {
+export class OrderDetailsDialogComponent implements OnInit {
   /**
    * The form
    */
@@ -18,8 +19,8 @@ export class ProductDetailsDialogComponent implements OnInit {
   private suppliers: Supplier[];
 
   constructor(
-    public dialogRef: MatDialogRef<ProductDetailsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: { product: ProductModel, title: string, editable: boolean },
+    public dialogRef: MatDialogRef<OrderDetailsDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: { order: OrderModel, title: string, editable: boolean },
   ) {
     this.suppliers = SuppliersDataSource.getInstance().getAll();
   }
@@ -85,7 +86,7 @@ export class ProductDetailsDialogComponent implements OnInit {
 
   private onSaveClick() {
     const newProduct = new ProductModel(
-      this.data.product ? this.data.product.id : null,
+      this.data.order ? this.data.order.id : null,
       this.productItemForm.get('supplier').value.name,
       this.productItemForm.get('supplier').value.id,
       this.productItemForm.get('name').value,
@@ -98,7 +99,7 @@ export class ProductDetailsDialogComponent implements OnInit {
 
   private formInitialization = (): FormGroup => {
     const editable = this.data.editable;
-    const initialProduct = this.data.product;
+    const initialProduct = this.data.order;
 
     return new FormGroup({
       supplier: new FormControl(

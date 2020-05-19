@@ -2,7 +2,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { CustomerModel } from '../../app/models/customers/customer.model';
 import { OrderProductModel } from '../../app/models/orders/oder-product.model';
 import { OrderModel } from '../../app/models/orders/order.model';
-import { ProductModel } from '../../app/models/products/products.model';
 import { MockProductsAPI } from '../products/products-data';
 
 // TODO: replace this with real data from your application
@@ -15,7 +14,7 @@ export class MockOrdersAPI {
   private data: OrderModel[] = [
     new OrderModel(
       1,
-      new Date(2020, 02, 10, 13, 15, 9),
+      new Date(2020, 2, 10, 13, 15, 9),
       1,
       'PLACED',
       4150,
@@ -26,8 +25,8 @@ export class MockOrdersAPI {
           new CustomerModel(
             1,
             'Company 1',
-            1,
-            'Amazong client 1',
+            '1',
+            'Amazing client 1',
             'bla1@bla.com',
             'FirstName1',
             'FirstName1',
@@ -42,8 +41,8 @@ export class MockOrdersAPI {
           new CustomerModel(
             1,
             'Company 1',
-            1,
-            'Amazong client 1',
+            '1',
+            'Amazing client 1',
             'bla1@bla.com',
             'FirstName1',
             'FirstName1',

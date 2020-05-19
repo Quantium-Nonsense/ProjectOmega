@@ -13,13 +13,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { DeleteDialogModule } from '../shared/delete-dialog/delete-dialog.module';
 import { SharedModule } from '../shared/shared.module';
-import { ProductDetailsDialogComponent } from './order-details-dialog/product-details-dialog.component';
+import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
 
 import { OrdersRoutingModule } from './orders-routing.module';
 import { OrdersComponent } from './orders.component';
 
 @NgModule({
-  declarations: [OrdersComponent, ProductDetailsDialogComponent],
+  declarations: [OrdersComponent, OrderDetailsDialogComponent],
   imports: [
     CommonModule,
     DeleteDialogModule,

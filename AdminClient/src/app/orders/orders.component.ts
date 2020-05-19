@@ -9,7 +9,7 @@ import { Observable, Subscription } from 'rxjs';
 import { MockOrdersAPI } from '../../data/orders/orders-data';
 import { OrderModel } from '../models/orders/order.model';
 import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
-import { ProductDetailsDialogComponent } from './order-details-dialog/product-details-dialog.component';
+import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
 
 @Component({
   selector: 'app-products',
@@ -22,7 +22,7 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatTable) table: MatTable<OrderModel>;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['dateCreated', 'user', 'products', 'totalPrice', 'status', 'actions'];
+  displayedColumns = ['dateCreated', 'products', 'totalPrice', 'status', 'actions'];
   dataSource: MatTableDataSource<OrderModel> = new MatTableDataSource<OrderModel>([]);
 
   private subscriptions = new Subscription();
@@ -57,7 +57,7 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   handleReadDetails(order: OrderModel) {
-    const dialogRef = this.dialog.open(ProductDetailsDialogComponent, {
+    const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
       data: { order, title: `Details for ${order.id}`, editable: false }
@@ -65,10 +65,10 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   handleEditDetails(order: OrderModel) {
-    const dialogRef = this.dialog.open(ProductDetailsDialogComponent, {
+    const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
-      data: { order, title: `Edit ${order.name}`, editable: true }
+      data: { order, title: `Edit Order ${order.id}`, editable: true }
     });
 
     this.subscriptions.add(
@@ -84,12 +84,12 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   handleCreate() {
-    const dialogRef = this.dialog.open(ProductDetailsDialogComponent, {
+    const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
       data: {
         product: null,
-        title: 'Create new product',
+        title: 'Create new order',
         editable: true
       }
     });
@@ -126,8 +126,14 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   handleFilter = (order: OrderModel, filterValue: string): boolean =>
-    order.supplier.toLowerCase().includes(filterValue)
-    || order.name.toLowerCase().includes(filterValue)
-    || order.description.toLowerCase().includes(filterValue)
-    || order.price.toString().includes(filterValue);
+    order.status.toLowerCase().includes(filterValue)
+    || order.totalOrderPrice.toString().includes(filterValue)
+    || order.dateCreated.toString().includes(filterValue)
+    || order.orderProducts.filter(
+    orderProduct => orderProduct.product.name.includes(filterValue)
+      || orderProduct.product.supplier.includes(filterValue)
+      || orderProduct.client.companyName.includes(filterValue)
+      || orderProduct.client.firstName.includes(filterValue)
+      || orderProduct.client.lastName.includes(filterValue)
+    ).length > 0;
 }
