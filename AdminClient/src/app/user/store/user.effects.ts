@@ -1,14 +1,18 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import * as fromApp from '../../reducers/index';
+import { ApiPathService } from '../../services/api-path.service';
 import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
 import { UserModel } from '../../shared/model/user/user.model';
+import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import * as UserActions from './user.actions';
 import { selectFocusedUser, selectUsers } from './user.reducer';
@@ -20,7 +24,7 @@ export class UserEffects {
       ofType(UserActions.editUser),
       switchMap((action: Action & { user: UserModel }) => {
         let users: UserModel[] = [];
-        this.store.select(selectUsers)
+        this.store$.select(selectUsers)
             .pipe(take(1)) // Dispose subscription after operation is done
             .subscribe((oldUsers: UserModel[]) => {
               users = [...oldUsers]; // The old users before updating
@@ -46,8 +50,8 @@ export class UserEffects {
         let newUsers: UserModel[] = [];
         let currentUser: UserModel;
 
-        this.store.select(selectFocusedUser).pipe(take(1)).subscribe(user => currentUser = user);
-        this.store.select(selectUsers).pipe(take(1)).subscribe(users => {
+        this.store$.select(selectFocusedUser).pipe(take(1)).subscribe(user => currentUser = user);
+        this.store$.select(selectUsers).pipe(take(1)).subscribe(users => {
           newUsers = users.filter(u => u.id !== currentUser.id);
         });
 
@@ -66,7 +70,7 @@ export class UserEffects {
                 {
                   action: () => {
                     this.dialog.closeAll();
-                    this.store.dispatch(UserActions.deleteFocusedUser());
+                    this.store$.dispatch(UserActions.deleteFocusedUser());
                   },
                   text: environment.common.CONFIRMATION_TEXT,
                   color: 'warn'
@@ -89,37 +93,48 @@ export class UserEffects {
       map((action: Action) => UserActions.loadAllUsers())
   ));
 
+  showErrorMessage$ = createEffect(
+      () => this.actions$.pipe(
+          ofType(UserActions.hasErrorMessage),
+          map((action: Action & { error: string }) => {
+            this.snackBar.open(action.error, null, {
+              duration: 3000
+            });
+          })
+      ), { dispatch: false });
+
   loadUsers$ = createEffect(() => this.actions$.pipe(
       ofType(UserActions.loadAllUsers),
-      switchMap((action: Action) => of(UserActions.usersLoaded({ users: this.createMockUsers() })).pipe(delay(2000)))
+      switchMap((action: Action) => {
+        return this.httpGetAllUsers().pipe(
+            switchMap((users: UserModel[]) => {
+              return [
+                UserActions.usersLoaded({ users }),
+                ToolbarActions.stopProgressBar()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                UserActions.hasErrorMessage({ error: error.message }),
+                ToolbarActions.stopProgressBar()
+              ];
+            })
+        );
+      })
   ));
 
   constructor(
-      private store: Store<fromApp.State>,
+      private store$: Store<fromApp.State>,
       private actions$: Actions,
-      public dialog: MatDialog
+      private endPoint: ApiPathService,
+      public dialog: MatDialog,
+      private http: HttpClient,
+      private snackBar: MatSnackBar
   ) {
   }
 
-  /**
-   * Creates 50 dummy users for display
-   *
-   * @returns UserModel[]
-   */
-  createMockUsers = (): UserModel[] => {
-    const mockUsers: UserModel[] = [];
-
-    for (let i = 0; i < 50; i++) {
-      mockUsers.push(
-          new UserModel(
-              (Math.random() * 153000).toString(),
-              `bla${ i }@bla.com`,
-              `longasspass${ i }`,
-              ['Admin', 'Rep'][Math.floor(Math.random() * 2)],
-              'Company 1'));
-    }
-
-    return mockUsers;
-  };
+  httpGetAllUsers(): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(this.endPoint.allUsersEndPoint);
+  }
 }
 
