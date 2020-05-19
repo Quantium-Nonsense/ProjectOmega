@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.entity.PasswordResetToken;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.exceptions.NoRecordsFoundException;
+import com.project.omega.exceptions.UserDisabledException;
 import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.helper.RoleBasedConstant;
 import com.project.omega.repository.UserRepository;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -108,9 +110,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByEmail(String email) {
+    public User findUserByEmail(String email) throws UserNotFoundException, UserDisabledException {
         LOGGER.debug("Get User By Email : {}", email);
-        return userRepository.findByEmail(email);
+        User user = findUserByEmail(email);
+        if(user == null) {
+            throw new UserNotFoundException(messages.getMessage("message.userNotFound", null, null));
+        } else if(!user.getEnabled()) {
+            throw new UserDisabledException(messages.getMessage("auth.message.disabled", null, null));
+        }
+        return user;
     }
 
     @Override

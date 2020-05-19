@@ -8,10 +8,7 @@ import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.PasswordDTO;
 import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.bean.dto.UserResponse;
-import com.project.omega.exceptions.DuplicateUserException;
-import com.project.omega.exceptions.InvalidOldPasswordException;
-import com.project.omega.exceptions.TokenExpiredException;
-import com.project.omega.exceptions.UserNotFoundException;
+import com.project.omega.exceptions.*;
 import com.project.omega.helper.EmailSender;
 import com.project.omega.helper.GenericResponse;
 import com.project.omega.service.JwtUserDetailsService;
@@ -64,6 +61,7 @@ public class JwtAuthenticationController {
     @PostMapping(value = "/api/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
         LOGGER.debug("Authentication for JwtRequest: {}", authenticationRequest);
+        User user = userService.findUserByEmail(authenticationRequest.getEmail());
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
         return ResponseEntity.ok(new JwtResponse(authenticationService.createJWTToken(authenticationRequest)));
     }
@@ -114,7 +112,7 @@ public class JwtAuthenticationController {
     /*To be Used When the User DOES NOT remember their password*/
     @SuppressWarnings("unchecked")
     @PostMapping(value = "/api/resetPassword", headers = "Accept=application/json")
-    public ResponseEntity resetUserPassword(@RequestParam("email") final String userEmail) {
+    public ResponseEntity resetUserPassword(@RequestParam("email") final String userEmail) throws UserNotFoundException, UserDisabledException {
         final User user = userService.findUserByEmail(userEmail);
         Properties properties = null;
         if (user != null) {
@@ -130,7 +128,7 @@ public class JwtAuthenticationController {
     /*To be User When User KNOWS his password*/
     @PostMapping(value = "/api/updatePassword", headers = "Accept=application/json")
     @SuppressWarnings("unchecked")
-    public ResponseEntity changeUserPassword(@Valid PasswordDTO passwordDto) {
+    public ResponseEntity changeUserPassword(@Valid PasswordDTO passwordDto) throws UserNotFoundException, UserDisabledException {
         final User user = userService.findUserByEmail(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getEmail());
         if (!userService.checkIfOldPasswordIsValid(user, passwordDto.getOldPassword())) {
             throw new InvalidOldPasswordException();
