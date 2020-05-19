@@ -67,13 +67,13 @@
             <td *matCellDef="let row"
                 mat-cell>
                 <button (click)="editSupplier(row)"
-                        [disabled]="isLoading | async"
+                        [disabled]="isLoading"
                         color="primary"
                         mat-icon-button>
                     <mat-icon>edit</mat-icon>
                 </button>
                 <button (click)="deleteSupplier(row)"
-                        [disabled]="isLoading | async"
+                        [disabled]="isLoading"
                         color="primary"
                         mat-icon-button>
                     <mat-icon>delete</mat-icon>

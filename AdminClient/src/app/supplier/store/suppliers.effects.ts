@@ -113,7 +113,7 @@ export class SuppliersEffects {
               this.dialog.closeAll();
               return [
                 ToolbarActions.stopProgressBar(),
-                SupplierActions.showErrorMessage({ error: error instanceof HttpErrorResponse ? error.message : error })
+                SupplierActions.showErrorMessage({ error: error instanceof Error ? error.message : error })
               ];
             })
         );
@@ -206,10 +206,10 @@ export class SuppliersEffects {
             SupplierActions.allSuppliersLoaded({ suppliers }),
             ToolbarActions.stopProgressBar()
           ]),
-          catchError((error: HttpErrorResponse) => {
+          catchError(error => {
             return [
               ToolbarActions.stopProgressBar(),
-              SupplierActions.showErrorMessage({ error: error.message })
+              SupplierActions.showErrorMessage({ error: error instanceof HttpErrorResponse ? error.message : error })
             ];
           })
       )))

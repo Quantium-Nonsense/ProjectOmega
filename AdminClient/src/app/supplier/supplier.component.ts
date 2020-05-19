@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as fromApp from '../reducers/index';
 import { SupplierModel } from '../shared/model/supplier/supplier.model';
 import * as ToolbarActions from '../toolbar/store/toolbar.actions';
@@ -18,7 +18,7 @@ import * as fromSuppliers from './store/suppliers.reducer';
 export class SupplierComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  isLoading: Observable<boolean>;
+  isLoading: boolean;
   suppliers: MatTableDataSource<SupplierModel>;
   displayCols: string[] = ['companyName', 'contactNumber', 'email', 'firstName', 'lastName', 'actions', 'id'];
 
@@ -35,7 +35,9 @@ export class SupplierComponent implements OnInit, OnDestroy {
     // Load all supplier
     this.store$.dispatch(ToolbarActions.beginProgressBar());
     this.store$.dispatch(SupplierActions.beginLoadingSuppliers());
-    this.isLoading = this.store$.select(fromToolbar.selectIsVisible);
+    this.sub.add(
+        this.store$.select(fromToolbar.selectIsVisible).subscribe(loading => this.isLoading = loading)
+    );
     this.sub.add(
         this.store$.select(fromSuppliers.selectAllSuppliers).subscribe((suppliers: SupplierModel[]) => {
           this.suppliers.data = suppliers;
