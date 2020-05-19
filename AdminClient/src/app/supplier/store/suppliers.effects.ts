@@ -18,6 +18,55 @@ import * as fromSuppliers from './suppliers.reducer';
 
 @Injectable()
 export class SuppliersEffects {
+
+  showSupplierCreatedSuccessMessageAndClear$ = createEffect(() => this.actions$.pipe(
+      ofType(SupplierActions.newSupplierCreateSuccess),
+      map((action: Action) => {
+        this.toast.open('New supplier created successfully', null, {
+          duration: 3000
+        });
+        this.dialog.closeAll();
+        return SupplierActions.beginLoadingSuppliers();
+      })
+  ));
+
+
+  showSupplerFailedToCreateMessage$ = createEffect(() => this.actions$.pipe(
+      ofType(SupplierActions.newSupplierCreateFailed),
+      map((action: Action & { error: string }) => {
+        this.toast.open(`Something went wrong: ${ action.error }`, null, {
+          duration: 3000
+        });
+        this.dialog.closeAll();
+      })
+  ), { dispatch: false });
+
+  createSupplier$ = createEffect(() => this.actions$.pipe(
+      ofType(SupplierActions.attemptToCreateNewSupplier),
+      switchMap((action: Action & { supplier: SupplierModel }) => {
+        return this.httpCreateNewSupplier(action.supplier).pipe(
+            switchMap(supplier => {
+              return [
+                SupplierActions.newSupplierCreateSuccess(),
+                ToolbarActions.stopProgressBar()
+              ];
+            }),
+            catchError(err => {
+              if (err instanceof HttpErrorResponse) {
+                return [
+                  ToolbarActions.stopProgressBar(),
+                  SupplierActions.newSupplierCreateFailed({ error: err.message })
+                ];
+              }
+              return [
+                ToolbarActions.stopProgressBar(),
+                SupplierActions.newSupplierCreateFailed({ error: err })
+              ];
+            })
+        );
+      })
+  ));
+
   deleteSupplier$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.deleteSupplier),
       switchMap((action: Action) => of(this.deleteSupplier()).pipe(
@@ -71,14 +120,15 @@ export class SuppliersEffects {
       })
   ), { dispatch: false });
 
-  showCreateSupplierDialog$ = createEffect( () => this.actions$.pipe(
-      ofType(SupplierActions.createNewSupplier),
+  showCreateSupplierDialog$ = createEffect(() => this.actions$.pipe(
+      ofType(SupplierActions.showCreateNewSupplierDialog),
       map((action: Action) => {
-        this.dialog.open<SupplierFormComponent, SupplierModel>(SupplierFormComponent,
+        this.dialog.open<SupplierFormComponent, 'edit' | 'create'>(SupplierFormComponent,
             {
               width: '66vw',
               height: '66vh',
-              panelClass: 'customerDialog'
+              panelClass: 'customerDialog',
+              data: 'create'
             }
         );
       })
@@ -87,11 +137,12 @@ export class SuppliersEffects {
   showEditSupplierDialog$ = createEffect(() => this.actions$.pipe(
       ofType(SupplierActions.showEditSupplier),
       map((action: Action & { focusedSupplier: SupplierModel }) => {
-        this.dialog.open<SupplierFormComponent, SupplierModel>(SupplierFormComponent,
+        this.dialog.open<SupplierFormComponent, 'edit' | 'create'>(SupplierFormComponent,
             {
               width: '66vw',
               height: '66vh',
-              panelClass: 'customerDialog'
+              panelClass: 'customerDialog',
+              data: 'edit'
             }
         );
       })
@@ -121,6 +172,10 @@ export class SuppliersEffects {
       private endPoint: ApiPathService,
       private store$: Store<fromApp.State>
   ) {
+  }
+
+  httpCreateNewSupplier(supplier: SupplierModel): Observable<SupplierModel> {
+    return this.http.post<SupplierModel>(this.endPoint.createNewSupplierEndPoint, supplier);
   }
 
   httpGetAllSuppliers(): Observable<SupplierModel[]> {

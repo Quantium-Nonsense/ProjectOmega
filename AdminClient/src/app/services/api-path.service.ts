@@ -19,6 +19,10 @@ export class ApiPathService {
     return `${ this.endPoint }/registration`;
   }
 
+  get createNewSupplierEndPoint(): string {
+    return `${ this.endPoint }/supplier/create`;
+  }
+
   /**
    * returns the login end point
    */

@@ -136,12 +136,12 @@
 </form>
 <mat-dialog-actions>
     <button (click)="submitForm()"
-            [disabled]="isLoading | async"
+            [disabled]="supplierForm.invalid || isLoading"
             color="primary"
             mat-stroked-button>Confirm
     </button>
     <button (click)="cancel()"
-            [disabled]="isLoading | async"
+            [disabled]="isLoading"
             color="warn"
             mat-stroked-button>Cancel
     </button>

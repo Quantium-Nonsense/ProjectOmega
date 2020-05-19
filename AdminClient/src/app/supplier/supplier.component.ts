@@ -8,6 +8,7 @@ import { SupplierModel } from '../shared/model/supplier/supplier.model';
 import * as ToolbarActions from '../toolbar/store/toolbar.actions';
 import * as SupplierActions from './store/suppliers.actions';
 import * as fromSuppliers from './store/suppliers.reducer';
+import * as fromToolbar from '../toolbar/store/toolbar.reducer';
 
 @Component({
   selector: 'app-suppliers',
@@ -34,7 +35,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     // Load all supplier
     this.store$.dispatch(ToolbarActions.beginProgressBar());
     this.store$.dispatch(SupplierActions.beginLoadingSuppliers());
-    this.isLoading = this.store$.select(fromSuppliers.selectIsLoading);
+    this.isLoading = this.store$.select(fromToolbar.selectShowProgressBar);
     this.sub.add(
         this.store$.select(fromSuppliers.selectAllSuppliers).subscribe((suppliers: SupplierModel[]) => {
           this.suppliers.data = suppliers;
@@ -65,6 +66,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
   }
 
   handleCreate(): void {
-    this.store$.dispatch(SupplierActions.createNewSupplier())
+    this.store$.dispatch(SupplierActions.showCreateNewSupplierDialog())
   }
 }

@@ -1,6 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import * as fromApp from '../../reducers';
@@ -15,16 +15,16 @@ import * as fromToolbar from '../../toolbar/store/toolbar.reducer';
 })
 export class SupplierFormComponent implements OnInit, OnDestroy {
   supplierForm: FormGroup;
-  isLoading: Observable<boolean>;
+  isLoading: boolean;
 
   private sub: Subscription;
 
   constructor(
       private store$: Store<fromApp.State>,
-      private dialogRef: MatDialogRef<SupplierFormComponent>
+      private dialogRef: MatDialogRef<SupplierFormComponent>,
+      @Inject(MAT_DIALOG_DATA) public formType: 'edit' | 'create'
   ) {
-    this.sub = new Subscription();
-    this.supplierForm = this.initializeForm();
+
   }
 
   get lastNameHasError(): boolean {
@@ -85,10 +85,10 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
 
   get emailErrorMessage(): string {
     return this.email.hasError('required')
-        ? 'Email is required'
-        : this.email.hasError('email')
-            ? 'This is not a valid email'
-            : null;
+           ? 'Email is required'
+           : this.email.hasError('email')
+             ? 'This is not a valid email'
+             : null;
   }
 
   get companyNameHasError(): boolean {
@@ -108,9 +108,19 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.sub = new Subscription();
+    this.supplierForm = this.initializeForm();
     this.sub.add(
-        this.store$.select(fromToolbar.selectToolbarState)
-            .subscribe(isLoading => isLoading ? this.supplierForm.disable() : this.supplierForm.enable())
+        this.store$.select(fromToolbar.selectShowProgressBar)
+            .subscribe(isLoading => {
+              if (isLoading) {
+                this.supplierForm.disable();
+                this.isLoading = isLoading;
+              } else {
+                this.supplierForm.enable();
+                this.isLoading = isLoading;
+              }
+            })
     );
     this.sub.add(
         this.store$.select(fromSupplier.selectFocusedSupplier).subscribe(supplier => {
@@ -144,18 +154,33 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
   };
 
   submitForm() {
-    this.store$.dispatch(SupplierActions.editSupplier({
-      editedSupplier: {
-        id: null,
-        notes: this.notes.value,
-        lastName: this.lastName.value,
-        firstName: this.firstName.value,
-        email: this.email.value,
-        description: this.description.value,
-        contactNumber: this.contactNumber.value,
-        companyName: this.companyName.value
-      }
-    }));
+    if (this.formType === 'create') {
+      this.store$.dispatch(SupplierActions.attemptToCreateNewSupplier({
+        supplier: {
+          id: null,
+          notes: this.notes.value,
+          lastName: this.lastName.value,
+          firstName: this.firstName.value,
+          email: this.email.value,
+          description: this.description.value,
+          contactNumber: this.contactNumber.value,
+          companyName: this.companyName.value
+        }
+      }));
+    } else {
+      this.store$.dispatch(SupplierActions.editSupplier({
+        editedSupplier: {
+          id: null,
+          notes: this.notes.value,
+          lastName: this.lastName.value,
+          firstName: this.firstName.value,
+          email: this.email.value,
+          description: this.description.value,
+          contactNumber: this.contactNumber.value,
+          companyName: this.companyName.value
+        }
+      }));
+    }
   }
 
   cancel() {

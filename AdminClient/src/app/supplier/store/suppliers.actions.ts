@@ -1,13 +1,27 @@
 import { createAction, props } from '@ngrx/store';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 
+export const newSupplierCreateSuccess = createAction(
+    '[Suppliers - Effects] New supplier created success'
+);
+
+export const newSupplierCreateFailed = createAction(
+    '[Suppliers - Effects] Error when created new supplier',
+    props<{ error: string }>()
+);
+
 export const showErrorMessage = createAction(
     '[Suppliers - Effects] Has error message to show',
     props<{ error: string }>()
 );
 
-export const createNewSupplier = createAction(
-    '[Suppliers - Component] Create new supplier'
+export const showCreateNewSupplierDialog = createAction(
+    '[Suppliers - Component] Show new supplier dialog'
+);
+
+export const attemptToCreateNewSupplier = createAction(
+    '[Suppliers - Form] Attempt to create new supplier',
+    props<{ supplier: SupplierModel }>()
 );
 
 export const beginLoadingSuppliers = createAction(
