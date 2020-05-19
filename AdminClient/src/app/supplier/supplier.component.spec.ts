@@ -187,5 +187,69 @@ describe('SupplierComponent', () => {
     });
 
     expect(effects.createSupplier$).toBeObservable(expected);
-  })
+  });
+
+  it('should reload page when a supplier has been deleted', () => {
+    actions$ = hot('---a', { a: SuppliersActions.deleteSupplierSuccess() });
+
+    const expected = hot('---(ab)', {
+      a: ToolbarActions.beginProgressBar(),
+      b: SuppliersActions.beginLoadingSuppliers()
+    });
+
+    expect(effects.deleteSupplierSucess$).toBeObservable(expected);
+  });
+
+  it('should show error on failiure to delete supplier', () => {
+    const supplier = mockSuppliers()[0];
+    const spy = spyOn(effects, 'httpDeleteSupplier').and.returnValue(
+        cold('---#|', null, 'error go brrr')
+    );
+
+    actions$ = hot('---a', { a: SuppliersActions.deleteSupplier({ supplier }) });
+
+    const expected = hot('------(ab)', {
+      a: ToolbarActions.stopProgressBar(),
+      b: SuppliersActions.showErrorMessage({ error: 'error go brrr' })
+    });
+
+    expect(effects.deleteSupplier$).toBeObservable(expected);
+  });
+
+  it('should fire action deletesuppliersuccess when supplier has been deleted successfully', () => {
+    const supplier = mockSuppliers()[0];
+    const spy = spyOn(effects, 'httpDeleteSupplier').and.returnValue(
+        cold('---a|', {
+          a: supplier
+        })
+    );
+
+    actions$ = hot('---a', { a: SuppliersActions.deleteSupplier({ supplier }) });
+
+    const expected = hot('------(ab)', {
+      a: ToolbarActions.stopProgressBar(),
+      b: SuppliersActions.deleteSupplierSuccess()
+    });
+
+    expect(effects.deleteSupplier$).toBeObservable(expected);
+  });
+
+  it('should fire action edit when supplier has been edited successfully', () => {
+    const supplier = mockSuppliers()[0];
+    const spy = spyOn(effects, 'httpEditSupplier').and.returnValue(
+        cold('---a|', {
+          a: supplier
+        })
+    );
+
+    actions$ = hot('---a', { a: SuppliersActions.editSupplier({ editedSupplier: supplier }) });
+
+    const expected = hot('------(abc)', {
+      a: ToolbarActions.stopProgressBar(),
+      b: SuppliersActions.editSupplierSuccess(),
+      c: SuppliersActions.beginLoadingSuppliers()
+    });
+
+    expect(effects.editSupplier$).toBeObservable(expected);
+  });
 });

@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Supplier, SuppliersDataSource } from '../../../data/supplier/supplier-datasource';
 import { ProductModel } from '../../models/products/products.model';
+import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 
 @Component({
   selector: 'app-details-dialog',
@@ -15,13 +15,13 @@ export class ProductDetailsDialogComponent implements OnInit {
    */
   protected productItemForm: FormGroup;
 
-  private suppliers: Supplier[];
+  private suppliers: SupplierModel[];
 
   constructor(
     public dialogRef: MatDialogRef<ProductDetailsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: { product: ProductModel, title: string, editable: boolean },
   ) {
-    this.suppliers = SuppliersDataSource.getInstance().getAll();
+    this.suppliers = null;
   }
 
   get supplierHasError(): boolean {
@@ -103,7 +103,7 @@ export class ProductDetailsDialogComponent implements OnInit {
     return new FormGroup({
       supplier: new FormControl(
         {
-          value: initialProduct ? this.suppliers.find((element) => element.id === initialProduct.supplierId) : '',
+          value: initialProduct ? this.suppliers.find((element) => +element.id === initialProduct.id) : '',
           disabled: !editable,
         },
         [Validators.required],
