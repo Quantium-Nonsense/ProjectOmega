@@ -158,7 +158,7 @@ describe('SupplierComponent', () => {
     const spy = spyOn(effects, 'httpCreateNewSupplier').and.returnValue(cold(
         '---#|',
         null,
-        'error goes brrr'
+        new Error('error goes brrr')
     ));
 
     actions$ = hot('--a', { a: SuppliersActions.attemptToCreateNewSupplier({ supplier }) });

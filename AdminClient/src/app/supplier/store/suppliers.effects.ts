@@ -228,13 +228,13 @@ export class SuppliersEffects {
   };
 
 
-  private httpEditSupplier(editedSupplier: SupplierModel): Observable<SupplierModel> {
+  httpEditSupplier(editedSupplier: SupplierModel): Observable<SupplierModel> {
     return this.http.put<SupplierModel>(this.endPoint.getEditSupplierEndPoint(+editedSupplier.id), {
       ...editedSupplier
     });
   }
 
-  private httpDeleteSupplier(supplierId) {
+  httpDeleteSupplier(supplierId) {
     return this.http.delete(this.endPoint.getDeleteSupplierEndPoint(supplierId));
   }
 }

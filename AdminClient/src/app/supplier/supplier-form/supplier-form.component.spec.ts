@@ -98,7 +98,7 @@ describe('SupplierFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should stop progress bar and show error on error http response', () => {
+  it('should stop progress bar and show error on error http response 1', () => {
     const suppliers = mockSuppliers();
     const httpSpy = spyOn(effects, 'httpGetAllSuppliers').and.returnValue(
         cold('--#|', null, 'Bad!')
@@ -116,7 +116,7 @@ describe('SupplierFormComponent', () => {
     expect(effects.loadAllSuppliers$).toBeObservable(expected);
   });
 
-  it('should load all suppliers', () => {
+  it('should load all suppliers 1', () => {
     const suppliers = mockSuppliers();
     const httpSpy = spyOn(effects, 'httpGetAllSuppliers').and.callThrough().and.returnValue(
         cold('--a|', {
