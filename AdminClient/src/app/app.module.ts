@@ -56,7 +56,10 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     FormsModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: getToken
+        tokenGetter: getToken,
+        whitelistedDomains: [
+          '40.65.236.154'
+        ]
       }
     }),
     MatToolbarModule,

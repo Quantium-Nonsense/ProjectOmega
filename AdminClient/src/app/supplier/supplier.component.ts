@@ -49,13 +49,11 @@ export class SupplierComponent implements OnInit, OnDestroy {
 
 
   filterActions(data: SupplierModel, filterValue: string): boolean {
-    if (data && filterValue) {
       return data.email.toLowerCase().includes(filterValue)
              || data.notes.toLowerCase().includes(filterValue)
              || data.lastName.toLowerCase().includes(filterValue)
              || data.firstName.toLowerCase().includes(filterValue)
              || data.description.toLowerCase().includes(filterValue);
-    }
   }
 
   editSupplier(supplier: SupplierModel) {
