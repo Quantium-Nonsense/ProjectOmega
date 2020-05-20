@@ -1,9 +1,13 @@
+<h2>Client-Representative List</h2>
 <mat-list role="list">
   <mat-list-item id="{{customer.id}}" (click)="openDialog(customer.id)" role="listitem" *ngFor="let customer of customers" class="example-ripple-container mat-elevation-z4"
                  matRipple>
     ID: {{customer.id}}, {{customer.companyName}}, {{customer.firstName}} {{customer.lastName}}, Rep: {{customerRepList[customer.id].assignedRepresentative}}
   </mat-list-item>
 </mat-list>
+
+<h2>Client Data</h2>
+<app-chart></app-chart>
 
 
 

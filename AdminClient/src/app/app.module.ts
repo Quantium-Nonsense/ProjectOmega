@@ -11,31 +11,35 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {JwtModule} from '@auth0/angular-jwt';
-
 import {EffectsModule} from '@ngrx/effects';
 import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {MatRippleModule} from '@angular/material/core';
+import {MatDialogModule, MatDialogRef, MatDialog} from '@angular/material/dialog';
 import {environment} from '../environments/environment';
 import {AppRoutingModule} from './app-routing.module';
+import {SharedModule} from './shared/shared.module';
+import {AuthModule} from './auth/auth.module';
+import {ChartsModule} from 'ng2-charts';
+
 // Components imported
 import {AppComponent} from './app.component';
-import {AuthModule} from './auth/auth.module';
-
 import {AuthEffects} from './auth/store/auth.effects';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {appReducer, metaReducers} from './reducers';
-import {SharedModule} from './shared/shared.module';
 import {UserEffects} from './user/store/user.effects';
 import {CustomersEffects} from './customers/store/customers.effects';
 import {ToolbarComponent} from './toolbar/toolbar.component';
-import { ManagementComponent } from './management/management.component';
-import {MatRippleModule} from "@angular/material/core";
+import {ManagementComponent} from './management/management.component';
+import {ChartComponent} from './chart/chart.component';
+
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
 @NgModule({
 	declarations: [
 		AppComponent,
+    ChartComponent,
 		DashboardComponent,
 		ToolbarComponent,
 		ManagementComponent
@@ -45,6 +49,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     AppRoutingModule,
     AuthModule,
     BrowserModule,
+    ChartsModule,
     SharedModule,
     BrowserAnimationsModule,
     EffectsModule.forRoot([
@@ -60,6 +65,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     }),
     MatToolbarModule,
     MatButtonModule,
+    MatDialogModule,
     MatGridListModule,
     MatIconModule,
     MatSidenavModule,

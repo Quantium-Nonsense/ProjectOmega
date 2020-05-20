@@ -3,6 +3,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import {CustomerModel} from '../models/customers/customer.model';
 import {ManagementDialogComponent} from './management-dialog/management-dialog.component';
 import {CustomerManagementModel} from '../models/customers/management/customer-management.model';
+import {ChartComponent} from '../chart/chart.component';
 
 export interface DialogData {
   representative: string;
@@ -35,7 +36,7 @@ export class ManagementComponent implements OnInit {
   }
 
   openDialog(id: number): void {
-    let selectedId = id;
+    const selectedId = id;
     const dialogRef = this.dialog.open(ManagementDialogComponent, { // dialog reference
       width: '250px',
       data: {representative: this.customerRepList[selectedId].assignedRepresentative, id: selectedId} // data share for dialog
