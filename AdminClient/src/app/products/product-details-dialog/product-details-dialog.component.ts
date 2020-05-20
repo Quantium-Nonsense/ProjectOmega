@@ -90,7 +90,7 @@ export class ProductDetailsDialogComponent implements OnInit {
       this.productItemForm.get('supplier').value.id,
       this.productItemForm.get('name').value,
       this.productItemForm.get('description').value,
-      parseFloat(this.productItemForm.get('price').value)
+      //parseFloat(this.productItemForm.get('price').value)
     );
 
     this.dialogRef.close(newProduct);
