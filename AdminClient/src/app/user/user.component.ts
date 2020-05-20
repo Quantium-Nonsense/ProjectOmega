@@ -24,9 +24,9 @@ export class UserComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   constructor(
-    private store: Store<fromApp.State>,
+      private store: Store<fromApp.State>
   ) {
-    this.displayColumns = ['email', 'role', 'companyId', 'actions'];
+    this.displayColumns = ['email', 'roles', 'actions', 'id'];
     this.subscription = new Subscription();
   }
 
@@ -34,22 +34,14 @@ export class UserComponent implements OnInit, OnDestroy {
     this.store.dispatch(ToolbarActions.beginProgressBar());
     this.store.dispatch(UserActions.beginLoadingUserPage());
     this.subscription.add(
-      this.store.select(fromUser.selectIsLoading).subscribe(isLoading => {
-        if (!isLoading) {
-          this.store.dispatch(ToolbarActions.stopProgressBar());
-        }
-      })
+        this.store.select(fromUser.selectUsers).subscribe((users: UserModel[]) => {
+          if (!users) {
+            return;
+          }
+          this.users.data = users;
+          this.users.paginator = this.paginator;
+        })
     );
-    this.subscription.add(
-      this.store.select(fromUser.selectUsers).subscribe((users: UserModel[]) => {
-        if (!users) {
-          return;
-        }
-        this.users.data = users;
-        this.users.paginator = this.paginator;
-      })
-    );
-
   }
 
   ngOnDestroy(): void {
@@ -58,8 +50,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   filteringAction = (user: UserModel, filterValue: string) => {
     return user.email.toLowerCase().includes(filterValue)
-      || user.role.toLowerCase().includes(filterValue)
-      || user.companyId.toLowerCase().includes(filterValue);
+           || user.roles.some(r => r.name.toLowerCase().includes(filterValue));
   };
 
   editUser(user: UserModel) {
@@ -68,5 +59,9 @@ export class UserComponent implements OnInit, OnDestroy {
 
   deleteUser(user: UserModel) {
     this.store.dispatch(UserActions.showDeleteUserDialog({ user }));
+  }
+
+  handleCreate(): void {
+    this.store.dispatch(UserActions.showEditUserModal({ user: null }));
   }
 }

@@ -9,7 +9,7 @@ import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { UserModel } from '../shared/model/user.model';
+import { UserModel } from '../shared/model/user/user.model';
 import { TestModule } from '../shared/test/test.module';
 import * as fromApp from './../reducers/index';
 import * as UserActions from './store/user.actions';
@@ -214,7 +214,7 @@ describe('UserComponent', () => {
     selectFocusedUser.setResult(mockUsers[5]);
     mockStore.refreshState();
 
-    actions$ = of(UserActions.deleteFocusedUser());
+    actions$ = of(UserActions.deleteUser());
 
     effects.deleteUser$.subscribe(action => {
       const tryToFindDeletedUser = action.newUserList.find(u => u.id === mockUsers[5].id);
@@ -231,7 +231,7 @@ describe('UserComponent', () => {
       selectFocusedUser.setResult(mockUsers[i]);
       mockStore.refreshState();
 
-      actions$ = of(UserActions.deleteFocusedUser());
+      actions$ = of(UserActions.deleteUser());
 
       effects.deleteUser$.subscribe(action => {
         const tryToFindDeletedUser = action.newUserList.find(u => u.id === mockUsers[i].id);

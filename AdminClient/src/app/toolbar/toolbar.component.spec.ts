@@ -58,7 +58,7 @@ describe('ToolbarComponent', () => {
     effects = TestBed.inject<ToolbarEffects>(ToolbarEffects);
 
     mockProgressBarSelector = mockStore.overrideSelector(
-      fromToolbar.selectShowProgressBar,
+      fromToolbar.selectIsProgressBarVisible,
       false
     );
 
