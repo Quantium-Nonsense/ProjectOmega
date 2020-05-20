@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -16,6 +17,7 @@ import { selectAllProducts } from './store/products.reducer';
 })
 export class ProductsComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name', 'description', 'price', 'supplier', 'actions', 'id'];
@@ -36,6 +38,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
     this.store$.pipe(select(selectAllProducts)).subscribe((products: ProductModel[]) => {
       this.productTable.data = products;
+      this.productTable.sort = this.sort;
       this.productTable.paginator = this.paginator;
     });
   }

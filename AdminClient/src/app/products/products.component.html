@@ -17,7 +17,7 @@
 </div>
 <div fxLayout="row" fxLayoutAlign="center">
   <div class="mat-elevation-z8 w-100">
-    <table aria-label="Elements" class="w-100" mat-table matSort>
+    <table [dataSource]="productTable" aria-label="Elements" class="w-100" mat-table matSort>
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
@@ -46,9 +46,6 @@
         <th *matHeaderCellDef class="px-3" mat-header-cell>Actions</th>
         <td *matCellDef="let row" class="pl-3" mat-cell>
           <!-- TODO permissions -->
-          <button (click)="handleReadDetails(row)" aria-label="Details" color="primary" mat-icon-button>
-            <mat-icon>visibility</mat-icon>
-          </button>
           <button (click)="handleEditDetails(row)" aria-label="Edit Product" color="primary" mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
