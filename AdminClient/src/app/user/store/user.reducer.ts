@@ -28,7 +28,7 @@ export const selectFocusedUser: MemoizedSelector<fromApp.State, UserModel> = cre
 );
 
 const initialState: State = {
-  users: null,
+  users: [],
   loading: false,
   focusedUser: null
 };

@@ -1,10 +1,12 @@
+import { RoleModel } from '../../../models/role/role.model';
+
 export class UserModel {
   constructor(
-    public id: string,
+    public id: number,
     public email: string,
     public password: string,
-    public role: string,
-    public companyId: string,
+    public roles: RoleModel[],
+    public companyId: number,
   ) {
   }
 }

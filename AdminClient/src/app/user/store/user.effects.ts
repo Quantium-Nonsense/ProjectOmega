@@ -1,17 +1,19 @@
-import {Injectable} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {Action, Store} from '@ngrx/store';
-import {of} from 'rxjs';
-import {delay, map, switchMap, take, tap} from 'rxjs/operators';
-import {environment} from '../../../environments/environment';
+import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action, Store } from '@ngrx/store';
+import { of } from 'rxjs';
+import { delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { PrivilegeModel } from '../../models/privileges/privilege.model';
+import { RoleModel } from '../../models/role/role.model';
 import * as fromApp from '../../reducers/index';
-import {PopupDialogComponent} from '../../shared/components/popup-dialog/popup-dialog.component';
-import {PopupDialogDataModel} from '../../shared/model/popup-dialog-data.model';
-import {UserModel} from '../../shared/model/user/user.model';
-import {EditUserComponent} from '../edit-user/edit-user.component';
+import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
+import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
+import { UserModel } from '../../shared/model/user/user.model';
+import { EditUserComponent } from '../edit-user/edit-user.component';
 import * as UserActions from './user.actions';
-import {selectFocusedUser, selectUsers} from './user.reducer';
+import { selectFocusedUser, selectUsers } from './user.reducer';
 
 @Injectable()
 export class UserEffects {
@@ -108,17 +110,24 @@ export class UserEffects {
   createMockUsers = (): UserModel[] => {
     const mockUsers: UserModel[] = [];
 
+    const roles = [
+      new RoleModel(0, 'Admin', [new PrivilegeModel(0, 'DO EVERYTHING')]), // dummy role,
+      new RoleModel(1, 'Rep', [new PrivilegeModel(24, 'CREATE ORDER')]) // dummy role for this testing purposes
+    ];
+
     for (let i = 0; i < 50; i++) {
       mockUsers.push(
         new UserModel(
-          (Math.random() * 153000).toString(),
+          (Math.random() * 153000),
           `bla${i}@bla.com`,
           `longasspass${i}`,
-          ['Admin', 'Rep'][Math.floor(Math.random() * 2)],
-          'Company 1'));
+          [roles[Math.floor(Math.random() * 2)]],
+          1,
+        ));
     }
 
     return mockUsers;
-  };
+  }
+  ;
 }
 

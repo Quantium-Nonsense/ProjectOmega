@@ -58,9 +58,8 @@ export class UserComponent implements OnInit, OnDestroy {
 
   filteringAction = (user: UserModel, filterValue: string) => {
     return user.email.toLowerCase().includes(filterValue)
-      || user.role.toLowerCase().includes(filterValue)
-      || user.companyId.toLowerCase().includes(filterValue);
-  };
+      || user.roles.filter(role => role.name.toLowerCase().includes(filterValue)).length > 0;
+  }
 
   editUser(user: UserModel) {
     this.store.dispatch(UserActions.showEditUserModal({ user }));

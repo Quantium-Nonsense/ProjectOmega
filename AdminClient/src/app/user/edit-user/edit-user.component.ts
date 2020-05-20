@@ -3,6 +3,8 @@ import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/form
 import {Store} from '@ngrx/store';
 import {Subscription} from 'rxjs';
 import {take} from 'rxjs/operators';
+import { PrivilegeModel } from '../../models/privileges/privilege.model';
+import { RoleModel } from '../../models/role/role.model';
 import * as fromApp from '../../reducers/index';
 import * as fromUser from '../../user/store/user.reducer';
 import * as UserActions from './../store/user.actions';
@@ -16,6 +18,11 @@ export class EditUserComponent implements OnInit, AfterContentInit, OnDestroy {
   userForm: FormGroup;
 
   private subscription: Subscription;
+
+  private roles = [
+    new RoleModel(0, 'Admin', [new PrivilegeModel(0, 'DO EVERYTHING')]), // dummy role,
+    new RoleModel(1, 'Rep', [new PrivilegeModel(24, 'CREATE ORDER')]) // dummy role for this testing purposes
+  ];
 
   constructor(
     private store: Store<fromApp.State>
@@ -32,7 +39,7 @@ export class EditUserComponent implements OnInit, AfterContentInit, OnDestroy {
       this.store.select(fromUser.selectFocusedUser).subscribe(user => {
         if (user) {
           this.email.setValue(user.email);
-          this.role.setValue(user.role);
+          this.role.setValue(user.roles[0]);
           this.company.setValue(user.companyId);
         }
       })
@@ -50,7 +57,7 @@ export class EditUserComponent implements OnInit, AfterContentInit, OnDestroy {
         user: {
           ...user,
           email: this.email.value,
-          role: this.role.value,
+          roles: [this.role.value],
           companyId: this.company.value
         }
       })));

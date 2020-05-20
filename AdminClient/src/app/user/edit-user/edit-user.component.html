@@ -27,13 +27,12 @@
         appearance="fill"
       >
         <mat-label>Role</mat-label>
-        <input
-          id="formRole"
-          matInput
-          formControlName="role"
-          type="text"
-        />
-        <mat-error *ngIf="roleHasError" id="passwordError">
+        <mat-select formControlName="role" id="role">
+          <mat-option *ngFor="let role of roles" [value]="role">
+            {{role.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="roleHasError" id="roleError">
           {{roleErrorMessage}}
         </mat-error>
       </mat-form-field>
