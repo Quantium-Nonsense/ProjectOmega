@@ -3,8 +3,7 @@ import { RoleModel } from '../../shared/model/role/role.model';
 import { UserModel } from '../../shared/model/user/user.model';
 
 export const userSuccessfullyEdited = createAction(
-    '[Edit User - Effect] User successfully changed',
-    props<{ newUsers: UserModel[] }>()
+    '[Edit User - Effect] User successfully changed'
 );
 
 export const editUser = createAction(

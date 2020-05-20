@@ -31,6 +31,10 @@ export class ApiPathService {
     return `${ this.endPoint }/supplier/create`;
   }
 
+  getEditUserEndPoint(userId: number) {
+    return `${this.endPoint}/user/update/${userId}`
+  }
+
   getEditSupplierEndPoint(supplierId: number) {
     return `${ this.endPoint }/supplier/update/${ supplierId }`;
   }

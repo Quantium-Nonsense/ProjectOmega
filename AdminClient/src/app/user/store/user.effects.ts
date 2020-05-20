@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, delay, map, switchMap, take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import * as fromApp from '../../reducers/index';
 import { ApiPathService } from '../../services/api-path.service';
@@ -24,16 +24,20 @@ export class UserEffects {
   editUser$ = createEffect(() => this.actions$.pipe(
       ofType(UserActions.editUser),
       switchMap((action: Action & { user: UserModel }) => {
-        let users: UserModel[] = [];
-        this.store$.select(selectUsers)
-            .pipe(take(1)) // Dispose subscription after operation is done
-            .subscribe((oldUsers: UserModel[]) => {
-              users = [...oldUsers]; // The old users before updating
-              // Assign old user's index to the edited user
-              users[oldUsers.findIndex(u => u.id === action.user.id)] = { ...action.user };
-            });
-
-        return of(UserActions.userSuccessfullyEdited({ newUsers: users })).pipe(delay(2000), tap(() => this.dialog.closeAll()));
+        return this.httpEditUser(action.user).pipe(
+            switchMap((user: UserModel) => {
+              return [
+                UserActions.userSuccessfullyEdited(),
+                ToolbarActions.stopProgressBar()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                UserActions.hasErrorMessage({ error: error.message }),
+                ToolbarActions.stopProgressBar()
+              ];
+            })
+        );
       })
   ));
 
@@ -159,6 +163,12 @@ export class UserEffects {
       private http: HttpClient,
       private snackBar: MatSnackBar
   ) {
+  }
+
+  httpEditUser(user: UserModel): Observable<UserModel> {
+    return this.http.put<UserModel>(this.endPoint.getEditUserEndPoint(user.id), {
+      ...user
+    });
   }
 
   httpGetAllUsers(): Observable<UserModel[]> {
