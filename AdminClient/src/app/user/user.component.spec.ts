@@ -214,7 +214,7 @@ describe('UserComponent', () => {
     selectFocusedUser.setResult(mockUsers[5]);
     mockStore.refreshState();
 
-    actions$ = of(UserActions.deleteFocusedUser());
+    actions$ = of(UserActions.deleteUser());
 
     effects.deleteUser$.subscribe(action => {
       const tryToFindDeletedUser = action.newUserList.find(u => u.id === mockUsers[5].id);
@@ -231,7 +231,7 @@ describe('UserComponent', () => {
       selectFocusedUser.setResult(mockUsers[i]);
       mockStore.refreshState();
 
-      actions$ = of(UserActions.deleteFocusedUser());
+      actions$ = of(UserActions.deleteUser());
 
       effects.deleteUser$.subscribe(action => {
         const tryToFindDeletedUser = action.newUserList.find(u => u.id === mockUsers[i].id);

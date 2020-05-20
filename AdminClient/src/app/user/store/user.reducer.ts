@@ -46,12 +46,11 @@ const _userReducer = createReducer(
         (prevState, { user }) => ({
           ...prevState
         })),
-    on(UserActions.deleteFocusedUser, (prevState: State) => ({
+    on(UserActions.deleteUser, (prevState: State) => ({
       ...prevState
     })),
-    on(UserActions.userDeleted, (prevState: State, { newUserList }) => ({
+    on(UserActions.userDeleted, (prevState: State) => ({
       ...prevState,
-      users: newUserList
     })),
     on(UserActions.editUser, (prevState: State) => ({
       ...prevState

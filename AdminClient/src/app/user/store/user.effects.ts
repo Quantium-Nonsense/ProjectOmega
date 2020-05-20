@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { catchError, delay, map, switchMap, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import * as fromApp from '../../reducers/index';
 import { ApiPathService } from '../../services/api-path.service';
@@ -16,7 +16,6 @@ import { UserModel } from '../../shared/model/user/user.model';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import * as UserActions from './user.actions';
-import { selectUsers } from './user.reducer';
 
 @Injectable()
 export class UserEffects {
@@ -77,19 +76,31 @@ export class UserEffects {
   ));
 
   deleteUser$ = createEffect(() => this.actions$.pipe(
-      ofType(UserActions.deleteFocusedUser),
-      switchMap((action: Action) => {
-
-        let newUsers: UserModel[] = [];
-        let currentUser: UserModel;
-
-        this.store$.select(selectUsers).pipe(take(1)).subscribe(users => {
-          newUsers = users.filter(u => u.id !== currentUser.id);
-        });
-
-        return of(UserActions.userDeleted({ newUserList: newUsers })).pipe(delay(2000));
+      ofType(UserActions.deleteUser),
+      switchMap((action: Action & { user: UserModel }) => {
+        return this.httpDeleteUser(action.user.id).pipe(
+            switchMap((user: UserModel) => {
+              return [
+                ToolbarActions.stopProgressBar(),
+                UserActions.userDeleted()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                ToolbarActions.stopProgressBar(),
+                UserActions.hasErrorMessage({ error: error.message })
+              ];
+            })
+        );
       })
   ));
+
+  userDeleted$ = createEffect(() => this.actions$.pipe(
+      ofType(UserActions.userDeleted),
+      tap(() => this.snackBar.open('User deleted!', null, {
+        duration: 3000
+      }))
+  ), { dispatch: false });
 
   showDeleteUserDialog$ = createEffect(() => this.actions$.pipe(
       ofType(UserActions.showDeleteUserDialog),
@@ -102,7 +113,7 @@ export class UserEffects {
                 {
                   action: () => {
                     this.dialog.closeAll();
-                    this.store$.dispatch(UserActions.deleteFocusedUser());
+                    this.store$.dispatch(UserActions.deleteUser({ user: action.user }));
                   },
                   text: environment.common.CONFIRMATION_TEXT,
                   color: 'warn'
@@ -169,6 +180,10 @@ export class UserEffects {
     return this.http.put<UserModel>(this.endPoint.getEditUserEndPoint(user.id), {
       ...user
     });
+  }
+
+  httpDeleteUser(userId: number): Observable<UserModel> {
+    return this.http.delete<UserModel>(this.endPoint.getDeleteUserEndPoint(userId));
   }
 
   httpGetAllUsers(): Observable<UserModel[]> {

@@ -12,12 +12,12 @@ export const editUser = createAction(
 );
 
 export const userDeleted = createAction(
-    '[User - Effect] User deleted',
-    props<{ newUserList: UserModel[] }>()
+    '[User - Effect] User deleted'
 );
 
-export const deleteFocusedUser = createAction(
-    '[User - Effect] Delete focused user'
+export const deleteUser = createAction(
+    '[User - Effect] Delete focused user',
+    props<{ user: UserModel }>()
 );
 
 export const getAllUserRoles = createAction(
@@ -26,8 +26,8 @@ export const getAllUserRoles = createAction(
 
 export const setAllUserRoles = createAction(
     '[User - Effects] Set all roles in state',
-    props<{roles: RoleModel[]}>()
-)
+    props<{ roles: RoleModel[] }>()
+);
 
 export const showEditUserModal = createAction(
     '[User - Page] Show the user edit user modal',
