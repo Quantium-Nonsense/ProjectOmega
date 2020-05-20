@@ -1,12 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { CustomerModel } from '../../models/customers/customer.model';
 import * as fromApp from '../../reducers/index';
+import { ApiPathService } from '../../services/api-path.service';
 import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
@@ -35,8 +38,26 @@ export class CustomersEffects {
 
   loadAllCustomers$ = createEffect(() => this.actions$.pipe(
       ofType(CustomerActions.beginLoadingCustomers),
-      switchMap((action: Action) => of(this.customersLoadedAfter()).pipe(delay(2000)))
+      switchMap((action: Action) => {
+        return this.httpGetAllCustomers().pipe(
+            switchMap((customers: CustomerModel[]) => {
+              return [
+                CustomerActions.customersLoaded({ customers }),
+                ToolbarActions.stopProgressBar()
+              ];
+            }),
+            catchError((error: Error) => {
+              this.snackBar.open(error.message, null, {
+                duration: 3000
+              });
+              return [
+                ToolbarActions.stopProgressBar()
+              ];
+            })
+        );
+      })
   ));
+
 
   showEditCustomerDialog$ = createEffect(() => this.actions$.pipe(
       ofType(CustomerActions.showEditCustomerDialog),
@@ -58,31 +79,12 @@ export class CustomersEffects {
   constructor(
       private store: Store<fromApp.State>,
       private actions$: Actions,
-      public dialog: MatDialog
+      public dialog: MatDialog,
+      private http: HttpClient,
+      private endPoints: ApiPathService,
+      private snackBar: MatSnackBar
   ) {
   }
-
-  /**
-   * Create 50 dummy customers
-   *
-   * @returns CustomerModel[]
-   */
-  createDummyCustomers = (): CustomerModel[] => {
-    const dummyCustomers: CustomerModel[] = [];
-    for (let i = 0; i < 50; i++) {
-      dummyCustomers.push({
-        contactNumber: i.toString(),
-        description: `Amazing client ${ i }`,
-        email: `bla${ i }@bla.com`,
-        firstName: `FirstName${ i }`,
-        lastName: `FirstName${ i }`,
-        id: i,
-        companyName: `Company ${ i }`,
-        notes: 'bla and mac bla'
-      });
-    }
-    return dummyCustomers;
-  };
 
   private customersLoadedAfter() {
     const customers = this.createDummyCustomers();
@@ -147,5 +149,9 @@ export class CustomersEffects {
 
     this.store.dispatch(ToolbarActions.stopProgressBar());
     return CustomerActions.editCustomerSuccess({ newCustomers: allCustomers });
+  }
+
+  httpGetAllCustomers(): Observable<CustomerModel[]> {
+    return this.http.get<CustomerModel[]>(this.endPoints.allCustomersEndPoint);
   }
 }

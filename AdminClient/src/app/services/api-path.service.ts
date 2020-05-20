@@ -16,6 +16,10 @@ export class ApiPathService {
     return `${ this.endPoint }/product/create`;
   }
 
+  get allCustomersEndPoint(): string {
+    return `${ this.endPoint }/client/get`;
+  }
+
   /**
    * Returns the end point to log in the user
    */
