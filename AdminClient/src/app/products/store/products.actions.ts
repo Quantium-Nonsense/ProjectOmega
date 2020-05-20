@@ -14,3 +14,13 @@ export const hasErrorMessage = createAction(
     '[Products - Effects] Has Error message',
     props<{ error: string }>()
 );
+
+export const showProductForm = createAction(
+    '[Products - Component] Show product form',
+    props<{ product: ProductModel }>()
+);
+
+export const createNewProduct = createAction(
+    '[Products - Form] Create new product',
+    props<{ product: ProductModel }>()
+);

@@ -1,28 +1,102 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { select, Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { ProductModel } from '../../models/products/products.model';
+import * as fromApp from '../../reducers/index';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
+import { selectAllSuppliers } from '../../supplier/store/suppliers.reducer';
+import { createNewProduct } from '../store/products.actions';
 
 @Component({
   selector: 'app-details-dialog',
   templateUrl: './product-details-dialog.component.html',
   styleUrls: ['./product-details-dialog.component.scss']
 })
-export class ProductDetailsDialogComponent implements OnInit {
+export class ProductDetailsDialogComponent implements OnInit, OnDestroy {
   /**
    * The form
    */
-  protected productItemForm: FormGroup;
-
-  private suppliers: SupplierModel[];
+  productItemForm: FormGroup;
+  suppliers: SupplierModel[];
+  private sub: Subscription;
 
   constructor(
-    public dialogRef: MatDialogRef<ProductDetailsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: { product: ProductModel, title: string, editable: boolean },
+      public dialogRef: MatDialogRef<ProductDetailsDialogComponent>,
+      private fb: FormBuilder,
+      private store$: Store<fromApp.State>,
+      @Inject(MAT_DIALOG_DATA) public data: { product: ProductModel }
   ) {
-    this.suppliers = null;
+    this.sub = new Subscription();
   }
+
+
+  ngOnInit(): void {
+    this.productItemForm = this.formInitialization();
+    this.sub.add(
+        this.store$.pipe(select(selectAllSuppliers)).subscribe(sup => this.suppliers = sup)
+    );
+    if (this.data.product) {
+      const prod = this.data.product;
+      this.id.setValue(prod.id);
+      this.description.setValue(prod.description);
+      this.name.setValue(prod.name);
+      this.price.setValue(prod.price);
+      this.supplier.setValue(prod.supplier);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  isFormValid(): boolean {
+    return this.productItemForm.valid;
+  }
+
+  private onSaveClick() {
+    const newProduct = new ProductModel(
+        this.data.product ? this.data.product.id : null,
+        this.productItemForm.get('name').value,
+        this.productItemForm.get('description').value,
+        Number(this.price.value),
+        this.supplier.value
+    );
+
+    this.store$.dispatch(createNewProduct({ product: newProduct }));
+  }
+
+  private formInitialization = (): FormGroup => {
+    return this.fb.group({
+      id: [''],
+      name: ['', [Validators.required]],
+      description: [''],
+      price: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      supplier: ['', [Validators.required]]
+    });
+  };
+
+  get id(): AbstractControl {
+    return this.productItemForm.get('id');
+  }
+
+  get name(): AbstractControl {
+    return this.productItemForm.get('name');
+  }
+
+  get description(): AbstractControl {
+    return this.productItemForm.get('description');
+  }
+
+  get price(): AbstractControl {
+    return this.productItemForm.get('price');
+  }
+
+  get supplier(): AbstractControl {
+    return this.productItemForm.get('supplier');
+  }
+
 
   get supplierHasError(): boolean {
     return this.productItemForm.get('supplier').invalid;
@@ -74,61 +148,4 @@ export class ProductDetailsDialogComponent implements OnInit {
     }
     return '';
   }
-
-  ngOnInit(): void {
-    this.productItemForm = this.formInitialization();
-  }
-
-  isFormValid(): boolean {
-    return this.productItemForm.valid;
-  }
-
-  private onSaveClick() {
-    const newProduct = new ProductModel(
-      this.data.product ? this.data.product.id : null,
-      this.productItemForm.get('supplier').value.name,
-      this.productItemForm.get('supplier').value.id,
-      this.productItemForm.get('name').value,
-      this.productItemForm.get('description').value,
-      //parseFloat(this.productItemForm.get('price').value)
-    );
-
-    this.dialogRef.close(newProduct);
-  }
-
-  private formInitialization = (): FormGroup => {
-    const editable = this.data.editable;
-    const initialProduct = this.data.product;
-
-    return new FormGroup({
-      supplier: new FormControl(
-        {
-          value: initialProduct ? this.suppliers.find((element) => +element.id === initialProduct.id) : '',
-          disabled: !editable,
-        },
-        [Validators.required],
-      ),
-      name: new FormControl(
-        {
-          value: initialProduct ? initialProduct.name : '',
-          disabled: !editable,
-        },
-        [Validators.required],
-      ),
-      description: new FormControl(
-        {
-          value: initialProduct ? initialProduct.description : '',
-          disabled: !editable,
-        },
-        [Validators.required],
-      ),
-      price: new FormControl(
-        {
-          value: initialProduct ? initialProduct.price.toFixed(2) : '',
-          disabled: !editable
-        },
-        [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{2})?$/)],
-      )
-    });
-  };
 }

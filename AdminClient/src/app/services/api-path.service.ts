@@ -12,6 +12,10 @@ export class ApiPathService {
     this.endPoint = environment.common.apiRoot();
   }
 
+  get createNewProductEndPoint(): string {
+    return `${ this.endPoint }/product/create`;
+  }
+
   /**
    * Returns the end point to log in the user
    */

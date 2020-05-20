@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { ProductModel } from '../models/products/products.model';
 import * as fromApp from '../reducers/index';
 import { beginProgressBar } from '../toolbar/store/toolbar.actions';
-import { loadAllProducts } from './store/products.actions';
+import { loadAllProducts, showProductForm } from './store/products.actions';
 import { selectAllProducts } from './store/products.reducer';
 
 @Component({
@@ -35,7 +35,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.store$.dispatch(loadAllProducts());
 
     this.store$.pipe(select(selectAllProducts)).subscribe((products: ProductModel[]) => {
-      console.log(products);
       this.productTable.data = products;
       this.productTable.paginator = this.paginator;
     });
@@ -52,7 +51,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       || product.price.toString().includes(filterValue);
 
   handleCreate(): void {
-
+    this.store$.dispatch(showProductForm({ product: null }));
   }
 
   handleReadDetails(row: ProductModel): void {
