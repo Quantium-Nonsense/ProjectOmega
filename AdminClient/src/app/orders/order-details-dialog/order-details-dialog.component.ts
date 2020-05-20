@@ -22,9 +22,9 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   protected orderProducts: FormArray;
   private subscriptions = new Subscription();
 
-  private products: ProductModel[];
-  private customers: CustomerModel[];
-  private users: UserModel[];
+  private readonly products: ProductModel[];
+  private readonly customers: CustomerModel[];
+  private readonly repUsers: UserModel[];
   private editable: boolean;
 
   constructor(
@@ -34,12 +34,12 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
       title: string,
       editable: boolean,
       customers: CustomerModel[]
-      users: UserModel[]
+      repUsers: UserModel[]
     },
   ) {
     this.products = MockProductsAPI.getInstance().getAll();
     this.customers = data.customers;
-    this.users = data.users;
+    this.repUsers = data.repUsers;
     this.editable = data.editable;
   }
 
@@ -82,11 +82,11 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   }
 
   protected quantityHasError(index: number): boolean {
-    return this.orderForm.get('orderProducts')[index].get('quantity').invalid;
+    return this.orderProducts.controls[index].get('quantity').invalid;
   }
 
   protected quantityErrorMessage(index: number): string {
-    const quantityCtrl = this.orderForm.get('orderProducts')[index].get('quantity');
+    const quantityCtrl = this.orderProducts.controls[index].get('quantity');
 
     if (quantityCtrl.hasError('required')) {
       return 'Product quantity is required!';
@@ -104,21 +104,21 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   }
 
   protected productHasError(index: number): boolean {
-    return this.orderForm.get('orderProducts')[index].get('product').invalid;
+    return this.orderProducts.controls[index].get('product').invalid;
   }
 
   protected productErrorMessage(index: number): string {
-    const productCtrl = this.orderForm.get('orderProducts')[index].get('product');
+    const productCtrl = this.orderProducts.controls[index].get('product');
 
     return productCtrl.hasError('required') ? 'Product is required!' : '';
   }
 
   protected customerHasError(index: number): boolean {
-    return this.orderForm.get('orderProducts')[index].get('customer').invalid;
+    return this.orderProducts.controls[index].get('customer').invalid;
   }
 
   protected customerErrorMessage(index: number): string {
-    const customerCtrl = this.orderForm.get('orderProducts')[index].get('customer');
+    const customerCtrl = this.orderProducts.controls[index].get('customer');
 
     return customerCtrl.hasError('required') ? 'Customer is required!' : '';
   }
@@ -141,7 +141,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
     const newOrder = new OrderModel(
       this.data.order ? this.data.order.id : null,
       this.orderForm.get('orderDate').value,
-      this.users.findIndex(user => user.email === this.orderForm.get('user').value),
+      this.repUsers.findIndex(user => user.email === this.orderForm.get('user').value),
       this.orderForm.get('status').value,
       this.orderForm.get('totalPrice').value,
       orderProducts
@@ -162,7 +162,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
                 value: initialOrder ? initialOrder.orderProducts[index].quantity : '',
                 disabled: !editable,
               },
-              [Validators.required, Validators.min(1), Validators.pattern('/d+')]
+              [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]
             ),
             product: new FormControl(
               {
@@ -216,7 +216,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
           [Validators.required]
         ),
         user: new FormControl({
-            value: initialOrder ? this.users.find(user => user.id === initialOrder.userId) : '',
+            value: initialOrder ? this.repUsers.find(user => user.id === initialOrder.userId) : '',
             disabled: !editable,
           },
           [Validators.required]),
@@ -251,7 +251,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
     const formGroup = new FormGroup({
       quantity: new FormControl(
         { value: '' },
-        [Validators.required, Validators.min(1), Validators.pattern('/d+')]
+        [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]
       ),
       product: new FormControl(
         { value: '' },
@@ -262,7 +262,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
         [Validators.required],
       ),
       subtotal: new FormControl(
-        { value: '' },
+        { value: '', disabled: true },
         [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{2})?$/)]
       ),
     });

@@ -16,7 +16,7 @@
     <div fxLayout="row">
       <mat-form-field>
         <mat-label>Order Status</mat-label>
-        <input formControlName="status">
+        <input matInput formControlName="status">
         <mat-error *ngIf="statusHasError" id="statusError">{{statusErrorMessage}}</mat-error>
       </mat-form-field>
     </div>
@@ -24,7 +24,7 @@
       <mat-form-field>
         <mat-label>Representative Email</mat-label>
         <mat-select formControlName="user" id="user">
-          <mat-option *ngFor="let user of users" [value]="user">{{ user.email }}</mat-option>
+          <mat-option *ngFor="let user of repUsers" [value]="user">{{ user.email }}</mat-option>
         </mat-select>
         <mat-error *ngIf="userHasError" id="userError">{{userErrorMessage}}</mat-error>
       </mat-form-field>
@@ -37,9 +37,11 @@
            *ngFor="let orderProduct of orderProducts.controls; let index = index"
            [formGroupName]="index">
         <div fxLayout="column">
-          <mat-label>Quantity</mat-label>
-          <input type="number" formControlName="quantity">
-          <mat-error *ngif="quantityHasError(index)" id="quantityError">{{quantityErrorMessage(index)}}</mat-error>
+          <mat-form-field>
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" formControlName="quantity">
+            <mat-error *ngIf="quantityHasError(index)" id="quantityError">{{quantityErrorMessage(index)}}</mat-error>
+          </mat-form-field>
         </div>
         <div fxLayout="column">
           <mat-form-field>
@@ -70,9 +72,8 @@
             <mat-label>Subtotal</mat-label>
             <input
               formControlName="subtotal"
-              id="subtotal"
+              id="subtotal{{index}}"
               matInput
-              disabled
             />
             <span matPrefix>€&nbsp;</span>
           </mat-form-field>
@@ -91,7 +92,6 @@
           formControlName="totalPrice"
           id="totalPrice"
           matInput
-          disabled
         />
         <span matPrefix>€&nbsp;</span>
       </mat-form-field>

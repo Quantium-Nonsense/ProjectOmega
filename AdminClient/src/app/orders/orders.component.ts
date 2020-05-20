@@ -64,6 +64,7 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscriptions.add(
       this.store$.select(fromUsers.selectUsers).subscribe((users: UserModel[]) => {
         this.users = users;
+        console.log('Users Populated');
       })
     );
   }
@@ -82,7 +83,19 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
-      data: { order, title: `Details for ${order.id}`, editable: false, customers: this.customers, users: this.users }
+      data: {
+        order,
+        title: `Details for Order ${order.id}`,
+        editable: false,
+        customers: this.customers,
+        repUsers: this.users.filter(
+          user => user.roles.filter(
+            role => role.privileges.filter(
+              privilege => privilege.name.includes('CREATE_ORDER') // TODO move this to a constants file?
+            ).length > 0
+          ).length > 0
+        ),
+      }
     });
   }
 
@@ -90,11 +103,23 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
-      data: { order, title: `Edit Order ${order.id}`, editable: true, customers: this.customers, users: this.users }
+      data: {
+        order,
+        title: `Edit Order ${order.id}`,
+        editable: true,
+        customers: this.customers,
+        repUsers: this.users.filter(
+          user => user.roles.filter(
+            role => role.privileges.filter(
+              privilege => privilege.name.includes('CREATE_ORDER') // TODO move this to a constants file?
+            ).length > 0
+          ).length > 0
+        ),
+      }
     });
 
     this.subscriptions.add(
-      dialogRef.afterClosed().subscribe(updatedOrder => {
+      dialogRef.afterClosed().subscribe((updatedOrder: OrderModel) => {
         if (updatedOrder && !updatedOrder.equalsWithoutId(order)) {
           this.ordersAPI.updateItem(updatedOrder);
           this.snackBar.open(`Order ${updatedOrder.id} was successfully updated`, 'Close', { duration: 3000 });
@@ -114,7 +139,13 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
         title: 'Create new order',
         editable: true,
         customers: this.customers,
-        users: this.users
+        repUsers: this.users.filter(
+          user => user.roles.filter(
+            role => role.privileges.filter(
+              privilege => privilege.name.includes('CREATE_ORDER') // TODO move this to a constants file?
+            ).length > 0
+          ).length > 0
+        ),
       }
     });
 
