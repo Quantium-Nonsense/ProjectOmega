@@ -51,7 +51,7 @@ export class ProductsComponent implements AfterViewInit, OnInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
     this.table.dataSource = this.dataSource;
   }
-eslint
+
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }

@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,6 +28,7 @@ import { OrdersComponent } from './orders.component';
     OrdersRoutingModule,
     MatTableModule,
     MatDialogModule,
+    MatMomentDateModule,
     MatPaginatorModule,
     MatSortModule,
     FlexModule,
@@ -35,7 +38,8 @@ import { OrdersComponent } from './orders.component';
     MatSelectModule,
     ReactiveFormsModule,
     MatInputModule,
-    SharedModule
+    SharedModule,
+    MatDatepickerModule
   ],
   entryComponents: [OrdersComponent]
 })

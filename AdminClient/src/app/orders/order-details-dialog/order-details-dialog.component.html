@@ -1,50 +1,99 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <mat-dialog-content>
   <form
-    [formGroup]="productItemForm"
+    [formGroup]="orderForm"
     class="max-height"
   >
     <div fxLayout="row">
       <mat-form-field>
-        <mat-label>Supplier</mat-label>
-        <mat-select formControlName="supplier" id="supplier">
-          <mat-option *ngFor="let sup of suppliers" [value]="sup">{{ sup.name }}</mat-option>
+        <mat-label>Order Date</mat-label>
+        <input matInput [matDatepicker]="orderDatePicker" formControlName="orderDate">
+        <mat-datepicker-toggle matSuffix [for]="orderDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #orderDatePicker></mat-datepicker>
+        <mat-error *ngIf="dateHasError" id="dateError">{{dateErrorMessage}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row">
+      <mat-form-field>
+        <mat-label>Order Status</mat-label>
+        <input formControlName="status">
+        <mat-error *ngIf="statusHasError" id="statusError">{{statusErrorMessage}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row">
+      <mat-form-field>
+        <mat-label>Representative Email</mat-label>
+        <mat-select formControlName="user" id="user">
+          <mat-option *ngFor="let user of users" [value]="user">{{ user.email }}</mat-option>
         </mat-select>
-        <mat-error *ngIf="supplierHasError" id="supplierError">{{supplierErrorMessage}}</mat-error>
+        <mat-error *ngIf="userHasError" id="userError">{{userErrorMessage}}</mat-error>
       </mat-form-field>
+    </div>
+    <div fxLayout="row" *ngIf="editable">
+      <button (click)="addNewEntry()" color="primary" mat-flat-button>Add another product to this order</button>
+    </div>
+    <div formArrayName="orderProducts">
+      <div fxLayout="row"
+           *ngFor="let orderProduct of orderProducts.controls; let index = index"
+           [formGroupName]="index">
+        <div fxLayout="column">
+          <mat-label>Quantity</mat-label>
+          <input type="number" formControlName="quantity">
+          <mat-error *ngif="quantityHasError(index)" id="quantityError">{{quantityErrorMessage(index)}}</mat-error>
+        </div>
+        <div fxLayout="column">
+          <mat-form-field>
+            <mat-label>Product</mat-label>
+            <mat-select formControlName="product" id="product">
+              <mat-option
+                *ngFor="let product of products" [value]="product"
+              >
+                {{ product.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="productHasError(index)" id="productError">{{productErrorMessage(index)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column">
+          <mat-form-field>
+            <mat-label>Customer</mat-label>
+            <mat-select formControlName="customer" id="customer">
+              <mat-option *ngFor="let customer of customers" [value]="customer">
+                {{customer.companyName}} - {{ customer.firstName }} {{customer.lastName}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="customerHasError(index)" id="customerError">{{customerErrorMessage(index)}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column">
+          <mat-form-field>
+            <mat-label>Subtotal</mat-label>
+            <input
+              formControlName="subtotal"
+              id="subtotal"
+              matInput
+              disabled
+            />
+            <span matPrefix>€&nbsp;</span>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" *ngIf="editable">
+          <button (click)="removeEntry(index)" mat-icon-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
     <div fxLayout="row">
       <mat-form-field>
-        <mat-label>Product Name</mat-label>
+        <mat-label>Total Price</mat-label>
         <input
-          formControlName="name"
-          id="name"
+          formControlName="totalPrice"
+          id="totalPrice"
           matInput
-        />
-        <mat-error *ngIf="nameHasError" id="nameError">{{nameErrorMessage}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-form-field>
-        <mat-label>Description</mat-label>
-        <input
-          formControlName="description"
-          id="description"
-          matInput
-        />
-        <mat-error *ngIf="descriptionHasError" id="descriptionError">{{descriptionErrorMessage}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-form-field>
-        <mat-label>Price</mat-label>
-        <input
-          formControlName="price"
-          id="price"
-          matInput
+          disabled
         />
         <span matPrefix>€&nbsp;</span>
-        <mat-error *ngIf="priceHasError" id="priceError">{{priceErrorMessage}}</mat-error>
       </mat-form-field>
     </div>
   </form>
@@ -55,12 +104,3 @@
     Save
   </button>
 </mat-dialog-actions>
-
-
-<!--  id: number,
-  supplier: string,
-  supplierId: number,
-  name: string,
-  description: string,
-  price: number,
--->

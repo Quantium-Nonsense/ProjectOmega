@@ -4,12 +4,18 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 
 import { MockOrdersAPI } from '../../data/orders/orders-data';
+import { CustomerModel } from '../models/customers/customer.model';
 import { OrderModel } from '../models/orders/order.model';
 import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
+import { UserModel } from '../shared/model/user/user.model';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
+
+import * as fromCustomers from '../customers/store/customers.reducer';
+import * as fromUsers from '../user/store/user.reducer';
 
 @Component({
   selector: 'app-products',
@@ -31,9 +37,13 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private ordersObservable: Observable<OrderModel[]>;
 
+  private customers: CustomerModel[];
+  private users: UserModel[];
+
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private store$: Store,
   ) {
   }
 
@@ -42,6 +52,18 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscriptions.add(
       this.ordersObservable.subscribe(ordersList => {
         this.dataSource.data = ordersList;
+      })
+    );
+
+    this.subscriptions.add(
+      this.store$.select(fromCustomers.selectAllCustomers).subscribe((customers: CustomerModel[]) => {
+        this.customers = customers;
+      })
+    );
+
+    this.subscriptions.add(
+      this.store$.select(fromUsers.selectUsers).subscribe((users: UserModel[]) => {
+        this.users = users;
       })
     );
   }
@@ -60,7 +82,7 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
-      data: { order, title: `Details for ${order.id}`, editable: false }
+      data: { order, title: `Details for ${order.id}`, editable: false, customers: this.customers, users: this.users }
     });
   }
 
@@ -68,7 +90,7 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
       maxWidth: '500px',
       width: '66vw',
-      data: { order, title: `Edit Order ${order.id}`, editable: true }
+      data: { order, title: `Edit Order ${order.id}`, editable: true, customers: this.customers, users: this.users }
     });
 
     this.subscriptions.add(
@@ -90,7 +112,9 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
       data: {
         product: null,
         title: 'Create new order',
-        editable: true
+        editable: true,
+        customers: this.customers,
+        users: this.users
       }
     });
 
@@ -136,4 +160,9 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
       || orderProduct.client.firstName.includes(filterValue)
       || orderProduct.client.lastName.includes(filterValue)
     ).length > 0;
+
+  private getDateString(date: Date) {
+    const options = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+  }
 }

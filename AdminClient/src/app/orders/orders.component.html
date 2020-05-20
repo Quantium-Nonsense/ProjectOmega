@@ -1,6 +1,6 @@
 <div fxLayout="row" fxLayoutAlign="space-between" xmlns="">
   <div>
-    <h2>Products</h2>
+    <h2>Orders</h2>
   </div>
   <div>
     <button (click)="handleCreate()" aria-label="New Product" color="primary" mat-mini-fab>
@@ -18,27 +18,33 @@
   <div class="mat-elevation-z8 w-100">
     <table aria-label="Elements" class="w-100" mat-table matSort>
       <!-- Supplier Column -->
-      <ng-container matColumnDef="supplier">
-        <th *matHeaderCellDef class="pr-3" mat-header-cell mat-sort-header>Supplier</th>
-        <td *matCellDef="let row" class="pr-3" mat-cell>{{row.supplier}}</td>
+      <ng-container matColumnDef="dateCreated">
+        <th *matHeaderCellDef class="pr-3" mat-header-cell mat-sort-header>Date Created</th>
+        <td *matCellDef="let row" class="pr-3" mat-cell>{{getDateString(row.dateCreated)}}</td>
       </ng-container>
 
       <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Name</th>
-        <td *matCellDef="let row" class="px-3" mat-cell>{{row.name}}</td>
+      <ng-container matColumnDef="products">
+        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Products</th>
+        <td *matCellDef="let row" class="px-3" mat-cell>
+          <ul style="list-style-type: none" class="pl-0">
+            <li *ngFor="let orderProduct of row.orderProducts">
+              {{orderProduct.quantity}} {{orderProduct.product.name}}
+            </li>
+          </ul>
+        </td>
       </ng-container>
 
       <!-- Description Column -->
-      <ng-container matColumnDef="description">
-        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Description</th>
-        <td *matCellDef="let row" class="px-3 wrap" mat-cell>{{row.description}}</td>
+      <ng-container matColumnDef="totalPrice">
+        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Total Price</th>
+        <td *matCellDef="let row" class="px-3 wrap" mat-cell>€ {{row.totalOrderPrice.toFixed(2)}}</td>
       </ng-container>
 
       <!-- Price Column -->
-      <ng-container matColumnDef="price">
-        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Price per Unit</th>
-        <td *matCellDef="let row" class="px-3" mat-cell>€ {{row.price.toFixed(2)}}</td>
+      <ng-container matColumnDef="status">
+        <th *matHeaderCellDef class="px-3" mat-header-cell mat-sort-header>Status</th>
+        <td *matCellDef="let row" class="px-3" mat-cell>{{row.status}}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
