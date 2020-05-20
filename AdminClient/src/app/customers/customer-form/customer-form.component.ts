@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { CustomerModel } from '../../models/customers/customer.model';
 import * as fromApp from '../../reducers/index';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
-import { selectIsToolbarVisible } from '../../toolbar/store/toolbar.reducer';
+import { selectIsProgressBarVisible } from '../../toolbar/store/toolbar.reducer';
 import * as CustomerActions from '../store/customers.actions';
 
 @Component({
@@ -31,7 +31,7 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.sub.add(
-				this.store$.pipe(select(selectIsToolbarVisible))
+				this.store$.pipe(select(selectIsProgressBarVisible))
 					.subscribe(isLoading => {
 						this.isLoading = isLoading;
 						if (isLoading) {

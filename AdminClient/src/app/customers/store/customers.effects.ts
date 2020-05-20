@@ -14,7 +14,7 @@ import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import { stopProgressBar } from '../../toolbar/store/toolbar.actions';
-import { selectIsToolbarVisible } from '../../toolbar/store/toolbar.reducer';
+import { selectIsProgressBarVisible } from '../../toolbar/store/toolbar.reducer';
 import { CustomerFormComponent } from '../customer-form/customer-form.component';
 import * as CustomerActions from './customers.actions';
 import { createNewCustomer } from './customers.actions';
@@ -144,7 +144,7 @@ export class CustomersEffects {
   showDeleteDialog(customer: CustomerModel) {
     this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(PopupDialogComponent, {
       data: {
-        isDisabled: this.store.pipe(select(selectIsToolbarVisible)),
+        isDisabled: this.store.pipe(select(selectIsProgressBarVisible)),
         title: environment.common.DELETE_CUSTOMER_TITLE,
         description: environment.common.DELETE_CUSTOMER_CONFIRM_TEXT,
         dialogActions: [

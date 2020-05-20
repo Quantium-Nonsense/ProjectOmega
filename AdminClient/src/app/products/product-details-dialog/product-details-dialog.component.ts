@@ -8,7 +8,7 @@ import * as fromApp from '../../reducers/index';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 import { selectAllSuppliers } from '../../supplier/store/suppliers.reducer';
 import { beginProgressBar } from '../../toolbar/store/toolbar.actions';
-import { selectIsToolbarVisible } from '../../toolbar/store/toolbar.reducer';
+import { selectIsProgressBarVisible } from '../../toolbar/store/toolbar.reducer';
 import { createNewProduct, editNewProduct } from '../store/products.actions';
 
 @Component({
@@ -39,7 +39,7 @@ export class ProductDetailsDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.productItemForm = this.formInitialization();
     this.sub.add(
-        this.store$.pipe(select(selectIsToolbarVisible)).subscribe(isLoading => {
+        this.store$.pipe(select(selectIsProgressBarVisible)).subscribe(isLoading => {
           this.isLoading = isLoading;
           if (isLoading) {
             this.productItemForm.disable();

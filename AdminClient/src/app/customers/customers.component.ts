@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { CustomerModel } from '../models/customers/customer.model';
 import * as fromApp from '../reducers/index';
 import * as ToolbarActions from '../toolbar/store/toolbar.actions';
-import { selectIsToolbarVisible } from '../toolbar/store/toolbar.reducer';
+import { selectIsProgressBarVisible } from '../toolbar/store/toolbar.reducer';
 import * as CustomerActions from './store/customers.actions';
 import * as fromCustomers from './store/customers.reducer';
 

@@ -114,7 +114,7 @@ export class SupplierFormComponent implements OnInit, OnDestroy {
     this.sub = new Subscription();
     this.supplierForm = this.initializeForm();
     this.sub.add(
-        this.store$.select(fromToolbar.selectIsToolbarVisible)
+        this.store$.select(fromToolbar.selectIsProgressBarVisible)
             .subscribe(isLoading => {
               if (isLoading) {
                 this.supplierForm.disable();

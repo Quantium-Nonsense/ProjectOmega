@@ -36,7 +36,7 @@ export class SupplierComponent implements OnInit, OnDestroy {
     this.store$.dispatch(ToolbarActions.beginProgressBar());
     this.store$.dispatch(SupplierActions.beginLoadingSuppliers());
     this.sub.add(
-        this.store$.select(fromToolbar.selectIsToolbarVisible).subscribe(loading => this.isLoading = loading)
+        this.store$.select(fromToolbar.selectIsProgressBarVisible).subscribe(loading => this.isLoading = loading)
     );
     this.sub.add(
         this.store$.select(fromSuppliers.selectAllSuppliers).subscribe((suppliers: SupplierModel[]) => {

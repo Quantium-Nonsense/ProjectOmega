@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import * as fromApp from '../../reducers/index';
 import { RoleModel } from '../../shared/model/role/role.model';
 import { UserModel } from '../../shared/model/user/user.model';
-import { selectIsToolbarVisible } from '../../toolbar/store/toolbar.reducer';
+import { selectIsProgressBarVisible } from '../../toolbar/store/toolbar.reducer';
 import { selectRoles } from '../store/user.reducer';
 import * as UserActions from './../store/user.actions';
 
@@ -37,7 +37,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription.add(this.store.pipe(select(selectRoles)).subscribe(roles => this.availableRoles = roles));
-    this.subscription.add(this.store.pipe(select(selectIsToolbarVisible)).subscribe(isLoading => {
+    this.subscription.add(this.store.pipe(select(selectIsProgressBarVisible)).subscribe(isLoading => {
       this.isLoading = isLoading;
       if (isLoading) {
         this.userForm.disable();
