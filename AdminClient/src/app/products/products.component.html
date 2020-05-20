@@ -10,7 +10,7 @@
 </div>
 <div fxLayout="row" fxLayoutAlign="center">
   <app-table-filter [action]="handleFilter"
-                    [dataSource]="dataSource" class="w-100">
+                    [dataSource]="productTable" class="w-100">
 
   </app-table-filter>
 </div>
@@ -62,7 +62,7 @@
     </table>
 
     <mat-paginator #paginator
-                   [length]="dataSource?.data.length"
+                   [length]="productTable?.data.length"
                    [pageIndex]="0"
                    [pageSizeOptions]="[20, 50, 100, 250]"
                    [pageSize]="20"

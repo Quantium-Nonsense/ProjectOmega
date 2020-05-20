@@ -24,23 +24,27 @@ export class ApiPathService {
   }
 
   get allRolesEndPoint(): string {
-    return `${this.endPoint}/role/get`
+    return `${ this.endPoint }/role/get`;
   }
 
   get createNewSupplierEndPoint(): string {
     return `${ this.endPoint }/supplier/create`;
   }
 
+  get allProductsEndPoint(): string {
+    return `${ this.endPoint }/product/get`;
+  }
+
   get createNewUserEndPoint(): string {
-    return `${this.endPoint}/user/create`
+    return `${ this.endPoint }/user/create`;
   }
 
   getDeleteUserEndPoint(userId: number) {
-    return `${this.endPoint}/user/delete/${userId}`
+    return `${ this.endPoint }/user/delete/${ userId }`;
   }
 
   getEditUserEndPoint(userId: number) {
-    return `${this.endPoint}/user/update/${userId}`
+    return `${ this.endPoint }/user/update/${ userId }`;
   }
 
   getEditSupplierEndPoint(supplierId: number) {
