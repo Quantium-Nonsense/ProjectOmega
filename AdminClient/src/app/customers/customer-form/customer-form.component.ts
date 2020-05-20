@@ -163,7 +163,10 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 		};
 		if (this.data.customer) {
 			this.store$.dispatch(CustomerActions.editCustomer({
-				editedCustomer: customer
+				editedCustomer: {
+					...customer,
+					id: this.data.customer.id
+				}
 			}));
 		} else {
 			this.store$.dispatch(CustomerActions.createNewCustomer({ customer }));

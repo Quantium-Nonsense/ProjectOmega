@@ -25,6 +25,9 @@ export class CustomersEffects {
   editCustomer$ = createEffect(() => this.actions$.pipe(
       ofType(CustomerActions.editCustomer),
       switchMap((action: Action & { editedCustomer: CustomerModel }) => this.httpEditCustomer(action.editedCustomer).pipe(
+          tap(() => {
+            this.dialog.closeAll();
+          }),
           switchMap((customer: CustomerModel) => {
             return [
               CustomerActions.editCustomerSuccess(),
