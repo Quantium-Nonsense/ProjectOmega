@@ -17,7 +17,6 @@ import { stopProgressBar } from '../../toolbar/store/toolbar.actions';
 import { selectIsProgressBarVisible } from '../../toolbar/store/toolbar.reducer';
 import { CustomerFormComponent } from '../customer-form/customer-form.component';
 import * as CustomerActions from './customers.actions';
-import { createNewCustomer } from './customers.actions';
 
 @Injectable()
 export class CustomersEffects {
@@ -46,7 +45,7 @@ export class CustomersEffects {
   ));
 
   createCustomer$ = createEffect(() => this.actions$.pipe(
-      ofType(createNewCustomer),
+      ofType(CustomerActions.createNewCustomer),
       switchMap((action: Action & { customer: CustomerModel }) => {
         return this.httpCreateCustomer(action.customer).pipe(
             tap(() => this.dialog.closeAll()),
