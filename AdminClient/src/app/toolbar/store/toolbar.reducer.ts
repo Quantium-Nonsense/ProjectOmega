@@ -12,7 +12,7 @@ const initialState: State = {
 
 export const selectToolbarState = createFeatureSelector<fromApp.State, State>('toolbar');
 
-export const selectIsVisible = createSelector(
+export const selectIsToolbarVisible = createSelector(
 	selectToolbarState,
 	(state: State) => state.progressBar
 );

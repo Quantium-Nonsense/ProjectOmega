@@ -26,7 +26,7 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(
       private store: Store<fromApp.State>
   ) {
-    this.displayColumns = ['email', 'role', 'companyId', 'actions'];
+    this.displayColumns = ['email', 'roles', 'actions', 'id'];
     this.subscription = new Subscription();
   }
 
@@ -50,8 +50,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   filteringAction = (user: UserModel, filterValue: string) => {
     return user.email.toLowerCase().includes(filterValue)
-           || user.role.toLowerCase().includes(filterValue)
-           || user.companyId.toLowerCase().includes(filterValue);
+           || user.roles.some(r => r.name.toLowerCase().includes(filterValue));
   };
 
   editUser(user: UserModel) {

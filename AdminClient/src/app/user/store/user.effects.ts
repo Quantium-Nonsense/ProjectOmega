@@ -11,11 +11,12 @@ import * as fromApp from '../../reducers/index';
 import { ApiPathService } from '../../services/api-path.service';
 import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
+import { RoleModel } from '../../shared/model/role/role.model';
 import { UserModel } from '../../shared/model/user/user.model';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import { EditUserComponent } from '../edit-user/edit-user.component';
 import * as UserActions from './user.actions';
-import { selectFocusedUser, selectUsers } from './user.reducer';
+import { selectUsers } from './user.reducer';
 
 @Injectable()
 export class UserEffects {
@@ -36,12 +37,40 @@ export class UserEffects {
       })
   ));
 
+  getAllRoles$ = createEffect(() => this.actions$.pipe(
+      ofType(UserActions.getAllUserRoles),
+      switchMap((action: Action) => {
+        return this.httpGetAllRoles().pipe(
+            switchMap((roles: RoleModel[]) => {
+              return [
+                UserActions.setAllUserRoles({ roles }),
+                ToolbarActions.stopProgressBar()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                ToolbarActions.stopProgressBar(),
+                UserActions.hasErrorMessage({ error: error.message })
+              ];
+            })
+        );
+      })
+  ));
+
   showEditUserModal$ = createEffect(() => this.actions$.pipe(
       ofType(UserActions.showEditUserModal),
-      map((action: Action) => this.dialog.open<EditUserComponent, any>(EditUserComponent, {
-        width: '60vw'
-      }))
-  ), { dispatch: false });
+      map((action: Action & { user: UserModel }) => {
+        this.dialog.open<EditUserComponent, { type: 'edit' | 'create', user: UserModel }>(EditUserComponent, {
+          width: '60vw',
+          data: {
+            type: 'edit',
+            user: action.user
+          }
+        });
+
+        return UserActions.getAllUserRoles();
+      })
+  ));
 
   deleteUser$ = createEffect(() => this.actions$.pipe(
       ofType(UserActions.deleteFocusedUser),
@@ -50,7 +79,6 @@ export class UserEffects {
         let newUsers: UserModel[] = [];
         let currentUser: UserModel;
 
-        this.store$.select(selectFocusedUser).pipe(take(1)).subscribe(user => currentUser = user);
         this.store$.select(selectUsers).pipe(take(1)).subscribe(users => {
           newUsers = users.filter(u => u.id !== currentUser.id);
         });
@@ -135,6 +163,10 @@ export class UserEffects {
 
   httpGetAllUsers(): Observable<UserModel[]> {
     return this.http.get<UserModel[]>(this.endPoint.allUsersEndPoint);
+  }
+
+  httpGetAllRoles(): Observable<RoleModel[]> {
+    return this.http.get<RoleModel[]>(this.endPoint.allRolesEndPoint);
   }
 }
 

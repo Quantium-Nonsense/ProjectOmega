@@ -14,11 +14,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
 import { PopupDialogComponent } from './components/popup-dialog/popup-dialog.component';
 import { TableFilterComponent } from './components/table-filter/table-filter.component';
+import { PrettyRolePipe } from './pipes/pretty-role.pipe';
 
 @NgModule({
   declarations: [
     TableFilterComponent,
-    PopupDialogComponent
+    PopupDialogComponent,
+    PrettyRolePipe
   ],
   imports: [
     FlexLayoutModule,
@@ -49,7 +51,8 @@ import { TableFilterComponent } from './components/table-filter/table-filter.com
     MatPaginatorModule,
     MatIconModule,
     MatMenuModule,
-    TextFieldModule
+    TextFieldModule,
+    PrettyRolePipe
   ]
 
 })

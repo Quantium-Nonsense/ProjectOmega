@@ -39,7 +39,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.showProgressBar = this.store.select(fromToolbar.selectIsVisible);
+    this.showProgressBar = this.store.select(fromToolbar.selectIsToolbarVisible);
   }
 
   handleLogout(): void {

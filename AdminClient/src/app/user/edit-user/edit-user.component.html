@@ -26,33 +26,12 @@
         class="max-width"
         appearance="fill"
       >
-        <mat-label>Role</mat-label>
-        <input
-          id="formRole"
-          matInput
-          formControlName="role"
-          type="text"
-        />
+        <mat-label>Roles</mat-label>
+        <mat-select formControlName="roles" [compareWith]="compareWith" multiple>
+          <mat-option *ngFor="let role of availableRoles" [value]="role">{{role.name | prettyRole}}</mat-option>
+        </mat-select>
         <mat-error *ngIf="roleHasError" id="passwordError">
           {{roleErrorMessage}}
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-form-field
-        fxFlexFill
-        class="max-width"
-        appearance="fill"
-      >
-        <mat-label>Company</mat-label>
-        <input
-          id="formCompany"
-          matInput
-          formControlName="company"
-          type="text"
-        />
-        <mat-error *ngIf="companyHasError" id="companyError">
-          {{companyErrorMessage}}
         </mat-error>
       </mat-form-field>
     </div>

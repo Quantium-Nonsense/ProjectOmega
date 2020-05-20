@@ -146,7 +146,7 @@ export class SuppliersEffects {
                     color: 'primary'
                   }
                 ],
-                isDisabled: this.store$.select(fromToolbar.selectIsVisible)
+                isDisabled: this.store$.select(fromToolbar.selectIsToolbarVisible)
               }
             }
         );

@@ -23,6 +23,10 @@ export class ApiPathService {
     return `${ this.endPoint }/user/get`;
   }
 
+  get allRolesEndPoint(): string {
+    return `${this.endPoint}/role/get`
+  }
+
   get createNewSupplierEndPoint(): string {
     return `${ this.endPoint }/supplier/create`;
   }

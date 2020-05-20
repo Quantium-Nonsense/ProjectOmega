@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { RoleModel } from '../../shared/model/role/role.model';
 import { UserModel } from '../../shared/model/user/user.model';
 
 export const userSuccessfullyEdited = createAction(
@@ -19,6 +20,15 @@ export const userDeleted = createAction(
 export const deleteFocusedUser = createAction(
     '[User - Effect] Delete focused user'
 );
+
+export const getAllUserRoles = createAction(
+    '[UserForm - Component] Get all available roles'
+);
+
+export const setAllUserRoles = createAction(
+    '[User - Effects] Set all roles in state',
+    props<{roles: RoleModel[]}>()
+)
 
 export const showEditUserModal = createAction(
     '[User - Page] Show the user edit user modal',
