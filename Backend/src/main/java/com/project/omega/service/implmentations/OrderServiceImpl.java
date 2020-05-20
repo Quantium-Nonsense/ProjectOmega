@@ -46,20 +46,14 @@ public class OrderServiceImpl implements OrderService {
         return this.orderRepository.findAll();
     }
 
-
-    public Order updateOrder(Order order) {
-        Order Order = orderRepository.save(order);
-        return order;
-    }
-
-    public Order updateOrderById (Long id, Order order) throws OrderNotFoundException {
+    @Override
+    public Order updateOrder(Long id, Order order) throws OrderNotFoundException {
       if (!orderRepository.existsById(id)) {
         throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
       }
         orderRepository.save(order);
         return order;
     }
-
 }
 
 

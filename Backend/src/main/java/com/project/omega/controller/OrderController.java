@@ -1,39 +1,24 @@
 package com.project.omega.controller;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import com.project.omega.bean.dao.entity.*;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.OrderProduct;
-import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.OrderProductDto;
 import com.project.omega.exceptions.*;
 import com.project.omega.service.interfaces.*;
-import com.project.omega.service.implmentations.*;
-import com.project.omega.service.interfaces.OrderProductService;
-import com.project.omega.service.interfaces.OrderService;
-import com.project.omega.service.interfaces.ClientService;
-import com.project.omega.service.interfaces.OrderService;
-import com.project.omega.service.interfaces.ProductService;
-import com.project.omega.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -52,7 +37,7 @@ public class OrderController {
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
     public ResponseEntity<Order> create(@RequestBody OrderForm form) throws ProductNotFoundException,
-            ClientNotFoundException, NoRecordsFoundException, UserNotFoundException {
+            ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
         List<OrderProductDto> formDtos = form.getProductOrders();
 
         validateProductsExistence(formDtos);
@@ -80,11 +65,9 @@ public class OrderController {
         }
 
         order.setOrderProducts(orderProducts);
-        System.out.print(order);
 
-        this.orderService.updateOrder(order);
+        this.orderService.updateOrder(order.getId(), order);
 
-        System.out.print(order);
         String uri = ServletUriComponentsBuilder
                 .fromCurrentServletMapping()
                 .path("/orders/{id}")
@@ -103,8 +86,28 @@ public class OrderController {
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity updateOrderById (@PathVariable (value ="id") Long id, @RequestBody Order update) throws NoRecordsFoundException {
-        Order order = orderService.updateOrderById (id, update);
+    public ResponseEntity updateOrderById (@PathVariable (value ="id") Long id, @RequestBody Order update) throws NoRecordsFoundException, OrderNotFoundException {
+        Order orderUpdate = new Order();
+        Order oldOrder = orderService.getOrderById(id);
+        if(update.getOrderProducts().isEmpty()) {
+            orderUpdate.setOrderProducts(oldOrder.getOrderProducts());
+        } else {
+            orderUpdate.setOrderProducts(update.getOrderProducts());
+        }
+
+        if(update.getStatus() != null) {
+            orderUpdate.setStatus(oldOrder.getStatus());
+        } else {
+            orderUpdate.setStatus(update.getStatus());
+        }
+
+        if(update.getUserId() != null) {
+            orderUpdate.setUserId(oldOrder.getUserId());
+        } else {
+            orderUpdate.setUserId(update.getUserId());
+        }
+
+        Order order = orderService.updateOrder(id, orderUpdate);
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
