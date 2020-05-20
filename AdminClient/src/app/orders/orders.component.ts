@@ -81,8 +81,8 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   handleReadDetails(order: OrderModel) {
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
-      maxWidth: '500px',
-      width: '66vw',
+      maxWidth: '1000px',
+      width: '80vw',
       data: {
         order,
         title: `Details for Order ${order.id}`,
@@ -101,8 +101,8 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   handleEditDetails(order: OrderModel) {
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
-      maxWidth: '500px',
-      width: '66vw',
+      maxWidth: '1000px',
+      width: '80vw',
       data: {
         order,
         title: `Edit Order ${order.id}`,
@@ -132,8 +132,8 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   handleCreate() {
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {
-      maxWidth: '500px',
-      width: '66vw',
+      maxWidth: '1000px',
+      width: '80vw',
       data: {
         product: null,
         title: 'Create new order',
