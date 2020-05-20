@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 //import javax.lang.model.element.VariableElement;
 //import javax.xml.ws.Response;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +36,12 @@ public class ClientController {
 
     @GetMapping(value = "/get")
     public ResponseEntity<Client> getAllClients() throws NoRecordsFoundException {
-        List<Client> clients = clientService.getAllClients();
-        return new ResponseEntity(clients, HttpStatus.OK);
+        try {
+            List<Client> clients = clientService.getAllClients();
+            return new ResponseEntity(clients, HttpStatus.OK);
+        } catch (NoRecordsFoundException e) {
+            return new ResponseEntity(new ArrayList(), HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{id}")

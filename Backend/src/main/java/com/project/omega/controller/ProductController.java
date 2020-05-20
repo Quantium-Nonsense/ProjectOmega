@@ -32,8 +32,13 @@ public class ProductController {
 
     @GetMapping(value = "/get")
     public ResponseEntity getProducts() throws NoRecordsFoundException {
-        List<Product> products = productService.getAllProducts();
-        return new ResponseEntity(products, HttpStatus.OK);
+        try {
+            List<Product> products = productService.getAllProducts();
+            return new ResponseEntity(products, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity(new ArrayList<>(),HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{id}")
