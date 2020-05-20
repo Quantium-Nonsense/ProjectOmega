@@ -59,9 +59,8 @@ const _userReducer = createReducer(
     on(UserActions.showEditUserModal, (prevState: State, { user }) => ({
       ...prevState
     })),
-    on(UserActions.userSuccessfullyEdited, (prevState, { newUsers }) => ({
+    on(UserActions.userSuccessfullyEdited, prevState => ({
       ...prevState,
-      users: [...newUsers]
     }))
 );
 
