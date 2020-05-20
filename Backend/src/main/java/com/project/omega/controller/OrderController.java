@@ -1,39 +1,24 @@
 package com.project.omega.controller;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import com.project.omega.bean.dao.entity.*;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.OrderProduct;
-import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.OrderProductDto;
 import com.project.omega.exceptions.*;
 import com.project.omega.service.interfaces.*;
-import com.project.omega.service.implmentations.*;
-import com.project.omega.service.interfaces.OrderProductService;
-import com.project.omega.service.interfaces.OrderService;
-import com.project.omega.service.interfaces.ClientService;
-import com.project.omega.service.interfaces.OrderService;
-import com.project.omega.service.interfaces.ProductService;
-import com.project.omega.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -58,9 +43,9 @@ public class OrderController {
         validateProductsExistence(formDtos);
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = ((UserDetails)principal).getUsername();
-            User user = userService.findUserByEmail(username);
-            Long userId = user.getId();
+        String username = ((UserDetails)principal).getUsername();
+        User user = userService.findUserByEmail(username);
+        Long userId = user.getId();
 
         Order order = new Order();
 
