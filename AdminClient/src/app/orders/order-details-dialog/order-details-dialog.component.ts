@@ -2,7 +2,6 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { MockProductsAPI } from '../../../data/products/products-data';
 import { CustomerModel } from '../../models/customers/customer.model';
 import { OrderProductModel } from '../../models/orders/oder-product.model';
 import { OrderModel } from '../../models/orders/order.model';
@@ -37,7 +36,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
       repUsers: UserModel[]
     },
   ) {
-    this.products = MockProductsAPI.getInstance().getAll();
+    // this.products = MockProductsAPI.getInstance().getAll();
     this.customers = data.customers;
     this.repUsers = data.repUsers;
     this.editable = data.editable;
