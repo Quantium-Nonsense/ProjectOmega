@@ -37,13 +37,13 @@ import {ChartComponent} from './chart/chart.component';
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
 @NgModule({
-	declarations: [
-		AppComponent,
+  declarations: [
+    AppComponent,
     ChartComponent,
-		DashboardComponent,
-		ToolbarComponent,
-		ManagementComponent
-	],
+    DashboardComponent,
+    ToolbarComponent,
+    ManagementComponent
+  ],
 	bootstrap: [AppComponent],
   imports: [
     AppRoutingModule,
