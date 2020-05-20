@@ -45,8 +45,10 @@
         <div fxLayout="row">
             <mat-form-field fxFlexFill>
                 <mat-label>Supplier</mat-label>
-                <mat-select formControlName="supplier"
-                            id="supplier">
+                <mat-select
+                        [compareWith]="compareFun"
+                        formControlName="supplier"
+                        id="supplier">
                     <mat-option *ngFor="let supplier of suppliers"
                                 [value]="supplier">{{ supplier.companyName }}</mat-option>
                 </mat-select>
@@ -59,8 +61,7 @@
 
 <mat-dialog-actions align="end">
     <button (click)="onSaveClick()"
-            [disabled]="this.productItemForm.invalid"
-            cdkFocusInitial
+            [disabled]="productItemForm.invalid || isLoading"
             color="primary"
             mat-raised-button>
         <mat-icon class="mr-1">save</mat-icon>

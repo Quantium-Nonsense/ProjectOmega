@@ -5,6 +5,16 @@ export const loadAllProducts = createAction(
     '[Products - Component] Load all products'
 );
 
+export const deleteProduct = createAction(
+    '[Product - Component] delete product',
+    props<{ product: ProductModel }>()
+);
+
+export const editNewProduct = createAction(
+    '[Products - Form] Edit product',
+    props<{ product: ProductModel }>()
+);
+
 export const allProductsLoaded = createAction(
     '[Products - Effects] All products have been loaded',
     props<{ products: ProductModel[] }>()

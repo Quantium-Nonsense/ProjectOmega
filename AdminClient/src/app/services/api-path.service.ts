@@ -59,6 +59,10 @@ export class ApiPathService {
     return `${ this.endPoint }/supplier/delete/${ supplierId }`;
   }
 
+  getDeleteProductEndPoint(productId: number) {
+    return `${ this.endPoint }/product/delete/${ productId }`;
+  }
+
   /**
    * returns the login end point
    */
@@ -73,5 +77,9 @@ export class ApiPathService {
    */
   get allSuppliers(): string {
     return `${ this.endPoint }/supplier/get`;
+  }
+
+  getEditProductEndPoint(id: number): string {
+    return `${ this.endPoint }/product/update/${ id }`;
   }
 }

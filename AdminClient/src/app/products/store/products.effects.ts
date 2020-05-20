@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { forkJoin, Observable } from 'rxjs';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { ProductModel } from '../../models/products/products.model';
 import { ApiPathService } from '../../services/api-path.service';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
@@ -15,6 +15,8 @@ import { ProductDetailsDialogComponent } from '../product-details-dialog/product
 import {
   allProductsLoaded,
   createNewProduct,
+  deleteProduct,
+  editNewProduct,
   hasErrorMessage,
   loadAllProducts,
   showProductForm
@@ -22,6 +24,25 @@ import {
 
 @Injectable()
 export class ProductsEffects {
+
+  deleteProduct$ = createEffect(() => this.actions$.pipe(
+      ofType(deleteProduct),
+      switchMap((action: Action & { product: ProductModel }) => {
+        return this.httpDeleteProduct(action.product).pipe(
+            switchMap(() => {
+              return [
+                loadAllProducts()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                stopProgressBar(),
+                hasErrorMessage({ error: error.message })
+              ];
+            })
+        );
+      })
+  ));
 
   createNewProduct$ = createEffect(() => this.actions$.pipe(
       ofType(createNewProduct),
@@ -33,6 +54,7 @@ export class ProductsEffects {
               });
               this.dialog.closeAll();
               return [
+                loadAllProducts(),
                 stopProgressBar()
               ];
             }),
@@ -41,6 +63,29 @@ export class ProductsEffects {
               return [
                 hasErrorMessage({ error: error.message }),
                 stopProgressBar()
+              ];
+            })
+        );
+      })
+  ));
+
+  editProduct$ = createEffect(() => this.actions$.pipe(
+      ofType(editNewProduct),
+      switchMap((action: Action & { product: ProductModel }) => {
+        return this.httpEditProduct(action.product).pipe(
+            tap(() => this.dialog.closeAll()),
+            switchMap((product: ProductModel) => {
+              this.snackBar.open('Product was successfully eddied', null, {
+                duration: 3000
+              });
+              return [
+                loadAllProducts()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                stopProgressBar(),
+                hasErrorMessage({ error: error.message })
               ];
             })
         );
@@ -97,6 +142,16 @@ export class ProductsEffects {
       private snackBar: MatSnackBar,
       private dialog: MatDialog
   ) {
+  }
+
+  httpDeleteProduct(product: ProductModel) {
+    return this.http.delete(this.endPoints.getDeleteProductEndPoint(product.id));
+  }
+
+  httpEditProduct(product: ProductModel): Observable<ProductModel> {
+    return this.http.put<ProductModel>(this.endPoints.getEditProductEndPoint(product.id), {
+      ...product
+    });
   }
 
   httpCreateNewProduct(product: ProductModel): Observable<ProductModel> {

@@ -7,7 +7,9 @@ import { ProductModel } from '../../models/products/products.model';
 import * as fromApp from '../../reducers/index';
 import { SupplierModel } from '../../shared/model/supplier/supplier.model';
 import { selectAllSuppliers } from '../../supplier/store/suppliers.reducer';
-import { createNewProduct } from '../store/products.actions';
+import { beginProgressBar } from '../../toolbar/store/toolbar.actions';
+import { selectIsToolbarVisible } from '../../toolbar/store/toolbar.reducer';
+import { createNewProduct, editNewProduct } from '../store/products.actions';
 
 @Component({
   selector: 'app-details-dialog',
@@ -20,6 +22,8 @@ export class ProductDetailsDialogComponent implements OnInit, OnDestroy {
    */
   productItemForm: FormGroup;
   suppliers: SupplierModel[];
+  isLoading: boolean;
+
   private sub: Subscription;
 
   constructor(
@@ -35,6 +39,16 @@ export class ProductDetailsDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.productItemForm = this.formInitialization();
     this.sub.add(
+        this.store$.pipe(select(selectIsToolbarVisible)).subscribe(isLoading => {
+          this.isLoading = isLoading;
+          if (isLoading) {
+            this.productItemForm.disable();
+          } else {
+            this.productItemForm.enable();
+          }
+        })
+    );
+    this.sub.add(
         this.store$.pipe(select(selectAllSuppliers)).subscribe(sup => this.suppliers = sup)
     );
     if (this.data.product) {
@@ -47,6 +61,10 @@ export class ProductDetailsDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  compareFun(obj1, obj2) {
+    return obj1.id === obj2.id;
+  }
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
@@ -56,6 +74,7 @@ export class ProductDetailsDialogComponent implements OnInit, OnDestroy {
   }
 
   private onSaveClick() {
+    this.store$.dispatch(beginProgressBar());
     const newProduct = new ProductModel(
         this.data.product ? this.data.product.id : null,
         this.productItemForm.get('name').value,
@@ -64,7 +83,11 @@ export class ProductDetailsDialogComponent implements OnInit, OnDestroy {
         this.supplier.value
     );
 
-    this.store$.dispatch(createNewProduct({ product: newProduct }));
+    if (this.data.product) {
+      this.store$.dispatch(editNewProduct({ product: newProduct }));
+    } else {
+      this.store$.dispatch(createNewProduct({ product: newProduct }));
+    }
   }
 
   private formInitialization = (): FormGroup => {

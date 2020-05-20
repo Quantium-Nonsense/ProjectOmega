@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { ProductModel } from '../models/products/products.model';
 import * as fromApp from '../reducers/index';
 import { beginProgressBar } from '../toolbar/store/toolbar.actions';
-import { loadAllProducts, showProductForm } from './store/products.actions';
+import { deleteProduct, loadAllProducts, showProductForm } from './store/products.actions';
 import { selectAllProducts } from './store/products.reducer';
 
 @Component({
@@ -57,15 +57,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.store$.dispatch(showProductForm({ product: null }));
   }
 
-  handleReadDetails(row: ProductModel): void {
-
-  }
 
   handleEditDetails(row: ProductModel): void {
-
+    this.store$.dispatch(showProductForm({ product: row }));
   }
 
   handleDeleteDetails(row: ProductModel): void {
-
+    this.store$.dispatch(beginProgressBar());
+    this.store$.dispatch(deleteProduct({ product: row }));
   }
 }
