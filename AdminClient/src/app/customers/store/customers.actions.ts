@@ -7,17 +7,20 @@ export const editCustomer = createAction(
 );
 
 export const editCustomerSuccess = createAction(
-    '[Customers - Effects] Edit customer successfully',
-    props<{ newCustomers: CustomerModel[] }>()
+    '[Customers - Effects] Edit customer successfully'
 );
 
 export const customerDeletedSuccess = createAction(
-    '[Customers - Effects] Customer Deleted successfully',
-    props<{ newCustomers: CustomerModel[] }>()
+    '[Customers - Effects] Customer Deleted successfully'
 );
 
 export const beginLoadingCustomers = createAction(
     '[Customers - Component] Load all customers'
+);
+
+export const createNewCustomer = createAction(
+    '[Customers - Form] Create new customer',
+    props<{ customer: CustomerModel }>()
 );
 
 export const customersLoaded = createAction(
@@ -36,6 +39,7 @@ export const showEditCustomerDialog = createAction(
 );
 
 export const deleteCustomer = createAction(
-    '[Customer - Effects] Delete selected user'
+    '[Customer - Effects] Delete selected user',
+    props<{ customer: CustomerModel }>()
 );
 

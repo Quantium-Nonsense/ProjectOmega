@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { catchError, delay, map, switchMap, take, tap } from 'rxjs/operators';
+import { Action, select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { CustomerModel } from '../../models/customers/customer.model';
 import * as fromApp from '../../reducers/index';
@@ -13,26 +13,75 @@ import { ApiPathService } from '../../services/api-path.service';
 import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
 import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
 import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
+import { stopProgressBar } from '../../toolbar/store/toolbar.actions';
+import { selectIsToolbarVisible } from '../../toolbar/store/toolbar.reducer';
 import { CustomerFormComponent } from '../customer-form/customer-form.component';
 import * as CustomerActions from './customers.actions';
-import * as fromCustomers from './customers.reducer';
+import { createNewCustomer } from './customers.actions';
 
 @Injectable()
 export class CustomersEffects {
 
   editCustomer$ = createEffect(() => this.actions$.pipe(
       ofType(CustomerActions.editCustomer),
-      switchMap((action: Action & { editedCustomer: CustomerModel }) => of(this.editCustomer(action.editedCustomer)).pipe(
-          delay(2000),
-          tap(() => this.dialog.closeAll())
+      switchMap((action: Action & { editedCustomer: CustomerModel }) => this.httpEditCustomer(action.editedCustomer).pipe(
+          switchMap((customer: CustomerModel) => {
+            return [
+              CustomerActions.editCustomerSuccess(),
+              CustomerActions.beginLoadingCustomers()
+            ];
+          }),
+          catchError((error: Error) => {
+            this.snackBar.open(error.message, null, {
+              duration: 3000
+            });
+            return [
+              ToolbarActions.stopProgressBar()
+            ];
+          })
       ))
+  ));
+
+  createCustomer$ = createEffect(() => this.actions$.pipe(
+      ofType(createNewCustomer),
+      switchMap((action: Action & { customer: CustomerModel }) => {
+        return this.httpCreateCustomer(action.customer).pipe(
+            tap(() => this.dialog.closeAll()),
+            switchMap((customer: CustomerModel) => {
+              return [
+                CustomerActions.beginLoadingCustomers()
+              ];
+            }),
+            catchError((error: Error) => {
+              this.snackBar.open(error.message, null, {
+                duration: 3000
+              });
+              return [
+                stopProgressBar()
+              ];
+            })
+        );
+      })
   ));
 
   deleteCustomer$ = createEffect(() => this.actions$.pipe(
       ofType(CustomerActions.deleteCustomer),
-      switchMap((action: Action) => of(this.deleteCustomer()).pipe(
-          delay(2000),
-          tap(() => this.dialog.closeAll())
+      switchMap((action: Action & { customer: CustomerModel }) => this.httpDeleteCustomer(action.customer).pipe(
+          tap(() => this.dialog.closeAll()),
+          switchMap(() => {
+            return [
+              CustomerActions.beginLoadingCustomers(),
+              CustomerActions.customerDeletedSuccess()
+            ];
+          }),
+          catchError((error: Error) => {
+            this.snackBar.open(error.message, null, {
+              duration: 3000
+            });
+            return [
+              ToolbarActions.stopProgressBar()
+            ];
+          })
       ))
   ));
 
@@ -64,6 +113,9 @@ export class CustomersEffects {
       map((action: Action & { customer: CustomerModel }) => this.dialog.open<CustomerFormComponent>(
           CustomerFormComponent,
           {
+            data: {
+              customer: action.customer
+            },
             width: '66vw',
             height: '66vh',
             panelClass: 'customerDialog'
@@ -86,16 +138,10 @@ export class CustomersEffects {
   ) {
   }
 
-  private customersLoadedAfter() {
-    const customers = this.createDummyCustomers();
-    this.store.dispatch(ToolbarActions.stopProgressBar());
-    return CustomerActions.customersLoaded({ customers });
-  }
-
-  private showDeleteDialog(customer: CustomerModel) {
+  showDeleteDialog(customer: CustomerModel) {
     this.dialog.open<PopupDialogComponent, PopupDialogDataModel>(PopupDialogComponent, {
       data: {
-        isDisabled: this.store.select(fromCustomers.selectIsLoading),
+        isDisabled: this.store.pipe(select(selectIsToolbarVisible)),
         title: environment.common.DELETE_CUSTOMER_TITLE,
         description: environment.common.DELETE_CUSTOMER_CONFIRM_TEXT,
         dialogActions: [
@@ -104,7 +150,7 @@ export class CustomersEffects {
             text: environment.common.CONFIRMATION_TEXT,
             action: () => {
               this.store.dispatch(ToolbarActions.beginProgressBar());
-              this.store.dispatch(CustomerActions.deleteCustomer());
+              this.store.dispatch(CustomerActions.deleteCustomer({ customer }));
             }
           },
           {
@@ -118,40 +164,23 @@ export class CustomersEffects {
     });
   }
 
-  private deleteCustomer(): Action {
-    let currentCustomer: CustomerModel = null;
-    let allCustomers: CustomerModel[] = [];
-
-    this.store.select(fromCustomers.selectAllCustomers).pipe(take(1)).subscribe(customers => allCustomers = customers);
-    this.store.select(fromCustomers.selectSelectedCustomer).pipe(take(1)).subscribe(customer => currentCustomer = customer);
-
-    const newCustomers = allCustomers.filter(customer => customer.id !== currentCustomer.id);
-
-    this.store.dispatch(ToolbarActions.stopProgressBar());
-    return CustomerActions.customerDeletedSuccess({ newCustomers });
-  }
-
-  private editCustomer(editedCustomer: CustomerModel): Action {
-    let allCustomers: CustomerModel[] = [];
-    let customerToEdit: CustomerModel;
-
-    this.store.select(fromCustomers.selectSelectedCustomer)
-        .pipe(take(1))
-        .subscribe(customer => customerToEdit = customer);
-    this.store.select(fromCustomers.selectAllCustomers)
-        .pipe(take(1))
-        .subscribe(customers => allCustomers = [...customers]);
-
-    allCustomers[allCustomers.findIndex(c => c.id === customerToEdit.id)] = {
-      ...editedCustomer,
-      id: customerToEdit.id
-    };
-
-    this.store.dispatch(ToolbarActions.stopProgressBar());
-    return CustomerActions.editCustomerSuccess({ newCustomers: allCustomers });
+  httpDeleteCustomer(customer: CustomerModel) {
+    return this.http.delete(this.endPoints.getDeleteCustomerEndPoint(customer.id));
   }
 
   httpGetAllCustomers(): Observable<CustomerModel[]> {
     return this.http.get<CustomerModel[]>(this.endPoints.allCustomersEndPoint);
+  }
+
+  httpEditCustomer(customer: CustomerModel): Observable<CustomerModel> {
+    return this.http.put<CustomerModel>(this.endPoints.getEditCustomerEndPoint(customer.id), {
+      ...customer
+    });
+  }
+
+  httpCreateCustomer(customer: CustomerModel): Observable<CustomerModel> {
+    return this.http.post<CustomerModel>(this.endPoints.createCustomerEndPoint, {
+      ...customer
+    });
   }
 }

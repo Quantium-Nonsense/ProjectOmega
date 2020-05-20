@@ -86,4 +86,16 @@ export class ApiPathService {
   getEditProductEndPoint(id: number): string {
     return `${ this.endPoint }/product/update/${ id }`;
   }
+
+  getDeleteCustomerEndPoint(id: number): string {
+    return `${ this.endPoint }/client/delete/${ id }`;
+  }
+
+  get createCustomerEndPoint(): string {
+    return `${ this.endPoint }/client/create`;
+  }
+
+  getEditCustomerEndPoint(id: number): string {
+    return `${ this.endPoint }/client/update/${ id }`;
+  }
 }
