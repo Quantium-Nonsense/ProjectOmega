@@ -37,6 +37,7 @@ export class ProductsEffects {
               ];
             }),
             catchError((error: Error) => {
+              this.dialog.closeAll();
               return [
                 hasErrorMessage({ error: error.message }),
                 stopProgressBar()
