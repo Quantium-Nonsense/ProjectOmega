@@ -1,5 +1,5 @@
-import { Action, createReducer, createSelector, MemoizedSelector, on } from '@ngrx/store';
-import { UserModel } from '../../shared/model/user.model';
+import {Action, createReducer, createSelector, MemoizedSelector, on} from '@ngrx/store';
+import {UserModel} from '../../shared/model/user/user.model';
 import * as UserActions from './user.actions';
 import * as fromApp from './../../reducers/index';
 

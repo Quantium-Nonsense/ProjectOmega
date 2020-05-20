@@ -1,5 +1,6 @@
 package com.project.omega.exceptions;
 
+
 public class NoRolesCreatedException extends Exception {
     private static final long serialVersionUID = 1L;
 

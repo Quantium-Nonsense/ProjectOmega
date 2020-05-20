@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { delay, map, switchMap, take, tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import {Injectable} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {Actions, createEffect, ofType} from '@ngrx/effects';
+import {Action, Store} from '@ngrx/store';
+import {of} from 'rxjs';
+import {delay, map, switchMap, take, tap} from 'rxjs/operators';
+import {environment} from '../../../environments/environment';
 import * as fromApp from '../../reducers/index';
-import { PopupDialogComponent } from '../../shared/components/popup-dialog/popup-dialog.component';
-import { PopupDialogDataModel } from '../../shared/model/popup-dialog-data.model';
-import { UserModel } from '../../shared/model/user.model';
-import { EditUserComponent } from '../edit-user/edit-user.component';
+import {PopupDialogComponent} from '../../shared/components/popup-dialog/popup-dialog.component';
+import {PopupDialogDataModel} from '../../shared/model/popup-dialog-data.model';
+import {UserModel} from '../../shared/model/user/user.model';
+import {EditUserComponent} from '../edit-user/edit-user.component';
 import * as UserActions from './user.actions';
-import { selectFocusedUser, selectUsers } from './user.reducer';
+import {selectFocusedUser, selectUsers} from './user.reducer';
 
 @Injectable()
 export class UserEffects {

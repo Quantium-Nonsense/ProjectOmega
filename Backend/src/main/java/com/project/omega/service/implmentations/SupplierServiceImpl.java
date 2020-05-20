@@ -2,6 +2,7 @@ package com.project.omega.service.implmentations;
 
 import com.project.omega.bean.dao.entity.Supplier;
 import com.project.omega.exceptions.NoRecordsFoundException;
+import com.project.omega.exceptions.SupplierNotFoundException;
 import com.project.omega.repository.SupplierRepository;
 import com.project.omega.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,35 +35,35 @@ public class SupplierServiceImpl implements SupplierService {
         return supplierCompanies;
     }
 
-    public Supplier getSupplierById(Long id) throws NoRecordsFoundException {
+    public Supplier getSupplierById(Long id) throws SupplierNotFoundException {
         Optional<Supplier> supplier = supplierRepository.findById(id);
         if(!supplier.isPresent()) {
-            throw new NoRecordsFoundException(messages.getMessage("message.supplierNotFound", null, null));
+            throw new SupplierNotFoundException(messages.getMessage("message.supplierNotFound", null, null));
         }
         return supplier.get();
     }
 
-    public Supplier getSupplierByName(String companyName) throws NoRecordsFoundException {
+    public Supplier getSupplierByName(String companyName) throws SupplierNotFoundException {
         Optional<Supplier> supplier = supplierRepository.findByCompanyName(companyName);
         if(!supplier.isPresent()) {
-            throw new NoRecordsFoundException(messages.getMessage("message.supplierNotFound", null, null));
+            throw new SupplierNotFoundException(messages.getMessage("message.supplierNotFound", null, null));
         }
         return supplier.get();
     }
 
-    public Supplier updateSupplierById(Long id, Supplier supplierDetails) throws NoRecordsFoundException {
+    public Supplier updateSupplierById(Long id, Supplier supplierDetails) throws SupplierNotFoundException {
         Optional<Supplier> supplier = supplierRepository.findById(id);
         if(!supplier.isPresent()) {
-            throw new NoRecordsFoundException(messages.getMessage("message.supplierNotFound", null, null));
+            throw new SupplierNotFoundException(messages.getMessage("message.supplierNotFound", null, null));
         }
         supplierRepository.save(supplierDetails);
         return supplier.get();
     }
 
-    public Supplier deleteSupplierById(Long id) throws NoRecordsFoundException {
+    public Supplier deleteSupplierById(Long id) throws SupplierNotFoundException {
         Optional<Supplier> supplier = supplierRepository.findById(id);
         if(!supplier.isPresent()) {
-            throw new NoRecordsFoundException(messages.getMessage("message.supplierNotFound", null, null));
+            throw new SupplierNotFoundException(messages.getMessage("message.supplierNotFound", null, null));
         }
         supplierRepository.deleteById(id);
         return supplier.get();

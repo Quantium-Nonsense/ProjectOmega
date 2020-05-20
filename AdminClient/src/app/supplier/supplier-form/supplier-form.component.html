@@ -1,0 +1,148 @@
+<button (click)="cancel()"
+        class="close"
+        mat-icon-button>
+    <mat-icon>cancel</mat-icon>
+</button>
+<form [formGroup]="supplierForm"
+      class="h20"
+>
+    <div fxLayout="row">
+        <mat-form-field
+                appearance="fill"
+                fxFlexFill
+        >
+            <mat-label>Email</mat-label>
+            <input
+                    autocomplete="email"
+                    formControlName="email"
+                    id="formEmailInput"
+                    matInput
+                    placeholder="email@example.com"
+            />
+            <mat-error *ngIf="emailHasError"
+                       id="emailError">{{emailErrorMessage}}</mat-error>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field
+                appearance="fill"
+                class="max-width"
+                fxFlexFill
+        >
+            <mat-label>Company name</mat-label>
+            <input
+                    formControlName="companyName"
+                    id="formCompanyName"
+                    matInput
+                    type="text"
+            />
+            <mat-error *ngIf="companyNameHasError"
+                       id="passwordError">
+                {{companyNameErrorMessage}}
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field
+                appearance="fill"
+                class="max-width"
+                fxFlexFill
+        >
+            <mat-label>Contact number</mat-label>
+            <input
+                    formControlName="contactNumber"
+                    id="formCompany"
+                    matInput
+                    type="text"
+            />
+            <mat-error *ngIf="contactNumberHasError"
+                       id="contactNumberError">
+                {{contactNumberErrorMessage}}
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field
+                appearance="fill"
+                class="max-width"
+                fxFlexFill
+        >
+            <mat-label>Description</mat-label>
+            <input
+                    formControlName="description"
+                    id="formDescription"
+                    matInput
+                    type="text"
+            />
+            <mat-error *ngIf="descriptionHasError"
+                       id="descriptionError">
+                {{descriptionErrorMessage}}
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field
+                appearance="fill"
+                class="max-width"
+                fxFlexFill
+        >
+            <mat-label>First name</mat-label>
+            <input
+                    formControlName="firstName"
+                    id="formFirstName"
+                    matInput
+                    type="text"
+            />
+            <mat-error *ngIf="firstNameHasError"
+                       id="firstNameError">
+                {{firstNameErrorMessage}}
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field
+                appearance="fill"
+                class="max-width"
+                fxFlexFill
+        >
+            <mat-label>Last name</mat-label>
+            <input
+                    formControlName="lastName"
+                    id="formLastName"
+                    matInput
+                    type="text"
+            />
+            <mat-error *ngIf="lastNameHasError"
+                       id="lastNameError">
+                {{lastNameErrorMessage}}
+            </mat-error>
+        </mat-form-field>
+    </div>
+    <div fxLayout="row">
+        <mat-form-field
+                appearance="fill"
+                class="max-width"
+                fxFlexFill
+        >
+            <mat-label>Additional notes</mat-label>
+            <textarea
+                    formControlName="notes"
+                    id="formNotes"
+                    matInput
+                    type="text">
+                </textarea>
+        </mat-form-field>
+    </div>
+</form>
+<mat-dialog-actions>
+    <button (click)="submitForm()"
+            [disabled]="isLoading | async"
+            color="primary"
+            mat-stroked-button>Confirm
+    </button>
+    <button (click)="cancel()"
+            [disabled]="isLoading | async"
+            color="warn"
+            mat-stroked-button>Cancel
+    </button>
+</mat-dialog-actions>
