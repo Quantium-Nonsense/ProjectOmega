@@ -2,14 +2,11 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { CustomerModel } from '../../app/models/customers/customer.model';
 import { OrderProductModel } from '../../app/models/orders/oder-product.model';
 import { OrderModel } from '../../app/models/orders/order.model';
-import { MockProductsAPI } from '../products/products-data';
 
 // TODO: replace this with real data from your application
 /* In lieu of backend */
 export class MockOrdersAPI {
   private static instance: MockOrdersAPI;
-
-  private static productsApi: MockProductsAPI = MockProductsAPI.getInstance();
 
   private data: OrderModel[] = [
     new OrderModel(
@@ -99,4 +96,4 @@ export class MockOrdersAPI {
   public getNextId(): number {
     return this.data[this.data.length - 1].id + 1;
   }
-};
+}
