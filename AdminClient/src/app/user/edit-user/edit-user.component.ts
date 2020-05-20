@@ -65,14 +65,25 @@ export class EditUserComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    this.store.dispatch(UserActions.editUser({
-      user: {
-        id: this.data.user.id,
-        roles: this.roles.value,
-        email: this.email.value as string,
-        password: null
-      }
-    }));
+    if (this.data.user) {
+      this.store.dispatch(UserActions.editUser({
+        user: {
+          id: this.data.user.id,
+          roles: this.roles.value,
+          email: this.email.value as string,
+          password: null
+        }
+      }));
+    } else {
+      this.store.dispatch(UserActions.createNewUser({
+        user: {
+          id: null,
+          roles: this.roles.value,
+          email: this.email.value as string,
+          password: null
+        }
+      }));
+    }
   }
 
   isFormValid(): boolean {

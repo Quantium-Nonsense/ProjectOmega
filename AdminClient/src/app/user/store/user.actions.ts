@@ -34,6 +34,11 @@ export const showEditUserModal = createAction(
     props<{ user: UserModel }>()
 );
 
+export const createNewUser = createAction(
+    '[User - Effects] Create new user',
+    props<{ user: UserModel }>()
+);
+
 export const showDeleteUserDialog = createAction(
     '[User - Page] Show user dialog',
     props<{ user: UserModel }>()

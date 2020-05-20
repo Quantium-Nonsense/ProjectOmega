@@ -38,9 +38,8 @@
   </form>
   <mat-dialog-actions>
     <div fxLayout="row" fxLayoutAlign="center">
-      <button (click)="onSubmit()" [disabled]="!isFormValid()" class="w20" color="primary" id="editUserButton"
+      <button (click)="onSubmit()" [innerText]="data.user ? 'Edit User' : 'Create User'" [disabled]="!isFormValid()" class="w20" color="primary" id="editUserButton"
               mat-raised-button>
-        Edit user
       </button>
       <button class="w20" color="primary" mat-dialog-close mat-raised-button>
         Cancel

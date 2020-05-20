@@ -60,4 +60,8 @@ export class UserComponent implements OnInit, OnDestroy {
   deleteUser(user: UserModel) {
     this.store.dispatch(UserActions.showDeleteUserDialog({ user }));
   }
+
+  handleCreate(): void {
+    this.store.dispatch(UserActions.showEditUserModal({ user: null }));
+  }
 }

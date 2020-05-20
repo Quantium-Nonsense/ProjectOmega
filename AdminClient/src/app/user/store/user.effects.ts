@@ -60,17 +60,49 @@ export class UserEffects {
       })
   ));
 
+  createNewUser$ = createEffect(() => this.actions$.pipe(
+      ofType(UserActions.createNewUser),
+      switchMap((action: Action & { user: UserModel }) => {
+        return this.httpCreateNewUser(action.user).pipe(
+            tap(() => {
+              this.dialog.closeAll();
+            }),
+            switchMap((user: UserModel) => {
+              return [
+                ToolbarActions.stopProgressBar()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                ToolbarActions.stopProgressBar(),
+                UserActions.hasErrorMessage({ error: error.message })
+              ];
+            })
+        );
+      })
+  ));
+
   showEditUserModal$ = createEffect(() => this.actions$.pipe(
       ofType(UserActions.showEditUserModal),
       map((action: Action & { user: UserModel }) => {
-        this.dialog.open<EditUserComponent, { type: 'edit' | 'create', user: UserModel }>(EditUserComponent, {
-          width: '60vw',
-          data: {
-            type: 'edit',
-            user: action.user
-          }
-        });
+        if (!action.user) {
+          this.dialog.open<EditUserComponent, { type: 'edit' | 'create', user: UserModel }>(EditUserComponent, {
+            width: '60vw',
+            data: {
+              type: 'create',
+              user: null
+            }
+          });
+        } else {
+          this.dialog.open<EditUserComponent, { type: 'edit' | 'create', user: UserModel }>(EditUserComponent, {
+            width: '60vw',
+            data: {
+              type: 'edit',
+              user: action.user
+            }
+          });
 
+        }
         return UserActions.getAllUserRoles();
       })
   ));
@@ -178,6 +210,12 @@ export class UserEffects {
 
   httpEditUser(user: UserModel): Observable<UserModel> {
     return this.http.put<UserModel>(this.endPoint.getEditUserEndPoint(user.id), {
+      ...user
+    });
+  }
+
+  httpCreateNewUser(user: UserModel): Observable<UserModel> {
+    return this.http.post<UserModel>(this.endPoint.createNewUserEndPoint, {
       ...user
     });
   }

@@ -31,6 +31,10 @@ export class ApiPathService {
     return `${ this.endPoint }/supplier/create`;
   }
 
+  get createNewUserEndPoint(): string {
+    return `${this.endPoint}/user/create`
+  }
+
   getDeleteUserEndPoint(userId: number) {
     return `${this.endPoint}/user/delete/${userId}`
   }
