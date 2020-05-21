@@ -39,6 +39,9 @@ public class Order implements Serializable {
     @Enumerated
     private OrderStatus status;
 
+    @NotNull
+    private double totalOrderPrice;
+
     @Transient
     public Double getTotalOrderPrice() {
         double sum = 0D;
@@ -96,6 +99,10 @@ public class Order implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public void setTotalOrderPrice(double totalOrderPrice) {
+        this.totalOrderPrice = totalOrderPrice;
     }
 }
 
