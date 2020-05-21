@@ -2,10 +2,11 @@ package com.project.omega.service.implmentations;
 
 
 import com.project.omega.bean.dao.entity.Order;
+import com.project.omega.bean.dao.entity.OrderProduct;
 import com.project.omega.enums.OrderStatus;
-import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.OrderNotFoundException;
 import com.project.omega.repository.OrderRepository;
+import com.project.omega.service.interfaces.OrderProductService;
 import com.project.omega.service.interfaces.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -24,6 +25,9 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
 
     @Autowired
+    OrderProductService orderProductService;
+
+    @Autowired
     MessageSource messages;
 
     public Order createOrder(Order order) {
@@ -35,11 +39,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(Long id) throws OrderNotFoundException {
-            Optional<Order> order = orderRepository.findById(id);
-            if (!order.isPresent()){
-                throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
-            }
-            return order.get();
+        Optional<Order> order = orderRepository.findById(id);
+        if (!order.isPresent()) {
+            throw new OrderNotFoundException(messages.getMessage("message.orderNotFound", null, null));
+        }
+        return order.get();
     }
 
     @Override
@@ -49,9 +53,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateOrder(Long id, Order order) throws OrderNotFoundException {
-      if (!orderRepository.existsById(id)) {
-        throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
-      }
+        if (!orderRepository.existsById(id)) {
+            throw new OrderNotFoundException(messages.getMessage("message.orderNotFound", null, null));
+        }
+        List<OrderProduct> orderProducts = order.getOrderProducts();
+        orderProducts.forEach(op -> {orderProductService.create(op);});
+
         orderRepository.save(order);
         return order;
     }

@@ -97,7 +97,7 @@ public class OrderController {
         Order orderUpdate = new Order();
         Order oldOrder = orderService.getOrderById(id);
 
-        if(update.getOrderProducts().isEmpty()) {
+        if(update.getOrderProducts().isEmpty() || update.getOrderProducts() == null) {
             orderUpdate.setOrderProducts(oldOrder.getOrderProducts());
         } else {
             orderUpdate.setOrderProducts(update.getOrderProducts());
