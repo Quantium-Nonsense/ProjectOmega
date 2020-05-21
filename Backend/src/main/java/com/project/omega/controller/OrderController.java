@@ -66,10 +66,9 @@ public class OrderController {
         List<OrderProduct> orderProducts = new ArrayList<>();
 
         for (OrderProductDto dto : productsForOrder) {
-            orderProducts.add(orderProductService.create(new OrderProduct(
-                    productService.getProductById(dto.getProduct().getId()),
-                    dto.getQuantity(),
-                    clientService.getClientById(dto.getClient().getId()))));
+            orderProducts.add(orderProductService.create(new OrderProduct(productService.getProductById(dto.getProduct().getId()),
+                    clientService.getClientById(dto.getClient().getId()),
+                    dto.getQuantity())));
         }
 
         order.setOrderProducts(orderProducts);

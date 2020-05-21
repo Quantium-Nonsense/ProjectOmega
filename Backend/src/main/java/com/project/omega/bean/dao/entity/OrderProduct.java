@@ -1,17 +1,27 @@
 package com.project.omega.bean.dao.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
-@Embeddable
-public class OrderProduct implements Serializable{
-    @EmbeddedId
-    @JsonIgnore
-    private OrderProductPK productPk;
+public class OrderProduct implements Serializable {
+//    @Id
+//    @JsonIgnore
+//    private OrderProductPK productPk;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product productPk;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -21,104 +31,58 @@ public class OrderProduct implements Serializable{
         super();
     }
 
-
-    public OrderProduct(Product productPk, Integer quantity, Client client) {
-        this.productPk = new OrderProductPK();
-        this.productPk.setProduct(productPk);
-        this.productPk.setClient(client);
+    public OrderProduct(Product productPk, Client client, Integer quantity) {
+        this.productPk = productPk;
+        this.client = client;
         this.quantity = quantity;
     }
 
+    public Long getId() {
+        return id;
+    }
 
-    @Transient
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Product getProductPk() {
-        return this.productPk.getProduct();
-    }
-
-    @Transient
-    public Client getClient() {
-
-        return this.productPk.getClient ();
-    }
-
-    @Transient
-    public Integer getTotalPrice() {
-        return productPk.getProduct().getPrice() * getQuantity();
-    }
-
-
-    public OrderProductPK getProduct() {
-
         return productPk;
     }
 
-    public void setProductPk(OrderProductPK productPk) {
-
+    public void setProductPk(Product productPk) {
         this.productPk = productPk;
     }
 
-    public Integer getQuantity() {
+    public Client getClient() {
+        return client;
+    }
 
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Integer getQuantity() {
         return quantity;
     }
 
     public void setQuantity(Integer quantity) {
-
         this.quantity = quantity;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderProduct that = (OrderProduct) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(productPk, that.productPk) &&
+                Objects.equals(client, that.client) &&
+                Objects.equals(quantity, that.quantity);
+    }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((productPk == null) ? 0 : productPk.hashCode());
-
-        return result;
+        return Objects.hash(id, productPk, client, quantity);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        OrderProduct other = (OrderProduct) obj;
-        if (productPk == null) {
-            if (other.productPk != null) {
-                return false;
-            }
-        } else if (!productPk.equals(other.productPk)) {
-            return false;
-        }
-
-        return true;
-    }
-//    public OrderProduct build() {
-//        return new OrderProduct(pk.setOrder(),
-//        pk.setProduct(),
-//        pk.setClient(), quantity);
-//    }
-
-
 }
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof OrderProduct)) return false;
-//        OrderProduct that = (OrderProduct) o;
-//        return pk.equals(that.pk) &&
-//                quantity.equals(that.quantity);
-//    }
-//
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(pk, quantity);
-//    }
 
