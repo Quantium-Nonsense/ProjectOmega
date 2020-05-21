@@ -42,7 +42,7 @@ public class OrderController {
         List<OrderProductDto> productsForOrder = new ArrayList<>();
 
         newOrder.getOrderProducts().forEach(po -> {
-            OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());
+            OrderProductDto opDto = new OrderProductDto(po.getProductPk(), po.getQuantity(), po.getClient());
             productsForOrder.add(opDto);
         });
 
