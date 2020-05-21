@@ -24,6 +24,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
   customers: CustomerModel[];
   repUsers: UserModel[];
   editable: boolean;
+  isEdit: boolean;
 
   private subscriptions = new Subscription();
 
@@ -46,6 +47,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     [this.orderForm, this.orderProducts] = this.formInitialization();
+    this.isEdit = !!this.data.order;
   }
 
   ngOnDestroy() {
@@ -133,8 +135,8 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
 
     const newOrder = new OrderModel(
         this.data.order ? this.data.order.id : null,
-        this.repUsers.findIndex(user => user.email === this.orderForm.get('user').value),
-        this.orderForm.get('status').value,
+        (this.orderForm.get('user').value as UserModel).id,
+        this.orderForm.get('status')?.value ?? null,
         this.orderForm.get('totalPrice').value,
         orderProducts
     );
@@ -147,53 +149,55 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
     const initialOrder = this.data.order;
 
     const orderProducts = new FormArray([], [Validators.minLength(1)]);
-      initialOrder?.orderProducts.forEach((orderProduct, index) => {
-            const formGroup = new FormGroup({
-              quantity: new FormControl({
-                    value: initialOrder ? initialOrder.orderProducts[index].quantity : '',
-                    disabled: !editable
-                  },
-                  [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]
-              ),
-              product: new FormControl(
-                  {
-                    value: initialOrder ? initialOrder.orderProducts[index].product : '',
-                    disabled: !editable
-                  },
-                  [Validators.required]
-              ),
-              customer: new FormControl(
-                  {
-                    value: initialOrder ? initialOrder.orderProducts[index].client : '',
-                    disabled: !editable
-                  },
-                  [Validators.required]
-              ),
-              subtotal: new FormControl({
-                    value: initialOrder ? initialOrder.orderProducts[index].totalPrice : '',
-                    disabled: true
-                  },
-                  [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{2})?$/)]
-              )
-            });
+    initialOrder?.orderProducts.forEach((orderProduct, index) => {
+          const formGroup = new FormGroup({
+            quantity: new FormControl({
+                  value: initialOrder ? initialOrder.orderProducts[index].quantity : '',
+                  disabled: !editable
+                },
+                [Validators.required, Validators.min(1), Validators.pattern(/^\d+$/)]
+            ),
+            product: new FormControl(
+                {
+                  value: initialOrder ? initialOrder.orderProducts[index].product : '',
+                  disabled: !editable
+                },
+                [Validators.required]
+            ),
+            customer: new FormControl(
+                {
+                  value: initialOrder ? initialOrder.orderProducts[index].client : '',
+                  disabled: !editable
+                },
+                [Validators.required]
+            ),
+            subtotal: new FormControl({
+                  value: initialOrder ? initialOrder.orderProducts[index].totalPrice : '',
+                  disabled: true
+                },
+                [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{2})?$/)]
+            )
+          });
 
-            this.subscriptions.add(
-                formGroup.get('product').valueChanges.subscribe((value) => {
-                  this.calculatePrices(formGroup);
-                })
-            );
+          this.subscriptions.add(
+              formGroup.get('product').valueChanges.subscribe((value) => {
+                this.calculatePrices(formGroup);
+              })
+          );
 
-            this.subscriptions.add(
-                formGroup.get('quantity').valueChanges.subscribe((value) => {
-                  this.calculatePrices(formGroup);
-                })
-            );
+          this.subscriptions.add(
+              formGroup.get('quantity').valueChanges.subscribe((value) => {
+                this.calculatePrices(formGroup);
+              })
+          );
 
-            orderProducts.push(formGroup);
-          }
-      );
+          orderProducts.push(formGroup);
+        }
+    );
 
-      const form = new FormGroup({
+    let form;
+    if (this.data.order) {
+      form = new FormGroup({
         status: new FormControl({
               value: initialOrder ? initialOrder.status : '',
               disabled: !editable
@@ -214,7 +218,24 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
             [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{2})?$/)]
         )
       });
-      return [form, orderProducts];
+    } else {
+      form = new FormGroup({
+        user: new FormControl({
+              value: initialOrder ? this.repUsers.find(user => user.id === initialOrder.userId) : '',
+              disabled: !editable
+            },
+            [Validators.required]),
+        orderProducts,
+        totalPrice: new FormControl(
+            {
+              value: initialOrder ? initialOrder.totalOrderPrice.toFixed(2) : '',
+              disabled: true
+            },
+            [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{2})?$/)]
+        )
+      });
+    }
+    return [form, orderProducts];
   };
 
   private calculatePrices(orderProduct: FormGroup): void {

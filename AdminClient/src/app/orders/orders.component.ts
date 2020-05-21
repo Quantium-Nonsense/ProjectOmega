@@ -149,7 +149,7 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscriptions.add(
         dialogRef.afterClosed().subscribe(newOrder => {
           if (newOrder) {
-            this.store$.dispatch(createNewOrder({order: newOrder}))
+            this.store$.dispatch(createNewOrder({ order: newOrder }));
           } else {
             this.snackBar.open('Order was not placed', 'Close', { duration: 3000 });
           }
@@ -178,7 +178,6 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   handleFilter = (order: OrderModel, filterValue: string): boolean =>
       order.status.toLowerCase().includes(filterValue)
       || order.totalOrderPrice.toString().includes(filterValue)
-      || order.dateCreated.toString().includes(filterValue)
       || order.orderProducts.filter(
       orderProduct => orderProduct.product.name.includes(filterValue)
       || orderProduct.product.supplier.companyName.includes(filterValue)
