@@ -5,7 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, pipe, Subscription } from 'rxjs';
+import { getAllCustomers } from '../customers/store/customers.actions';
 
 import * as fromCustomers from '../customers/store/customers.reducer';
 
@@ -13,8 +14,12 @@ import { CustomerModel } from '../models/customers/customer.model';
 import { OrderModel } from '../models/orders/order.model';
 import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
 import { UserModel } from '../shared/model/user/user.model';
+import { beginProgressBar } from '../toolbar/store/toolbar.actions';
+import { getAllUsers } from '../user/store/user.actions';
 import * as fromUsers from '../user/store/user.reducer';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
+import { getAllOrders } from './store/order.actions';
+import { selectAllOrders } from './store/order.reducer';
 
 @Component({
   selector: 'app-products',
@@ -24,7 +29,6 @@ import { OrderDetailsDialogComponent } from './order-details-dialog/order-detail
 export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<OrderModel>;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['dateCreated', 'products', 'totalPrice', 'status', 'actions'];
@@ -45,19 +49,23 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.ordersObservable = this.ordersAPI.getAllAsObservable();
+    this.store$.dispatch(beginProgressBar());
+    this.store$.dispatch(getAllOrders());
+    this.store$.dispatch(getAllCustomers());
+    this.store$.dispatch(getAllUsers());
+
     this.subscriptions.add(
-        this.ordersObservable.subscribe(ordersList => {
-          this.dataSource.data = ordersList;
+        this.store$.select(pipe(selectAllOrders)).subscribe(orders => {
+          this.dataSource.data = orders;
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
         })
     );
-
     this.subscriptions.add(
         this.store$.select(fromCustomers.selectAllCustomers).subscribe((customers: CustomerModel[]) => {
           this.customers = customers;
         })
     );
-
     this.subscriptions.add(
         this.store$.select(fromUsers.selectUsers).subscribe((users: UserModel[]) => {
           this.users = users;
@@ -67,9 +75,7 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
+
   }
 
   ngOnDestroy() {

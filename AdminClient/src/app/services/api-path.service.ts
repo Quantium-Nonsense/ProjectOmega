@@ -98,4 +98,8 @@ export class ApiPathService {
   getEditCustomerEndPoint(id: number): string {
     return `${ this.endPoint }/client/update/${ id }`;
   }
+
+  allOrdersEndPoint(): string {
+    return `${this.endPoint}/order/get`;
+  }
 }

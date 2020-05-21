@@ -164,7 +164,7 @@ export class UserEffects {
   ), { dispatch: false });
 
   beginLoadingPage$ = createEffect(() => this.actions$.pipe(
-      ofType(UserActions.beginLoadingUserPage),
+      ofType(UserActions.getAllUsers),
       map((action: Action) => UserActions.loadAllUsers())
   ));
 

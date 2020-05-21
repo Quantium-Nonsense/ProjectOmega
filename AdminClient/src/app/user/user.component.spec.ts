@@ -115,7 +115,7 @@ describe('UserComponent', () => {
 
   it('should begin loading when component initializes', async () => {
     component.ngOnInit();
-    actions$ = of(UserActions.beginLoadingUserPage());
+    actions$ = of(UserActions.getAllUsers());
     effects.beginLoadingPage$.subscribe(action => expect(action).toEqual(UserActions.loadAllUsers()));
   });
 

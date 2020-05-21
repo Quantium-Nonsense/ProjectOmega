@@ -23,7 +23,7 @@ export const selectAllCustomers = createSelector(
 
 const reducer = createReducer(
 		initialState,
-		on(CustomerActions.beginLoadingCustomers, (prevState: State) => ({
+		on(CustomerActions.getAllCustomers, (prevState: State) => ({
 			...prevState
 		})),
 		on(CustomerActions.customersLoaded, (prevState: State, { customers }) => ({

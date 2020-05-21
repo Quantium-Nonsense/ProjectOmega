@@ -30,7 +30,7 @@ export class CustomersEffects {
           switchMap((customer: CustomerModel) => {
             return [
               CustomerActions.editCustomerSuccess(),
-              CustomerActions.beginLoadingCustomers()
+              CustomerActions.getAllCustomers()
             ];
           }),
           catchError((error: Error) => {
@@ -51,7 +51,7 @@ export class CustomersEffects {
             tap(() => this.dialog.closeAll()),
             switchMap((customer: CustomerModel) => {
               return [
-                CustomerActions.beginLoadingCustomers()
+                CustomerActions.getAllCustomers()
               ];
             }),
             catchError((error: Error) => {
@@ -72,7 +72,7 @@ export class CustomersEffects {
           tap(() => this.dialog.closeAll()),
           switchMap(() => {
             return [
-              CustomerActions.beginLoadingCustomers(),
+              CustomerActions.getAllCustomers(),
               CustomerActions.customerDeletedSuccess()
             ];
           }),
@@ -88,7 +88,7 @@ export class CustomersEffects {
   ));
 
   loadAllCustomers$ = createEffect(() => this.actions$.pipe(
-      ofType(CustomerActions.beginLoadingCustomers),
+      ofType(CustomerActions.getAllCustomers),
       switchMap((action: Action) => {
         return this.httpGetAllCustomers().pipe(
             switchMap((customers: CustomerModel[]) => {

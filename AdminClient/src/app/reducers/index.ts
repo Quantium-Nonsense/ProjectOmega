@@ -2,6 +2,7 @@ import { ActionReducer, ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { environment } from '../../environments/environment';
 import * as fromAuth from '../auth/store/auth.reducer';
 import * as fromCustomers from '../customers/store/customers.reducer';
+import * as fromOrders from '../orders/store/order.reducer';
 import * as fromProducts from '../products/store/products.reducer';
 import * as fromSuppliers from '../supplier/store/suppliers.reducer';
 import * as fromToolbar from '../toolbar/store/toolbar.reducer';
@@ -14,6 +15,7 @@ export interface State {
   toolbar: fromToolbar.State;
   suppliers: fromSuppliers.State;
   products: fromProducts.State;
+  orders: fromOrders.State;
 }
 
 export const appReducer: ActionReducerMap<State> = {
@@ -22,7 +24,8 @@ export const appReducer: ActionReducerMap<State> = {
   customers: fromCustomers.customerReducer,
   toolbar: fromToolbar.toolbarReducer,
   suppliers: fromSuppliers.supplierReducer,
-  products: fromProducts.productsReducer
+  products: fromProducts.productsReducer,
+  orders: fromOrders.orderReducer
 };
 
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>

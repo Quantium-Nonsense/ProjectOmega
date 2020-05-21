@@ -32,7 +32,7 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store$.dispatch(ToolbarActions.beginProgressBar());
-    this.store$.dispatch(CustomerActions.beginLoadingCustomers());
+    this.store$.dispatch(CustomerActions.getAllCustomers());
 
     this.subscription.add(
         this.store$.select(fromCustomers.selectAllCustomers).subscribe(customers => {

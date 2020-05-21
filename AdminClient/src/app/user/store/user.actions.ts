@@ -44,7 +44,7 @@ export const showDeleteUserDialog = createAction(
     props<{ user: UserModel }>()
 );
 
-export const beginLoadingUserPage = createAction(
+export const getAllUsers = createAction(
     '[User - Page] Prepare the page to indicate loading'
 );
 

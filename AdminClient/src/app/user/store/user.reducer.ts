@@ -29,7 +29,7 @@ export const selectRoles: MemoizedSelector<fromApp.State, RoleModel[]> = createS
 // eslint-disable-next-line no-underscore-dangle
 const _userReducer = createReducer(
     initialState,
-    on(UserActions.beginLoadingUserPage, (prevState: State) => ({
+    on(UserActions.getAllUsers, (prevState: State) => ({
       ...prevState
     })),
     on(UserActions.usersLoaded, (prevState: State, { users }) => ({

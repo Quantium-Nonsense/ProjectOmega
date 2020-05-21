@@ -24,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuthEffects } from './auth/store/auth.effects';
 import { CustomersEffects } from './customers/store/customers.effects';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { OrderEffects } from './orders/store/order.effects';
 import { ProductsEffects } from './products/store/products.effects';
 import { appReducer, metaReducers } from './reducers';
 import { SharedModule } from './shared/shared.module';
@@ -53,7 +54,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
       CustomersEffects,
       ToolbarEffects,
       SuppliersEffects,
-      ProductsEffects
+      ProductsEffects,
+      OrderEffects
     ]),
     FormsModule,
     JwtModule.forRoot({
