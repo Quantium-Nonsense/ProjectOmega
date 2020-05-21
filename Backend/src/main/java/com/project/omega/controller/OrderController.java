@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -36,27 +37,34 @@ public class OrderController {
     ClientService clientService;
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity<Order> create(@RequestBody OrderForm form) throws ProductNotFoundException,
+    public ResponseEntity<Order> create(@RequestBody Order newOrder) throws ProductNotFoundException,
             ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
-        List<OrderProductDto> formDtos = form.getProductOrders();
 
-        validateProductsExistence(formDtos);
+        List<OrderProductDto> productsForOrder = (List<OrderProductDto>) newOrder.getOrderProducts().stream().map(po -> {
+            OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());
+            return opDto;
+        });
+
+        validateProductsExistence(productsForOrder);
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = ((UserDetails)principal).getUsername();
-            User user = userService.findUserByEmail(username);
-            Long userId = user.getId();
+        String username = ((UserDetails)principal).getUsername();
+        User user = userService.findUserByEmail(username);
+        Long userId = user.getId();
 
         Order order = new Order();
 
-        order.setUserId(userId);
+        if(newOrder.getUserId() == null) {
+            order.setUserId(userId);
+        } else {
+            order.setUserId(newOrder.getUserId());
+        }
 
         order = orderService.createOrder(order);
 
         List<OrderProduct> orderProducts = new ArrayList<>();
 
-
-        for (OrderProductDto dto : formDtos) {
+        for (OrderProductDto dto : productsForOrder) {
             orderProducts.add(orderProductService.create(new OrderProduct(
                     order,
                     productService.getProductById(dto.getProduct().getId()),
