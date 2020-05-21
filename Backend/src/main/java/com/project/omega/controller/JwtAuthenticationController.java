@@ -1,16 +1,15 @@
 package com.project.omega.controller;
 
-import com.project.omega.bean.dao.auth.JwtRequest;
-import com.project.omega.bean.dao.auth.JwtResponse;
-import com.project.omega.bean.dao.auth.Privilege;
-import com.project.omega.bean.dao.auth.VerificationToken;
+import com.project.omega.bean.dao.auth.*;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.PasswordDTO;
 import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.bean.dto.UserResponse;
 import com.project.omega.exceptions.*;
+import com.project.omega.helper.EmailConstants;
 import com.project.omega.helper.EmailSender;
 import com.project.omega.helper.GenericResponse;
+import com.project.omega.helper.RoleBasedConstant;
 import com.project.omega.service.JwtUserDetailsService;
 import com.project.omega.service.interfaces.AuthenticationService;
 import com.project.omega.service.interfaces.UserService;
@@ -82,14 +81,20 @@ public class JwtAuthenticationController {
         String verificationToken = UUID.randomUUID().toString();
         tokenService.saveToken(verificationToken, newUser);
 
-        EmailSender.send(user.getEmail(), "Sign-up confirmation.", "confirmRegistration?token=" + verificationToken);
+        String emailContent = EmailConstants.WELCOME
+                + EmailConstants.PASSWORD + user.getPassword() + "\n"
+                + EmailConstants.linkBuilder(EmailConstants.BACKEND_ENDPOINT,
+                    "confirmRegistration?token=" + verificationToken,
+                    EmailConstants.CONFIRMATION + user.getEmail());
+
+        EmailSender.send(user.getEmail(), EmailConstants.REG_CONFIRM, emailContent);
 
         UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
 
         return new ResponseEntity(userMap, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/confirmRegistration")
+    @GetMapping(value = "/api/confirmRegistration")
     public String registrationConfirm(@RequestParam("token") String token) throws Exception {
         VerificationToken verificationToken = tokenService.findByToken(token);
         if(verificationToken == null) {
@@ -106,7 +111,13 @@ public class JwtAuthenticationController {
         userService.updateUserById(user.getId(), user);
         tokenService.deleteToken(verificationToken);
 
-        return "redirect:login.html";
+        Role userRole = (Role) ((List) user.getRoles()).get(0);
+
+        if(userRole.getName().equals(RoleBasedConstant.REP)) {
+            return "Confirmation successful, but no suitable redirection path found for representative.";
+        } else {
+            return "redirect:/auth";
+        }
     }
 
     /*To be Used When the User DOES NOT remember their password*/

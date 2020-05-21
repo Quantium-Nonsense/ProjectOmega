@@ -1,37 +1,84 @@
 package com.project.omega.helper;
+import com.sun.mail.smtp.SMTPTransport;
 
-import com.sendgrid.*;
-import com.sendgrid.Response;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
-import com.sendgrid.helpers.mail.objects.Email;
-import org.springframework.beans.factory.annotation.Value;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Properties;
 
 public class EmailSender {
-    @Value("${sendGrid.key}")
-    private static String key;
 
-    public static void send(String to, String subject, String content) throws IOException {
-        Email fromUser = new Email("esrs_omega@gmail.com");
-        Email toUser = new Email(to);
-        Content contents = new Content("text/html", "a href=\"52.177.233.178/api/" + content + "\">Click to confirm registration and login.</a>");
-        Mail mail = new Mail(fromUser, subject, toUser, contents);
+    private static final String SMTP_SERVER = "smtp.gmail.com";
 
-        SendGrid sg = new SendGrid(System.getenv(key));
-        Request request = new Request();
+    public static void send(String to, String subject, String content) {
+        Properties prop = System.getProperties();
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(prop, null);
+        Message msg = new MimeMessage(session);
 
         try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-            Response response = sg.api(request);
-            System.out.println(response.getStatusCode());
-            System.out.println(response.getBody());
-            System.out.println(response.getHeaders());
-        } catch (IOException ex) {
-            throw ex;
+            msg.setFrom(new InternetAddress("omega.quantium@gmail.com"));
+
+            msg.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(to, false));
+
+            msg.setSubject(subject);
+
+            //msg.setText(EMAIL_TEXT);
+
+//            String EMAIL_TEXT = "<a href=\"http://localhost:5000/api/" + endpoint + "\">" + linkText + " </a>";
+            String EMAIL_TEXT = content;
+            msg.setDataHandler(new DataHandler(new HTMLDataSource(EMAIL_TEXT)));
+
+            SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
+
+            t.connect(SMTP_SERVER,  "omega.quantium@gmail.com", "omegaNonsense!23");
+
+            t.sendMessage(msg, msg.getAllRecipients());
+
+            t.close();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static class HTMLDataSource implements DataSource {
+
+        private String html;
+
+        public HTMLDataSource(String htmlString) {
+            html = htmlString;
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+            if (html == null) throw new IOException("html message is null!");
+            return new ByteArrayInputStream(html.getBytes());
+        }
+
+        @Override
+        public OutputStream getOutputStream() throws IOException {
+            throw new IOException("This DataHandler cannot write HTML");
+        }
+
+        @Override
+        public String getContentType() {
+            return "text/html";
+        }
+
+        @Override
+        public String getName() {
+            return "HTMLDataSource";
         }
     }
 }

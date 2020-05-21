@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByEmail(String email) throws UserNotFoundException, UserDisabledException {
         LOGGER.debug("Get User By Email : {}", email);
-        User user = findUserByEmail(email);
+        User user = userRepository.findByEmail(email);
         if(user == null) {
             throw new UserNotFoundException(messages.getMessage("message.userNotFound", null, null));
         } else if(!user.getEnabled()) {
