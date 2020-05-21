@@ -88,7 +88,7 @@ public class OrderController {
 
     @GetMapping(value = "/get")
     public ResponseEntity fetchAllOrders() {
-        Iterable<Order> order = orderService.getAllOrders();
+        List<Order> order = orderService.getAllOrders();
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
