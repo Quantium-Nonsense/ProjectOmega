@@ -3,7 +3,6 @@ import { OrderProductModel } from './oder-product.model';
 export class OrderModel {
   constructor(
     public id: number,
-    public dateCreated: Date,
     public userId: number,
     public status: string,
     public totalOrderPrice: number,
@@ -12,8 +11,7 @@ export class OrderModel {
   }
 
   equalsWithoutId(order: OrderModel) {
-    return this.dateCreated === order.dateCreated
-      && this.userId === order.userId
+    return this.userId === order.userId
       && this.status === order.status
       && this.totalOrderPrice === order.totalOrderPrice
       && this.orderProducts

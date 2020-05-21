@@ -1,4 +1,4 @@
-import { Action, createReducer, createSelector, MemoizedSelector, on } from '@ngrx/store';
+import { Action, createFeatureSelector, createReducer, createSelector, MemoizedSelector, on } from '@ngrx/store';
 import { RoleModel } from '../../shared/model/role/role.model';
 import { UserModel } from '../../shared/model/user/user.model';
 import * as fromApp from './../../reducers/index';
@@ -14,7 +14,9 @@ const initialState: State = {
   roles: null
 };
 
-export const selectUserState = (state: fromApp.State) => state.user;
+export const selectUserState = createFeatureSelector<fromApp.State, State>(
+    'user'
+);
 export const selectUsers: MemoizedSelector<fromApp.State, UserModel[]> = createSelector(
     selectUserState,
     (state: State) => state.users
@@ -25,6 +27,11 @@ export const selectRoles: MemoizedSelector<fromApp.State, RoleModel[]> = createS
     (state: State) => state.roles
 );
 
+export const selectRepUsers: MemoizedSelector<fromApp.State, UserModel[]> = createSelector(
+    selectUserState,
+    selectUsers,
+    (state: State, users: UserModel[]) => users?.filter(u => u.roles?.filter(r => r.privileges?.filter(p => p.name?.includes('CREATE_ORDER'))))
+);
 
 // eslint-disable-next-line no-underscore-dangle
 const _userReducer = createReducer(
@@ -50,7 +57,7 @@ const _userReducer = createReducer(
       ...prevState
     })),
     on(UserActions.userDeleted, (prevState: State) => ({
-      ...prevState,
+      ...prevState
     })),
     on(UserActions.editUser, (prevState: State) => ({
       ...prevState
@@ -59,7 +66,7 @@ const _userReducer = createReducer(
       ...prevState
     })),
     on(UserActions.userSuccessfullyEdited, prevState => ({
-      ...prevState,
+      ...prevState
     }))
 );
 

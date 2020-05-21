@@ -8,10 +8,38 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { OrderModel } from '../../models/orders/order.model';
 import { ApiPathService } from '../../services/api-path.service';
 import { stopProgressBar } from '../../toolbar/store/toolbar.actions';
-import { allOrdersLoadedSuccessfully, getAllOrders, getAllOrdersFailed } from './order.actions';
+import {
+  allOrdersLoadedSuccessfully,
+  createNewOrder,
+  createNewOrderFailed,
+  getAllOrders,
+  getAllOrdersFailed
+} from './order.actions';
 
 @Injectable()
 export class OrderEffects {
+
+  createNewOrder$ = createEffect(() => this.actions$.pipe(
+      ofType(createNewOrder),
+      switchMap((action: Action & { order: OrderModel }) => {
+        return this.httpCreateNewOrder(action.order).pipe(
+            switchMap((order: OrderModel) => {
+              this.snackBar.open('Order placed successful!', null, {
+                duration: 3000
+              });
+              return [
+                stopProgressBar()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                stopProgressBar(),
+                createNewOrderFailed({ error: error.message })
+              ];
+            })
+        );
+      })
+  ));
 
   getAllOrders$ = createEffect(() => this.actions$.pipe(
       ofType(getAllOrders),
@@ -48,6 +76,12 @@ export class OrderEffects {
       private endPoints: ApiPathService,
       private snackBar: MatSnackBar
   ) {
+  }
+
+  httpCreateNewOrder(order: OrderModel): Observable<OrderModel> {
+    return this.http.post<OrderModel>(this.endPoints.createNewOrderEndPoint, {
+      ...order
+    });
   }
 
   httpGetAllOrders(): Observable<OrderModel[]> {

@@ -69,6 +69,7 @@ export class UserEffects {
             }),
             switchMap((user: UserModel) => {
               return [
+                UserActions.loadAllUsers(),
                 ToolbarActions.stopProgressBar()
               ];
             }),
