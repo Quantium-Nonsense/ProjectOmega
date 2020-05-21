@@ -144,6 +144,10 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
     this.dialogRef.close(newOrder);
   }
 
+  compareFunc(obj1, obj2): boolean {
+    return obj1.id === obj2.id;
+  }
+
   private formInitialization = (): [FormGroup, FormArray] => {
     const editable = this.data.editable;
     const initialOrder = this.data.order;
