@@ -11,9 +11,9 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "order")
 public class OrderProductPK implements Serializable {
 
-    @ManyToOne(optional = false, fetch= FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+//    @ManyToOne(optional = false, fetch= FetchType.LAZY)
+//    @JoinColumn(name = "order_id")
+//    private Order order;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
@@ -24,9 +24,9 @@ public class OrderProductPK implements Serializable {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    public Order getOrder() {
-        return order;
-    }
+//    public Order getOrder() {
+//        return order;
+//    }
 
     public Client getClient() {
         return client;
@@ -36,9 +36,9 @@ public class OrderProductPK implements Serializable {
         this.client = client;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
-    }
+//    public void setOrder(Order order) {
+//        this.order = order;
+//    }
 
     public Object setOrder() {
         return new Order();
@@ -56,48 +56,48 @@ public class OrderProductPK implements Serializable {
         return new Product();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        OrderProductPK other = (OrderProductPK) obj;
-        if (order == null) {
-            if (other.order != null) {
-                return false;
-            }
-        } else if (!order.equals(other.order)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-
-        result = prime * result + ((order.getId() == null)
-                ? 0
-                : order
-                .getId()
-                .hashCode());
-        result = prime * result + ((product.getId() == null)
-                ? 0
-                : product
-                .getId()
-                .hashCode());
-        result = prime * result + ((client.getId() == null)
-                ? 0
-                : client.getId().hashCode());
-
-        return result;
-    }
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//        if (obj == null) {
+//            return false;
+//        }
+//        if (getClass() != obj.getClass()) {
+//            return false;
+//        }
+//        OrderProductPK other = (OrderProductPK) obj;
+//        if (order == null) {
+//            if (other.order != null) {
+//                return false;
+//            }
+//        } else if (!order.equals(other.order)) {
+//            return false;
+//        }
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        final int prime = 31;
+//        int result = 1;
+//
+//        result = prime * result + ((order.getId() == null)
+//                ? 0
+//                : order
+//                .getId()
+//                .hashCode());
+//        result = prime * result + ((product.getId() == null)
+//                ? 0
+//                : product
+//                .getId()
+//                .hashCode());
+//        result = prime * result + ((client.getId() == null)
+//                ? 0
+//                : client.getId().hashCode());
+//
+//        return result;
+//    }
 }
