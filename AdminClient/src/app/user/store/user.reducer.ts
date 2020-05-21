@@ -1,66 +1,81 @@
 import { Action, createReducer, createSelector, MemoizedSelector, on } from '@ngrx/store';
-import { RoleModel } from '../../shared/model/role/role.model';
-import { UserModel } from '../../shared/model/user/user.model';
-import * as fromApp from './../../reducers/index';
+import { UserModel } from '../../shared/model/user.model';
 import * as UserActions from './user.actions';
+import * as fromApp from './../../reducers/index';
 
 export interface State {
   users: UserModel[];
-  roles: RoleModel[];
+  loading: boolean;
+  focusedUser: UserModel;
 }
+
+export const selectUserState = (state: fromApp.State) => state.user;
+export const selectIsLoading: MemoizedSelector<fromApp.State, boolean> = createSelector(
+  selectUserState,
+  (state: State) => state.loading
+);
+export const selectUsers: MemoizedSelector<fromApp.State, UserModel[]> = createSelector(
+  selectUserState,
+  (state: State) => state.users
+);
+export const selectFocusedUser: MemoizedSelector<fromApp.State, UserModel> = createSelector(
+  selectUserState,
+  (state: State) => {
+    if (state) {
+      return state.focusedUser;
+    }
+  }
+);
 
 const initialState: State = {
   users: null,
-  roles: null
+  loading: false,
+  focusedUser: null
 };
-
-export const selectUserState = (state: fromApp.State) => state.user;
-export const selectUsers: MemoizedSelector<fromApp.State, UserModel[]> = createSelector(
-    selectUserState,
-    (state: State) => state.users
-);
-
-export const selectRoles: MemoizedSelector<fromApp.State, RoleModel[]> = createSelector(
-    selectUserState,
-    (state: State) => state.roles
-);
-
 
 // eslint-disable-next-line no-underscore-dangle
 const _userReducer = createReducer(
-    initialState,
-    on(UserActions.beginLoadingUserPage, (prevState: State) => ({
-      ...prevState
-    })),
-    on(UserActions.usersLoaded, (prevState: State, { users }) => ({
+  initialState,
+  on(UserActions.beginLoadingUserPage, (prevState: State) => ({
+    ...prevState,
+    loading: true
+  })),
+  on(UserActions.usersLoaded, (prevState: State, {users}) => ({
+    ...prevState,
+    users,
+    loading: false
+  })),
+  on(
+    UserActions.showDeleteUserDialog,
+    UserActions.showDeleteUserDialog,
+    (prevState, {user}) => ({
       ...prevState,
-      users
+      focusedUser: user
     })),
-    on(UserActions.setAllUserRoles, (prevState: State, { roles }) => ({
-      ...prevState,
-      roles
-    })),
-    on(
-        UserActions.showDeleteUserDialog,
-        UserActions.showDeleteUserDialog,
-        (prevState, { user }) => ({
-          ...prevState
-        })),
-    on(UserActions.deleteUser, (prevState: State) => ({
-      ...prevState
-    })),
-    on(UserActions.userDeleted, (prevState: State) => ({
-      ...prevState,
-    })),
-    on(UserActions.editUser, (prevState: State) => ({
-      ...prevState
-    })),
-    on(UserActions.showEditUserModal, (prevState: State, { user }) => ({
-      ...prevState
-    })),
-    on(UserActions.userSuccessfullyEdited, prevState => ({
-      ...prevState,
-    }))
+  on(UserActions.deleteFocusedUser, (prevState: State) => ({
+    ...prevState,
+    loading: true
+  })),
+  on(UserActions.userDeleted, (prevState: State, {newUserList}) => ({
+    ...prevState,
+    loading: false,
+    users: newUserList,
+    focusedUser: null
+  })),
+  on(UserActions.editUser, (prevState: State) => ({
+    ...prevState,
+    loading: true,
+  })),
+  on(UserActions.showEditUserModal, (prevState: State, {user}) => ({
+    ...prevState,
+    focusedUser: user
+  })),
+  on(UserActions.userSuccessfullyEdited, (prevState, {newUsers}) => ({
+    ...prevState,
+    users: [...newUsers],
+    focusedUser: null,
+    loading: false
+  }))
 );
 
 export const userReducer = (state: State | undefined, action: Action) => _userReducer(state, action);

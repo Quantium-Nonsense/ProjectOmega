@@ -1,9 +1,9 @@
-import {Overlay, OverlayRef} from '@angular/cdk/overlay';
-import {ComponentPortal} from '@angular/cdk/portal';
-import {Injectable} from '@angular/core';
-import {MatSpinner} from '@angular/material/progress-spinner';
-import {Observable, Subject} from 'rxjs';
-import {switchAll} from 'rxjs/operators';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { Injectable } from '@angular/core';
+import { MatSpinner } from '@angular/material/progress-spinner';
+import { Observable, Subject } from 'rxjs';
+import { switchAll } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

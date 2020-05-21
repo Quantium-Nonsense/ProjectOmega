@@ -1,73 +1,39 @@
+<mat-progress-bar *ngIf="isLoading | async" mode="indeterminate"></mat-progress-bar>
 <div
-        class="mrl1"
-        fxLayout="row wrap"
-        fxLayoutAlign="start start"
-        *ngIf="users"
+  class="mrl1"
+  fxLayout="row wrap"
+  fxLayoutAlign="start start"
+  *ngIf="users"
 >
-    <app-table-filter fxFlexFill
-                      [dataSource]="users"
-                      [action]="filteringAction"></app-table-filter>
-    <div fxFlexOffset="95">
-        <button (click)="handleCreate()"
-                aria-label="New user"
-                color="primary"
-                mat-mini-fab>
-            <mat-icon>add</mat-icon>
+  <app-table-filter fxFlexFill [dataSource]="users" [action]="filteringAction"></app-table-filter>
+  <table fxFlexFill mat-table [dataSource]="users">
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef>Email</th>
+      <td mat-cell *matCellDef="let user">{{user.email}}</td>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Role</th>
+      <td mat-cell *matCellDef="let user">{{user.role}}</td>
+    </ng-container>
+    <ng-container matColumnDef="companyId">
+      <th mat-header-cell *matHeaderCellDef>Company</th>
+      <td mat-cell *matCellDef="let user">{{user.companyId}}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let user">
+        <button (click)="editUser(user)" color="primary" mat-icon-button>
+          <mat-icon>edit</mat-icon>
         </button>
-    </div>
-    <table fxFlexFill
-           mat-table
-           [dataSource]="users">
-        <ng-container matColumnDef="email">
-            <th mat-header-cell
-                *matHeaderCellDef>Email
-            </th>
-            <td mat-cell
-                *matCellDef="let user">{{user.email}}</td>
-        </ng-container>
-        <ng-container matColumnDef="roles">
-            <th mat-header-cell
-                *matHeaderCellDef>Roles
-            </th>
-            <td mat-cell
-                *matCellDef="let user">
-                <span style="padding-right: 1px"
-                      *ngFor="let role of user.roles">{{role.name | prettyRole}},</span>
-            </td>
-        </ng-container>
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell
-                *matHeaderCellDef>Actions
-            </th>
-            <td mat-cell
-                *matCellDef="let user">
-                <button (click)="editUser(user)"
-                        color="primary"
-                        mat-icon-button>
-                    <mat-icon>edit</mat-icon>
-                </button>
-                <button (click)="deleteUser(user)"
-                        color="primary"
-                        mat-icon-button>
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-            <th mat-header-cell
-                hidden
-                *matHeaderCellDef>id
-            </th>
-            <td mat-cell
-                hidden
-                *matCellDef="let user">{{user.id}}</td>
-        </ng-container>
+        <button (click)="deleteUser(user)" color="primary" mat-icon-button>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
 
-        <tr mat-header-row
-            *matHeaderRowDef="displayColumns"></tr>
-        <tr mat-row
-            *matRowDef="let user; columns: displayColumns"></tr>
-    </table>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+    <tr mat-row *matRowDef="let user; columns: displayColumns"></tr>
+  </table>
 </div>
-<mat-paginator [pageSizeOptions]="[5,10,20]"
-               showFirstLastButtons></mat-paginator>
+<mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>

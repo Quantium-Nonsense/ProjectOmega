@@ -1,7 +1,7 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import {PopupDialogComponent} from './popup-dialog.component';
+import { PopupDialogComponent } from './popup-dialog.component';
 
 describe('ConfirmationDialogComponent', () => {
   let component: PopupDialogComponent;

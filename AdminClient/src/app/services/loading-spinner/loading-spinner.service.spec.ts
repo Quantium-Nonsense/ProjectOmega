@@ -1,10 +1,10 @@
-import {CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import {TestBed} from '@angular/core/testing';
-import {MockStore, provideMockStore} from '@ngrx/store/testing';
-import {State} from '../../reducers';
-import {TestModule} from '../../shared/test/test.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { State } from '../../reducers';
+import { TestModule } from '../../shared/test/test.module';
 
-import {LoadingSpinnerService} from './loading-spinner.service';
+import { LoadingSpinnerService } from './loading-spinner.service';
 
 describe('LoadingSpinnerService', () => {
   let service: LoadingSpinnerService;

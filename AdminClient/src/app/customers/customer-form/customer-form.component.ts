@@ -1,13 +1,11 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { select, Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { CustomerModel } from '../../models/customers/customer.model';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as fromApp from '../../reducers/index';
-import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
-import { selectIsProgressBarVisible } from '../../toolbar/store/toolbar.reducer';
+import {Store} from '@ngrx/store';
+import * as fromCustomers from '../store/customers.reducer';
 import * as CustomerActions from '../store/customers.actions';
+import {MatDialogRef} from '@angular/material/dialog';
+import {Observable, Subscription} from 'rxjs';
 
 @Component({
 	selector: 'app-customer-form',
@@ -16,41 +14,35 @@ import * as CustomerActions from '../store/customers.actions';
 })
 export class CustomerFormComponent implements OnInit, OnDestroy {
 	customerForm: FormGroup;
-	isLoading: boolean;
+	isLoading: Observable<boolean>;
 
 	private sub: Subscription;
 
 	constructor(
-			private store$: Store<fromApp.State>,
-			private dialogRef: MatDialogRef<CustomerFormComponent>,
-			@Inject(MAT_DIALOG_DATA) public data: { customer: CustomerModel }
+		private store$: Store<fromApp.State>,
+		private dialogRef: MatDialogRef<CustomerFormComponent>
 	) {
 		this.sub = new Subscription();
 		this.customerForm = this.initializeForm();
 	}
 
 	ngOnInit(): void {
+		this.isLoading = this.store$.select(fromCustomers.selectIsLoading);
 		this.sub.add(
-				this.store$.pipe(select(selectIsProgressBarVisible))
-					.subscribe(isLoading => {
-						this.isLoading = isLoading;
-						if (isLoading) {
-							this.customerForm.disable();
-						} else {
-							this.customerForm.enable();
-						}
-					})
+			this.store$.select(fromCustomers.selectIsLoading)
+			    .subscribe(isLoading => isLoading ? this.customerForm.disable() : this.customerForm.enable())
 		);
-		const customer = this.data.customer;
-		if (customer) {
-			this.companyName.setValue(customer.companyName);
-			this.contactNumber.setValue(customer.contactNumber);
-			this.description.setValue(customer.description);
-			this.email.setValue(customer.email);
-			this.firstName.setValue(customer.firstName);
-			this.lastName.setValue(customer.lastName);
-			this.notes.setValue(customer.notes);
-		}
+		this.store$.select(fromCustomers.selectSelectedCustomer).subscribe(customer => {
+			if (customer) {
+				this.companyName.setValue(customer.companyName);
+				this.contactNumber.setValue(customer.contactNumber);
+				this.description.setValue(customer.description);
+				this.email.setValue(customer.email);
+				this.firstName.setValue(customer.firstName);
+				this.lastName.setValue(customer.lastName);
+				this.notes.setValue(customer.notes);
+			}
+		});
 	}
 
 	ngOnDestroy(): void {
@@ -127,10 +119,10 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 
 	get emailErrorMessage(): string {
 		return this.email.hasError('required')
-			   ? 'Email is required'
-			   : this.email.hasError('email')
-				 ? 'This is not a valid email'
-				 : null;
+			? 'Email is required'
+			: this.email.hasError('email')
+				? 'This is not a valid email'
+				: null;
 	}
 
 	get companyNameHasError(): boolean {
@@ -150,27 +142,18 @@ export class CustomerFormComponent implements OnInit, OnDestroy {
 	}
 
 	submitForm() {
-		this.store$.dispatch(ToolbarActions.beginProgressBar());
-		const customer = {
-			id: null,
-			notes: this.notes.value,
-			lastName: this.lastName.value,
-			firstName: this.firstName.value,
-			email: this.email.value,
-			description: this.description.value,
-			contactNumber: this.contactNumber.value,
-			companyName: this.companyName.value
-		};
-		if (this.data.customer) {
-			this.store$.dispatch(CustomerActions.editCustomer({
-				editedCustomer: {
-					...customer,
-					id: this.data.customer.id
-				}
-			}));
-		} else {
-			this.store$.dispatch(CustomerActions.createNewCustomer({ customer }));
-		}
+		this.store$.dispatch(CustomerActions.editCustomer({
+			editedCustomer: {
+				id: null,
+				notes: this.notes.value,
+				lastName: this.lastName.value,
+				firstName: this.firstName.value,
+				email: this.email.value,
+				description: this.description.value,
+				contactNumber: this.contactNumber.value,
+				companyName: this.companyName.value
+			}
+		}));
 	}
 
 	cancel() {

@@ -12,7 +12,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { DeleteDialogModule } from '../shared/delete-dialog/delete-dialog.module';
-import { SharedModule } from '../shared/shared.module';
 import { ProductDetailsDialogComponent } from './product-details-dialog/product-details-dialog.component';
 
 import { ProductsRoutingModule } from './products-routing.module';
@@ -34,8 +33,7 @@ import { ProductsComponent } from './products.component';
     MatFormFieldModule,
     MatSelectModule,
     ReactiveFormsModule,
-    MatInputModule,
-    SharedModule
+    MatInputModule
   ],
   entryComponents: [ProductsComponent]
 })

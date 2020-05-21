@@ -1,11 +1,7 @@
 <h2>{{data.title}}</h2>
 <mat-dialog-content>
-    {{data.description}}
+  {{data.description}}
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button [disabled]="data.isDisabled | async"
-            [color]="actions.color"
-            mat-stroked-button
-            (click)="actions.action()"
-            *ngFor="let actions of data.dialogActions">{{actions.text}}</button>
+  <button [disabled]="data.isDisabled | async" [color]="actions.color" mat-stroked-button (click)="actions.action()" *ngFor="let actions of data.dialogActions">{{actions.text}}</button>
 </mat-dialog-actions>

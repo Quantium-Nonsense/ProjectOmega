@@ -4,11 +4,9 @@ package com.project.omega.service.implmentations;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.enums.OrderStatus;
 import com.project.omega.exceptions.NoRecordsFoundException;
-import com.project.omega.exceptions.OrderNotFoundException;
 import com.project.omega.repository.OrderRepository;
 import com.project.omega.service.interfaces.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +20,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
 
-    @Autowired
-    MessageSource messages;
 
     public Order createOrder(Order order) {
         order.setDateCreated(LocalDate.now());
@@ -33,27 +29,44 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderById(Long id) throws OrderNotFoundException {
+    public Order getOrderById(Long id) throws NoRecordsFoundException {
             Optional<Order> order = orderRepository.findById(id);
             if (!order.isPresent()){
-                throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
+                throw new NoRecordsFoundException("Order with id" + id + " not found");
             }
             return order.get();
     }
-
     @Override
     public Iterable<Order> getAllOrders() {
         return this.orderRepository.findAll();
     }
 
-    @Override
-    public Order updateOrder(Long id, Order order) throws OrderNotFoundException {
-      if (!orderRepository.existsById(id)) {
-        throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
-      }
-        orderRepository.save(order);
+
+    public Order updateOrder(Order order) {
+        Order Order = orderRepository.save(order);
         return order;
     }
+
+
+
+//    public Optional<Order> getOrderById (Long id) throws NoRecordsFoundException {
+//        Optional<Order> order = orderRepository.findById(id);
+//        if (!order.isPresent()){
+//            throw new NoRecordsFoundException("order" + id + "not Found");
+//        }
+//            return order;
+//            }
+
+
+            public Order updateOrderStatus (Long id, Order order) throws NoRecordsFoundException {
+            if (!orderRepository.existsById(id)){
+                throw new NoRecordsFoundException("order" + id + "not Found");
+            }
+                orderRepository.save(order);
+                return order;
+
+                    }
+
 }
 
 

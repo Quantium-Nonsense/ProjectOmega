@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -46,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable().cors().and()
+        httpSecurity.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/authenticate",
                         "/api/confirmRegistration").permitAll()
@@ -67,7 +66,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/supplier/get",
                         "/api/supplier/{id}",
                         "/api/supplier/{companyName}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")
-                .antMatchers("/api/order/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")
                 .antMatchers("/api/client/get",
                         "/api/client/{id}",
                         "/api/client/{update}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")

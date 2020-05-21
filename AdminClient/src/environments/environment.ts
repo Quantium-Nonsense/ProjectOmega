@@ -6,7 +6,7 @@ import { commonEnvironment } from './enviroment.common';
 
 export const environment = {
   production: false,
-  ACCESS_TOKEN: 'ACCESS_TOKEN',
+  ACCESS_TOKEN: '',
   common: commonEnvironment
 };
 

@@ -1,4 +1,4 @@
-FROM node:12.16.3 AS build-stage
+FROM node:10.13.0 AS build-stage
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install

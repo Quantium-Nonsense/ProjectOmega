@@ -1,8 +1,6 @@
 # Specifies intentionally untracked files to ignore when using Git
 # http://git-scm.com/docs/gitignore
 
-android
-ioscd
 *~
 *.sw[mnpcod]
 .tmp
@@ -14,7 +12,7 @@ ioscd
 Thumbs.db
 UserInterfaceState.xcuserstate
 $RECYCLE.BIN/
-out-tsc
+
 *.log
 log.txt
 npm-debug.log*
