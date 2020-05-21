@@ -115,6 +115,9 @@ public class OrderController {
             orderUpdate.setUserId(update.getUserId());
         }
 
+        orderUpdate.setDateCreated(oldOrder.getDateCreated());
+        orderUpdate.setId(oldOrder.getId());
+
         Order order = orderService.updateOrder(id, orderUpdate);
         return new ResponseEntity(order, HttpStatus.OK);
     }
