@@ -19,6 +19,15 @@ import {
 @Injectable()
 export class OrderEffects {
 
+  createNewOrderFailed$ = createEffect(() => this.actions$.pipe(
+      ofType(createNewOrderFailed),
+      map((action: Action & {error: string}) => {
+        this.snackBar.open(action.error, null, {
+          duration: 3000
+        })
+      })
+  ), {dispatch: false});
+
   createNewOrder$ = createEffect(() => this.actions$.pipe(
       ofType(createNewOrder),
       switchMap((action: Action & { order: OrderModel }) => {
@@ -41,6 +50,17 @@ export class OrderEffects {
       })
   ));
 
+  getAllOrdersFailed$ = createEffect(
+      () => this.actions$.pipe(
+          ofType(getAllOrdersFailed),
+          map((action: Action & { error: string }) => {
+            this.snackBar.open(action.error, null, {
+              duration: 3000
+            });
+          })
+      ), { dispatch: false }
+  );
+
   getAllOrders$ = createEffect(() => this.actions$.pipe(
       ofType(getAllOrders),
       switchMap((action: Action) => {
@@ -53,8 +73,8 @@ export class OrderEffects {
             }),
             catchError((error: Error) => {
               return [
+                getAllOrdersFailed({ error: error.message }),
                 stopProgressBar(),
-                getAllOrdersFailed({ error: error.message })
               ];
             })
         );
