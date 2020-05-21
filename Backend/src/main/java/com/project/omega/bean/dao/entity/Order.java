@@ -52,12 +52,13 @@ public class Order implements Serializable {
         return sum;
     }
 
-    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, Long userId, OrderStatus status) {
+    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, Long userId, OrderStatus status, double totalOrderPrice) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.orderProducts = orderProducts;
         this.userId = userId;
         this.status = status;
+        this.totalOrderPrice = totalOrderPrice;
     }
 
     public Order() {
