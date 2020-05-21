@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +39,11 @@ public class OrderController {
     public ResponseEntity<Order> create(@RequestBody Order newOrder) throws ProductNotFoundException,
             ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
 
-        List<OrderProductDto> productsForOrder = (List<OrderProductDto>) newOrder.getOrderProducts().stream().map(po -> {
+        List<OrderProductDto> productsForOrder = new ArrayList<>();
+
+        newOrder.getOrderProducts().forEach(po -> {
             OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());
-            return opDto;
+            productsForOrder.add(opDto);
         });
 
         validateProductsExistence(productsForOrder);
@@ -97,6 +98,7 @@ public class OrderController {
     public ResponseEntity updateOrderById (@PathVariable (value ="id") Long id, @RequestBody Order update) throws NoRecordsFoundException, OrderNotFoundException {
         Order orderUpdate = new Order();
         Order oldOrder = orderService.getOrderById(id);
+
         if(update.getOrderProducts().isEmpty()) {
             orderUpdate.setOrderProducts(oldOrder.getOrderProducts());
         } else {
