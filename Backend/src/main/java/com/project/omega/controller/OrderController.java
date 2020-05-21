@@ -1,39 +1,25 @@
 package com.project.omega.controller;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import com.project.omega.bean.dao.entity.*;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.OrderProduct;
-import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.OrderProductDto;
 import com.project.omega.exceptions.*;
 import com.project.omega.service.interfaces.*;
-import com.project.omega.service.implmentations.*;
-import com.project.omega.service.interfaces.OrderProductService;
-import com.project.omega.service.interfaces.OrderService;
-import com.project.omega.service.interfaces.ClientService;
-import com.project.omega.service.interfaces.OrderService;
-import com.project.omega.service.interfaces.ProductService;
-import com.project.omega.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -51,27 +37,34 @@ public class OrderController {
     ClientService clientService;
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity<Order> create(@RequestBody OrderForm form) throws ProductNotFoundException,
-            ClientNotFoundException, NoRecordsFoundException, UserNotFoundException {
-        List<OrderProductDto> formDtos = form.getProductOrders();
+    public ResponseEntity<Order> create(@RequestBody Order newOrder) throws ProductNotFoundException,
+            ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
 
-        validateProductsExistence(formDtos);
+        List<OrderProductDto> productsForOrder = (List<OrderProductDto>) newOrder.getOrderProducts().stream().map(po -> {
+            OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());
+            return opDto;
+        });
+
+        validateProductsExistence(productsForOrder);
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = ((UserDetails)principal).getUsername();
-            User user = userService.findUserByEmail(username);
-            Long userId = user.getId();
+        String username = ((UserDetails)principal).getUsername();
+        User user = userService.findUserByEmail(username);
+        Long userId = user.getId();
 
         Order order = new Order();
 
-        order.setUserId(userId);
+        if(newOrder.getUserId() == null) {
+            order.setUserId(userId);
+        } else {
+            order.setUserId(newOrder.getUserId());
+        }
 
         order = orderService.createOrder(order);
 
         List<OrderProduct> orderProducts = new ArrayList<>();
 
-
-        for (OrderProductDto dto : formDtos) {
+        for (OrderProductDto dto : productsForOrder) {
             orderProducts.add(orderProductService.create(new OrderProduct(
                     order,
                     productService.getProductById(dto.getProduct().getId()),
@@ -80,11 +73,9 @@ public class OrderController {
         }
 
         order.setOrderProducts(orderProducts);
-        System.out.print(order);
 
-        this.orderService.updateOrder(order);
+        this.orderService.updateOrder(order.getId(), order);
 
-        System.out.print(order);
         String uri = ServletUriComponentsBuilder
                 .fromCurrentServletMapping()
                 .path("/orders/{id}")
@@ -99,6 +90,32 @@ public class OrderController {
     @GetMapping(value = "/get")
     public ResponseEntity fetchAllOrders() {
         Iterable<Order> order = orderService.getAllOrders();
+        return new ResponseEntity(order, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity updateOrderById (@PathVariable (value ="id") Long id, @RequestBody Order update) throws NoRecordsFoundException, OrderNotFoundException {
+        Order orderUpdate = new Order();
+        Order oldOrder = orderService.getOrderById(id);
+        if(update.getOrderProducts().isEmpty()) {
+            orderUpdate.setOrderProducts(oldOrder.getOrderProducts());
+        } else {
+            orderUpdate.setOrderProducts(update.getOrderProducts());
+        }
+
+        if(update.getStatus() != null) {
+            orderUpdate.setStatus(oldOrder.getStatus());
+        } else {
+            orderUpdate.setStatus(update.getStatus());
+        }
+
+        if(update.getUserId() != null) {
+            orderUpdate.setUserId(oldOrder.getUserId());
+        } else {
+            orderUpdate.setUserId(update.getUserId());
+        }
+
+        Order order = orderService.updateOrder(id, orderUpdate);
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
