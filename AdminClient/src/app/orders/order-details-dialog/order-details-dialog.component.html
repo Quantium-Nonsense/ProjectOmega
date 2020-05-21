@@ -14,7 +14,7 @@
     <div fxLayout="row">
       <mat-form-field fxFlexFill>
         <mat-label>Representative Email</mat-label>
-        <mat-select formControlName="user" id="user">
+        <mat-select [compareWith]="compareFunc" formControlName="user" id="user">
           <mat-option *ngFor="let user of repUsers" [value]="user">{{ user.email }}</mat-option>
         </mat-select>
         <mat-error *ngIf="userHasError" id="userError">{{userErrorMessage}}</mat-error>
@@ -37,7 +37,7 @@
         <div fxLayout="column">
           <mat-form-field>
             <mat-label>Product</mat-label>
-            <mat-select formControlName="product" id="product">
+            <mat-select [compareWith]="compareFunc" formControlName="product" id="product">
               <mat-option
                 *ngFor="let product of products" [value]="product"
               >
@@ -50,7 +50,7 @@
         <div fxLayout="column">
           <mat-form-field>
             <mat-label>Customer</mat-label>
-            <mat-select formControlName="customer" id="customer">
+            <mat-select [compareWith]="compareFunc" formControlName="customer" id="customer">
               <mat-option *ngFor="let customer of customers" [value]="customer">
                 {{customer.companyName}} - {{ customer.firstName }} {{customer.lastName}}
               </mat-option>

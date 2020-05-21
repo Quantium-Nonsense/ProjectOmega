@@ -20,7 +20,7 @@ import { PrettyRolePipe } from './pipes/pretty-role.pipe';
   declarations: [
     TableFilterComponent,
     PopupDialogComponent,
-    PrettyRolePipe
+    PrettyRolePipe,
   ],
   imports: [
     FlexLayoutModule,
@@ -52,7 +52,7 @@ import { PrettyRolePipe } from './pipes/pretty-role.pipe';
     MatIconModule,
     MatMenuModule,
     TextFieldModule,
-    PrettyRolePipe
+    PrettyRolePipe,
   ]
 
 })

@@ -6,7 +6,8 @@ export class OrderModel {
     public userId: number,
     public status: string,
     public totalOrderPrice: number,
-    public orderProducts: OrderProductModel[]
+    public orderProducts: OrderProductModel[],
+    public dateCreated?: Date,
   ) {
   }
 
