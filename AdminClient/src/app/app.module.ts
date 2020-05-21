@@ -23,16 +23,18 @@ import {AuthModule} from './auth/auth.module';
 import {ChartsModule} from 'ng2-charts';
 
 // Components imported
-import {AppComponent} from './app.component';
-import {AuthEffects} from './auth/store/auth.effects';
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {appReducer, metaReducers} from './reducers';
-import {UserEffects} from './user/store/user.effects';
-import {CustomersEffects} from './customers/store/customers.effects';
-import {ToolbarComponent} from './toolbar/toolbar.component';
+import { AppComponent } from './app.component';
+import { AuthEffects } from './auth/store/auth.effects';
+import { CustomersEffects } from './customers/store/customers.effects';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProductsEffects } from './products/store/products.effects';
+import { appReducer, metaReducers } from './reducers';
+import { SuppliersEffects } from './supplier/store/suppliers.effects';
+import { ToolbarEffects } from './toolbar/store/toolbar.effects';
+import { ToolbarComponent } from './toolbar/toolbar.component';
+import { UserEffects } from './user/store/user.effects';
 import {ManagementComponent} from './management/management.component';
 import {ChartComponent} from './chart/chart.component';
-
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -82,6 +84,53 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     MatRippleModule
   ],
 	providers: []
+  declarations: [
+    AppComponent,
+    DashboardComponent,
+    ToolbarComponent
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    AppRoutingModule,
+    AuthModule,
+    BrowserModule,
+    SharedModule,
+    BrowserAnimationsModule,
+    EffectsModule.forRoot([
+      AuthEffects,
+      UserEffects,
+      CustomersEffects,
+      ToolbarEffects,
+      SuppliersEffects,
+      ProductsEffects
+    ]),
+    FormsModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: getToken,
+        whitelistedDomains: [
+          '40.65.236.154',
+          'localhost:8080'
+        ]
+      }
+    }),
+    MatToolbarModule,
+    MatButtonModule,
+    MatGridListModule,
+    MatIconModule,
+    MatSidenavModule,
+    StoreModule.forRoot(appReducer, {
+      metaReducers,
+      runtimeChecks: {
+        strictActionImmutability: true,
+        strictStateImmutability: true
+      }
+    }),
+    MatCardModule,
+    MatListModule,
+    !environment.production ? StoreDevtoolsModule.instrument() : []
+  ],
+  providers: []
 })
 export class AppModule {
 }

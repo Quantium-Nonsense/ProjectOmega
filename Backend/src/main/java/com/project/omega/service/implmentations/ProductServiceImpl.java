@@ -6,12 +6,15 @@ import com.project.omega.bean.dto.ProductDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 
 import com.project.omega.exceptions.ProductNotFoundException;
+import com.project.omega.exceptions.SupplierNotFoundException;
 import com.project.omega.repository.ProductRepository;
 import com.project.omega.repository.SupplierRepository;
 import com.project.omega.service.interfaces.ProductService;
 import com.project.omega.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,13 +34,15 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     MessageSource messages;
 
-    public Product createProduct(ProductDTO productDTO) throws NoRecordsFoundException {
-        Supplier supplier = supplierService.getSupplierById(productDTO.getSupplierId());
+    public Product createProduct(ProductDTO productDTO) throws SupplierNotFoundException {
+        if (productDTO.getSupplier() == null) {
+            throw new SupplierNotFoundException("Supplier cannot be empty");
+        }
         Product product = new Product.ProductBuilder()
                 .setName(productDTO.getName())
                 .setDescription(productDTO.getDescription())
                 .setPrice(productDTO.getPrice())
-                .setSupplier(supplier)
+                .setSupplier(productDTO.getSupplier())
                 .build();
         productRepository.save(product);
         return product;

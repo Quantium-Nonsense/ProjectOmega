@@ -1,70 +1,53 @@
-import {CustomerModel} from '../../models/customers/customer.model';
-import {Action, createFeatureSelector, createReducer, createSelector, on} from '@ngrx/store';
-import * as CustomerActions from './customers.actions';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
+import { CustomerModel } from '../../models/customers/customer.model';
 import * as fromApp from '../../reducers/index';
+import * as CustomerActions from './customers.actions';
 
 export interface State {
-	loading: boolean,
 	customers: CustomerModel[],
-	selectedCustomer: CustomerModel
 }
 
 const initialState: State = {
-	loading: false,
-	customers: null,
-	selectedCustomer: null
+	customers: null
 };
 
 export const selectCustomersState = createFeatureSelector<fromApp.State, State>(
-	'customers'
+		'customers'
 );
 
-export const selectIsLoading = createSelector(
-	selectCustomersState,
-	(state: State) => state.loading
-);
 export const selectAllCustomers = createSelector(
-	selectCustomersState,
-	(state: State) => state.customers
+		selectCustomersState,
+		(state: State) => state.customers
 );
-export const selectSelectedCustomer = createSelector(
-	selectCustomersState,
-	(state: State) => state.selectedCustomer
-);
+
 
 const reducer = createReducer(
-	initialState,
-	on(CustomerActions.beginLoadingCustomers, (prevState: State) => ({
-		...prevState,
-		loading: true
-	})),
-	on(CustomerActions.customersLoaded, (prevState: State, {customers}) => ({
-		...prevState,
-		loading: false,
-		customers
-	})),
-	on(
-		CustomerActions.deleteCustomer,
-		CustomerActions.editCustomer,
-		(prevState: State) => ({
-		...prevState,
-		loading: true
-	})),
-	on(
-		CustomerActions.showDeleteCustomerDialog,
-		CustomerActions.showEditCustomerDialog,
-		(prevState: State, {customer}) => ({
-			...prevState,
-			selectedCustomer: customer
+		initialState,
+		on(CustomerActions.beginLoadingCustomers, (prevState: State) => ({
+			...prevState
 		})),
-	on(
-		CustomerActions.customerDeletedSuccess,
-		CustomerActions.editCustomerSuccess,
-		(prevState: State, {newCustomers}) => ({
-		...prevState,
-		loading: false,
-		customers: newCustomers
-	})),
+		on(CustomerActions.customersLoaded, (prevState: State, { customers }) => ({
+			...prevState,
+			customers
+		})),
+		on(
+				CustomerActions.deleteCustomer,
+				CustomerActions.editCustomer,
+				(prevState: State) => ({
+					...prevState
+				})),
+		on(
+				CustomerActions.showDeleteCustomerDialog,
+				CustomerActions.showEditCustomerDialog,
+				(prevState: State, { customer }) => ({
+					...prevState
+				})),
+		on(
+				CustomerActions.customerDeletedSuccess,
+				CustomerActions.editCustomerSuccess,
+				(prevState: State) => ({
+					...prevState,
+				}))
 );
 
 export const customerReducer = (state: State | undefined, action: Action) => reducer(state, action);

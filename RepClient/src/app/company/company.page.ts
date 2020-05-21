@@ -5,7 +5,6 @@ import { take } from 'rxjs/operators';
 import { ItemModel } from '../shared/model/company-items/item.model';
 import { OrderItemModel } from '../shared/model/order/order-item.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
-import * as OrderActions from './../order/store/order.actions';
 import * as fromApp from './../reducers/index';
 import * as CompanyActions from './store/company.actions';
 import * as fromCompany from './store/company.reducer';
@@ -36,7 +35,6 @@ export class CompanyPage implements OnInit {
 
   private state$ = this.store.select('company');
   private subscription: Subscription = new Subscription();
-  private isBottomSheetVisible: boolean;
 
   constructor(
     public store: Store<fromApp.State>
