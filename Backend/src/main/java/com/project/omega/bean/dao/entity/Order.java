@@ -27,7 +27,7 @@ public class Order implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateCreated;
 
-    @OneToMany(mappedBy = "pk.order")
+    @OneToMany(mappedBy = "productPk.order")
     @Valid
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<OrderProduct> orderProducts;
