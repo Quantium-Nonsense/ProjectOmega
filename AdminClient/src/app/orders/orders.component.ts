@@ -21,7 +21,7 @@ import { beginProgressBar } from '../toolbar/store/toolbar.actions';
 import { getAllUsers } from '../user/store/user.actions';
 import * as fromUsers from '../user/store/user.reducer';
 import { OrderDetailsDialogComponent } from './order-details-dialog/order-details-dialog.component';
-import { createNewOrder, getAllOrders } from './store/order.actions';
+import { createNewOrder, getAllOrders, updateOrder } from './store/order.actions';
 import { selectAllOrders } from './store/order.reducer';
 
 @Component({
@@ -124,7 +124,8 @@ export class OrdersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.subscriptions.add(
         dialogRef.afterClosed().subscribe((updatedOrder: OrderModel) => {
           if (updatedOrder && !updatedOrder.equalsWithoutId(order)) {
-            this.snackBar.open(`Order ${ updatedOrder.id } was successfully updated`, 'Close', { duration: 3000 });
+            this.store$.dispatch(beginProgressBar());
+            this.store$.dispatch(updateOrder({ order: updatedOrder }));
           } else {
             this.snackBar.open(`Order ${ updatedOrder.id } was not updated as no changes were saved`, 'Close', { duration: 3000 });
           }

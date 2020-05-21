@@ -12,6 +12,11 @@ export class ApiPathService {
     this.endPoint = environment.common.apiRoot();
   }
 
+  getUpdateOrderEndPoint(id): string {
+    return `${this.endPoint}/order/update/${id}`
+  };
+
+
   get createNewOrderEndPoint(): string {
    return `${this.endPoint}/order/create`
   }
