@@ -22,9 +22,8 @@ public class OrderProduct implements Serializable{
     }
 
 
-    public OrderProduct(Order order, Product productPk, Integer quantity, Client client) {
+    public OrderProduct(Product productPk, Integer quantity, Client client) {
         this.productPk = new OrderProductPK();
-        this.productPk.setOrder(order);
         this.productPk.setProduct(productPk);
         this.productPk.setClient(client);
         this.quantity = quantity;

@@ -67,7 +67,6 @@ public class OrderController {
 
         for (OrderProductDto dto : productsForOrder) {
             orderProducts.add(orderProductService.create(new OrderProduct(
-                    order,
                     productService.getProductById(dto.getProduct().getId()),
                     dto.getQuantity(),
                     clientService.getClientById(dto.getClient().getId()))));
