@@ -44,7 +44,7 @@ public class Order implements Serializable {
         double sum = 0D;
         List<OrderProduct> orderProducts = getOrderProducts();
         for (OrderProduct op : orderProducts) {
-            sum += op.getProductPk().getPrice() * op.getQuantity();
+            sum += op.getProduct().getPrice() * op.getQuantity();
         }
         return sum;
     }

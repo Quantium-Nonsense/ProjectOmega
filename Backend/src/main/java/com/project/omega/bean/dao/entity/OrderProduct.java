@@ -17,7 +17,7 @@ public class OrderProduct implements Serializable {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product productPk;
+    private Product product;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
@@ -31,8 +31,8 @@ public class OrderProduct implements Serializable {
         super();
     }
 
-    public OrderProduct(Product productPk, Client client, Integer quantity) {
-        this.productPk = productPk;
+    public OrderProduct(Product product, Client client, Integer quantity) {
+        this.product = product;
         this.client = client;
         this.quantity = quantity;
     }
@@ -45,12 +45,12 @@ public class OrderProduct implements Serializable {
         this.id = id;
     }
 
-    public Product getProductPk() {
-        return productPk;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductPk(Product productPk) {
-        this.productPk = productPk;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public Client getClient() {
@@ -75,14 +75,14 @@ public class OrderProduct implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         OrderProduct that = (OrderProduct) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(productPk, that.productPk) &&
+                Objects.equals(product, that.product) &&
                 Objects.equals(client, that.client) &&
                 Objects.equals(quantity, that.quantity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, productPk, client, quantity);
+        return Objects.hash(id, product, client, quantity);
     }
 }
 
