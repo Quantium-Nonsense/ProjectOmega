@@ -103,13 +103,13 @@ public class OrderController {
             orderUpdate.setOrderProducts(update.getOrderProducts());
         }
 
-        if(update.getStatus() != null) {
+        if(update.getStatus() == null) {
             orderUpdate.setStatus(oldOrder.getStatus());
         } else {
             orderUpdate.setStatus(update.getStatus());
         }
 
-        if(update.getUserId() != null) {
+        if(update.getUserId() == null) {
             orderUpdate.setUserId(oldOrder.getUserId());
         } else {
             orderUpdate.setUserId(update.getUserId());
