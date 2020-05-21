@@ -8,10 +8,10 @@
         <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.project</groupId>
-    <artifactId>sprintone</artifactId>
+    <groupId>com.quantiumnonsense</groupId>
+    <artifactId>omega</artifactId>
     <version>0.0.1</version>
-    <name>sprintone</name>
+    <name>omega</name>
     <description>ESRS Project</description>
 
     <properties>
@@ -124,6 +124,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.3.0.RELEASE</version>
             </plugin>
 
             <plugin>
@@ -136,10 +137,9 @@
                     </from>
                     <to>
                         <image>${docker.image.prefix}/maven:${project.version}</image>
-
                     </to>
                 </configuration>
-            </plugin>   
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -163,10 +163,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
-
-
     </build>
-
 </project>
