@@ -1,22 +1,17 @@
 package com.project.omega.bean.dao.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.omega.bean.dao.entity.OrderProductPK;
-import com.project.omega.bean.dao.entity.Product;
-import lombok.Builder;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
 @Embeddable
 public class OrderProduct implements Serializable{
     @EmbeddedId
     @JsonIgnore
-    private OrderProductPK pk;
+    private OrderProductPK productPk;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -27,42 +22,40 @@ public class OrderProduct implements Serializable{
     }
 
 
-    public OrderProduct(Order order, Product product, Integer quantity, Client client) {
-        pk = new OrderProductPK();
-        pk.setOrder(order);
-        pk.setProduct(product);
-        pk.setClient(client);
+    public OrderProduct(Order order, Product productPk, Integer quantity, Client client) {
+        this.productPk = new OrderProductPK();
+        this.productPk.setOrder(order);
+        this.productPk.setProduct(productPk);
+        this.productPk.setClient(client);
         this.quantity = quantity;
-
     }
 
 
     @Transient
-    public Product getProduct() {
-
-        return this.pk.getProduct();
+    public Product getProductPk() {
+        return this.productPk.getProduct();
     }
 
     @Transient
     public Client getClient() {
 
-        return this.pk.getClient ();
+        return this.productPk.getClient ();
     }
 
     @Transient
     public Integer getTotalPrice() {
-        return pk.getProduct().getPrice() * getQuantity();
+        return productPk.getProduct().getPrice() * getQuantity();
     }
 
 
-    public OrderProductPK getPk() {
+    public OrderProductPK getProduct() {
 
-        return pk;
+        return productPk;
     }
 
-    public void setPk(OrderProductPK pk) {
+    public void setProductPk(OrderProductPK productPk) {
 
-        this.pk = pk;
+        this.productPk = productPk;
     }
 
     public Integer getQuantity() {
@@ -80,7 +73,7 @@ public class OrderProduct implements Serializable{
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((pk == null) ? 0 : pk.hashCode());
+        result = prime * result + ((productPk == null) ? 0 : productPk.hashCode());
 
         return result;
     }
@@ -97,11 +90,11 @@ public class OrderProduct implements Serializable{
             return false;
         }
         OrderProduct other = (OrderProduct) obj;
-        if (pk == null) {
-            if (other.pk != null) {
+        if (productPk == null) {
+            if (other.productPk != null) {
                 return false;
             }
-        } else if (!pk.equals(other.pk)) {
+        } else if (!productPk.equals(other.productPk)) {
             return false;
         }
 
