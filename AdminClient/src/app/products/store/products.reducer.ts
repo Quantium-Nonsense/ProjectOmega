@@ -1,4 +1,4 @@
-import { Action, createReducer, createSelector, on } from '@ngrx/store';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import { ProductModel } from '../../models/products/products.model';
 import * as fromApp from '../../reducers/index';
 import { allProductsLoaded } from './products.actions';
@@ -11,7 +11,7 @@ const initialState: State = {
   products: null
 };
 
-export const selectProductState = (state: fromApp.State) => state.products;
+export const selectProductState = createFeatureSelector<fromApp.State, State>('products');
 export const selectAllProducts = createSelector(
     selectProductState,
     (state: State) => state.products

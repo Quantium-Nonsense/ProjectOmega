@@ -48,6 +48,7 @@ export class CompanyEffects {
         this.httpGetAllItemsForCompany(action.company).pipe(
             switchMap((products: ItemModel[]) =>
               [
+                CompanyActions.companySelected(),
                 CompanyActions.itemsOfCompanyLoaded({ items: products })
               ]),
             catchError((error: Error) =>

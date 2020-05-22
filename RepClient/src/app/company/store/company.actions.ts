@@ -19,8 +19,7 @@ export const companyPageHasError = createAction(
 );
 
 export const companySelected = createAction(
-    '[Dashboard navigation to Company Pages] Incoming Action Company Selected',
-    props<{ selectedCompany: SupplierModel }>()
+    '[Dashboard navigation to Company Pages] Incoming Action Company Selected'
 );
 
 export const itemsOfCompanyLoaded = createAction(
