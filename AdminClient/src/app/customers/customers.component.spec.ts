@@ -98,19 +98,9 @@ describe('CustomersComponent', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
     documentLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
 
-    isLoadingSelector = mockStore.overrideSelector(
-        fromCustomers.selectIsLoading,
-        false
-    );
-
     selectAllCustomersSelector = mockStore.overrideSelector(
         fromCustomers.selectAllCustomers,
         []
-    );
-
-    selectSelectedCustomerSelector = mockStore.overrideSelector(
-        fromCustomers.selectSelectedCustomer,
-        undefined
     );
 
     mockStore.refreshState();
@@ -136,9 +126,9 @@ describe('CustomersComponent', () => {
   it('should load all customers when landing on dashboard', () => {
     actions$ = of(CustomerActions.getAllCustomers());
     const dummyCustomers = createDummyCustomers();
-    spyOn(effects, 'createDummyCustomers').and.callThrough().and.returnValue(dummyCustomers);
+    spyOn(effects, 'httpGetAllCustomers').and.callThrough().and.returnValue(of(dummyCustomers));
     effects.loadAllCustomers$.subscribe(action => {
-      expect(action).toEqual(CustomerActions.customersLoaded({customers: dummyCustomers}));
+      expect(action).toEqual(CustomerActions.customersLoaded({ customers: dummyCustomers }));
     });
   });
 
@@ -159,7 +149,7 @@ describe('CustomersComponent', () => {
 
   it('should show edit customer dialog on showEditCustomerDialog dispatch', async () => {
     const selectedCustomer: CustomerModel = createDummyCustomers()[0];
-    actions$ = of(CustomerActions.showEditCustomerDialog({customer: selectedCustomer}));
+    actions$ = of(CustomerActions.showEditCustomerDialog({ customer: selectedCustomer }));
 
     effects.showEditCustomerDialog$.subscribe(); // no dispatch
 
