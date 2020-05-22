@@ -6,6 +6,7 @@ import { CustomerModel } from '../../models/customers/customer.model';
 import { OrderProductModel } from '../../models/orders/oder-product.model';
 import { OrderModel } from '../../models/orders/order.model';
 import { ProductModel } from '../../models/products/products.model';
+import { OrderStatusModel } from '../../shared/model/order/order-status.model';
 import { UserModel } from '../../shared/model/user/user.model';
 
 @Component({
@@ -19,6 +20,7 @@ export class OrderDetailsDialogComponent implements OnInit, OnDestroy {
    */
   orderForm: FormGroup;
   orderProducts: FormArray;
+  status = Object.keys(OrderStatusModel);
 
   products: ProductModel[];
   customers: CustomerModel[];

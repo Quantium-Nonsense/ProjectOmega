@@ -16,6 +16,7 @@ import { ProductModel } from '../models/products/products.model';
 import { getAllProducts } from '../products/store/products.actions';
 import { selectAllProducts } from '../products/store/products.reducer';
 import { DeleteDialogComponent } from '../shared/delete-dialog/delete-dialog.component';
+import { OrderStatusModel } from '../shared/model/order/order-status.model';
 import { UserModel } from '../shared/model/user/user.model';
 import { beginProgressBar } from '../toolbar/store/toolbar.actions';
 import { getAllUsers } from '../user/store/user.actions';
