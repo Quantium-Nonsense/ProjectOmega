@@ -17,38 +17,38 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    
     @Autowired
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
+    
     @Autowired
     private UserDetailsService jwtUserDetailsService;
-
+    
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
-
+    
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
-
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
+    
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable().cors().and()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate",
-                        "/api/confirmRegistration").permitAll()
+                .antMatchers("/api/authenticate", "/api/confirmRegistration").permitAll()
+                .antMatchers("/log").anonymous()
                 .antMatchers("/api/registration").hasAnyRole("SUPER_ADMIN", "ADMIN")
                 .antMatchers("/api/user/**",
                         "/api/role/**",
@@ -76,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+        
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
