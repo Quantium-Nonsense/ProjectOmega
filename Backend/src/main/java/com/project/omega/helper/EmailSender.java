@@ -41,7 +41,7 @@ public class EmailSender {
 
             SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
 
-            t.connect(SMTP_SERVER,  "omega.quantium@gmail.com", "omegaNonsense!23");
+            t.connect(SMTP_SERVER,  "omega.quantium@gmail.com", "myOmega!23");
 
             t.sendMessage(msg, msg.getAllRecipients());
 

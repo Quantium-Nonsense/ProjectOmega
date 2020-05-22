@@ -81,11 +81,13 @@ public class JwtAuthenticationController {
         String verificationToken = UUID.randomUUID().toString();
         tokenService.saveToken(verificationToken, newUser);
 
-        String emailContent = EmailConstants.WELCOME
-                + EmailConstants.PASSWORD + user.getPassword() + "\n"
-                + EmailConstants.linkBuilder(EmailConstants.BACKEND_ENDPOINT,
-                    "/api/confirmRegistration?token=" + verificationToken,
-                    EmailConstants.CONFIRMATION + user.getEmail());
+        String emailContent = EmailConstants.WELCOME + "</br>"
+                + EmailConstants.PASSWORD + user.getPassword() + "</br></br>"
+                + EmailConstants.REP_NOTE
+                + EmailConstants.PASS_CHANGE_NOTE + "</br>"
+                + EmailConstants.linkBuilder(EmailConstants.BACKEND_REMOTE,
+                "/api/confirmRegistration?token=" + verificationToken,
+                EmailConstants.CONFIRMATION + user.getEmail());
 
         EmailSender.send(user.getEmail(), EmailConstants.REG_CONFIRM, emailContent);
 
@@ -116,7 +118,7 @@ public class JwtAuthenticationController {
         if(userRole.getName().equals(RoleBasedConstant.REP)) {
             return "Confirmation successful, but no suitable redirection path found for representative.";
         } else {
-            return "redirect:/auth";
+            return "redirect:http://" + EmailConstants.FRONTEND_REMOTE + "/auth";
         }
     }
 
