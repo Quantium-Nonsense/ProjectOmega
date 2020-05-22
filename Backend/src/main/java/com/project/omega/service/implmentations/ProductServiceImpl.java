@@ -118,7 +118,7 @@ public class ProductServiceImpl implements ProductService {
         if (!product.isPresent()) {
             throw new ProductNotFoundException(messages.getMessage("message.productNotFound", null, null));
         }
-        orderProductService.deleteByProductId(id);
+        orderProductService.deleteByProductId(product.get());
         productRepository.deleteById(id);
         return product.get();
     }

@@ -7,9 +7,6 @@ import java.util.Objects;
 
 @Entity
 public class OrderProduct implements Serializable {
-//    @Id
-//    @JsonIgnore
-//    private OrderProductPK productPk;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
