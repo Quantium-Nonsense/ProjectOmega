@@ -22,19 +22,18 @@ export class OrderEffects {
 
   createNewOrder$ = createEffect(() => this.actions$.pipe(
       ofType(OrderActions.createNewOrder),
-      switchMap((action: Action & { order: OrderProductModel[] }) => {
-        return this.httpCreateNewOrder(action.order).pipe(
+      switchMap((action: Action & { order: OrderProductModel[] }) =>
+        this.httpCreateNewOrder(action.order).pipe(
             switchMap(() => {
               this.snackBar.open('Order created!', null, {
                 duration: 3000
               });
+
               return [OrderActions.createNewOrderSuccess()];
             }),
-            catchError((error: Error) => {
-              return [OrderActions.createNewOrderFailed({ error: error.message })];
-            })
-        );
-      })
+            catchError((error: Error) =>
+              [OrderActions.createNewOrderFailed({ error: error.message })])
+        ))
   ));
 
   createNewOrderFailed$ = createEffect(() => this.actions$.pipe(
@@ -48,20 +47,17 @@ export class OrderEffects {
 
   getAllCustomers$ = createEffect(() => this.actions$.pipe(
       ofType(OrderActions.loadAllClients),
-      switchMap((action: Action) => {
-        return this.httpGetAllCustomers().pipe(
-            switchMap((clients: ClientModel[]) => {
-              return [
+      switchMap((action: Action) =>
+        this.httpGetAllCustomers().pipe(
+            switchMap((clients: ClientModel[]) =>
+              [
                 OrderActions.loadAllClientsSuccess({ clients })
-              ];
-            }),
-            catchError((error: Error) => {
-              return [
+              ]),
+            catchError((error: Error) =>
+              [
                 OrderActions.loadAllClientsFailed({ error: error.message })
-              ];
-            })
-        );
-      })
+              ])
+        ))
   ));
 
   showErrorMessage$ = createEffect(() => this.actions$.pipe(
@@ -160,6 +156,7 @@ export class OrderEffects {
 
   httpCreateNewOrder(order: OrderProductModel[]): Observable<any> {
     console.log(JSON.stringify({orderProducts: order}));
+
     return this.http.post(this.endPoints.createNewOrderEndPoint, {
       orderProducts: order
     });
