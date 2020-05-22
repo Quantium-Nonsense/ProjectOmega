@@ -14,8 +14,7 @@ export class ApiEndpointCreatorService {
 
   getUpdateOrderEndPoint(id): string {
     return `${ this.endPoint }/order/update/${ id }`;
-  };
-
+  }
 
   get createNewOrderEndPoint(): string {
     return `${ this.endPoint }/order/create`;
