@@ -14,8 +14,7 @@ export class ApiEndpointCreatorService {
 
   getUpdateOrderEndPoint(id): string {
     return `${ this.endPoint }/order/update/${ id }`;
-  };
-
+  }
 
   get createNewOrderEndPoint(): string {
     return `${ this.endPoint }/order/create`;
@@ -56,23 +55,23 @@ export class ApiEndpointCreatorService {
     return `${ this.endPoint }/registration`;
   }
 
-  getDeleteUserEndPoint(userId: number) {
+  getDeleteUserEndPoint(userId: number): string {
     return `${ this.endPoint }/user/delete/${ userId }`;
   }
 
-  getEditUserEndPoint(userId: number) {
+  getEditUserEndPoint(userId: number): string {
     return `${ this.endPoint }/user/update/${ userId }`;
   }
 
-  getEditSupplierEndPoint(supplierId: number) {
+  getEditSupplierEndPoint(supplierId: number): string {
     return `${ this.endPoint }/supplier/update/${ supplierId }`;
   }
 
-  getDeleteSupplierEndPoint(supplierId: number) {
+  getDeleteSupplierEndPoint(supplierId: number): string {
     return `${ this.endPoint }/supplier/delete/${ supplierId }`;
   }
 
-  getDeleteProductEndPoint(productId: number) {
+  getDeleteProductEndPoint(productId: number): string {
     return `${ this.endPoint }/product/delete/${ productId }`;
   }
 
