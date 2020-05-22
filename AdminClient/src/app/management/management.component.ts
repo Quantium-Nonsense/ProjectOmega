@@ -1,9 +1,12 @@
-import {Component, OnInit, inject, Inject} from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {CustomerModel} from '../models/customers/customer.model';
-import {ManagementDialogComponent} from './management-dialog/management-dialog.component';
-import {CustomerManagementModel} from '../models/customers/management/customer-management.model';
-import {ChartComponent} from '../chart/chart.component';
+import { Component, OnInit, inject, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CustomerModel } from '../models/customers/customer.model';
+import { ManagementDialogComponent } from './management-dialog/management-dialog.component';
+import { CustomerManagementModel } from '../models/customers/management/customer-management.model';
+import { ChartComponent } from '../chart/chart.component';
+import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as fromApp from '../reducers/index';
 
 export interface DialogData {
   representative: string;
@@ -16,11 +19,14 @@ export interface DialogData {
   styleUrls: ['./management.component.scss']
 })
 export class ManagementComponent implements OnInit {
-  customers: CustomerModel[] = []; // customer data model
-  customerRepList: CustomerManagementModel[] = []; // for mapping customers with rep
+  private subscription = new Subscription();
+  private customers: CustomerModel[] = []; // customer data model
+  private customerRepList: CustomerManagementModel[] = []; // for mapping customers with rep
 
   // initialize customer sets
-  constructor(public dialog: MatDialog) {
+  constructor(private store$: Store<fromApp.State>, public dialog: MatDialog) {
+    this.subscription = new Subscription();
+
     this.customers.push(new CustomerModel(0, 'company1', '0', 'no',
       'email', 'Damian', 'Bigman', 'notes'));
     this.customers.push(new CustomerModel(1, 'company2', '1', 'no',
