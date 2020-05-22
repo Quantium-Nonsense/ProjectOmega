@@ -36,7 +36,6 @@ public class EmailSender {
 
             //msg.setText(EMAIL_TEXT);
 
-//            String EMAIL_TEXT = "<a href=\"http://localhost:5000/api/" + endpoint + "\">" + linkText + " </a>";
             String EMAIL_TEXT = content;
             msg.setDataHandler(new DataHandler(new HTMLDataSource(EMAIL_TEXT)));
 
