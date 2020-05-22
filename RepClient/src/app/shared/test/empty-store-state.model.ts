@@ -22,6 +22,7 @@ export const mockEmptyState: fromApp.State = {
     loading: false
   },
   order: {
+    clients: undefined,
     items: undefined
   }
 };
