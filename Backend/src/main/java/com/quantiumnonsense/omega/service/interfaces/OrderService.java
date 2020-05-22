@@ -7,9 +7,6 @@ import com.quantiumnonsense.omega.exceptions.OrderNotFoundException;
 public interface OrderService {
     Order createOrder(Order order);
     Order getOrderById(Long id) throws OrderNotFoundException;
-
-    Order updateOrder(Order order);
-
+    Order updateOrder(Long id, Order order) throws OrderNotFoundException;
     Iterable<Order> getAllOrders();
-    Order updateOrderStatus(Long id, Order order) throws OrderNotFoundException;
 }

@@ -1,5 +1,7 @@
 package com.quantiumnonsense.omega.bean.dto;
 
+import com.quantiumnonsense.omega.bean.dao.entity.Supplier;
+
 public class ProductDTO {
     private Long id;
 
@@ -9,14 +11,14 @@ public class ProductDTO {
 
     private int price;
 
-    private Long supplierId;
+    private Supplier supplier;
 
-    public ProductDTO(Long id, String name, String description, int price, Long supplierId) {
+    public ProductDTO(Long id, String name, String description, int price, Supplier supplier) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.supplierId = supplierId;
+        this.supplier = supplier;
     }
 
     public Long getId() {
@@ -51,11 +53,11 @@ public class ProductDTO {
         this.price = price;
     }
 
-    public Long getSupplierId() {
-        return supplierId;
+    public Supplier getSupplier() {
+        return this.supplier;
     }
 
-    public void setSupplierId(Long supplierId) {
-        this.supplierId = supplierId;
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 }

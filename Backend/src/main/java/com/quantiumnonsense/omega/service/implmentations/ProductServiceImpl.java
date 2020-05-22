@@ -12,6 +12,8 @@ import com.quantiumnonsense.omega.service.interfaces.ProductService;
 import com.quantiumnonsense.omega.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +34,14 @@ public class ProductServiceImpl implements ProductService {
     MessageSource messages;
 
     public Product createProduct(ProductDTO productDTO) throws SupplierNotFoundException {
-        Supplier supplier = supplierService.getSupplierById(productDTO.getSupplierId());
+        if (productDTO.getSupplier() == null) {
+            throw new SupplierNotFoundException("Supplier cannot be empty");
+        }
         Product product = new Product.ProductBuilder()
                 .setName(productDTO.getName())
                 .setDescription(productDTO.getDescription())
                 .setPrice(productDTO.getPrice())
-                .setSupplier(supplier)
+                .setSupplier(productDTO.getSupplier())
                 .build();
         productRepository.save(product);
         return product;

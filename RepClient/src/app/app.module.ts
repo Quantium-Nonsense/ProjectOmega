@@ -61,7 +61,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

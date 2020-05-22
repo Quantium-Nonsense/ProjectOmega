@@ -17,10 +17,10 @@ public class Client implements Serializable{
     private Long id;
 
     @NotBlank
-    private String first_name;
+    private String firstName;
 
     @NotBlank
-    private String last_name;
+    private String lastName;
 
     @NotBlank
     private String description;
@@ -42,8 +42,8 @@ public class Client implements Serializable{
 
     public Client(Long id, @NotBlank String first_name, @NotBlank String last_name, @NotBlank String description, @NotBlank String companyName, @NotBlank String email, @NotBlank String contactNumber, @NotBlank String notes) {
         this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = first_name;
+        this.lastName = last_name;
         this.description = description;
         this.companyName = companyName;
         this.email = email;
@@ -59,20 +59,20 @@ public class Client implements Serializable{
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getDescription() {

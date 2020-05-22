@@ -7,6 +7,7 @@ import com.quantiumnonsense.omega.exceptions.OrderNotFoundException;
 import com.quantiumnonsense.omega.repository.OrderRepository;
 import com.quantiumnonsense.omega.service.interfaces.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
 
+    @Autowired
+    MessageSource messages;
+
     public Order createOrder(Order order) {
         order.setDateCreated(LocalDate.now());
         order.setStatus(OrderStatus.PLACED);
@@ -29,11 +33,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(Long id) throws OrderNotFoundException {
-        Optional<Order> order = orderRepository.findById(id);
-        if (!order.isPresent()) {
-            throw new OrderNotFoundException("Order with id" + id + " not found");
-        }
-        return order.get();
+            Optional<Order> order = orderRepository.findById(id);
+            if (!order.isPresent()){
+                throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
+            }
+            return order.get();
     }
 
     @Override
@@ -41,20 +45,14 @@ public class OrderServiceImpl implements OrderService {
         return this.orderRepository.findAll();
     }
 
-
-    public Order updateOrder(Order order) {
-        Order Order = orderRepository.save(order);
-        return order;
-    }
-
-    public Order updateOrderStatus(Long id, Order order) throws OrderNotFoundException {
-        if (!orderRepository.existsById(id)) {
-            throw new OrderNotFoundException("order" + id + "not Found");
-        }
+    @Override
+    public Order updateOrder(Long id, Order order) throws OrderNotFoundException {
+      if (!orderRepository.existsById(id)) {
+        throw new OrderNotFoundException(messages.getMessage("message.orderNotFound" , null, null));
+      }
         orderRepository.save(order);
         return order;
     }
-
 }
 
 

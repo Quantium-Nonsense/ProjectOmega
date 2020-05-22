@@ -65,7 +65,7 @@ public class UserController {
             userToUpdate.setEmail(userInDb.getEmail());
         }
 
-        if (!updatedUser.getPassword().isEmpty()) {
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
             userToUpdate.setPassword(updatedUser.getPassword());
         } else {
             userToUpdate.setPassword(userInDb.getPassword());

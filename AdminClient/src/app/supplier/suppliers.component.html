@@ -1,15 +1,28 @@
-<mat-progress-bar *ngIf="isLoading | async"
-                  mode="indeterminate"></mat-progress-bar>
+<script src="supplier.component.ts"></script>
 <app-table-filter [action]="filterActions"
                   [dataSource]="suppliers">
 
 </app-table-filter>
-
 <div class="w20"
      fxLayout="column">
+    <div fxLayout="row"
+         fxLayoutAlign="space-between"
+         xmlns="">
+        <div fxFlexOffset="95">
+            <button (click)="handleCreate()"
+                    aria-label="New Product"
+                    color="primary"
+                    mat-mini-fab>
+                <mat-icon>add</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div *ngIf="suppliers.data && suppliers.data.length === 0"
+         class="mat-typography"><p class="body-1">No suppliers found</p></div>
     <table [dataSource]="suppliers"
            fxFlexFill
            mat-table>
+
         <ng-container matColumnDef="companyName">
             <th *matHeaderCellDef
                 mat-header-cell>Name
@@ -55,20 +68,26 @@
             <td *matCellDef="let row"
                 mat-cell>
                 <button (click)="editSupplier(row)"
-                        [disabled]="isLoading | async"
+                        [disabled]="isLoading"
                         color="primary"
                         mat-icon-button>
                     <mat-icon>edit</mat-icon>
                 </button>
                 <button (click)="deleteSupplier(row)"
-                        [disabled]="isLoading | async"
+                        [disabled]="isLoading"
                         color="primary"
                         mat-icon-button>
                     <mat-icon>delete</mat-icon>
                 </button>
             </td>
         </ng-container>
-
+        <ng-container matColumnDef="id">
+            <th [hidden]="true" *matHeaderCellDef
+                mat-header-cell>Id
+            </th>
+            <td [hidden]="true" *matCellDef="let supplier"
+                mat-cell>{{supplier.id}}</td>
+        </ng-container>
         <tr *matHeaderRowDef="displayCols"
             mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayCols;"
@@ -80,5 +99,6 @@
                    showFirstLastButtons
     >
     </mat-paginator>
+
 </div>
 

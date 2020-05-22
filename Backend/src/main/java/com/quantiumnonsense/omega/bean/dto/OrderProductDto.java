@@ -11,6 +11,11 @@ public class OrderProductDto implements Serializable {
     private Integer quantity;
     private Client client;
 
+    public OrderProductDto(Product product, Integer quantity, Client client) {
+        this.product = product;
+        this.quantity = quantity;
+        this.client = client;
+    }
 
     public Product getProduct() {
         return product;

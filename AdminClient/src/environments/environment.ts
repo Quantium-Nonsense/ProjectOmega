@@ -2,19 +2,12 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import {commonEnvironment} from './enviroment.common';
+import { commonEnvironment } from './enviroment.common';
 
 export const environment = {
   production: false,
-  ACCESS_TOKEN: '',
-  common: commonEnvironment,
-  logging: {
-    kafkaBrokerURI: '104.196.186.213',
-    kafkaBrokerPort: 9092,
-    kafkaTopic: 'staging-logs',
-    showConsole: true,
-    level: 'INFO'
-  }
+  ACCESS_TOKEN: 'ACCESS_TOKEN',
+  common: commonEnvironment
 };
 
 /*

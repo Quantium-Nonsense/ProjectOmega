@@ -6,13 +6,11 @@ import * as SupplierActions from './suppliers.actions';
 export interface State {
   loading: boolean;
   suppliers: SupplierModel[];
-  focusedSupplier: SupplierModel
 }
 
 const initialState: State = {
   loading: false,
-  suppliers: null,
-  focusedSupplier: null
+  suppliers: null
 };
 
 export const selectSuppliersState = createFeatureSelector<fromApp.State, State>(
@@ -29,10 +27,6 @@ export const selectAllSuppliers = createSelector(
     (state: State) => state.suppliers
 );
 
-export const selectFocusedSupplier = createSelector(
-    selectSuppliersState,
-    (state: State) => state.focusedSupplier
-);
 
 // eslint-disable-next-line no-underscore-dangle
 const _supplierReducer: ActionReducer<State, Action> = createReducer(
@@ -41,34 +35,17 @@ const _supplierReducer: ActionReducer<State, Action> = createReducer(
       ...prevState,
       loading: true
     })),
-    on(SupplierActions.allSuppliersLoaded, (prevState: State, {suppliers}) => ({
+    on(SupplierActions.allSuppliersLoaded, (prevState: State, { suppliers }) => ({
       ...prevState,
-      loading: false,
       suppliers
     })),
-    on(
-        SupplierActions.showEditSupplier,
-        SupplierActions.showDeleteSupplier,
-        (prevState: State, {focusedSupplier}) => ({
-          ...prevState,
-          focusedSupplier
-        })),
     on(
         SupplierActions.editSupplier,
         SupplierActions.deleteSupplier,
         (prevState: State) => ({
           ...prevState,
           loading: true
-        })),
-    on(
-        SupplierActions.editSupplierSuccess,
-        SupplierActions.deleteSupplierSuccess,
-        (prevState: State, {suppliers}) => ({
-          ...prevState,
-          loading: false,
-          suppliers
-        })
-    )
+        }))
 );
 
 export const supplierReducer = (state: State | undefined, action: Action) => _supplierReducer(state, action);
