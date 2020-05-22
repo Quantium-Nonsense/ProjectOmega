@@ -19,6 +19,10 @@ const initialState: State = {
 };
 
 export const selectCompanyState = createFeatureSelector<fromApp.State, State>('company');
+export const selectAllItems = createSelector(
+    selectCompanyState,
+    (state: State) => state.companyItems
+);
 export const selectClickedCompany = createSelector(
     selectCompanyState,
     (state: State) => state.company
@@ -26,9 +30,8 @@ export const selectClickedCompany = createSelector(
 
 const _companyReducer = createReducer(
   initialState,
-  on(CompanyActions.companySelected, (prevState, {selectedCompany}) => ({
-    ...prevState,
-    company: selectedCompany
+  on(CompanyActions.companySelected, prevState => ({
+    ...prevState
   })),
   on(CompanyActions.loadItemsOfCompany, (prevState, {company}) => ({
     ...prevState,
@@ -52,7 +55,10 @@ const _companyReducer = createReducer(
     companyItems: undefined
   })),
   on(CompanyActions.cleanup, prevState => ({
-    ...initialState
+    ...initialState,
+    company: undefined,
+    errorMessage: undefined,
+    companyItems: undefined
   }))
 );
 

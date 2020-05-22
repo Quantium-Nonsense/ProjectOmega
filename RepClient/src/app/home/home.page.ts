@@ -36,7 +36,7 @@ export class HomePage {
 
   loadCompaniesItems(name: string): void {
     this.subscriptions.add(this.store.pipe(select(selectGetCompanyFromName, { name })).subscribe(companies => {
-      this.store.dispatch(CompanyActions.companySelected({ selectedCompany: companies[0] }));
+      this.store.dispatch(CompanyActions.loadItemsOfCompany({ company: companies[0] }));
     }));
   }
 }

@@ -32,11 +32,11 @@ export const selectItemsByCompany: MemoizedSelector<fromApp.State, ItemsByCompan
 
     for (const company of compNames) {
       const companyInOrder: OrderItemModel = orderState.items
-        ? orderState.items.find(i => i.companyId === company)
+        ? orderState.items.find(i => i.supplier.companyName === company)
         : null;
       if (companyInOrder) { // If there are items in order from this company
         // Get the items to add that belong to current company and exist in order
-        const itemsToAdd: OrderItemModel[] = [...orderState.items.filter(item => item.companyId.includes(company))];
+        const itemsToAdd: OrderItemModel[] = [...orderState.items.filter(item => item.supplier.companyName.includes(company))];
         if (itemsByCompany) { // if the object array is not empty
           // find the object that belongs to the company in query
           const toAdd: ItemsByCompanyModel = itemsByCompany.find(ibc => ibc.companyName.includes(company));
