@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table (name = "clients")
 @Builder
-public class Client implements Serializable{
+public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
