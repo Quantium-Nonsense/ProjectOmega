@@ -19,6 +19,6 @@ public class EmailConstants {
     public static final String PASS_CHANGE_LINK = "here";
 
     public static String linkBuilder(String ip, String endpoint, String text) {
-        return "<a href=\"http://" + ip + "/api/" + endpoint + "\">" + text + " </a>" + "\n";
+        return "<a href=\"http://" + ip + endpoint + "\">" + text + " </a>" + "\n";
     }
 }

@@ -84,7 +84,7 @@ public class JwtAuthenticationController {
         String emailContent = EmailConstants.WELCOME
                 + EmailConstants.PASSWORD + user.getPassword() + "\n"
                 + EmailConstants.linkBuilder(EmailConstants.BACKEND_ENDPOINT,
-                    "confirmRegistration?token=" + verificationToken,
+                    "/api/confirmRegistration?token=" + verificationToken,
                     EmailConstants.CONFIRMATION + user.getEmail());
 
         EmailSender.send(user.getEmail(), EmailConstants.REG_CONFIRM, emailContent);
