@@ -30,7 +30,7 @@ export const selectClickedCompany = createSelector(
 
 const _companyReducer = createReducer(
   initialState,
-  on(CompanyActions.companySelected,prevState => ({
+  on(CompanyActions.companySelected, prevState => ({
     ...prevState
   })),
   on(CompanyActions.loadItemsOfCompany, (prevState, {company}) => ({

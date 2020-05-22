@@ -26,9 +26,8 @@ export class OrderPage implements OnInit {
   }
 
   ionViewWillEnter(): void {
-    this.subscription.add(this.store.select(selectItemsByCompany).subscribe(cItems => {
-      return this.companyWithItemsInOrder = cItems;
-    }));
+    this.subscription.add(this.store.select(selectItemsByCompany).subscribe(cItems =>
+      this.companyWithItemsInOrder = cItems));
     this.subscription.add(this.store.select(selectAllCompanies).subscribe(companies => this.companies = companies));
   }
 
