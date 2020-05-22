@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { selectCompany } from '../company/store/company.reducer';
 import { selectAllCompaniesNames } from '../home/store/home.reducer';
-import * as fromHome from '../home/store/home.reducer';
-import { SupplierModel } from '../shared/model/home/supplier.model';
 import { ItemsByCompanyModel } from '../shared/model/order/items-by-company.model';
 import * as CompanyActions from './../company/store/company.actions';
 import * as fromApp from './../reducers/index';
@@ -22,7 +19,7 @@ export class OrderPage implements OnInit {
   private allCompaniesNames: string[];
 
   constructor(
-    private store: Store<fromApp.State>
+      private store: Store<fromApp.State>
   ) {
     this.subscription = new Subscription();
   }
@@ -48,7 +45,7 @@ export class OrderPage implements OnInit {
     this.store.dispatch(CompanyActions.showCompaniesBottomSheet({
       data: {
         action: (selectedCompany: string) => {
-          this.store.dispatch(CompanyActions.companySelected({selectedCompany}));
+          this.store.dispatch(CompanyActions.companySelected({ selectedCompany: null }));
         },
         listLabels: [
           ...this.allCompaniesNames

@@ -82,7 +82,7 @@ export class AuthEffects {
   }
 
   attemptLogin(email: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(this.apiEndPoints.login, {
+    return this.http.post<{ token: string }>(this.apiEndPoints.loginEndPoint, {
       email,
       password
     });

@@ -75,6 +75,10 @@ export class ApiEndpointCreatorService {
     return `${ this.endPoint }/product/delete/${ productId }`;
   }
 
+  getAllProductsForCompany(id: number): string {
+    return `${ this.endPoint }/product/supplier/${ id }`;
+  }
+
   /**
    * returns the login end point
    */

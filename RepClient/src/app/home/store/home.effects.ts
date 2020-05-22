@@ -45,7 +45,7 @@ export class HomeEffects {
   }
 
   getAllCompanies(): Observable<SupplierModel[]> {
-    return this.http.get<SupplierModel[]>(this.endPoints.allCompanies, {
+    return this.http.get<SupplierModel[]>(this.endPoints.allSuppliers, {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'

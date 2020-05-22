@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ItemModel } from '../shared/model/company-items/item.model';
+import { SupplierModel } from '../shared/model/home/supplier.model';
 import { OrderItemModel } from '../shared/model/order/order-item.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import * as fromApp from './../reducers/index';
 import * as CompanyActions from './store/company.actions';
 import * as fromCompany from './store/company.reducer';
+import { selectClickedCompany } from './store/company.reducer';
 
 @Component({
   selector: 'app-company',
@@ -26,7 +28,7 @@ export class CompanyPage implements OnInit {
   /**
    * Company name to display at top of nav bar
    */
-  currentCompany = '';
+  currentCompany: SupplierModel = null;
 
   /**
    * Hold the orders to display quantity
@@ -37,44 +39,39 @@ export class CompanyPage implements OnInit {
   private subscription: Subscription = new Subscription();
 
   constructor(
-    public store: Store<fromApp.State>
+      public store: Store<fromApp.State>
   ) {
 
   }
 
   ngOnInit(): void {
+    //
   }
 
   ionViewWillEnter(): void {
     this.subscription.add(
-      this.store.select('company')
-        .pipe(
-          // Force to run synchronously as company is already loaded from dashboard
-          take(1)
+        this.store.pipe(select(selectClickedCompany), take(1)).subscribe(
+            company => this.store.dispatch(CompanyActions.loadItemsOfCompany({ company }))
         )
-        .subscribe(s => {
-          this.currentCompany = s.company;
-          this.store.dispatch(CompanyActions.loadItemsOfCompany({company: s.company}));
+    );
+
+    this.subscription.add(
+        this.store.select('order').subscribe(orderState => {
+          this.order = orderState.items;
         })
     );
 
     this.subscription.add(
-      this.store.select('order').subscribe(orderState => {
-        this.order = orderState.items;
-      })
-    );
-
-    this.subscription.add(
-      this.state$.subscribe(
-        (currentState: fromCompany.State) => {
-          this.items = currentState.companyItems;
-          if (this.currentCompany !== currentState.company) {
-            this.currentCompany = currentState.company;
-            this.store.dispatch(CompanyActions.companyChanged({newCompany: currentState.company}));
-            this.store.dispatch(CompanyActions.loadItemsOfCompany({company: currentState.company}));
-          }
-        }
-      )
+        this.state$.subscribe(
+            (currentState: fromCompany.State) => {
+              this.items = currentState.companyItems;
+              if (this.currentCompany?.companyName !== currentState.company?.companyName) {
+                this.currentCompany = currentState.company;
+                this.store.dispatch(CompanyActions.companyChanged({ newCompany: currentState.company }));
+                this.store.dispatch(CompanyActions.loadItemsOfCompany({ company: currentState.company }));
+              }
+            }
+        )
     );
   }
 
@@ -88,7 +85,7 @@ export class CompanyPage implements OnInit {
    * @param sortBy How to sort the list
    */
   sortBy(sortBy: SortOptionsEnum): void {
-    this.store.dispatch(CompanyActions.sortItems({by: sortBy, items: this.items}));
+    this.store.dispatch(CompanyActions.sortItems({ by: sortBy, items: this.items }));
   }
 
   /**
@@ -105,8 +102,8 @@ export class CompanyPage implements OnInit {
     }
     this.items = [...this.items.filter(item => {
       if (
-        item.description.toLocaleUpperCase().includes(value.toLocaleUpperCase()) ||
-        item.name.toLocaleUpperCase().includes(value.toLocaleUpperCase())) {
+          item.description.toLocaleUpperCase().includes(value.toLocaleUpperCase()) ||
+          item.name.toLocaleUpperCase().includes(value.toLocaleUpperCase())) {
         return item;
       }
     })];
@@ -123,15 +120,15 @@ export class CompanyPage implements OnInit {
   quickShowAllCompanies(): void {
     this.store.select('home').pipe(take(1)).subscribe(lastState => {
       this.store.dispatch(CompanyActions.showCompaniesBottomSheet({
-          data: {
-            action: (selectedCompany: string) => {
-              this.store.dispatch(CompanyActions.companySelected({selectedCompany}));
-            },
-            listLabels: [
-              ...lastState.companies.map(c => c.companyName)
-            ]
+            data: {
+              action: (selectedCompany: string) => {
+                this.store.dispatch(CompanyActions.companySelected({ selectedCompany: null }));
+              },
+              listLabels: [
+                ...lastState.companies.map(c => c.companyName)
+              ]
+            }
           }
-        }
       ));
     });
   }
