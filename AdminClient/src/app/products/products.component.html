@@ -1,3 +1,4 @@
+<script src="../supplier/supplier.component.ts"></script>
 <div fxLayout="row" fxLayoutAlign="space-between" xmlns="">
   <div>
     <h2>Products</h2>
@@ -9,13 +10,14 @@
   </div>
 </div>
 <div fxLayout="row" fxLayoutAlign="center">
+  <app-table-filter [action]="handleFilter"
+                    [dataSource]="productTable" class="w-100">
+
+  </app-table-filter>
+</div>
+<div fxLayout="row" fxLayoutAlign="center">
   <div class="mat-elevation-z8 w-100">
-    <table aria-label="Elements" class="full-width-table" mat-table matSort>
-      <!-- Supplier Column -->
-      <ng-container matColumnDef="supplier">
-        <th *matHeaderCellDef class="pr-3" mat-header-cell mat-sort-header>Supplier</th>
-        <td *matCellDef="let row" class="pr-3" mat-cell>{{row.supplier}}</td>
-      </ng-container>
+    <table [dataSource]="productTable" aria-label="Elements" class="w-100" mat-table matSort>
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
@@ -35,13 +37,15 @@
         <td *matCellDef="let row" class="px-3" mat-cell>€ {{row.price.toFixed(2)}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="supplier">
+        <th *matHeaderCellDef class="pr-3" mat-header-cell mat-sort-header>Supplier</th>
+        <td *matCellDef="let row" class="pr-3" mat-cell>{{row.supplier.companyName}}</td>
+      </ng-container>
+
       <ng-container matColumnDef="actions">
         <th *matHeaderCellDef class="px-3" mat-header-cell>Actions</th>
         <td *matCellDef="let row" class="pl-3" mat-cell>
           <!-- TODO permissions -->
-          <button (click)="handleReadDetails(row)" aria-label="Details" color="primary" mat-icon-button>
-            <mat-icon>visibility</mat-icon>
-          </button>
           <button (click)="handleEditDetails(row)" aria-label="Edit Product" color="primary" mat-icon-button>
             <mat-icon>edit</mat-icon>
           </button>
@@ -51,15 +55,20 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="id">
+        <th *matHeaderCellDef hidden class="pr-3" mat-header-cell mat-sort-header>Supplier</th>
+        <td *matCellDef="let row" hidden class="pr-3" mat-cell>{{row.id}}</td>
+      </ng-container>
+
       <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
     </table>
 
-    <mat-paginator #paginator
-                   [length]="dataSource?.data.length"
-                   [pageIndex]="0"
-                   [pageSizeOptions]="[20, 50, 100, 250]"
-                   [pageSize]="20">
+    <mat-paginator [length]="100"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   [pageSize]="10"
+                   showFirstLastButtons
+    >
     </mat-paginator>
   </div>
 </div>

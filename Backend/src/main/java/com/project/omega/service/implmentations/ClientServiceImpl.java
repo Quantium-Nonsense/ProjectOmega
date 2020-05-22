@@ -24,6 +24,9 @@ public class ClientServiceImpl implements ClientService {
     private MessageSource messages;
 
     public Client createClient(Client client) {
+        if(client.getNotes().isEmpty() || client.getNotes() == null) {
+            client.setNotes("");
+        }
         clientRepository.save(client);
         return client;
     }

@@ -8,6 +8,7 @@ import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.ProductNotFoundException;
 import com.project.omega.repository.ProductRepository;
 import com.project.omega.repository.SupplierRepository;
+import com.project.omega.service.interfaces.OrderProductService;
 import com.project.omega.service.interfaces.ProductService;
 import com.project.omega.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    OrderProductService orderProductService;
 
     @Autowired
     SupplierService supplierService;
@@ -109,6 +113,7 @@ public class ProductServiceImpl implements ProductService {
         if (!product.isPresent()) {
             throw new ProductNotFoundException(messages.getMessage("message.productNotFound", null, null));
         }
+        orderProductService.deleteByProductId(product.get());
         productRepository.deleteById(id);
         return product.get();
     }
