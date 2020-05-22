@@ -26,9 +26,8 @@ export const selectAllCompaniesNames = createSelector(
 );
 export const selectGetCompanyFromName = createSelector(
     selectHome,
-    (state: State, props: { name: string }) => {
-      return state.companies.filter(c => c.companyName === props.name);
-    }
+    (state: State, props: { name: string }) =>
+      state.companies.filter(c => c.companyName === props.name)
 );
 
 const _homeReducer = createReducer<State>(
