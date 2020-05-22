@@ -38,16 +38,11 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     MessageSource messages;
 
-    public Product createProduct(ProductDTO productDTO) throws SupplierNotFoundException {
-        if (productDTO.getSupplier() == null) {
+    public Product createProduct(Product product) throws SupplierNotFoundException {
+        if (product.getSupplier() == null) {
             throw new SupplierNotFoundException("Supplier cannot be empty");
         }
-        Product product = new Product.ProductBuilder()
-                .setName(productDTO.getName())
-                .setDescription(productDTO.getDescription())
-                .setPrice(productDTO.getPrice())
-                .setSupplier(productDTO.getSupplier())
-                .build();
+
         productRepository.save(product);
         return product;
     }

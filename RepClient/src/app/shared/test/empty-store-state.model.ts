@@ -17,6 +17,7 @@ export const mockEmptyState: fromApp.State = {
     loading: false
   },
   home: {
+    errorMessage: undefined,
     companies: undefined,
     loading: false
   },

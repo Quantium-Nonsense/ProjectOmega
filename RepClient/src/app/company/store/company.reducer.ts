@@ -1,10 +1,11 @@
-import { Action, createReducer, on } from '@ngrx/store';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import * as fromApp from '../../reducers/index';
 import { ItemModel } from '../../shared/model/company-items/item.model';
+import { SupplierModel } from '../../shared/model/home/supplier.model';
 import * as CompanyActions from './company.actions.js';
 
 export interface State {
-  company: string;
+  company: SupplierModel;
   errorMessage: string;
   loading: boolean;
   companyItems: ItemModel[];
@@ -17,13 +18,20 @@ const initialState: State = {
   loading: false
 };
 
-export const selectCompany = (state: fromApp.State) => state.company;
+export const selectCompanyState = createFeatureSelector<fromApp.State, State>('company');
+export const selectAllItems = createSelector(
+    selectCompanyState,
+    (state: State) => state.companyItems
+);
+export const selectClickedCompany = createSelector(
+    selectCompanyState,
+    (state: State) => state.company
+);
 
 const _companyReducer = createReducer(
   initialState,
-  on(CompanyActions.companySelected, (prevState, {selectedCompany}) => ({
-    ...prevState,
-    company: selectedCompany
+  on(CompanyActions.companySelected, prevState => ({
+    ...prevState
   })),
   on(CompanyActions.loadItemsOfCompany, (prevState, {company}) => ({
     ...prevState,
@@ -47,7 +55,10 @@ const _companyReducer = createReducer(
     companyItems: undefined
   })),
   on(CompanyActions.cleanup, prevState => ({
-    ...initialState
+    ...initialState,
+    company: undefined,
+    errorMessage: undefined,
+    companyItems: undefined
   }))
 );
 

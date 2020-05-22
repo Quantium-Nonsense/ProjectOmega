@@ -13,7 +13,7 @@ import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
 import { ItemModel } from '../shared/model/company-items/item.model';
-import { CompanyModel } from '../shared/model/home/company.model';
+import { SupplierModel } from '../shared/model/home/supplier.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import { SharedModule } from '../shared/shared.module';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
@@ -29,10 +29,10 @@ const createMockItems = (): ItemModel[] => [
   new ItemModel('2', 'B', 'Mock item B', 2, 'Mock Company B'),
   new ItemModel('3', 'C', 'Mock item C', 3, 'Mock Company C')
 ];
-const createMockCompanies = (): CompanyModel[] => [
-  new CompanyModel('Company 1', 'A', 'Mock Company A'),
-  new CompanyModel('Company 2', 'B', 'Mock Company B'),
-  new CompanyModel('Company 3', 'C', 'Mock Company C')
+const createMockCompanies = (): SupplierModel[] => [
+  new SupplierModel('Company 1', 'A', 'Mock Company A'),
+  new SupplierModel('Company 2', 'B', 'Mock Company B'),
+  new SupplierModel('Company 3', 'C', 'Mock Company C')
 ];
 
 describe('CompanyPage', () => {
