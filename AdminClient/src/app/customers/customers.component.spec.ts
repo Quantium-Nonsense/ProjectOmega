@@ -134,7 +134,7 @@ describe('CustomersComponent', () => {
   });
 
   it('should load all customers when landing on dashboard', () => {
-    actions$ = of(CustomerActions.beginLoadingCustomers());
+    actions$ = of(CustomerActions.getAllCustomers());
     const dummyCustomers = createDummyCustomers();
     spyOn(effects, 'createDummyCustomers').and.callThrough().and.returnValue(dummyCustomers);
     effects.loadAllCustomers$.subscribe(action => {

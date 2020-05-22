@@ -1,64 +1,161 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Supplier, SuppliersDataSource } from '../../../data/supplier/supplier-datasource';
+import { select, Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { ProductModel } from '../../models/products/products.model';
+import * as fromApp from '../../reducers/index';
+import { SupplierModel } from '../../shared/model/supplier/supplier.model';
+import { selectAllSuppliers } from '../../supplier/store/suppliers.reducer';
+import { beginProgressBar } from '../../toolbar/store/toolbar.actions';
+import { selectIsProgressBarVisible } from '../../toolbar/store/toolbar.reducer';
+import { createNewProduct, editNewProduct } from '../store/products.actions';
 
 @Component({
   selector: 'app-details-dialog',
   templateUrl: './product-details-dialog.component.html',
   styleUrls: ['./product-details-dialog.component.scss']
 })
-export class ProductDetailsDialogComponent implements OnInit {
+export class ProductDetailsDialogComponent implements OnInit, OnDestroy {
   /**
    * The form
    */
-  protected productItemForm: FormGroup;
+  productItemForm: FormGroup;
+  suppliers: SupplierModel[];
+  isLoading: boolean;
 
-  private suppliers: Supplier[];
+  private sub: Subscription;
 
   constructor(
-    public dialogRef: MatDialogRef<ProductDetailsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: { product: ProductModel, title: string, editable: boolean },
+      public dialogRef: MatDialogRef<ProductDetailsDialogComponent>,
+      private fb: FormBuilder,
+      private store$: Store<fromApp.State>,
+      @Inject(MAT_DIALOG_DATA) public data: { product: ProductModel }
   ) {
-    this.suppliers = SuppliersDataSource.getInstance().getAll();
+    this.sub = new Subscription();
   }
 
-  protected get supplierHasError(): boolean {
+
+  ngOnInit(): void {
+    this.productItemForm = this.formInitialization();
+    this.sub.add(
+        this.store$.pipe(select(selectIsProgressBarVisible)).subscribe(isLoading => {
+          this.isLoading = isLoading;
+          if (isLoading) {
+            this.productItemForm.disable();
+          } else {
+            this.productItemForm.enable();
+          }
+        })
+    );
+    this.sub.add(
+        this.store$.pipe(select(selectAllSuppliers)).subscribe(sup => this.suppliers = sup)
+    );
+    if (this.data.product) {
+      const prod = this.data.product;
+      this.id.setValue(prod.id);
+      this.description.setValue(prod.description);
+      this.name.setValue(prod.name);
+      this.price.setValue(prod.price);
+      this.supplier.setValue(prod.supplier);
+    }
+  }
+
+  compareFun(obj1, obj2) {
+    return obj1.id === obj2.id;
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  isFormValid(): boolean {
+    return this.productItemForm.valid;
+  }
+
+  private onSaveClick() {
+    this.store$.dispatch(beginProgressBar());
+    const newProduct = new ProductModel(
+        this.data.product ? this.data.product.id : null,
+        this.productItemForm.get('name').value,
+        this.productItemForm.get('description').value,
+        Number(this.price.value),
+        this.supplier.value
+    );
+
+    if (this.data.product) {
+      this.store$.dispatch(editNewProduct({ product: newProduct }));
+    } else {
+      this.store$.dispatch(createNewProduct({ product: newProduct }));
+    }
+  }
+
+  private formInitialization = (): FormGroup => {
+    return this.fb.group({
+      id: [''],
+      name: ['', [Validators.required]],
+      description: [''],
+      price: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      supplier: ['', [Validators.required]]
+    });
+  };
+
+  get id(): AbstractControl {
+    return this.productItemForm.get('id');
+  }
+
+  get name(): AbstractControl {
+    return this.productItemForm.get('name');
+  }
+
+  get description(): AbstractControl {
+    return this.productItemForm.get('description');
+  }
+
+  get price(): AbstractControl {
+    return this.productItemForm.get('price');
+  }
+
+  get supplier(): AbstractControl {
+    return this.productItemForm.get('supplier');
+  }
+
+
+  get supplierHasError(): boolean {
     return this.productItemForm.get('supplier').invalid;
   }
 
-  protected get supplierErrorMessage(): string {
+  get supplierErrorMessage(): string {
     const supplierCtrl = this.productItemForm.get('supplier');
 
     return supplierCtrl.hasError('required') ? 'Supplier is required!' : '';
   }
 
-  protected get nameHasError(): boolean {
+  get nameHasError(): boolean {
     return this.productItemForm.get('name').invalid;
   }
 
-  protected get nameErrorMessage(): string {
+  get nameErrorMessage(): string {
     const nameCtrl = this.productItemForm.get('name');
 
     return nameCtrl.hasError('required') ? 'Product name is required!' : '';
   }
 
-  protected get descriptionHasError(): boolean {
+  get descriptionHasError(): boolean {
     return this.productItemForm.get('description').invalid;
   }
 
-  protected get descriptionErrorMessage(): string {
+  get descriptionErrorMessage(): string {
     const descriptionCtrl = this.productItemForm.get('description');
 
     return descriptionCtrl.hasError('required') ? 'Description is required!' : '';
   }
 
-  protected get priceHasError(): boolean {
+  get priceHasError(): boolean {
     return this.productItemForm.get('price').invalid;
   }
 
-  protected get priceErrorMessage(): string {
+  get priceErrorMessage(): string {
     const priceCtrl = this.productItemForm.get('price');
 
     if (priceCtrl.hasError('required')) {
@@ -74,61 +171,4 @@ export class ProductDetailsDialogComponent implements OnInit {
     }
     return '';
   }
-
-  ngOnInit(): void {
-    this.productItemForm = this.formInitialization();
-  }
-
-  protected isFormValid(): boolean {
-    return this.productItemForm.valid;
-  }
-
-  private onSaveClick() {
-    const newProduct = new ProductModel(
-      this.data.product ? this.data.product.id : null,
-      this.productItemForm.get('supplier').value.name,
-      this.productItemForm.get('supplier').value.id,
-      this.productItemForm.get('name').value,
-      this.productItemForm.get('description').value,
-      parseFloat(this.productItemForm.get('price').value)
-    );
-
-    this.dialogRef.close(newProduct);
-  }
-
-  private formInitialization = (): FormGroup => {
-    const editable = this.data.editable;
-    const initialProduct = this.data.product;
-
-    return new FormGroup({
-      supplier: new FormControl(
-        {
-          value: initialProduct ? this.suppliers.find((element) => element.id === initialProduct.supplierId) : '',
-          disabled: !editable,
-        },
-        [Validators.required],
-      ),
-      name: new FormControl(
-        {
-          value: initialProduct ? initialProduct.name : '',
-          disabled: !editable,
-        },
-        [Validators.required],
-      ),
-      description: new FormControl(
-        {
-          value: initialProduct ? initialProduct.description : '',
-          disabled: !editable,
-        },
-        [Validators.required],
-      ),
-      price: new FormControl(
-        {
-          value: initialProduct ? initialProduct.price.toFixed(2) : '',
-          disabled: !editable
-        },
-        [Validators.required, Validators.min(0), Validators.pattern(/^\d+(\.\d{2})?$/)],
-      )
-    });
-  };
 }

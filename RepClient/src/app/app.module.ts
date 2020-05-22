@@ -69,7 +69,8 @@ export const getToken = () => {
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ]
 })
-export class AppModule {}
+export class AppModule {
+}

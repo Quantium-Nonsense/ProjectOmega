@@ -1,6 +1,6 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PopupDialogDataModel } from '../../model/popup-dialog-data.model';
+import {Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {PopupDialogDataModel} from '../../model/popup-dialog-data.model';
 
 @Component({
   selector: 'app-confirmation-dialog',

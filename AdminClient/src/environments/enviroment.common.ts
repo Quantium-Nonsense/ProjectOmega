@@ -4,5 +4,6 @@ export const commonEnvironment = {
   CONFIRMATION_TEXT: 'Confirm',
   CANCELLATION_TEXT: 'Cancel',
   DELETE_CUSTOMER_CONFIRM_TEXT: 'Are you sure you want to delete this customer?',
-  DELETE_CUSTOMER_TITLE: 'Delete Customer'
+  DELETE_CUSTOMER_TITLE: 'Delete Customer',
+  apiRoot: () => 'http://localhost:8080/api'
 };
