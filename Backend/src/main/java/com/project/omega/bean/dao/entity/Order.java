@@ -36,8 +36,7 @@ public class Order implements Serializable {
     private Long userId;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private String status;
 
     @Transient
     public Double getTotalOrderPrice() {
@@ -49,7 +48,7 @@ public class Order implements Serializable {
         return sum;
     }
 
-    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, Long userId, OrderStatus status) {
+    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, Long userId, String status) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.orderProducts = orderProducts;
@@ -82,11 +81,11 @@ public class Order implements Serializable {
     public void setOrderProducts(List<OrderProduct> orderProducts) {
         this.orderProducts = orderProducts;
     }
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
