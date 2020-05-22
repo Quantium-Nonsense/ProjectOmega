@@ -7,7 +7,9 @@
     <div fxLayout="row">
       <mat-form-field fxFlexFill *ngIf="isEdit">
         <mat-label>Order Status</mat-label>
-        <input matInput formControlName="status">
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let s of status" [value]="s">{{s}}</mat-option>
+        </mat-select>
         <mat-error *ngIf="statusHasError" id="statusError">{{statusErrorMessage}}</mat-error>
       </mat-form-field>
     </div>

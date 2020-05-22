@@ -5,6 +5,16 @@ export const getAllOrders = createAction(
     '[Orders - Component] Get all orders'
 );
 
+export const updateOrderFailed = createAction(
+    '[Orders - Effects] Update Order failed',
+    props<{ error: string }>()
+);
+
+export const updateOrder = createAction(
+    '[Orders - Component] Edit order',
+    props<{ order: OrderModel }>()
+);
+
 export const getAllOrdersFailed = createAction(
     '[Orders - Effects] Failed to get all orders',
     props<{ error: string }>()

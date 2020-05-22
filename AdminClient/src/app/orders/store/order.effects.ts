@@ -13,7 +13,9 @@ import {
   createNewOrder,
   createNewOrderFailed,
   getAllOrders,
-  getAllOrdersFailed
+  getAllOrdersFailed,
+  updateOrder,
+  updateOrderFailed
 } from './order.actions';
 
 @Injectable()
@@ -21,12 +23,12 @@ export class OrderEffects {
 
   createNewOrderFailed$ = createEffect(() => this.actions$.pipe(
       ofType(createNewOrderFailed),
-      map((action: Action & {error: string}) => {
+      map((action: Action & { error: string }) => {
         this.snackBar.open(action.error, null, {
           duration: 3000
-        })
+        });
       })
-  ), {dispatch: false});
+  ), { dispatch: false });
 
   createNewOrder$ = createEffect(() => this.actions$.pipe(
       ofType(createNewOrder),
@@ -44,6 +46,36 @@ export class OrderEffects {
               return [
                 stopProgressBar(),
                 createNewOrderFailed({ error: error.message })
+              ];
+            })
+        );
+      })
+  ));
+
+  updateOrderFailed$ = createEffect(() => this.actions$.pipe(
+      ofType(updateOrderFailed),
+      map((action: Action & { error: string }) => {
+        this.snackBar.open(action.error, null, {
+          duration: 3000
+        });
+      })
+      ),
+      { dispatch: false });
+
+  updateOrder$ = createEffect(() => this.actions$.pipe(
+      ofType(updateOrder),
+      switchMap((action: Action & { order: OrderModel }) => {
+        return this.httpUpdateOrder(action.order).pipe(
+            switchMap((order: OrderModel) => {
+              return [
+                stopProgressBar(),
+                getAllOrders()
+              ];
+            }),
+            catchError((error: Error) => {
+              return [
+                stopProgressBar(),
+                updateOrderFailed({ error: error.message })
               ];
             })
         );
@@ -74,7 +106,7 @@ export class OrderEffects {
             catchError((error: Error) => {
               return [
                 getAllOrdersFailed({ error: error.message }),
-                stopProgressBar(),
+                stopProgressBar()
               ];
             })
         );
@@ -96,6 +128,12 @@ export class OrderEffects {
       private endPoints: ApiPathService,
       private snackBar: MatSnackBar
   ) {
+  }
+
+  httpUpdateOrder(order: OrderModel): Observable<OrderModel> {
+    return this.http.put<OrderModel>(this.endPoints.getUpdateOrderEndPoint(order.id), {
+      ...order
+    });
   }
 
   httpCreateNewOrder(order: OrderModel): Observable<OrderModel> {
