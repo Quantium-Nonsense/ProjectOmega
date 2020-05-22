@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 import { ProductModel } from '../models/products/products.model';
 import * as fromApp from '../reducers/index';
 import { beginProgressBar } from '../toolbar/store/toolbar.actions';
-import { deleteProduct, loadAllProducts, showProductForm } from './store/products.actions';
+import { deleteProduct, getAllProducts, showProductForm } from './store/products.actions';
 import { selectAllProducts } from './store/products.reducer';
 
 @Component({
@@ -34,7 +34,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store$.dispatch(beginProgressBar());
-    this.store$.dispatch(loadAllProducts());
+    this.store$.dispatch(getAllProducts());
 
     this.store$.pipe(select(selectAllProducts)).subscribe((products: ProductModel[]) => {
       this.productTable.data = products;

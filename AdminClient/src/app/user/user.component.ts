@@ -32,7 +32,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(ToolbarActions.beginProgressBar());
-    this.store.dispatch(UserActions.beginLoadingUserPage());
+    this.store.dispatch(UserActions.getAllUsers());
     this.subscription.add(
         this.store.select(fromUser.selectUsers).subscribe((users: UserModel[]) => {
           if (!users) {

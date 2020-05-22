@@ -11,22 +11,13 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "order")
 public class OrderProductPK implements Serializable {
 
-    @ManyToOne(optional = false, fetch= FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
-
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product product;
-
+    private Product productPk;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
-
-    public Order getOrder() {
-        return order;
-    }
 
     public Client getClient() {
         return client;
@@ -36,20 +27,12 @@ public class OrderProductPK implements Serializable {
         this.client = client;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public Product getProductPk() {
+        return productPk;
     }
 
-    public Object setOrder() {
-        return new Order();
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProductPk(Product productPk) {
+        this.productPk = productPk;
     }
 
     public Object setProduct() {
@@ -57,47 +40,16 @@ public class OrderProductPK implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        OrderProductPK other = (OrderProductPK) obj;
-        if (order == null) {
-            if (other.order != null) {
-                return false;
-            }
-        } else if (!order.equals(other.order)) {
-            return false;
-        }
-
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderProductPK that = (OrderProductPK) o;
+        return Objects.equals(productPk, that.productPk) &&
+                Objects.equals(client, that.client);
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-
-        result = prime * result + ((order.getId() == null)
-                ? 0
-                : order
-                .getId()
-                .hashCode());
-        result = prime * result + ((product.getId() == null)
-                ? 0
-                : product
-                .getId()
-                .hashCode());
-        result = prime * result + ((client.getId() == null)
-                ? 0
-                : client.getId().hashCode());
-
-        return result;
+        return Objects.hash(productPk, client);
     }
 }
