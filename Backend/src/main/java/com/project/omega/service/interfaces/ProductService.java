@@ -10,7 +10,7 @@ import java.util.List;
 
 public  interface ProductService {
 
-    Product createProduct(ProductDTO product) throws SupplierNotFoundException;
+    Product createProduct(Product product) throws SupplierNotFoundException;
     List<Product> getAllProducts() throws NoRecordsFoundException;
     List<Product> getProductsAbovePrice(int price) throws NoRecordsFoundException;
     List<Product> getProductsBelowPrice(int price) throws NoRecordsFoundException;

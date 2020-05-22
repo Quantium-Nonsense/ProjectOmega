@@ -1,4 +1,6 @@
+import { SupplierModel } from '../../../model/home/supplier.model';
+
 export interface ListDisplayDataModel {
-  listLabels: string[];
-  action?(data?: string): void;
+  companies: SupplierModel[];
+  action?(data?: SupplierModel): void;
 }

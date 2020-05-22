@@ -13,14 +13,14 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
-  AssertionVariable, BooleanBranchDescriptor,
   PreparedFunction,
-  QuantiumTesting, SingleStage,
+  QuantiumTesting,
+  SingleStage,
   Stage,
   StringDefinition,
-  StringDefinitionValue, VariableDescriptor
+  StringDefinitionValue,
+  TestValidatorActions
 } from 'quantium_testing';
-import { TestValidatorActions } from 'quantium_testing/lib/QuantiumTester/test-validator/test-validator';
 import { Observable, of, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import * as fromApp from '../reducers/index';
@@ -143,45 +143,9 @@ describe('AuthPage', () => {
       q.expose(text, 'snackBarActualMessage');
     }, ['toastMessage']));
     q.setValidationRules(TestValidatorActions.MATCH_EXACTLY);
-    await q.withAsyncAssertExposed('snackBarActualMessage', 'toastMessage', true, 20);
+    await q.assertExposedAsync('snackBarActualMessage', 'toastMessage', true, 20);
     expect(q.failedAssertions.length).toBe(0);
   });
-
-  it('Should ensure log in successful', async(() => {
-    component.ngOnInit();
-    component.ionViewWillEnter();
-
-    const q = new QuantiumTesting(1);
-    q.inferAndCreateInner(createMockUser(), 'user');
-    q.setStaging(new SingleStage('setupSpies', user => {
-      // Override functions in a way to indicate success
-      spyOn(effects, 'attemptLogin').and.callThrough().and.returnValue(of({token: ''}));
-      spyOn(effects, 'decodeToken').and.callThrough().and.returnValue(user);
-    }, null));
-    q.setStaging(new Stage(
-        'output',
-        user => {
-          actions$ = of(AuthActions.loginAttempt({email: user.email, password: user.password}));
-
-          mockStore.refreshState();
-          fixture.detectChanges();
-          effects.loginAttempt$.subscribe((action: Action & { user: UserModel }) => {
-            // Set up to fire success
-            q.expose(action, 'loginObs');
-          });
-        }, ['user'], 1
-    ));
-    q.assertExposed(
-        'loginObs',
-        new PreparedFunction(
-            AuthActions.loginSuccessful,
-            ['user'],
-            null),
-        true,
-        20
-    );
-    expect(q.failedAssertions.length).toBe(0);
-  }));
 
   it('Should handle failed log in', async(() => {
     component.ngOnInit();
@@ -253,39 +217,36 @@ describe('AuthPage', () => {
     expect(mockRouter.navigateByUrl).toHaveBeenCalled();
   });
 
-  it('should dispatch spinner action and stop spinner action according to loading', () => {
-  /*  const qTester = new QuantiumTesting();
-    const startSpinnerSpy = spyOn(component, 'startSpinner').and.callThrough();
-    const stopSpinnerSpy = spyOn(component, 'startSpinner').and.callThrough();
-
-    qTester.setStaging(
-        new StageSingle('init', () => {
-          component.ngOnInit();
-          component.ionViewWillEnter();
-          startSpinnerSpy.calls.reset();
-          stopSpinnerSpy.calls.reset();
-        }, null)
-    );
-    qTester.setAssertionVariable(new AssertionVariable(
-        'isLoading',
-        new PreparedFunction(loading => {
-          mockStore.overrideSelector(fromAuth.selectIsLoading, loading);
-        }, ['loading'])
-    ));
-    qTester.setDescriptorForVariable(
-        'isLoading',
-        new VariableDescriptor(
-            new BooleanBranchDescriptor(
-                startSpinnerSpy.calls.count() === 1,
-                stopSpinnerSpy.calls.count() === 1))
-    );
-    mockStore.refreshState();
-    fixture.detectChanges();
-
+  it('should hide the spinner', () => {
     component.ngOnInit();
     component.ionViewWillEnter();
+    const hideSpinnerSpy = spyOn(component, 'stopSpinner').and.callThrough();
 
-    expect(component.startSpinner).toHaveBeenCalled();
-*/
+    const qTester = new QuantiumTesting();
+    qTester.setStaging(
+        new Stage(
+            'initialize',
+            () => {
+              hideSpinnerSpy.calls.reset();
+              mockSelectIsLoading.setResult(false);
+              mockStore.refreshState();
+              fixture.detectChanges();
+            }
+        )
+    );
+    qTester.setStaging(
+        new Stage(
+            'beforeEvaluation',
+            () => {
+              mockSelectIsLoading.setResult(true);
+              mockStore.refreshState();
+              fixture.detectChanges();
+              qTester.expose(hideSpinnerSpy.calls.count() > 0, 'spinnerSpy');
+            }, null, 1
+        )
+    );
+    qTester.setValidationRules(TestValidatorActions.MATCH_EXACTLY);
+    qTester.assertExposed('spinnerSpy', true, false, 20);
+    expect(qTester.failedAssertions.length).toBe(1);
   });
 });

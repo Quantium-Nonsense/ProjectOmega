@@ -1,5 +1,5 @@
 <ion-list>
-	<ion-item (click)="data.action(label)" *ngFor="let label of data.listLabels">
-		<ion-label>{{label}}</ion-label>
+	<ion-item (click)="data.action(company)" *ngFor="let company of data.companies">
+		<ion-label>{{company.companyName}}</ion-label>
 	</ion-item>
 </ion-list>

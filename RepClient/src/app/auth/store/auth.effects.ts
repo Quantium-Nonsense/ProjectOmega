@@ -52,20 +52,21 @@ export class AuthEffects {
                     [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()]),
                   catchError((error: HttpErrorResponse) => {
                     if (error.status === 404 || error.status === 500) {
-                      return switchMap(() => [
+                      return [
                         AuthActions.loginRejected({
                           errorMessage: environment.common.FAILED_LOGIN_SERVER
                         }),
                         AuthActions.loadingComplete()
-                      ]);
+                      ];
                     }
+                    console.log(error);
 
-                    return switchMap(() => [
+                    return [
                       AuthActions.loginRejected({
                         errorMessage: 'Wrong email or password, please try again'
                       }),
                       AuthActions.loadingComplete()
-                    ]);
+                    ];
                   })
               ))
       ));
@@ -88,6 +89,7 @@ export class AuthEffects {
   }
 
   handleTokenReturn(httpResult: { token: string }): Action {
+    console.log(`From handle token token is:  ${httpResult.token}`);
     const user = this.decodeToken(httpResult.token);
 
     return AuthActions.loginSuccessful({user});

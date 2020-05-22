@@ -135,7 +135,7 @@ public class OrderController {
                 list.add(op);
             }
         }
-        if (!CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isEmpty(list)) {
             new ProductNotFoundException("Product not found");
         }
     }

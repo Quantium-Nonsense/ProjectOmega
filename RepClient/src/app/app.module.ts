@@ -22,7 +22,12 @@ import { OrderEffects } from './order/store/order.effects';
 import { appReducer, metaReducers } from './reducers';
 import { SharedModule } from './shared/shared.module';
 
-export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
+export const getToken = () => {
+  const token = localStorage.getItem(environment.ACCESS_TOKEN);
+  if (token) {
+    return localStorage.getItem(environment.ACCESS_TOKEN).replace(new RegExp('"', 'g'), '');
+  }
+};
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -35,7 +40,11 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     BrowserModule,
     JwtModule.forRoot({
       config: {
-        tokenGetter: getToken
+        tokenGetter: getToken,
+        whitelistedDomains: [
+            '40.65.236.154',
+            'localhost:8080'
+        ]
       }
     }),
     IonicModule.forRoot(),

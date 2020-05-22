@@ -1,15 +1,17 @@
-import { strategy } from '@angular-devkit/core/src/experimental/jobs';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import { of } from 'rxjs';
-import { delay, map, switchMap, take } from 'rxjs/operators';
-import { State } from '../../reducers';
+import { Action } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { ApiEndpointCreatorService } from '../../services/api-endpoint-creator.service';
 import { ListDisplayBottomSheetComponent } from '../../shared/component/list-display-bottom-sheet/list-display-bottom-sheet.component';
 import { ListDisplayDataModel } from '../../shared/component/list-display-bottom-sheet/model/list-display-data.model';
 import { ItemModel } from '../../shared/model/company-items/item.model';
+import { SupplierModel } from '../../shared/model/home/supplier.model';
 import { SortOptionsEnum } from '../../shared/model/sort-options.enum';
 import * as CompanyActions from './company.actions';
 
@@ -29,8 +31,8 @@ export class CompanyEffects {
    * No further actions are dispatched
    */
   redirectToCompanyPage$ = createEffect(() => this.actions$.pipe(
-    ofType(CompanyActions.companySelected),
-    map(action => this.router.navigateByUrl('/company'))
+      ofType(CompanyActions.companySelected),
+      map(action => this.router.navigateByUrl('/company'))
   ), this.noDispatchConfig);
 
   /**
@@ -41,79 +43,67 @@ export class CompanyEffects {
    * // todo: It should dispatch further action in case of failure
    */
   getItemsOfSelectedCompany$ = createEffect(() => this.actions$.pipe(
-    ofType(CompanyActions.loadItemsOfCompany),
-    switchMap(action => of(this.loadItems(action.company)).pipe(delay(2000)))
+      ofType(CompanyActions.loadItemsOfCompany),
+      switchMap((action: Action & { company: SupplierModel }) =>
+        this.httpGetAllItemsForCompany(action.company).pipe(
+            switchMap((products: ItemModel[]) =>
+              [
+                CompanyActions.companySelected(),
+                CompanyActions.itemsOfCompanyLoaded({ items: products })
+              ]),
+            catchError((error: Error) =>
+              [
+                CompanyActions.companyPageHasError({ error: error.message })
+              ])
+        ))
   ));
+
+  hasErrorMessage$ = createEffect(() => this.actions$.pipe(
+      ofType(CompanyActions.companyPageHasError),
+      map((action: Action & { error: string }) => {
+        this.snackBar.open(action.error, null, {
+          duration: 3000
+        });
+      })
+  ), { dispatch: false });
 
   /**
    * Makes the bottom sheep appear so that the user may quickly switch between companies
    */
   showCompaniesOnBottomSheet$ = createEffect(() => this.actions$.pipe(
-    ofType(CompanyActions.showCompaniesBottomSheet),
-    map(action => this.toggleBottomSheet(action.data))
+      ofType(CompanyActions.showCompaniesBottomSheet),
+      map(action => this.toggleBottomSheet(action.data))
   ), this.noDispatchConfig);
 
   /**
    * Sorts the items in the state
    */
   sortItems$ = createEffect(() => this.actions$.pipe(
-    ofType(CompanyActions.sortItems),
-    map(action => this.sortBy(action.by, action.items))
-    )
+      ofType(CompanyActions.sortItems),
+      map(action => this.sortBy(action.by, action.items))
+      )
   );
 
   constructor(
-    private bottomSheet: MatBottomSheet,
-    private actions$: Actions,
-    private router: Router,
-    private store: Store<State>) {
+      private snackBar: MatSnackBar,
+      private bottomSheet: MatBottomSheet,
+      private actions$: Actions,
+      private router: Router,
+      private endPoints: ApiEndpointCreatorService,
+      private http: HttpClient
+  ) {
   }
 
-  createFakeItems = (): ItemModel[] => {
-    const fakeItems: ItemModel[] = [];
-
-    /**
-     * Used to check sorting
-     */
-    const randomLetters = ['A', 'B', 'C', 'D', 'E'];
-    let currentCompany: string; // this is necessary to test store functionality
-    this.store.select('company').pipe(take(1)).subscribe(s => currentCompany = s.company);
-    // A simple inner function to get a random letter from the array
-    const getRandomLetter = () =>
-      randomLetters[Math.floor(Math.random() * randomLetters.length)];
-
-    for (let i = 0; i < 50; i++) {
-      fakeItems.push(new ItemModel(
-        i.toString() + currentCompany,
-        `Magic Item ${getRandomLetter()}${getRandomLetter()}${getRandomLetter()} ${i} `,
-        `You are now looking at this fantastic piece of magic item ${i}`,
-        +(i * Math.exp(i)).toString().substr(0, 2),
-        currentCompany)
-      );
-    }
-
-    return fakeItems;
-  };
-
-  /**
-   * Creates fake items for company for testing purposes and returns action of type itemsOfCompanyLoaded
-   * @param company Name of company
-   * @see CompanyActions
-   */
-  private loadItems = (company: string): Action => {
-    // Fake http request
-
-    const fakeItems = this.createFakeItems();
-
-    return CompanyActions.itemsOfCompanyLoaded({items: fakeItems});
-  };
+  httpGetAllItemsForCompany(company: SupplierModel): Observable<ItemModel[]> {
+    return this.http.get<ItemModel[]>(this.endPoints.getAllProductsForCompany(company.id));
+  }
 
   /**
    * Sort items by given order
    * @param by How to sort items
    * @param items The items to sort
    */
-  private sortBy = (by: SortOptionsEnum, items: ItemModel[]): Action => {
+  sortBy = (by: SortOptionsEnum, items: ItemModel[]): Action => {
     const sortedItems = [...items].sort((itemA, itemB) => itemA.name.localeCompare(itemB.name));
 
     // If items should be in descending order reverse the list
@@ -121,10 +111,10 @@ export class CompanyEffects {
       sortedItems.reverse();
     }
 
-    return CompanyActions.updateItems({items: sortedItems});
+    return CompanyActions.updateItems({ items: sortedItems });
   };
 
-  private toggleBottomSheet(data: ListDisplayDataModel): void {
+  toggleBottomSheet(data: ListDisplayDataModel): void {
     this.bottomSheet.dismiss();
     this.bottomSheet.open(ListDisplayBottomSheetComponent, {
       data

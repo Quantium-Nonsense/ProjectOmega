@@ -3,7 +3,6 @@ package com.project.omega.bean.dto;
 import com.project.omega.bean.dao.entity.Supplier;
 
 public class ProductDTO {
-    private Long id;
 
     private String name;
 
@@ -13,20 +12,11 @@ public class ProductDTO {
 
     private Supplier supplier;
 
-    public ProductDTO(Long id, String name, String description, int price, Supplier supplier) {
-        this.id = id;
+    public ProductDTO(String name, String description, int price, Supplier supplier) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.supplier = supplier;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
