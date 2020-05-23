@@ -6,10 +6,7 @@ import com.project.omega.bean.dto.PasswordDTO;
 import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.bean.dto.UserResponse;
 import com.project.omega.exceptions.*;
-import com.project.omega.helper.EmailConstants;
-import com.project.omega.helper.EmailSender;
-import com.project.omega.helper.GenericResponse;
-import com.project.omega.helper.RoleBasedConstant;
+import com.project.omega.helper.*;
 import com.project.omega.service.JwtUserDetailsService;
 import com.project.omega.service.interfaces.AuthenticationService;
 import com.project.omega.service.interfaces.UserService;
@@ -18,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,8 +27,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -73,11 +73,6 @@ public class JwtAuthenticationController {
 
         authenticate(user.getEmail(), user.getPassword());
 
-        JwtRequest jwtRequest = new JwtRequest.JwtRequestBuilder()
-                .setEmail(user.getEmail())
-                .setPassword(user.getPassword())
-                .build();
-
         String verificationToken = UUID.randomUUID().toString();
         tokenService.saveToken(verificationToken, newUser);
 
@@ -97,16 +92,16 @@ public class JwtAuthenticationController {
     }
 
     @GetMapping(value = "/api/confirmRegistration")
-    public String registrationConfirm(@RequestParam("token") String token) throws Exception {
+    public ResponseEntity registrationConfirm(@RequestParam("token") String token) throws Exception {
         VerificationToken verificationToken = tokenService.findByToken(token);
         if(verificationToken == null) {
-            throw new UserNotFoundException("You are not registered with the service");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(TokenConstants.TOKEN_INACTIVE);
         }
 
         User user = verificationToken.getUser();
 
         if(verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime() <= 0) {
-            throw new TokenExpiredException("Verification token expired. Contact the service provider to request a new token.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(TokenConstants.TOKEN_EXPIRED);
         }
 
         user.setEnabled(true);
@@ -115,19 +110,27 @@ public class JwtAuthenticationController {
 
         Role userRole = (Role) ((List) user.getRoles()).get(0);
 
+        String adminUrl = "http://" + EmailConstants.FRONTEND_REMOTE + "/auth";
+//        String repUrl = "http://" + EmailConstants.FRONTEND_LOCAL + "/auth_rep";
+
+        HttpHeaders headers = new HttpHeaders();
+
         if(userRole.getName().equals(RoleBasedConstant.REP)) {
-            return "Confirmation successful, but no suitable redirection path found for representative.";
+//            headers.setLocation(URI.create(adminUrl));
+//            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+            return ResponseEntity.status(HttpStatus.OK).body(TokenConstants.TOKEN_REP_REDIRECT);
         } else {
-            return "redirect:http://" + EmailConstants.FRONTEND_REMOTE + "/auth";
+            headers.setLocation(URI.create(adminUrl));
+            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
         }
     }
 
     /*To be Used When the User DOES NOT remember their password*/
     @SuppressWarnings("unchecked")
-    @PostMapping(value = "/api/resetPassword", headers = "Accept=application/json")
-    public ResponseEntity resetUserPassword(@RequestParam("email") final String userEmail) throws UserNotFoundException, UserDisabledException {
-        final User user = userService.findUserByEmail(userEmail);
-        Properties properties = null;
+    @GetMapping(value = "/api/resetPassword")
+    public ResponseEntity resetUserPassword() throws UserNotFoundException, UserDisabledException {
+        final User user = userService.findUserByEmail("ak581@sussex.ac.uk");
+        Properties properties = new Properties();
         if (user != null) {
             final String token = UUID.randomUUID().toString();
             userService.createPasswordResetTokenForUser(user, token);
