@@ -33,6 +33,10 @@ public class JwtTokenUtil implements Serializable {
         return getAllClaimsFromToken(token).get("email", String.class);
     }
 
+    public Long getIdFromToken(String token) {
+        return getAllClaimsFromToken(token).get("id", Long.class);
+    }
+
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
