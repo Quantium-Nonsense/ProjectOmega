@@ -38,6 +38,7 @@
     "@ngrx/store": "^9.1.2",
     "cordova-android": "^8.1.0",
     "core-js": "^3.6.5",
+    "jasmine-marbles": "^0.6.0",
     "lodash": "^4.17.15",
     "quantium_testing": "0.1.27",
     "rxjs": "^6.5.5",

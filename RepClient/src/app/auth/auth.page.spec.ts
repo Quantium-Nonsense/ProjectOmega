@@ -12,16 +12,15 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { cold, hot } from 'jasmine-marbles';
 import {
-  PreparedFunction,
   QuantiumTesting,
-  SingleStage,
   Stage,
   StringDefinition,
   StringDefinitionValue,
   TestValidatorActions
 } from 'quantium_testing';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import * as fromApp from '../reducers/index';
 import { UserModel } from '../shared/model/auth/user.model';
@@ -132,7 +131,7 @@ describe('AuthPage', () => {
     q.setProperty('toastMessage', new StringDefinition([
       StringDefinitionValue.ALL,
       StringDefinitionValue.NOT_EMPTY
-    ], {from: 1, to: 100}));
+    ], { from: 1, to: 100 }));
     q.setStaging(new Stage('init', async toastMessage => {
       mockSelectErrorMessage.setResult(toastMessage);
       mockStore.refreshState();
@@ -152,20 +151,23 @@ describe('AuthPage', () => {
     component.ionViewWillEnter();
     const mockUser = createMockUser();
 
-    httpSpy.post.and.callThrough().and.returnValue(throwError(new HttpErrorResponse({
-      error: 'mock error',
+    httpSpy.post.and.callThrough().and.returnValue(cold('---#|', null, new HttpErrorResponse({
+      error: {
+        message: 'error goes brrr'
+      },
       status: 404
     })));
 
-    actions$ = of(AuthActions.loginAttempt({email: mockUser.email, password: mockUser.password}));
-    mockStore.refreshState();
-    fixture.detectChanges();
-
-    effects.loginAttempt$.subscribe((action: Action) => {
-      // Set up to fire success
-      expect(action).toEqual(AuthActions.loginRejected({errorMessage: environment.common.FAILED_LOGIN_SERVER}));
+    actions$ = hot('---a', {
+      a: AuthActions.loginAttempt({ email: mockUser.email, password: mockUser.password })
     });
 
+    const expected = hot('------(ab)', {
+      a: AuthActions.loginRejected({errorMessage: environment.common.FAILED_LOGIN_SERVER}),
+      b: AuthActions.loadingComplete()
+    });
+
+    expect(effects.loginAttempt$).toBeObservable(expected);
   }));
 
   it('should display errors if inputs are invalid', async(() => {
@@ -194,7 +196,7 @@ describe('AuthPage', () => {
 
   it('should navigate to auth in case of rejected authentication', () => {
 
-    actions$ = of(AuthActions.loginRejected({errorMessage: 'mock'}));
+    actions$ = of(AuthActions.loginRejected({ errorMessage: 'mock' }));
     effects.loginRejected$.subscribe();
 
     expect(mockRouter.navigateByUrl).toHaveBeenCalled();
@@ -211,7 +213,7 @@ describe('AuthPage', () => {
   });
 
   it('should redirect home on successful Login', () => {
-    actions$ = of(AuthActions.loginSuccessful({user: createMockUser()}));
+    actions$ = of(AuthActions.loginSuccessful({ user: createMockUser() }));
 
     effects.successfulLogin$.subscribe();
     expect(mockRouter.navigateByUrl).toHaveBeenCalled();

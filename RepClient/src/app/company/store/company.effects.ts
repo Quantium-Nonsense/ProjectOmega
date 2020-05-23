@@ -104,7 +104,7 @@ export class CompanyEffects {
    * @param items The items to sort
    */
   sortBy = (by: SortOptionsEnum, items: ItemModel[]): Action => {
-    const sortedItems = [...items].sort((itemA, itemB) => itemA.name.localeCompare(itemB.name));
+    const sortedItems = [...items].sort((itemA, itemB) => itemA.price - itemB.price);
 
     // If items should be in descending order reverse the list
     if (by === SortOptionsEnum.DESCENDING) {
