@@ -10,6 +10,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable } from 'rxjs';
 import { routes } from '../app-routing.module';
 import * as fromApp from '../reducers';
+import { emptyState } from '../shared/empty.state';
 import { TestModule } from '../shared/test/test.module';
 import * as fromToolbar from '../toolbar/store/toolbar.reducer';
 import { ToolbarEffects } from './store/toolbar.effects';
@@ -29,25 +30,21 @@ describe('ToolbarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ToolbarComponent],
-      providers: [
-        MatDialogHarness,
-        provideMockStore({
-          initialState: {
-            toolbar: {
-              progressBar: false,
-            }
-          } as fromApp.State
-        }),
-        provideMockActions(() => actions$),
-        ToolbarEffects,
-      ],
-      imports: [
-        TestModule,
-        RouterTestingModule.withRoutes(routes),
-      ]
-    })
-      .compileComponents();
+             declarations: [ToolbarComponent],
+             providers: [
+               MatDialogHarness,
+               provideMockStore<fromApp.State>({
+                 initialState: emptyState
+               }),
+               provideMockActions(() => actions$),
+               ToolbarEffects
+             ],
+             imports: [
+               TestModule,
+               RouterTestingModule.withRoutes(routes)
+             ]
+           })
+           .compileComponents();
     fixture = TestBed.createComponent(ToolbarComponent);
     component = fixture.componentInstance;
 
@@ -58,8 +55,8 @@ describe('ToolbarComponent', () => {
     effects = TestBed.inject<ToolbarEffects>(ToolbarEffects);
 
     mockProgressBarSelector = mockStore.overrideSelector(
-      fromToolbar.selectIsProgressBarVisible,
-      false
+        fromToolbar.selectIsProgressBarVisible,
+        false
     );
 
     mockStore.refreshState();

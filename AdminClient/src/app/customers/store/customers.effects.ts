@@ -98,7 +98,7 @@ export class CustomersEffects {
               ];
             }),
             catchError((error: Error) => {
-              this.snackBar.open(error.message, null, {
+              this.snackBar.open(error.message, '', {
                 duration: 3000
               });
               return [
