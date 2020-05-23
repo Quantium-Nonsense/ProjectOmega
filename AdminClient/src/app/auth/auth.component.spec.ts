@@ -6,8 +6,10 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { routes } from '../app-routing.module';
+import { emptyState } from '../shared/empty.state';
 import { TestModule } from '../shared/test/test.module';
 import { AuthComponent } from './auth.component';
+import * as fromApp from '../reducers/index';
 
 describe('AuthPage', () => {
   let component: AuthComponent;
@@ -27,14 +29,8 @@ describe('AuthPage', () => {
       imports: [TestModule, RouterTestingModule.withRoutes(routes)],
       providers: [
         AuthComponent,
-        provideMockStore({
-          initialState: {
-            auth: {
-              errorMessage: null,
-              loading: false,
-              user: null
-            }
-          }
+        provideMockStore<fromApp.State>({
+          initialState: emptyState
         }),
         { provide: MatSnackBar, useValue: mockSnackbar }
       ],
