@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 
 import ch.qos.logback.classic.Level;
 import com.project.omega.enums.LogLevel;
-import sun.rmi.runtime.Log;
 
 public class KafkaLogDto implements Serializable {
     private LogLevel logLevel;

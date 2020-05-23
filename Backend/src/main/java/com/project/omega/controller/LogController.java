@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/log")
 public class LogController {
     private KafkaProducerService kafkaProducerService;
     
@@ -18,10 +19,9 @@ public class LogController {
         this.kafkaProducerService = kafkaProducerService;
     }
     
-    @PostMapping(value = "/log")
-    public ResponseEntity<HttpStatus> create(@RequestBody ClientLogDto log) {
+    private ResponseEntity<HttpStatus> sendLog(ClientLogDto log, String source){
         KafkaLogDto kafkaLog = new KafkaLogDto();
-        
+    
         kafkaLog.setFilename(log.getFilename());
         kafkaLog.setLogLevel(log.getLogLevel());
         kafkaLog.setTimestamp(log.getTimestamp());
@@ -29,9 +29,20 @@ public class LogController {
         kafkaLog.setLineNumber(log.getLineNumber());
         kafkaLog.setMessage(log.getMessage());
         kafkaLog.setAdditional(log.getAdditional());
-        
+        kafkaLog.setContext(source);
+    
         // We do not use the logger service since this is not a backend log.
         kafkaProducerService.sendMessage(kafkaLog);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    @PostMapping(value = "/admin")
+    public ResponseEntity<HttpStatus> createAdminLog(@RequestBody ClientLogDto log) {
+        return sendLog(log, "admin_client");
+    }
+    
+    @PostMapping(value = "/rep")
+    public ResponseEntity<HttpStatus> createRepLog(@RequestBody ClientLogDto log) {
+        return sendLog(log, "rep_client");
     }
 }
