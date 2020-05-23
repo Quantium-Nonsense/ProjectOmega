@@ -79,7 +79,7 @@ public class JwtAuthenticationController {
                 + EmailConstants.PASSWORD + user.getPassword() + "</br></br>"
                 + EmailConstants.REP_NOTE
                 + EmailConstants.PASS_CHANGE_NOTE + "</br>"
-                + EmailConstants.linkBuilder(EmailConstants.BACKEND_REMOTE,
+                + EmailConstants.linkBuilder(EmailConstants.BACKEND_LOCAL,
                 "/api/confirmRegistration?token=" + verificationToken,
                 EmailConstants.CONFIRMATION + user.getEmail());
 
@@ -109,7 +109,7 @@ public class JwtAuthenticationController {
 
         Role userRole = (Role) ((List) user.getRoles()).get(0);
 
-        String adminUrl = "http://" + EmailConstants.FRONTEND_REMOTE + "/auth";
+        String adminUrl = "http://" + EmailConstants.FRONTEND_LOCAL + "/auth";
 //        String repUrl = "http://" + EmailConstants.FRONTEND_LOCAL + "/auth_rep";
 
         HttpHeaders headers = new HttpHeaders();
