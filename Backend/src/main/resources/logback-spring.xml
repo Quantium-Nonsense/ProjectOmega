@@ -3,6 +3,8 @@
 
     <property name="LOGS" value="./logs"/>
 
+    <appender name="KafkaAppender" class="java.com.project.omega.logger.KafkaAppender" />
+
     <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS}/omega-backend.log</file>
         <encoder
@@ -32,6 +34,10 @@
     <!-- LOG "com.baeldung*" at TRACE level -->
     <logger name="com.baeldung" level="trace" additivity="false">
         <appender-ref ref="RollingFile"/>
+    </logger>
+
+    <logger name="com.project.omega.service.implmentations.KafkaProducerServiceImpl" additivity="false">
+        <appender-ref ref="RollingFile" />
     </logger>
 
 </configuration>

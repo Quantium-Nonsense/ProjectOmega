@@ -1,7 +1,8 @@
-package com.quantiumnonsense.omega.controller;
+package com.project.omega.controller;
 
-import com.quantiumnonsense.omega.bean.dto.ClientLogDto;
-import com.quantiumnonsense.omega.service.interfaces.KafkaProducerService;
+import com.project.omega.bean.dto.ClientLogDto;
+import com.project.omega.bean.dto.KafkaLogDto;
+import com.project.omega.service.interfaces.KafkaProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,18 @@ public class LogController {
     
     @PostMapping(value = "/log")
     public ResponseEntity<HttpStatus> create(@RequestBody ClientLogDto log) {
-        kafkaProducerService.sendMessage("Test Message");
+        KafkaLogDto kafkaLog = new KafkaLogDto();
+        
+        kafkaLog.setFilename(log.getFilename());
+        kafkaLog.setLogLevel(log.getLogLevel());
+        kafkaLog.setTimestamp(log.getTimestamp());
+        kafkaLog.setFilename(log.getFilename());
+        kafkaLog.setLineNumber(log.getLineNumber());
+        kafkaLog.setMessage(log.getMessage());
+        kafkaLog.setAdditional(log.getAdditional());
+        
+        // We do not use the logger service since this is not a backend log.
+        kafkaProducerService.sendMessage(kafkaLog);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

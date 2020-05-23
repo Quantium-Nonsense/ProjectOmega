@@ -1,10 +1,15 @@
 package com.project.omega.service.implmentations;
 
 import com.project.omega.service.interfaces.KafkaProducerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+
+import com.project.omega.bean.dto.KafkaLogDto;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
@@ -12,21 +17,26 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 public class KafkaProducerServiceImpl implements KafkaProducerService {
     
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, KafkaLogDto> kafkaTemplate;
+    
+    @Value("${spring.kafka.producer.properties.topics}")
+    private String topic;
     
     @Override
-    public void sendMessage(String message) {
-        ListenableFuture<? extends SendResult<String, String>> future
-                = kafkaTemplate.send("staging-logs", message);
+    public void sendMessage(KafkaLogDto message) {
+        Logger logger = LoggerFactory.getLogger(KafkaProducerServiceImpl.class);
         
-        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+        ListenableFuture<? extends SendResult<String, KafkaLogDto>> future
+                = kafkaTemplate.send(topic, message);
+        
+        future.addCallback(new ListenableFutureCallback<SendResult<String, KafkaLogDto>>() {
             @Override
             public void onFailure(Throwable throwable) {
-                //log to console cause failure means it can't be sent to kafka
+                logger.error("Failed to send message via Kafka: {}", throwable.getMessage());
             }
-    
+            
             @Override
-            public void onSuccess(SendResult<String, String> stringSendResult) {
+            public void onSuccess(SendResult<String, KafkaLogDto> stringSendResult) {
                 // do nothing
             }
         });
