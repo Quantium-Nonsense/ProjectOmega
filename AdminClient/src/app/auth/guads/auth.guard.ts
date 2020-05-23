@@ -3,9 +3,9 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } fro
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { JwtToken } from '../../../../../RepClient/src/app/shared/model/dto/jwt-token';
 import { environment } from '../../../environments/environment';
 import * as fromApp from '../../reducers';
+import { JwtToken } from '../../shared/model/jwt-token';
 import * as AuthActions from '../store/auth.actions';
 
 @Injectable({
