@@ -1,15 +1,12 @@
-package com.quantiumnonsense.omega.service.implmentations;
+package com.project.omega.service.implmentations;
 
-import com.quantiumnonsense.omega.service.interfaces.KafkaProducerService;
-import org.apache.kafka.clients.producer.KafkaProducer;
+import com.project.omega.service.interfaces.KafkaProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
-
-import java.util.Map;
 
 @Service
 public class KafkaProducerServiceImpl implements KafkaProducerService {

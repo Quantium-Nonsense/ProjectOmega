@@ -1,4 +1,4 @@
-package com.quantiumnonsense.omega.service.interfaces;
+package com.project.omega.service.interfaces;
 
 public interface KafkaProducerService {
     public void sendMessage(String message);
