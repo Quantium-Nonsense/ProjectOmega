@@ -120,7 +120,7 @@ public class JwtAuthenticationController {
             return ResponseEntity.status(HttpStatus.OK).body(TokenConstants.TOKEN_REP_REDIRECT);
         } else {
             headers.setLocation(URI.create(adminUrl));
-            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+            return new ResponseEntity<>(headers, HttpStatus.OK);
         }
     }
 
