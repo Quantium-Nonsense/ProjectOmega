@@ -22,16 +22,26 @@ describe('HomePage', () => {
   let actions$: Observable<Action>;
   let effects: HomeEffects;
 
-  const mockCompanies = () => {
-    const imageUrl = 'assets/shapes.svg';
-    const companies: SupplierModel[] = [];
-
-    for (let i = 0; i < 4; i++) {
-      companies.push(new SupplierModel(`Company ${i}`, imageUrl, `Some fantastic company called ${i}!`));
+  const createMockCompanies = (): SupplierModel[] => {
+    const supps: SupplierModel[] = [];
+    for (let i = 0; i < 50; i++) {
+      supps.push({
+        id: i,
+        companyName: `Company ${ i }`,
+        description: `Fancy company ${ i }`,
+        email: `a@a${ i }.com`,
+        firstName: `firstName${ i }`,
+        lastName: `lastName${ i }`,
+        contactNumber: `5435443${ i }`,
+        address: `bla${ i }`,
+        notes: `notes${ i }`,
+        country: `country ${ i }`
+      });
     }
 
-    return companies;
+    return supps;
   };
+
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -66,12 +76,12 @@ describe('HomePage', () => {
   }));
 
   it('should begin loading when you hit dashboard', async(() => {
-    spyOn(effects, 'createDummyCompanies').and.returnValue(mockCompanies());
+    spyOn(effects, 'getAllCompanies').and.returnValue(of(createMockCompanies()));
 
     actions$ = of(HomeActions.beginLoadingDashboard()); // Mock dashboard first action
     effects.dashboardBeginLoading$.subscribe(action => {
-      expect(action).toEqual(HomeActions.showCompanies({companies: mockCompanies()}));
-      expect(effects.createDummyCompanies).toHaveBeenCalled();
+      expect(action).toEqual(HomeActions.showCompanies({ companies: createMockCompanies() }));
+      expect(effects.getAllCompanies).toHaveBeenCalled();
     });
   }));
 
@@ -97,14 +107,15 @@ describe('HomePage', () => {
 
   it('should display companies on dashboard', () => {
 
-    const companies = mockCompanies();
+    const companies = createMockCompanies();
     component.ionViewWillEnter();
     // Set state with dummy companies
     mockStore.setState({
       ...mockEmptyState,
       home: {
         companies,
-        loading: false
+        loading: false,
+        errorMessage: undefined
       }
     });
 
@@ -126,17 +137,14 @@ describe('HomePage', () => {
   it('should update state to clean', () => {
     // Create dummy companies
     const imageUrl = 'assets/shapes.svg';
-    const companies: SupplierModel[] = [];
-
-    for (let i = 0; i < 4; i++) {
-      companies.push(new SupplierModel(`Company ${i}`, imageUrl, `Some fantastic company called ${i}!`));
-    }
-
+    let companies: SupplierModel[] = [];
+    companies = createMockCompanies();
     component.ionViewWillEnter();
     // Set state with dummy companies
     mockStore.setState({
       ...mockEmptyState,
       home: {
+        errorMessage: undefined,
         companies,
         loading: false
       }
@@ -150,6 +158,7 @@ describe('HomePage', () => {
     mockStore.setState({
       ...mockEmptyState,
       home: {
+        errorMessage: undefined,
         companies: undefined,
         loading: false
       }
