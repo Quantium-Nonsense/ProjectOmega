@@ -11,7 +11,7 @@ export const getAllClients = createAction(
 
 export const allClientsLoaded = createAction(
   '[Management - Effects] All clients loaded',
-  props<{ customers: CustomerModel[] }>()
+  props<{ customers: CustomerModel[]; customersReps: CustomerManagementModel[]}>()
 );
 
 export const editRepresentative = createAction(
