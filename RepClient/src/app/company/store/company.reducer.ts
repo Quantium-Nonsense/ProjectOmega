@@ -2,7 +2,7 @@ import { Action, createFeatureSelector, createReducer, createSelector, on } from
 import * as fromApp from '../../reducers/index';
 import { ItemModel } from '../../shared/model/company-items/item.model';
 import { SupplierModel } from '../../shared/model/home/supplier.model';
-import * as CompanyActions from './company.actions.js';
+import * as CompanyActions from './company.actions';
 
 export interface State {
   company: SupplierModel;

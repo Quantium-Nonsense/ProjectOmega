@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import * as CompanyActions from '../company/store/company.actions';
+import * as fromCompany from '../company/store/company.reducer';
 import { ItemModel } from '../shared/model/company-items/item.model';
 import { SupplierModel } from '../shared/model/home/supplier.model';
 import { OrderItemModel } from '../shared/model/order/order-item.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import * as fromApp from './../reducers/index';
-import * as CompanyActions from './store/company.actions';
-import { selectAllItems } from './store/company.reducer';
 
 @Component({
   selector: 'app-company',
@@ -54,7 +54,7 @@ export class CompanyPage implements OnInit {
         })
     );
 
-    this.subscription.add(this.store.pipe(select(selectAllItems)).subscribe(prods => this.items = prods));
+    this.subscription.add(this.store.pipe(select(fromCompany.selectAllItems)).subscribe(prods => this.items = prods));
   }
 
   ionViewWillLeave(): void {
