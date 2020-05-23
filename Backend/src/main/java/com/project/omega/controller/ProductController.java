@@ -25,7 +25,7 @@ public class ProductController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity createProduct(@RequestBody ProductDTO product) throws SupplierNotFoundException {
+    public ResponseEntity createProduct(@RequestBody Product product) throws SupplierNotFoundException {
         Product newProduct = productService.createProduct(product);
         return new ResponseEntity(newProduct, HttpStatus.CREATED);
     }

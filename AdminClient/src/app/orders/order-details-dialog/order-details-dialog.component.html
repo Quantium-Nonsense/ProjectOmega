@@ -5,32 +5,25 @@
     class="max-height"
   >
     <div fxLayout="row">
-      <mat-form-field>
-        <mat-label>Order Date</mat-label>
-        <input matInput [matDatepicker]="orderDatePicker" formControlName="orderDate">
-        <mat-datepicker-toggle matSuffix [for]="orderDatePicker"></mat-datepicker-toggle>
-        <mat-datepicker #orderDatePicker></mat-datepicker>
-        <mat-error *ngIf="dateHasError" id="dateError">{{dateErrorMessage}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-form-field>
+      <mat-form-field fxFlexFill *ngIf="isEdit">
         <mat-label>Order Status</mat-label>
-        <input matInput formControlName="status">
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let s of status" [value]="s">{{s}}</mat-option>
+        </mat-select>
         <mat-error *ngIf="statusHasError" id="statusError">{{statusErrorMessage}}</mat-error>
       </mat-form-field>
     </div>
     <div fxLayout="row">
-      <mat-form-field>
+      <mat-form-field fxFlexFill>
         <mat-label>Representative Email</mat-label>
-        <mat-select formControlName="user" id="user">
+        <mat-select [compareWith]="compareFunc" formControlName="user" id="user">
           <mat-option *ngFor="let user of repUsers" [value]="user">{{ user.email }}</mat-option>
         </mat-select>
         <mat-error *ngIf="userHasError" id="userError">{{userErrorMessage}}</mat-error>
       </mat-form-field>
     </div>
-    <div fxLayout="row" *ngIf="editable">
-      <button (click)="addNewEntry()" color="primary" mat-flat-button>Add another product to this order</button>
+    <div fxLayout="row" fxFlexAlign="center center" *ngIf="editable">
+      <button fxFlexOffset="25" fxFlex="50" (click)="addNewEntry()" color="primary" mat-flat-button>Add another product to this order</button>
     </div>
     <div formArrayName="orderProducts">
       <div fxLayout="row"
@@ -46,7 +39,7 @@
         <div fxLayout="column">
           <mat-form-field>
             <mat-label>Product</mat-label>
-            <mat-select formControlName="product" id="product">
+            <mat-select [compareWith]="compareFunc" formControlName="product" id="product">
               <mat-option
                 *ngFor="let product of products" [value]="product"
               >
@@ -59,7 +52,7 @@
         <div fxLayout="column">
           <mat-form-field>
             <mat-label>Customer</mat-label>
-            <mat-select formControlName="customer" id="customer">
+            <mat-select [compareWith]="compareFunc" formControlName="customer" id="customer">
               <mat-option *ngFor="let customer of customers" [value]="customer">
                 {{customer.companyName}} - {{ customer.firstName }} {{customer.lastName}}
               </mat-option>

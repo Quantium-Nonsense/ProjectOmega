@@ -14,7 +14,7 @@ export const customerDeletedSuccess = createAction(
     '[Customers - Effects] Customer Deleted successfully'
 );
 
-export const beginLoadingCustomers = createAction(
+export const getAllCustomers = createAction(
     '[Customers - Component] Load all customers'
 );
 

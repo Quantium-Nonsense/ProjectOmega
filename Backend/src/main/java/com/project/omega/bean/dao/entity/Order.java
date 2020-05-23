@@ -26,8 +26,9 @@ public class Order implements Serializable {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateCreated;
 
-    @OneToMany(mappedBy = "pk.order")
+    @OneToMany
     @Valid
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<OrderProduct> orderProducts;
 
@@ -35,29 +36,24 @@ public class Order implements Serializable {
     private Long userId;
 
     @NotNull
-    @Enumerated
-    private OrderStatus status;
-
-    @NotNull
-    private double totalOrderPrice;
+    private String status;
 
     @Transient
     public Double getTotalOrderPrice() {
         double sum = 0D;
         List<OrderProduct> orderProducts = getOrderProducts();
         for (OrderProduct op : orderProducts) {
-            sum += op.getTotalPrice();
+            sum += op.getProduct().getPrice() * op.getQuantity();
         }
         return sum;
     }
 
-    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, Long userId, OrderStatus status, double totalOrderPrice) {
+    public Order(Long id, LocalDate dateCreated, List<OrderProduct> orderProducts, Long userId, String status) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.orderProducts = orderProducts;
         this.userId = userId;
         this.status = status;
-        this.totalOrderPrice = totalOrderPrice;
     }
 
     public Order() {
@@ -85,11 +81,11 @@ public class Order implements Serializable {
     public void setOrderProducts(List<OrderProduct> orderProducts) {
         this.orderProducts = orderProducts;
     }
-    public OrderStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -99,10 +95,6 @@ public class Order implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public void setTotalOrderPrice(double totalOrderPrice) {
-        this.totalOrderPrice = totalOrderPrice;
     }
 }
 

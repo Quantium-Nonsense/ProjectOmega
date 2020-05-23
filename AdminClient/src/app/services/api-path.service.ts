@@ -12,6 +12,15 @@ export class ApiPathService {
     this.endPoint = environment.common.apiRoot();
   }
 
+  getUpdateOrderEndPoint(id): string {
+    return `${this.endPoint}/order/update/${id}`
+  };
+
+
+  get createNewOrderEndPoint(): string {
+   return `${this.endPoint}/order/create`
+  }
+
   get createNewProductEndPoint(): string {
     return `${ this.endPoint }/product/create`;
   }
@@ -44,7 +53,7 @@ export class ApiPathService {
   }
 
   get createNewUserEndPoint(): string {
-    return `${ this.endPoint }/user/create`;
+    return `${ this.endPoint }/registration`;
   }
 
   getDeleteUserEndPoint(userId: number) {
@@ -97,5 +106,9 @@ export class ApiPathService {
 
   getEditCustomerEndPoint(id: number): string {
     return `${ this.endPoint }/client/update/${ id }`;
+  }
+
+  allOrdersEndPoint(): string {
+    return `${this.endPoint}/order/get`;
   }
 }

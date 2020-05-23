@@ -1,16 +1,18 @@
-package com.quantiumnonsense.omega.service.implmentations;
+package com.project.omega.service.implmentations;
 
-import com.quantiumnonsense.omega.bean.dao.entity.OrderProduct;
-import com.quantiumnonsense.omega.repository.OrderProductRepository;
-import com.quantiumnonsense.omega.service.interfaces.OrderProductService;
+import com.project.omega.bean.dao.entity.OrderProduct;
+import com.project.omega.bean.dao.entity.Product;
+import com.project.omega.repository.OrderProductRepository;
+import com.project.omega.service.interfaces.OrderProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-    @Service
-    @Transactional
-    public class OrderProductServiceImpl implements OrderProductService {
+@Service
+@Transactional
+public class OrderProductServiceImpl implements OrderProductService {
 
     private OrderProductRepository orderProductRepository;
+
 
     public OrderProductServiceImpl(OrderProductRepository orderProductRepository) {
         this.orderProductRepository = orderProductRepository;
@@ -21,4 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
         return orderProductRepository.save(orderProduct);
     }
 
+    @Override
+    public void deleteByProductId(Product product) {
+        orderProductRepository.deleteByProductId(product);
+    }
 }

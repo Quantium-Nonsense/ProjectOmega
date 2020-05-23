@@ -18,7 +18,7 @@ import {
   deleteProduct,
   editNewProduct,
   hasErrorMessage,
-  loadAllProducts,
+  getAllProducts,
   showProductForm
 } from './products.actions';
 
@@ -31,7 +31,7 @@ export class ProductsEffects {
         return this.httpDeleteProduct(action.product).pipe(
             switchMap(() => {
               return [
-                loadAllProducts()
+                getAllProducts()
               ];
             }),
             catchError((error: Error) => {
@@ -54,7 +54,7 @@ export class ProductsEffects {
               });
               this.dialog.closeAll();
               return [
-                loadAllProducts(),
+                getAllProducts(),
                 stopProgressBar()
               ];
             }),
@@ -79,7 +79,7 @@ export class ProductsEffects {
                 duration: 3000
               });
               return [
-                loadAllProducts()
+                getAllProducts()
               ];
             }),
             catchError((error: Error) => {
@@ -106,7 +106,7 @@ export class ProductsEffects {
   ), { dispatch: false });
 
   onLoadAllProducts$ = createEffect(() => this.actions$.pipe(
-      ofType(loadAllProducts),
+      ofType(getAllProducts),
       switchMap((action: Action) => {
         return this.httpLoadAllProductsAndSuppliers().pipe(
             switchMap(([products, suppliers]) => {

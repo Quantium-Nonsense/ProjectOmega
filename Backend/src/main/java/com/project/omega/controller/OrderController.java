@@ -66,11 +66,9 @@ public class OrderController {
         List<OrderProduct> orderProducts = new ArrayList<>();
 
         for (OrderProductDto dto : productsForOrder) {
-            orderProducts.add(orderProductService.create(new OrderProduct(
-                    order,
-                    productService.getProductById(dto.getProduct().getId()),
-                    dto.getQuantity(),
-                    clientService.getClientById(dto.getClient().getId()))));
+            orderProducts.add(orderProductService.create(new OrderProduct(productService.getProductById(dto.getProduct().getId()),
+                    clientService.getClientById(dto.getClient().getId()),
+                    dto.getQuantity())));
         }
 
         order.setOrderProducts(orderProducts);
@@ -90,7 +88,7 @@ public class OrderController {
 
     @GetMapping(value = "/get")
     public ResponseEntity fetchAllOrders() {
-        Iterable<Order> order = orderService.getAllOrders();
+        List<Order> order = orderService.getAllOrders();
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
@@ -99,23 +97,26 @@ public class OrderController {
         Order orderUpdate = new Order();
         Order oldOrder = orderService.getOrderById(id);
 
-        if(update.getOrderProducts().isEmpty()) {
+        if(update.getOrderProducts().isEmpty() || update.getOrderProducts() == null) {
             orderUpdate.setOrderProducts(oldOrder.getOrderProducts());
         } else {
             orderUpdate.setOrderProducts(update.getOrderProducts());
         }
 
-        if(update.getStatus() != null) {
+        if(update.getStatus() == null) {
             orderUpdate.setStatus(oldOrder.getStatus());
         } else {
             orderUpdate.setStatus(update.getStatus());
         }
 
-        if(update.getUserId() != null) {
+        if(update.getUserId() == null) {
             orderUpdate.setUserId(oldOrder.getUserId());
         } else {
             orderUpdate.setUserId(update.getUserId());
         }
+
+        orderUpdate.setDateCreated(oldOrder.getDateCreated());
+        orderUpdate.setId(oldOrder.getId());
 
         Order order = orderService.updateOrder(id, orderUpdate);
         return new ResponseEntity(order, HttpStatus.OK);
@@ -134,7 +135,7 @@ public class OrderController {
                 list.add(op);
             }
         }
-        if (!CollectionUtils.isEmpty(list)) {
+        if (CollectionUtils.isEmpty(list)) {
             new ProductNotFoundException("Product not found");
         }
     }

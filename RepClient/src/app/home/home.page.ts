@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import * as CompanyActions from '../company/store/company.actions';
 import { State } from '../reducers';
-import { CompanyModel } from '../shared/model/home/company.model';
-import * as CompanyActions from './../company/store/company.actions';
+import { SupplierModel } from '../shared/model/home/supplier.model';
 import * as HomeActions from './store/home.actions';
+import { selectAllCompanies, selectGetCompanyFromName } from './store/home.reducer';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ import * as HomeActions from './store/home.actions';
   templateUrl: 'home.page.html'
 })
 export class HomePage {
-  companies: CompanyModel[];
+  companies: SupplierModel[];
 
   private subscriptions: Subscription;
 
@@ -21,21 +22,21 @@ export class HomePage {
     this.subscriptions = new Subscription();
   }
 
-  ionViewWillEnter(): void {
-    const homeState$ = this.store.select('home');
-    this.subscriptions.add(
-      homeState$.subscribe(state => {
-        this.companies = state.companies;
-      })
-    );
+  ionViewWillLeave(): void {
+    this.subscriptions.unsubscribe();
+  }
 
+  ionViewWillEnter(): void {
+
+    this.subscriptions.add(this.store.pipe(select(selectAllCompanies)).subscribe(companies => this.companies = companies));
     if (!this.companies) {
       this.store.dispatch(HomeActions.beginLoadingDashboard());
     }
   }
 
   loadCompaniesItems(name: string): void {
-    // this.store.dispatch(HomeActions.dashboardCleanUp());
-    this.store.dispatch(CompanyActions.companySelected({selectedCompany: name}));
+    this.subscriptions.add(this.store.pipe(select(selectGetCompanyFromName, { name })).subscribe(companies => {
+      this.store.dispatch(CompanyActions.loadItemsOfCompany({ company: companies[0] }));
+    }));
   }
 }

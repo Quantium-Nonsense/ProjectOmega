@@ -1,17 +1,24 @@
 package com.project.omega.bean.dao.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
-@Embeddable
-public class OrderProduct implements Serializable{
-    @EmbeddedId
-    @JsonIgnore
-    private OrderProductPK pk;
+public class OrderProduct implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     @Column(nullable = false)
     private Integer quantity;
@@ -21,107 +28,58 @@ public class OrderProduct implements Serializable{
         super();
     }
 
-
-    public OrderProduct(Order order, Product product, Integer quantity, Client client) {
-        pk = new OrderProductPK();
-        pk.setOrder(order);
-        pk.setProduct(product);
-        pk.setClient(client);
+    public OrderProduct(Product product, Client client, Integer quantity) {
+        this.product = product;
+        this.client = client;
         this.quantity = quantity;
-
     }
 
+    public Long getId() {
+        return id;
+    }
 
-    @Transient
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Product getProduct() {
-
-        return this.pk.getProduct();
+        return product;
     }
 
-    @Transient
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public Client getClient() {
-
-        return this.pk.getClient ();
+        return client;
     }
 
-    @Transient
-    public Integer getTotalPrice() {
-        return pk.getProduct().getPrice() * getQuantity();
-    }
-
-
-    public OrderProductPK getPk() {
-
-        return pk;
-    }
-
-    public void setPk(OrderProductPK pk) {
-
-        this.pk = pk;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public Integer getQuantity() {
-
         return quantity;
     }
 
     public void setQuantity(Integer quantity) {
-
         this.quantity = quantity;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderProduct that = (OrderProduct) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(product, that.product) &&
+                Objects.equals(client, that.client) &&
+                Objects.equals(quantity, that.quantity);
+    }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((pk == null) ? 0 : pk.hashCode());
-
-        return result;
+        return Objects.hash(id, product, client, quantity);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        OrderProduct other = (OrderProduct) obj;
-        if (pk == null) {
-            if (other.pk != null) {
-                return false;
-            }
-        } else if (!pk.equals(other.pk)) {
-            return false;
-        }
-
-        return true;
-    }
-//    public OrderProduct build() {
-//        return new OrderProduct(pk.setOrder(),
-//        pk.setProduct(),
-//        pk.setClient(), quantity);
-//    }
-
-
 }
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof OrderProduct)) return false;
-//        OrderProduct that = (OrderProduct) o;
-//        return pk.equals(that.pk) &&
-//                quantity.equals(that.quantity);
-//    }
-//
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(pk, quantity);
-//    }
 

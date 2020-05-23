@@ -69,6 +69,7 @@ export class UserEffects {
             }),
             switchMap((user: UserModel) => {
               return [
+                UserActions.loadAllUsers(),
                 ToolbarActions.stopProgressBar()
               ];
             }),
@@ -164,7 +165,7 @@ export class UserEffects {
   ), { dispatch: false });
 
   beginLoadingPage$ = createEffect(() => this.actions$.pipe(
-      ofType(UserActions.beginLoadingUserPage),
+      ofType(UserActions.getAllUsers),
       map((action: Action) => UserActions.loadAllUsers())
   ));
 
