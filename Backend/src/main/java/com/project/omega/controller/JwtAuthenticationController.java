@@ -27,7 +27,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -128,8 +127,8 @@ public class JwtAuthenticationController {
     /*To be Used When the User DOES NOT remember their password*/
     @SuppressWarnings("unchecked")
     @GetMapping(value = "/api/resetPassword")
-    public ResponseEntity resetUserPassword() throws UserNotFoundException, UserDisabledException {
-        final User user = userService.findUserByEmail("ak581@sussex.ac.uk");
+    public ResponseEntity resetUserPassword(@RequestParam("email") final String email) throws UserNotFoundException, UserDisabledException {
+        final User user = userService.findUserByEmail(email);
         Properties properties = new Properties();
         if (user != null) {
             final String token = UUID.randomUUID().toString();
