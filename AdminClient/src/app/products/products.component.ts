@@ -23,7 +23,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   displayedColumns = ['name', 'description', 'price', 'supplier', 'actions', 'id'];
   productTable: MatTableDataSource<ProductModel>;
 
-  private subscriptions;
+  private subscriptions: Subscription;
 
   constructor(
       private store$: Store<fromApp.State>
@@ -36,11 +36,13 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.store$.dispatch(beginProgressBar());
     this.store$.dispatch(getAllProducts());
 
-    this.store$.pipe(select(selectAllProducts)).subscribe((products: ProductModel[]) => {
-      this.productTable.data = products;
-      this.productTable.sort = this.sort;
-      this.productTable.paginator = this.paginator;
-    });
+    this.subscriptions.add(
+        this.store$.pipe(select(selectAllProducts)).subscribe((products: ProductModel[]) => {
+          this.productTable.data = products;
+          this.productTable.sort = this.sort;
+          this.productTable.paginator = this.paginator;
+        })
+    );
   }
 
   ngOnDestroy() {

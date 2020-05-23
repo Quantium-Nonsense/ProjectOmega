@@ -1,20 +1,26 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder } from '@angular/forms';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatRowHarness, MatTableHarness } from '@angular/material/table/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
+import * as fromApp from '../reducers/index';
+import { emptyState } from '../shared/empty.state';
 import { RoleModel } from '../shared/model/role/role.model';
 import { UserModel } from '../shared/model/user/user.model';
-import { TestModule } from '../shared/test/test.module';
+import { SharedModule } from '../shared/shared.module';
 import * as UserActions from './store/user.actions';
 import { UserEffects } from './store/user.effects';
 import * as fromUsers from './store/user.reducer';
+import { selectRoles } from './store/user.reducer';
 import { UserComponent } from './user.component';
 
 describe('UserComponent', () => {
@@ -417,6 +423,7 @@ describe('UserComponent', () => {
   let mockUsersSelector: MemoizedSelector<fromUsers.State, UserModel[]>;
   let mockIsLoadingSelector: MemoizedSelector<fromUsers.State, boolean>;
   let mockUserSelector: MemoizedSelector<fromUsers.State, UserModel>;
+  let mockSelectRoles;
   let effects: UserEffects;
   let actions$: Observable<Action>;
 
@@ -424,18 +431,18 @@ describe('UserComponent', () => {
     TestBed.configureTestingModule({
              declarations: [UserComponent],
              providers: [
+               FormBuilder,
                MatDialogHarness,
-               provideMockStore({
-                 initialState: {
-                   users: [],
-                   roles: []
-                 } as fromUsers.State
+               provideMockStore<fromApp.State>({
+                 initialState: emptyState
                }),
                provideMockActions(() => actions$),
                UserEffects
              ],
              imports: [
-               TestModule
+               NoopAnimationsModule,
+               MatSnackBarModule,
+               SharedModule
              ]
            })
            .compileComponents();
@@ -448,10 +455,8 @@ describe('UserComponent', () => {
     mockStore = TestBed.inject(MockStore);
     effects = TestBed.inject<UserEffects>(UserEffects);
 
-    mockUsersSelector = mockStore.overrideSelector(
-        fromUsers.selectUsers,
-        []
-    );
+    mockUsersSelector = mockStore.overrideSelector(fromUsers.selectUsers, []);
+    mockSelectRoles = mockStore.overrideSelector(selectRoles, []);
 
     mockStore.refreshState();
     fixture.detectChanges();
