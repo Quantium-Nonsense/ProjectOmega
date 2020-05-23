@@ -39,7 +39,7 @@ public class OrderController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity<Order> create(@RequestBody Order newOrder, @RequestHeader("Authorization") String token) throws ProductNotFoundException,
+    public ResponseEntity create(@RequestBody Order newOrder, @RequestHeader("Authorization") String token) throws ProductNotFoundException,
             ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
 
         List<OrderProductDto> productsForOrder = new ArrayList<>();
@@ -63,7 +63,7 @@ public class OrderController {
 
             order = orderService.createOrder(order);
         } catch (Exception e) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getStackTrace().toString());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getStackTrace().toString());
         }
 
         List<OrderProduct> orderProducts = new ArrayList<>();
@@ -78,7 +78,7 @@ public class OrderController {
 
         this.orderService.updateOrder(order.getId(), order);
 
-        return new ResponseEntity<>(order, HttpStatus.CREATED);
+        return new ResponseEntity(order, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/get")
