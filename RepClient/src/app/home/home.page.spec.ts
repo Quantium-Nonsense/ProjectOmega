@@ -5,7 +5,8 @@ import { IonicModule } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { Observable, of } from 'rxjs';
+import { cold, hot } from 'jasmine-marbles';
+import { Observable } from 'rxjs';
 import { SupplierModel } from '../shared/model/home/supplier.model';
 import { SharedModule } from '../shared/shared.module';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
@@ -42,7 +43,6 @@ describe('HomePage', () => {
     return supps;
   };
 
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [HomePage],
@@ -76,13 +76,23 @@ describe('HomePage', () => {
   }));
 
   it('should begin loading when you hit dashboard', async(() => {
-    spyOn(effects, 'getAllCompanies').and.returnValue(of(createMockCompanies()));
+    const companies = createMockCompanies();
+    spyOn(effects, 'getAllCompanies').and.returnValue(
+        cold('--a|', {
+          a: companies
+        })
+    );
 
-    actions$ = of(HomeActions.beginLoadingDashboard()); // Mock dashboard first action
-    effects.dashboardBeginLoading$.subscribe(action => {
-      expect(action).toEqual(HomeActions.showCompanies({ companies: createMockCompanies() }));
-      expect(effects.getAllCompanies).toHaveBeenCalled();
+    actions$ = hot('--a', {
+      a: HomeActions.beginLoadingDashboard()
+    }); // Mock dashboard first action
+
+    const expected = hot('----(ab)', {
+      a: HomeActions.showCompanies({ companies }),
+      b: HomeActions.dashboardDoneLoading()
     });
+
+    expect(effects.dashboardBeginLoading$).toBeObservable(expected);
   }));
 
   it('should create', () => {

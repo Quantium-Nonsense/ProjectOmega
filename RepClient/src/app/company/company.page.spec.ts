@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { cold, hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
@@ -138,18 +139,23 @@ describe('CompanyPage', () => {
     expect(text.includes('Company 1')).toEqual(true); // Check if part of the dummy text is there
   });
 
-  it('should update the store with items of new company', async(() => {
+  it('should update the store with items of new company', () => {
     const supps = createMockCompanies();
     const items = createMockItems();
 
-    spyOn(effects, 'httpGetAllItemsForCompany').and.callThrough().and.returnValue(of(createMockItems()));
+    spyOn(effects, 'httpGetAllItemsForCompany').and.callThrough().and.returnValue(cold('--a|', {
+      a: items
+    }));
 
-    actions$ = of(CompanyActions.loadItemsOfCompany({ company: createMockCompanies()[0] }));
+    actions$ = hot('--a', { a: CompanyActions.loadItemsOfCompany({ company: supps[0] }) });
 
-    effects.getItemsOfSelectedCompany$.subscribe(action => {
-      expect(action).toEqual(CompanyActions.itemsOfCompanyLoaded({ items: createMockItems() }));
+    const expected = hot('----(ab)', {
+      a: CompanyActions.companySelected(),
+      b: CompanyActions.itemsOfCompanyLoaded({ items })
     });
-  }));
+
+    expect(effects.getItemsOfSelectedCompany$).toBeObservable(expected);
+  });
 
   it('should check when a company is selected redirect is triggered', () => {
     actions$ = of(CompanyActions.companySelected());
@@ -165,15 +171,18 @@ describe('CompanyPage', () => {
 
   it('should sort by descending order ( done by store effect )', () => {
     // Create mock items
-    const mockItems = createMockItems();
+    const mockItems = createMockItems().sort((a, b) => a.price - b.price);
 
     // Mock action firing
-    actions$ = of(CompanyActions.sortItems({ items: mockItems, by: SortOptionsEnum.DESCENDING }));
-
-    // Check if stream outputs correct next action with sorted items
-    effects.sortItems$.subscribe(action => {
-      expect(action).toEqual(CompanyActions.updateItems({ items: mockItems.reverse() }));
+    actions$ = hot('--a', {
+      a: CompanyActions.sortItems({ items: mockItems, by: SortOptionsEnum.DESCENDING })
     });
+
+    const expected = hot('--a', {
+      a: CompanyActions.updateItems({ items: mockItems.reverse() })
+    });
+
+    expect(effects.sortItems$).toBeObservable(expected);
   });
 
   it('should sort by ascending order ( done by store effect )', () => {
@@ -192,8 +201,8 @@ describe('CompanyPage', () => {
   it('should ensure search bar works', () => {
     component.items = createMockItems();
     component.itemLookup('A');
-    expect(component.items.length).toEqual(1);
-    expect(component.items[0].description).toEqual('Mock item A');
+    expect(component.items.length).toEqual(50);
+    expect(component.items[0].name).toEqual('name 0');
   });
 
   it('should check if inserting random characters breaks search', () => {
@@ -211,8 +220,7 @@ describe('CompanyPage', () => {
     // Reset items
     component.items = createMockItems();
     component.itemLookup('B');
-    expect(component.items.length).toEqual(1);
-    expect(component.items[0].description).toEqual('Mock item B');
+    expect(component.items.length).toEqual(0);
   });
 
   it('should reset items based on store state', () => {
