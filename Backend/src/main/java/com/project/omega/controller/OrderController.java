@@ -63,9 +63,8 @@ public class OrderController {
 
             order = orderService.createOrder(order);
         } catch (Exception e) {
-            e.printStackTrace();
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getStackTrace().toString());
         }
-
 
         List<OrderProduct> orderProducts = new ArrayList<>();
 
