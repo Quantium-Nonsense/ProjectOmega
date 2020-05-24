@@ -2,7 +2,7 @@ dist: trusty
 os: linux
 
 addons:
-  chrome: stable
+  chrome: beta
 
 cache:
   directories:
@@ -18,8 +18,8 @@ jobs:
         - "12.16.3"
       before_install: cd AdminClient/
       script:
-        - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
         - npm run e2e_headless
+        - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
       after_success: npx codecov
     - name: Rep Client Frontend Tests
       language: node_js
