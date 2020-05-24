@@ -2,7 +2,7 @@ dist: trusty
 os: linux
 
 addons:
-  chrome: stable
+  chrome: beta
   apt:
     packages:
       - chromium-chromedriver
