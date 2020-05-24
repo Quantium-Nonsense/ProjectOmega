@@ -17,3 +17,9 @@ spec:
           image: omegacr.azurecr.io/dev-frontend
           ports:
             - containerPort: 4200
+          env:
+            - name: GIT_COMPANY
+              valueFrom:
+                secretKeyRef:
+                  name: frontend
+                  key: window.env.compandoy
