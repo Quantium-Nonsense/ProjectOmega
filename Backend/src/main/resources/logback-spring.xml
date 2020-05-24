@@ -3,7 +3,7 @@
 
     <property name="LOGS" value="./logs"/>
 
-    <appender name="KafkaAppender" class="com.project.omega.logger.KafkaAppender" />
+    <appender name="KafkaAppender" class="com.project.omega.logger.KafkaAppender"/>
 
     <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS}/omega-backend.log</file>
@@ -13,17 +13,18 @@
         </encoder>
 
         <rollingPolicy
-                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <!-- rollover daily and when the file reaches 10 MegaBytes -->
             <fileNamePattern>
                 ${LOGS}/omega-backend.%i.log
             </fileNamePattern>
-            <maxHistory>7</maxHistory>
-            <timeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>10MB</maxFileSize>
-            </timeBasedFileNamingAndTriggeringPolicy>
+            <minIndex>1</minIndex>
+            <maxIndex>7</maxIndex>
         </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
     </appender>
 
     <!-- LOG everything at INFO level -->
@@ -37,7 +38,7 @@
     </logger>
 
     <logger name="com.project.omega.service.implmentations.KafkaProducerServiceImpl" level="info" additivity="false">
-        <appender-ref ref="RollingFile" />
+        <appender-ref ref="RollingFile"/>
     </logger>
 
 </configuration>
