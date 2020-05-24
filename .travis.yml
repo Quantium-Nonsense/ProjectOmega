@@ -17,8 +17,6 @@ jobs:
       node_js:
         - "12.16.3"
       before_install: cd AdminClient/
-      before_script:
-        - chromedriver-update
       script:
         - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
         - npm run e2e_headless

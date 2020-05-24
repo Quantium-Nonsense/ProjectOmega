@@ -50,7 +50,8 @@ exports.config = {
 	capabilities: {
 		browserName: 'chrome',
 		chromeOptions: {
-			args: ['--headless', '--no-sandbox']
+			args: ["--headless", "--disable-gpu", "--window-size=1200,900"],
+			binary: process.env.CHROME_BIN
 		}
 	},
 	directConnect: true,
