@@ -17,7 +17,9 @@ jobs:
       node_js:
         - "12.16.3"
       before_install: cd AdminClient/
-      script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
+      script:
+        - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
+        - npm run e2e -- --protractor-config=e2e/protractor-ci.travis.conf.js
       after_success: npx codecov
     - name: Rep Client Frontend Tests
       language: node_js
