@@ -323,7 +323,33 @@ public class OrderTestService extends OmegaApplicationTests {
 
     @Test
     public void deleteOrderProductByProductIdTest() {
+        Product product = new Product.ProductBuilder()
+                .setId(1L)
+                .setName("Fockittol")
+                .setDescription("Effectively eliminates all the f*ucks given about anything.")
+                .setPrice(420)
+                .build();
+        Client client = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirstName("John")
+                .setLast_name("Doe")
+                .setDescription("Buys lots of things")
+                .setCompanyName("Lloyds")
+                .setEmail("a@a.com")
+                .setContactNumber("02088273729")
+                .setNotes("that's a random phone number")
+                .build();
 
+        OrderProduct orderProduct = new OrderProduct.OrderProductBuilder()
+                .setId(1L)
+                .setProduct(product)
+                .setClient(client)
+                .setQuantity(2)
+                .build();
+
+        Mockito.doNothing().when(orderProductRepository).deleteByProductId(product);
+        orderProductService.deleteByProductId(product);
+        Mockito.verify(orderProductRepository, Mockito.times(1)).deleteByProductId(product);
     }
 
 
