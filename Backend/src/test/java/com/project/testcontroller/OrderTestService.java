@@ -253,7 +253,72 @@ public class OrderTestService extends OmegaApplicationTests {
 
     @Test
     public void updateOrderByIdTest() throws OrderNotFoundException {
+        Product product = new Product.ProductBuilder()
+                .setId(1L)
+                .setName("Fockittol")
+                .setDescription("Effectively eliminates all the f*ucks given about anything.")
+                .setPrice(420)
+                .build();
+        Client client = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirstName("John")
+                .setLast_name("Doe")
+                .setDescription("Buys lots of things")
+                .setCompanyName("Lloyds")
+                .setEmail("a@a.com")
+                .setContactNumber("02088273729")
+                .setNotes("that's a random phone number")
+                .build();
+        LocalDate dateCreated = LocalDate.now();
 
+        OrderProduct orderProduct = new OrderProduct.OrderProductBuilder()
+                .setId(1L)
+                .setProduct(product)
+                .setClient(client)
+                .setQuantity(2)
+                .build();
+
+        List<OrderProduct> productList = new ArrayList<>();
+        productList.add(orderProduct);
+
+        User user = new User.UserBuilder()
+                .setId(TestingConstant.TEST_ID_1)
+                .setEmail(TestingConstant.TEST_EMAIL_1)
+                .setPassword(TestingConstant.TEST_PASSWORD)
+                .build();
+
+        Order order_one = new Order.OrderBuilder()
+                .setId(1L)
+                .setDateCreated(dateCreated)
+                .setOrderProducts(productList)
+                .setUserId(user.getId())
+                .setStatus("STATED")
+                .build();
+
+        OrderProduct updatedOrderProduct = new OrderProduct.OrderProductBuilder()
+                .setId(2L)
+                .setProduct(product)
+                .setClient(client)
+                .setQuantity(3)
+                .build();
+        List<OrderProduct> updatedProductList = new ArrayList<>();
+        updatedProductList.add(updatedOrderProduct);
+        Order order_two = new Order.OrderBuilder()
+                .setId(1L)
+                .setDateCreated(LocalDate.now())
+                .setOrderProducts(updatedProductList)
+                .setUserId(user.getId())
+                .setStatus("STATED")
+                .build();
+        Mockito.when(orderRepository.existsById(1L)).thenReturn(true);
+        Mockito.when(orderRepository.findById(1L)).thenReturn(Optional.of(order_one));
+        Mockito.when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order_two);
+        Mockito.when(orderProductRepository.save(Mockito.any(OrderProduct.class))).thenReturn(updatedOrderProduct);
+        Assert.assertEquals(order_one.getDateCreated(), orderService.getOrderById(1L).getDateCreated());
+        Assert.assertEquals(order_one.getTotalOrderPrice(), orderService.getOrderById(1L).getTotalOrderPrice());
+        order_two.setId(null);
+        Assert.assertEquals(order_two.getDateCreated(), orderService.updateOrder(1L, order_two).getDateCreated());
+        Assert.assertEquals(order_two.getTotalOrderPrice(), orderService.updateOrder(1L, order_two).getTotalOrderPrice());
     }
 
     @Test
