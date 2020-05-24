@@ -65,9 +65,10 @@ public class UserServiceImpl implements UserService {
         }
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> authorities = currentUser.getAuthorities().stream().collect(Collectors.toList());
-        boolean isAdmin = authorities.stream().anyMatch(a -> a.getAuthority().equals(RoleBasedConstant.ADMIN) &&
-                a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER));
-        if(isAdmin) {
+        boolean isAdminOrRep = authorities.stream().anyMatch(a -> a.getAuthority().equals(RoleBasedConstant.ADMIN)
+                || a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER)
+                || a.getAuthority().equals(RoleBasedConstant.REP));
+        if(isAdminOrRep) {
             finalUsers = users.stream().filter(u ->
                     !u.getRoles().contains(roleService.findByName(RoleBasedConstant.SUPER_ADMIN))).collect(Collectors.toList());
             return finalUsers;
