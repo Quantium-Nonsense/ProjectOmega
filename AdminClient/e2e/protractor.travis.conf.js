@@ -50,8 +50,8 @@ exports.config = {
 	capabilities: {
 		browserName: 'chrome',
 		chromeOptions: {
-			args: ["--headless", "--disable-gpu", "--window-size=1920,1080"],
-			binary: process.env.CHROME_BIN
+			args: ['--headless', '--disable-gpu', '--window-size=1920,1080'],
+			binary: '/home/travis/build/Quantium-Nonsense/ProjectOmega/AdminClient/node_modules/protractor/node_modules/webdriver-manager/selenium/chromedriver_83.0.4103.39'
 		}
 	},
 	directConnect: true,
