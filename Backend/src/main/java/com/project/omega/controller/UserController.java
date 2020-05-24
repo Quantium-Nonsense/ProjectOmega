@@ -1,32 +1,31 @@
 package com.project.omega.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.UserResponse;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.service.interfaces.UserService;
-import org.apache.coyote.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/user")
 public class UserController {
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private UserService userService;
 
-    private ObjectMapper mapper = new ObjectMapper();
-
     @GetMapping(value = "/get")
     public ResponseEntity getUsers() throws NoRecordsFoundException {
+        LOGGER.info("Fetching users...");
         List<User> users = userService.getAllUsers();
         List<UserResponse> u = users.stream().map(user -> {
            UserResponse r = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
@@ -37,6 +36,7 @@ public class UserController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity getById(@PathVariable(value = "id") Long id) throws UserNotFoundException {
+        LOGGER.info("Fetching user: {}", id);
         User user = userService.getUserById(id);
         UserResponse u = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
         return new ResponseEntity(u, HttpStatus.OK);
@@ -44,6 +44,7 @@ public class UserController {
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteById(@PathVariable(value = "id") Long id) throws UserNotFoundException {
+        LOGGER.info("Deleting user: {}", id);
         User user = userService.deleteUserById(id);
         UserResponse u = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
         return new ResponseEntity(u, HttpStatus.OK);
@@ -52,6 +53,7 @@ public class UserController {
     @PutMapping(value = "/update/{id}")
     public ResponseEntity updateById(@PathVariable(value = "id") Long id,
                                      @RequestBody User update) throws Exception {
+        LOGGER.info("Updating user: {}", id);
         User user = userService.updateUserById(id, update);
         UserResponse u = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
         return new ResponseEntity(u, HttpStatus.OK);

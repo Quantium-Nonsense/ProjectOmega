@@ -56,7 +56,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MessageSource messages;
 
-
     public List<User> getAllUsers() throws NoRecordsFoundException {
         List<User> users = (List) userRepository.findAll();
         List<User> finalUsers;
@@ -69,6 +68,7 @@ public class UserServiceImpl implements UserService {
                 || a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER)
                 || a.getAuthority().equals(RoleBasedConstant.REP));
         if(isAdminOrRep) {
+            LOGGER.warn("Not a super admin! Filtering output...");
             finalUsers = users.stream().filter(u ->
                     !u.getRoles().contains(roleService.findByName(RoleBasedConstant.SUPER_ADMIN))).collect(Collectors.toList());
             return finalUsers;
