@@ -1,5 +1,7 @@
 package com.project.omega.helper;
 import com.sun.mail.smtp.SMTPTransport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -14,7 +16,6 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 public class EmailSender {
-
     private static final String SMTP_SERVER = "smtp.gmail.com";
 
     public static void send(String to, String subject, String content) {
@@ -33,8 +34,6 @@ public class EmailSender {
                     InternetAddress.parse(to, false));
 
             msg.setSubject(subject);
-
-            //msg.setText(EMAIL_TEXT);
 
             String EMAIL_TEXT = content;
             msg.setDataHandler(new DataHandler(new HTMLDataSource(EMAIL_TEXT)));

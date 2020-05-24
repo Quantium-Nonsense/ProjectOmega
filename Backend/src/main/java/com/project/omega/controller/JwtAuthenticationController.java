@@ -79,10 +79,11 @@ public class JwtAuthenticationController {
                 + EmailConstants.PASSWORD + user.getPassword() + "</br></br>"
                 + EmailConstants.REP_NOTE
                 + EmailConstants.PASS_CHANGE_NOTE + "</br>"
-                + EmailConstants.linkBuilder(EmailConstants.BACKEND_LOCAL,
+                + EmailConstants.linkBuilder(EmailConstants.BACKEND_REMOTE,
                 "/api/confirmRegistration?token=" + verificationToken,
                 EmailConstants.CONFIRMATION + user.getEmail());
 
+        LOGGER.info("Sending Email (subject: {}, receiver: {})", EmailConstants.REG_CONFIRM, user.getEmail());
         EmailSender.send(user.getEmail(), EmailConstants.REG_CONFIRM, emailContent);
 
         UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
@@ -94,22 +95,25 @@ public class JwtAuthenticationController {
     public ResponseEntity registrationConfirm(@RequestParam("token") String token) throws Exception {
         VerificationToken verificationToken = tokenService.findByToken(token);
         if(verificationToken == null) {
+            LOGGER.warn("Token doesn't exist.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(TokenConstants.TOKEN_INACTIVE);
         }
 
         User user = verificationToken.getUser();
 
         if(verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime() <= 0) {
+            LOGGER.warn("Token expired.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(TokenConstants.TOKEN_EXPIRED);
         }
 
+        LOGGER.info("Verifying user: {}", user.getEmail());
         user.setEnabled(true);
         userService.updateUserById(user.getId(), user);
         tokenService.deleteToken(verificationToken);
 
         Role userRole = (Role) ((List) user.getRoles()).get(0);
 
-        String adminUrl = "http://" + EmailConstants.FRONTEND_LOCAL + "/auth";
+        String adminUrl = "http://" + EmailConstants.FRONTEND_REMOTE + "/auth";
 //        String repUrl = "http://" + EmailConstants.FRONTEND_LOCAL + "/auth_rep";
 
         HttpHeaders headers = new HttpHeaders();
@@ -120,7 +124,7 @@ public class JwtAuthenticationController {
             return ResponseEntity.status(HttpStatus.OK).body(TokenConstants.TOKEN_REP_REDIRECT);
         } else {
             headers.setLocation(URI.create(adminUrl));
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
         }
     }
 
