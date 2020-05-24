@@ -6,14 +6,15 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { routes } from '../app-routing.module';
-import { State } from '../reducers';
+import { emptyState } from '../shared/empty.state';
 import { TestModule } from '../shared/test/test.module';
 import { AuthComponent } from './auth.component';
+import * as fromApp from '../reducers/index';
 
 describe('AuthPage', () => {
   let component: AuthComponent;
   let fixture: ComponentFixture<AuthComponent>;
-  let mockStore: MockStore<State>;
+  let mockStore: MockStore;
   let mockRouter: Router;
 
   // Mocked services for auth page
@@ -28,17 +29,10 @@ describe('AuthPage', () => {
       imports: [TestModule, RouterTestingModule.withRoutes(routes)],
       providers: [
         AuthComponent,
-        provideMockStore({
-          initialState: {
-            auth: {
-              errorMessage: null,
-              loading: false,
-              user: null
-            },
-            user: null
-          }
+        provideMockStore<fromApp.State>({
+          initialState: emptyState
         }),
-        {provide: MatSnackBar, useValue: mockSnackbar}
+        { provide: MatSnackBar, useValue: mockSnackbar }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
@@ -54,6 +48,33 @@ describe('AuthPage', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should ensure form has no string errors', () => {
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    component.authForm.get('password').setValue('123');
+    component.authForm.get('email').setValue('ivnalidemail');
+    fixture.detectChanges();
+
+    expect(component.passwordHasError && component.emailHasError).toBe(true); // Ensure there are errors
+
+    component.authForm.get('password').setValue('alongvalidpassword');
+    component.authForm.get('email').setValue('valid@email.com');
+
+    expect(component.passwordErrorMessage).toBeFalsy();
+    expect(component.emailErrorMessage).toBeFalsy();
+  });
+
+  it('should check min length error', async(() => {
+    component.ngOnInit();
+    fixture.detectChanges();
+
+    component.authForm.get('password').setValue('123');
+    fixture.detectChanges();
+
+    expect(component.authForm.get('password').hasError('minlength')).toBe(true);
+  }));
+
   it('should show error message if not logged in', async(() => {
     spyOn(component, 'showMessage');
 
@@ -66,9 +87,7 @@ describe('AuthPage', () => {
         loading: false,
         user: null,
         returnUrl: ''
-      },
-      user: null,
-      customers: null
+      }
     });
 
     mockStore.refreshState();
@@ -79,31 +98,12 @@ describe('AuthPage', () => {
     });
   }));
 
-  it('Should present loader when form submitted', async(() => {
-    spyOn(component.loadingSpinnerService, 'showSpinner'); // Spy on function
-
+  it('should create form on initialization', () => {
     component.ngOnInit();
-
-    mockStore.setState({
-      toolbar: null,
-      auth: {
-        errorMessage: null,
-        loading: true,
-        user: null,
-        returnUrl: ''
-      },
-      user: null,
-      customers: null
-    });
-
-    mockStore.refreshState();
     fixture.detectChanges();
 
-    fixture.whenStable().then(() => {
-      expect(component.loadingSpinnerService.showSpinner).toHaveBeenCalled();
-    });
-
-  }));
+    expect(component.authForm).toBeTruthy();
+  });
 
   it('should display errors if email is invalid and password not entered', async(() => {
     component.ngOnInit();

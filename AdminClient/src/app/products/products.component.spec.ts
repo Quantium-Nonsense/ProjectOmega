@@ -1,28 +1,42 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { TestModule } from '../shared/test/test.module';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { Action } from '@ngrx/store';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { Observable } from 'rxjs';
+import * as fromApp from '../reducers/index';
+import { emptyState } from '../shared/empty.state';
+import { SharedModule } from '../shared/shared.module';
 
 import { ProductsComponent } from './products.component';
+import { ProductsEffects } from './store/products.effects';
+import { selectAllProducts } from './store/products.reducer';
 
 describe('ProductsComponent', () => {
   let component: ProductsComponent;
   let fixture: ComponentFixture<ProductsComponent>;
+  let mockStore: MockStore;
+  let mockSelectAllProducts;
+  let actions$: Observable<Action>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ProductsComponent],
-      imports: [
-        NoopAnimationsModule,
-        MatPaginatorModule,
-        MatSortModule,
-        MatTableModule,
-        TestModule,
-        MatDialogModule,
+      providers: [
+        provideMockActions(() => actions$),
+        provideMockStore<fromApp.State>({
+          initialState: emptyState
+        }),
+        ProductsEffects
       ],
+      imports: [
+        MatSnackBarModule,
+        SharedModule,
+        BrowserModule,
+        NoopAnimationsModule
+      ]
     }).compileComponents();
   }));
 
@@ -30,6 +44,10 @@ describe('ProductsComponent', () => {
     fixture = TestBed.createComponent(ProductsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    mockStore = TestBed.inject(MockStore);
+    mockSelectAllProducts = mockStore.overrideSelector(selectAllProducts, []);
+
   });
 
   it('should compile', () => {

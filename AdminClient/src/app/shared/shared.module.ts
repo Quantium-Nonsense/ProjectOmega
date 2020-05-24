@@ -1,5 +1,6 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,18 +12,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
-import { BrowserModule } from '@angular/platform-browser';
 import { PopupDialogComponent } from './components/popup-dialog/popup-dialog.component';
 import { TableFilterComponent } from './components/table-filter/table-filter.component';
+import { PrettyRolePipe } from './pipes/pretty-role.pipe';
 
 @NgModule({
   declarations: [
     TableFilterComponent,
-    PopupDialogComponent
+    PopupDialogComponent,
+    PrettyRolePipe,
   ],
   imports: [
     FlexLayoutModule,
     CommonModule,
+    HttpClientModule,
     MatFormFieldModule,
     MatInputModule,
     MatDialogModule,
@@ -32,13 +35,12 @@ import { TableFilterComponent } from './components/table-filter/table-filter.com
     MatPaginatorModule,
     MatIconModule,
     MatMenuModule,
-    BrowserModule,
     TextFieldModule
   ],
   exports: [
+    HttpClientModule,
     FlexLayoutModule,
     CommonModule,
-    BrowserModule,
     TableFilterComponent,
     MatFormFieldModule,
     MatInputModule,
@@ -49,7 +51,8 @@ import { TableFilterComponent } from './components/table-filter/table-filter.com
     MatPaginatorModule,
     MatIconModule,
     MatMenuModule,
-    TextFieldModule
+    TextFieldModule,
+    PrettyRolePipe,
   ]
 
 })

@@ -4,16 +4,16 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatBottomSheetHarness } from '@angular/material/bottom-sheet/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { cold, hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
 import { ItemModel } from '../shared/model/company-items/item.model';
-import { CompanyModel } from '../shared/model/home/company.model';
+import { SupplierModel } from '../shared/model/home/supplier.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
 import { SharedModule } from '../shared/shared.module';
 import { mockEmptyState } from '../shared/test/empty-store-state.model';
@@ -22,18 +22,41 @@ import { CompanyPage } from './company.page';
 import * as CompanyActions from './store/company.actions';
 import { CompanyEffects } from './store/company.effects';
 import * as fromCompany from './store/company.reducer';
-import Jasmine = jasmine.Jasmine;
 
-const createMockItems = (): ItemModel[] => [
-  new ItemModel('1', 'A', 'Mock item A', 1, 'Mock Company A'),
-  new ItemModel('2', 'B', 'Mock item B', 2, 'Mock Company B'),
-  new ItemModel('3', 'C', 'Mock item C', 3, 'Mock Company C')
-];
-const createMockCompanies = (): CompanyModel[] => [
-  new CompanyModel('Company 1', 'A', 'Mock Company A'),
-  new CompanyModel('Company 2', 'B', 'Mock Company B'),
-  new CompanyModel('Company 3', 'C', 'Mock Company C')
-];
+const createMockItems = (): ItemModel[] => {
+  const supps: ItemModel[] = [];
+  for (let i = 0; i < 50; i++) {
+    supps.push({
+      id: i.toString(),
+      description: `Fancy company ${ i }`,
+      name: `name ${ i }`,
+      supplier: createMockCompanies()[0],
+      companyId: `${ i }`,
+      price: (i + 1) * 5
+    });
+  }
+
+  return supps;
+};
+const createMockCompanies = (): SupplierModel[] => {
+  const supps: SupplierModel[] = [];
+  for (let i = 0; i < 50; i++) {
+    supps.push({
+      id: i,
+      companyName: `Company ${ i }`,
+      description: `Fancy company ${ i }`,
+      email: `a@a${ i }.com`,
+      firstName: `firstName${ i }`,
+      lastName: `lastName${ i }`,
+      contactNumber: `5435443${ i }`,
+      address: `bla${ i }`,
+      notes: `notes${ i }`,
+      country: `country ${ i }`
+    });
+  }
+
+  return supps;
+};
 
 describe('CompanyPage', () => {
   let component: CompanyPage;
@@ -60,7 +83,7 @@ describe('CompanyPage', () => {
         IonicModule.forRoot()
       ],
       providers: [
-        {provide: Router, useValue: navSpy},
+        { provide: Router, useValue: navSpy },
         CompanyEffects,
         provideMockActions(() => actions$),
         provideMockStore({
@@ -94,10 +117,10 @@ describe('CompanyPage', () => {
     const mockCompanies = createMockCompanies();
     actions$ = of(CompanyActions.showCompaniesBottomSheet({
       data: {
-        action: (selectedCompany: string) => {
+        action: (selectedCompany: SupplierModel) => {
         },
-        listLabels: [
-          ...mockCompanies.map(c => c.name)
+        companies: [
+          ...mockCompanies
         ]
       }
     }));
@@ -116,18 +139,26 @@ describe('CompanyPage', () => {
     expect(text.includes('Company 1')).toEqual(true); // Check if part of the dummy text is there
   });
 
-  it('should update the store with items of new company', async(() => {
-    spyOn(effects, 'createFakeItems').and.callThrough().and.returnValue(createMockItems());
+  it('should update the store with items of new company', () => {
+    const supps = createMockCompanies();
+    const items = createMockItems();
 
-    actions$ = of(CompanyActions.loadItemsOfCompany({company: 'Company 1'}));
+    spyOn(effects, 'httpGetAllItemsForCompany').and.callThrough().and.returnValue(cold('--a|', {
+      a: items
+    }));
 
-    effects.getItemsOfSelectedCompany$.subscribe(action => {
-      expect(action).toEqual(CompanyActions.itemsOfCompanyLoaded({items: createMockItems()}));
+    actions$ = hot('--a', { a: CompanyActions.loadItemsOfCompany({ company: supps[0] }) });
+
+    const expected = hot('----(ab)', {
+      a: CompanyActions.companySelected(),
+      b: CompanyActions.itemsOfCompanyLoaded({ items })
     });
-  }));
+
+    expect(effects.getItemsOfSelectedCompany$).toBeObservable(expected);
+  });
 
   it('should check when a company is selected redirect is triggered', () => {
-    actions$ = of(CompanyActions.companySelected({selectedCompany: 'Company 1'}));
+    actions$ = of(CompanyActions.companySelected());
 
     effects.redirectToCompanyPage$.subscribe(); // trigger has no dispatch
 
@@ -140,15 +171,18 @@ describe('CompanyPage', () => {
 
   it('should sort by descending order ( done by store effect )', () => {
     // Create mock items
-    const mockItems = createMockItems();
+    const mockItems = createMockItems().sort((a, b) => a.price - b.price);
 
     // Mock action firing
-    actions$ = of(CompanyActions.sortItems({items: mockItems, by: SortOptionsEnum.DESCENDING}));
-
-    // Check if stream outputs correct next action with sorted items
-    effects.sortItems$.subscribe(action => {
-      expect(action).toEqual(CompanyActions.updateItems({items: mockItems.reverse()}));
+    actions$ = hot('--a', {
+      a: CompanyActions.sortItems({ items: mockItems, by: SortOptionsEnum.DESCENDING })
     });
+
+    const expected = hot('--a', {
+      a: CompanyActions.updateItems({ items: mockItems.reverse() })
+    });
+
+    expect(effects.sortItems$).toBeObservable(expected);
   });
 
   it('should sort by ascending order ( done by store effect )', () => {
@@ -156,19 +190,19 @@ describe('CompanyPage', () => {
     const mockItems: ItemModel[] = createMockItems().reverse();
 
     // Mock action firing
-    actions$ = of(CompanyActions.sortItems({items: mockItems, by: SortOptionsEnum.ASCENDING}));
+    actions$ = of(CompanyActions.sortItems({ items: mockItems, by: SortOptionsEnum.ASCENDING }));
 
     // Check if stream outputs correct next action with sorted items
     effects.sortItems$.subscribe(action => {
-      expect(action).toEqual(CompanyActions.updateItems({items: mockItems.reverse()}));
+      expect(action).toEqual(CompanyActions.updateItems({ items: mockItems.reverse() }));
     });
   });
 
   it('should ensure search bar works', () => {
     component.items = createMockItems();
     component.itemLookup('A');
-    expect(component.items.length).toEqual(1);
-    expect(component.items[0].description).toEqual('Mock item A');
+    expect(component.items.length).toEqual(50);
+    expect(component.items[0].name).toEqual('name 0');
   });
 
   it('should check if inserting random characters breaks search', () => {
@@ -186,8 +220,7 @@ describe('CompanyPage', () => {
     // Reset items
     component.items = createMockItems();
     component.itemLookup('B');
-    expect(component.items.length).toEqual(1);
-    expect(component.items[0].description).toEqual('Mock item B');
+    expect(component.items.length).toEqual(0);
   });
 
   it('should reset items based on store state', () => {
@@ -213,7 +246,7 @@ describe('CompanyPage', () => {
     component.cancelLookup();
     fixture.detectChanges();
     mockStore.select('company')
-      .pipe(take(1))
-      .subscribe((state: fromCompany.State) => expect(state.companyItems).toBe(mockItems));
+             .pipe(take(1))
+             .subscribe((state: fromCompany.State) => expect(state.companyItems).toBe(mockItems));
   });
 });
