@@ -36,6 +36,7 @@ import { UserEffects } from './user/store/user.effects';
 import { ChartComponent} from './chart/chart.component';
 import { ManagementComponent} from './management/management.component';
 import { OrderEffects} from './orders/store/order.effects';
+import { HttpClientModule } from '@angular/common/http';
 
 export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
 
@@ -49,6 +50,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
   ],
   bootstrap: [AppComponent],
   imports: [
+    HttpClientModule,
     AppRoutingModule,
     AuthModule,
     BrowserModule,

@@ -2,20 +2,19 @@ import { createAction, props } from '@ngrx/store';
 import { CustomerModel } from '../../models/customers/customer.model';
 import { CustomerManagementModel } from '../../models/customers/management/customer-management.model';
 
-
-
 /** ngrx Actions that map for the management page, customer model required */
-export const getAllClients = createAction(
-  '[Management - Component] Load all clients'
+export const beginLoadingClients = createAction(
+  '[Management - Component] Begin loading all clients'
 );
 
 export const allClientsLoaded = createAction(
   '[Management - Effects] All clients loaded',
-  props<{ customers: CustomerModel[]; customersReps: CustomerManagementModel[]}>()
+  props<{ customers: CustomerModel[]}>()
 );
 
 export const editRepresentative = createAction(
-  '[Management - Effects] Change representative for customer'
+  '[Management - Effects] Change representative for customer',
+  props<{ customers: CustomerModel}>()
 );
 
 export const editRepresentativeSuccess = createAction(
@@ -27,8 +26,9 @@ export const editRepresentativeFailed = createAction(
   props<{ error: string }>()
 );
 
-export const showEditRepresentativeDialog = createAction(
-  '[Management - Component] Show edit representative dialog'
+export const showEditRepresentative = createAction(
+  '[Management - Component] Show edit representative dialog',
+  props<{ customer: CustomerModel}>()
 );
 
 export const showErrorMessage = createAction(
