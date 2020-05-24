@@ -33,22 +33,14 @@ steps:
     inputs:
       containerRegistry: 'omegacr'
       repository: 'dev-frontend'
-      command: 'build'
+      command: 'buildandpush'
       Dockerfile: './AdminClient/Dockerfile'
       buildContext: './AdminClient'
       tags: |
         latest
         $(Build.BuildId)
-      arguments: --env GIT_COMPANY=client1
 
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'omegacr'
-      repository: 'dev-frontend'
-      command: 'push'
-      tags: |
-        latest
-        $(Build.BuildId)
+
 
 
 
