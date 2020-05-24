@@ -2,5 +2,5 @@
 	window['env'] = window['env'] || {};
 	
 	// Enviroment variables
-	window.env.company = "default";
+	window.env.company = "${GIT_COMPANY}";
 })(this)
