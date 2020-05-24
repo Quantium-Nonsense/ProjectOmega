@@ -40,7 +40,6 @@ const _supplierReducer: ActionReducer<State, Action> = createReducer(
       suppliers
     })),
     on(
-        SupplierActions.editSupplier,
         SupplierActions.deleteSupplier,
         (prevState: State) => ({
           ...prevState,

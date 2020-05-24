@@ -23,7 +23,8 @@ export class SuppliersEffects {
       ofType(SupplierActions.newSupplierCreateSuccess),
       map((action: Action) => {
         this.toast.open('New supplier created successfully', null, {
-          duration: 3000
+          duration: 3000,
+          panelClass: 'successSnack'
         });
         this.dialog.closeAll();
         return SupplierActions.beginLoadingSuppliers();
@@ -62,7 +63,8 @@ export class SuppliersEffects {
       switchMap(action => {
         this.dialog.closeAll();
         this.toast.open('Supplier deleted successfully!', null, {
-          duration: 3000
+          duration: 3000,
+          panelClass: 'successSnack'
         });
         return [
           ToolbarActions.beginProgressBar(),
@@ -119,7 +121,8 @@ export class SuppliersEffects {
           ofType(SupplierActions.showErrorMessage),
           map((action: Action & { error: string }) => {
             this.toast.open(`An error has occurred: ${ action.error }`, null, {
-              duration: 3000
+              duration: 3000,
+              panelClass: 'failedSnack'
             });
           })
       ), { dispatch: false });
