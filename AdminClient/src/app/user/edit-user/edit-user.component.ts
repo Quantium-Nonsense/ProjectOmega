@@ -1,11 +1,13 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
 import * as fromApp from '../../reducers/index';
-import { UserModel } from '../../shared/model/user.model';
-import * as fromUser from '../../user/store/user.reducer';
+import { RoleModel } from '../../shared/model/role/role.model';
+import { UserModel } from '../../shared/model/user/user.model';
+import { selectIsProgressBarVisible } from '../../toolbar/store/toolbar.reducer';
+import { selectRoles } from '../store/user.reducer';
 import * as UserActions from './../store/user.actions';
 
 @Component({
@@ -13,31 +15,49 @@ import * as UserActions from './../store/user.actions';
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.scss']
 })
-export class EditUserComponent implements OnInit, AfterContentInit, OnDestroy {
+export class EditUserComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
+
+  availableRoles: RoleModel[];
+  isLoading: boolean;
 
   private subscription: Subscription;
 
   constructor(
-    private store: Store<fromApp.State>
+      private fb: FormBuilder,
+      private store: Store<fromApp.State>,
+      @Inject(MAT_DIALOG_DATA) public data: {
+        formType: 'edit' | 'create',
+        user: UserModel
+      }
   ) {
     this.subscription = new Subscription();
     this.userForm = this.formInitialization();
   }
 
   ngOnInit(): void {
+    this.subscription.add(this.store.pipe(select(selectRoles)).subscribe(roles => this.availableRoles = roles));
+    this.subscription.add(this.store.pipe(select(selectIsProgressBarVisible)).subscribe(isLoading => {
+      this.isLoading = isLoading;
+      if (isLoading) {
+        this.userForm.disable();
+      } else {
+        this.userForm.enable();
+      }
+    }));
+    if (this.data.user) {
+      this.email.setValue(this.data.user.email);
+      this.roles.setValue(this.data.user.roles);
+    }
   }
 
-  ngAfterContentInit(): void {
-    this.subscription.add(
-      this.store.select(fromUser.selectFocusedUser).subscribe(user => {
-        if (user) {
-          this.email.setValue(user.email);
-          this.role.setValue(user.role);
-          this.company.setValue(user.companyId);
-        }
-      })
-    );
+
+  get email(): AbstractControl {
+    return this.userForm.get('email');
+  }
+
+  get roles(): AbstractControl {
+    return this.userForm.get('roles');
   }
 
   ngOnDestroy(): void {
@@ -45,41 +65,29 @@ export class EditUserComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onSubmit(): void {
-    this.store.select(fromUser.selectFocusedUser)
-      .pipe(take(1))
-      .subscribe(user => this.store.dispatch(UserActions.editUser({
+    if (this.data.user) {
+      this.store.dispatch(UserActions.editUser({
         user: {
-          ...user,
-          email: this.email.value,
-          role: this.role.value,
-          companyId: this.company.value
+          id: this.data.user.id,
+          roles: this.roles.value,
+          email: this.email.value as string,
+          password: null
         }
-      })));
+      }));
+    } else {
+      this.store.dispatch(UserActions.createNewUser({
+        user: {
+          id: null,
+          roles: this.roles.value,
+          email: this.email.value as string,
+          password: null
+        }
+      }));
+    }
   }
 
-  /**
-   * Check if email is in the correct format
-   *
-   * @returns true if the email is invalid, false if it is valid
-   */
-  get emailHasError(): boolean {
-    return this.userForm.get('email').invalid;
-  }
-
-  protected isFormValid(): boolean {
+  isFormValid(): boolean {
     return this.userForm.valid;
-  }
-
-  get email(): AbstractControl {
-    return this.userForm.get('email');
-  }
-
-  get role(): AbstractControl {
-    return this.userForm.get('role');
-  }
-
-  get company(): AbstractControl {
-    return this.userForm.get('company');
   }
 
   /**
@@ -89,32 +97,33 @@ export class EditUserComponent implements OnInit, AfterContentInit, OnDestroy {
     const emailCtrl = this.userForm.get('email');
 
     return emailCtrl.hasError('required') // Check if email has been filled
-      ? 'Email is required!'
-      : emailCtrl.hasError('email') // If yes check if valid email
-        ? 'Not a valid email'
-        : '';
+           ? 'Email is required!'
+           : emailCtrl.hasError('email') // If yes check if valid email
+             ? 'Not a valid email'
+             : '';
   }
 
   get roleHasError(): boolean {
-    return this.userForm.get('role').invalid;
+    return this.roles.invalid;
   }
 
   get roleErrorMessage(): string {
-    return this.userForm.get('email').hasError('required') ? 'Role cannot be empty' : '';
+    return this.roles.hasError('required') ? 'Role cannot be empty' : '';
   }
 
-  private formInitialization = (): FormGroup =>
-    new FormGroup({
-      email: new FormControl('', [Validators.email, Validators.required]),
-      role: new FormControl('', [Validators.required]),
-      company: new FormControl('', [Validators.required])
-    });
+  compareWith(obj1, obj2) {
+    return obj1.id === obj2.id;
+  }
 
-  get companyHasError(): boolean {
-    return this.company.hasError('required');
+  private formInitialization = (): FormGroup => {
+    return this.fb.group({
+      email: ['', [Validators.email, Validators.required]],
+      roles: ['', [Validators.required]]
+    });
   };
 
-  get companyErrorMessage(): string {
-    return this.company.getError('required');
+
+  get emailHasError() {
+    return this.email.invalid;
   }
 }

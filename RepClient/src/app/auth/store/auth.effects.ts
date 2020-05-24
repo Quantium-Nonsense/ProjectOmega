@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiEndpointCreatorService } from '../../services/api-endpoint-creator.service';
 import { UserModel } from '../../shared/model/auth/user.model';
@@ -52,20 +52,21 @@ export class AuthEffects {
                     [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()]),
                   catchError((error: HttpErrorResponse) => {
                     if (error.status === 404 || error.status === 500) {
-                      return switchMap(() => [
+                      return [
                         AuthActions.loginRejected({
                           errorMessage: environment.common.FAILED_LOGIN_SERVER
                         }),
                         AuthActions.loadingComplete()
-                      ]);
+                      ];
                     }
+                    console.log(error);
 
-                    return switchMap(() => [
+                    return [
                       AuthActions.loginRejected({
                         errorMessage: 'Wrong email or password, please try again'
                       }),
                       AuthActions.loadingComplete()
-                    ]);
+                    ];
                   })
               ))
       ));
@@ -88,6 +89,7 @@ export class AuthEffects {
   }
 
   handleTokenReturn(httpResult: { token: string }): Action {
+    console.log(`From handle token token is:  ${httpResult.token}`);
     const user = this.decodeToken(httpResult.token);
 
     return AuthActions.loginSuccessful({user});

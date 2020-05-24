@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -47,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
+        httpSecurity.csrf().disable().cors().and()
                 .authorizeRequests()
                 .antMatchers("/api/authenticate",
                         "/api/confirmRegistration").permitAll()
@@ -57,7 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/product/**",
                         "/api/supplier/**",
                         "/api/order/**",
-                        "/api/client/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
+                        "/api/client/**",
+                        "/api/statistics/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "DEFAULT_USER_ROLE")
                 .antMatchers("/api/product/get",
                         "/api/product/{id}",
                         "/api/product/lt/**",
@@ -68,6 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/supplier/get",
                         "/api/supplier/{id}",
                         "/api/supplier/{companyName}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")
+                .antMatchers("/api/order/**").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")
                 .antMatchers("/api/client/get",
                         "/api/client/{id}",
                         "/api/client/{update}").hasAnyRole("SUPER_ADMIN", "ADMIN", "REP", "DEFAULT_USER_ROLE")

@@ -1,66 +1,70 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
 <mat-dialog-content>
-  <form
-    [formGroup]="productItemForm"
-    class="max-height"
-  >
-    <div fxLayout="row">
-      <mat-form-field>
-        <mat-label>Supplier</mat-label>
-        <mat-select formControlName="supplier" id="supplier">
-          <mat-option *ngFor="let sup of suppliers" [value]="sup">{{ sup.name }}</mat-option>
-        </mat-select>
-        <mat-error *ngIf="supplierHasError" id="supplierError">{{supplierErrorMessage}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-form-field>
-        <mat-label>Product Name</mat-label>
-        <input
-          formControlName="name"
-          id="name"
-          matInput
-        />
-        <mat-error *ngIf="nameHasError" id="nameError">{{nameErrorMessage}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-form-field>
-        <mat-label>Description</mat-label>
-        <input
-          formControlName="description"
-          id="description"
-          matInput
-        />
-        <mat-error *ngIf="descriptionHasError" id="descriptionError">{{descriptionErrorMessage}}</mat-error>
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-form-field>
-        <mat-label>Price</mat-label>
-        <input
-          formControlName="price"
-          id="price"
-          matInput
-        />
-        <span matPrefix>€&nbsp;</span>
-        <mat-error *ngIf="priceHasError" id="priceError">{{priceErrorMessage}}</mat-error>
-      </mat-form-field>
-    </div>
-  </form>
+    <form
+            [formGroup]="productItemForm"
+            class="max-height"
+    >
+
+        <div fxLayout="row">
+            <mat-form-field fxFlexFill>
+                <mat-label>Product Name</mat-label>
+                <input
+                        formControlName="name"
+                        id="name"
+                        matInput
+                />
+                <mat-error *ngIf="nameHasError"
+                           id="nameError">{{nameErrorMessage}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlexFill>
+                <mat-label>Description</mat-label>
+                <input
+                        formControlName="description"
+                        id="description"
+                        matInput
+                />
+                <mat-error *ngIf="descriptionHasError"
+                           id="descriptionError">{{descriptionErrorMessage}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlexFill>
+                <mat-label>Price</mat-label>
+                <input
+                        type="number"
+                        formControlName="price"
+                        id="price"
+                        matInput
+                />
+                <span matPrefix>€&nbsp;</span>
+                <mat-error *ngIf="priceHasError"
+                           id="priceError">{{priceErrorMessage}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div fxLayout="row">
+            <mat-form-field fxFlexFill>
+                <mat-label>Supplier</mat-label>
+                <mat-select
+                        [compareWith]="compareFun"
+                        formControlName="supplier"
+                        id="supplier">
+                    <mat-option *ngFor="let supplier of suppliers"
+                                [value]="supplier">{{ supplier.companyName }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="supplierHasError"
+                           id="supplierError">{{supplierErrorMessage}}</mat-error>
+            </mat-form-field>
+        </div>
+    </form>
 </mat-dialog-content>
-<mat-dialog-actions *ngIf="data.editable" align="end">
-  <button (click)="onSaveClick()" [disabled]="!isFormValid()" cdkFocusInitial color="primary" mat-raised-button>
-    <mat-icon class="mr-1">save</mat-icon>
-    Save
-  </button>
+
+<mat-dialog-actions align="end">
+    <button (click)="onSaveClick()"
+            [disabled]="productItemForm.invalid || isLoading"
+            color="primary"
+            mat-raised-button>
+        <mat-icon class="mr-1">save</mat-icon>
+        Save
+    </button>
 </mat-dialog-actions>
-
-
-<!--  id: number,
-  supplier: string,
-  supplierId: number,
-  name: string,
-  description: string,
-  price: number,
--->

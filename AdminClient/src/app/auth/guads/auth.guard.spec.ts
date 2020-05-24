@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { State } from '../../reducers';
+import { provideMockStore } from '@ngrx/store/testing';
+import { emptyState } from '../../shared/empty.state';
 
 import { AuthGuard } from './auth.guard';
 import createSpy = jasmine.createSpy;
@@ -15,15 +15,15 @@ describe('AuthGuard', () => {
     const jwtHelperService = jasmine.createSpyObj<JwtHelperService>('JwtHelperService', ['tokenGetter']);
 
     TestBed.configureTestingModule({
-      imports: [
-
-      ],
+      imports: [],
       providers: [
         AuthGuard,
         {
           provide: JwtHelperService, useValue: jwtHelperService
         },
-        provideMockStore({initialState})
+        provideMockStore({
+          initialState: emptyState
+        })
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     });

@@ -1,11 +1,12 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {CustomerFormComponent} from './customer-form.component';
-import {provideMockStore} from '@ngrx/store/testing';
-import {MatDialogHarness} from '@angular/material/dialog/testing';
-import {MatDialogRef} from '@angular/material/dialog';
-import {HarnessLoader} from '@angular/cdk/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { provideMockStore } from '@ngrx/store/testing';
+import * as fromApp from '../../reducers/index';
+import { emptyState } from '../../shared/empty.state';
+import { CustomerFormComponent } from './customer-form.component';
 
 describe('CustomerFormComponent', () => {
 	let component: CustomerFormComponent;
@@ -14,15 +15,14 @@ describe('CustomerFormComponent', () => {
 	let loader: HarnessLoader;
 	let documentLoader: HarnessLoader;
 
-	beforeEach(async(() => {
+	beforeEach(() => {
 		TestBed.configureTestingModule({
 				   declarations: [CustomerFormComponent],
 				   providers: [
-					   provideMockStore({
-						   initialState: {
-							   customers: {}
-						   }
+					   provideMockStore<fromApp.State>({
+						   initialState: emptyState
 					   }),
+					   { provide: MAT_DIALOG_DATA, useValue: {} },
 					   MatDialogHarness,
 					   {
 						   provide: MatDialogRef,
@@ -31,7 +31,7 @@ describe('CustomerFormComponent', () => {
 				   ]
 			   })
 			   .compileComponents();
-	}));
+	});
 
 	beforeEach(() => {
 		fixture = TestBed.createComponent(CustomerFormComponent);
@@ -45,10 +45,9 @@ describe('CustomerFormComponent', () => {
 
 	afterAll(async () => {
 		try {
-			const matDialog = await documentLoader.getHarness(MatDialogHarness)
+			const matDialog = await documentLoader.getHarness(MatDialogHarness);
 			await matDialog.close();
-		}
-		catch (e) {
+		} catch (e) {
 			// Ignore as this just means not found
 		}
 	});
