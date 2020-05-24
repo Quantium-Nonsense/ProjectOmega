@@ -3,4 +3,4 @@
 	
 	// Enviroment variables
 	window['env']['company'] = '${COMPANY}';
-})
+})(this)
