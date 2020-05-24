@@ -50,7 +50,6 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
   ],
   bootstrap: [AppComponent],
   imports: [
-    HttpClientModule,
     AppRoutingModule,
     AuthModule,
     BrowserModule,
@@ -92,7 +91,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     MatCardModule,
     MatListModule,
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    MatRippleModule
+    MatRippleModule,
+    HttpClientModule
   ],
   providers: []
 })

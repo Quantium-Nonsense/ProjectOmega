@@ -4,8 +4,6 @@ import { CustomerModel } from '../models/customers/customer.model';
 import { ManagementDialogComponent } from './management-dialog/management-dialog.component';
 import { CustomerManagementModel } from '../models/customers/management/customer-management.model';
 import { ChartComponent } from '../chart/chart.component';
-import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
 import * as fromApp from '../reducers/index';
 
 export interface DialogData {
@@ -19,22 +17,11 @@ export interface DialogData {
   styleUrls: ['./management.component.scss']
 })
 export class ManagementComponent implements OnInit {
-  private subscription = new Subscription();
   private customers: CustomerModel[] = []; // customer data model
   private customerRepList: CustomerManagementModel[] = []; // for mapping customers with rep
 
   // initialize customer sets
-  constructor(private store$: Store<fromApp.State>, public dialog: MatDialog) {
-    this.subscription = new Subscription();
-
-    this.customers.push(new CustomerModel(0, 'company1', '0', 'no',
-      'email', 'Damian', 'Bigman', 'notes'));
-    this.customers.push(new CustomerModel(1, 'company2', '1', 'no',
-      'email', 'Abe', 'Mountain', 'notes'));
-
-    for (let i = 0; i < this.customers.length; i++) {
-      this.customerRepList.push(new CustomerManagementModel(this.customers[i].id, 'none'))
-    }
+  constructor(public dialog: MatDialog) {
   }
 
   ngOnInit(): void {

@@ -12,7 +12,7 @@ import { ManagementDialogComponent } from './management-dialog/management-dialog
     ManagementRoutingModule,
     SharedModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ]
 })
 export class ManagementModule {
