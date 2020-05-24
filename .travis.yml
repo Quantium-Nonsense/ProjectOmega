@@ -2,7 +2,7 @@ dist: trusty
 os: linux
 
 addons:
-  chrome: beta
+  chrome: stable
 
 cache:
   directories:
