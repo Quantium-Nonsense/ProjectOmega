@@ -67,7 +67,8 @@ public class UserServiceImpl implements UserService {
         boolean isAdminOrRep = authorities.stream().anyMatch(a -> a.getAuthority().equals(RoleBasedConstant.ADMIN)
                 || a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER)
                 || a.getAuthority().equals(RoleBasedConstant.REP));
-        if(isAdminOrRep) {
+      
+        if(isAdminOrRep && !users.isEmpty()) {
             LOGGER.warn("Not a super admin! Filtering output...");
             finalUsers = users.stream().filter(u ->
                     !u.getRoles().contains(roleService.findByName(RoleBasedConstant.SUPER_ADMIN))).collect(Collectors.toList());

@@ -36,7 +36,20 @@
 			</ion-virtual-scroll>
 		</div>
 	</div>
+	<ion-list>
+		<ion-item>
+			<ion-label>Clients</ion-label>
+				<ion-select [(ngModel)]="selectedClient"  [compareWith]="compareWithFn">
+					<ion-select-option [value]="client" *ngFor="let client of clients">
+						{{client.companyName}}
+					</ion-select-option>
+				</ion-select>
+		</ion-item>
+	</ion-list>
 	<ion-button (click)="addItem()" expand="full" fill="outline">
 		<ion-icon name="add"></ion-icon>
+	</ion-button>
+	<ion-button (click)="completeOrder()" expand="full" fill="outline">
+		<ion-icon name="checkmark"></ion-icon>
 	</ion-button>
 </ion-content>

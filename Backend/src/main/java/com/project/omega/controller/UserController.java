@@ -12,10 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/api/user")
 public class UserController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
@@ -24,14 +28,19 @@ public class UserController {
     private UserService userService;
 
     @GetMapping(value = "/get")
-    public ResponseEntity getUsers() throws NoRecordsFoundException {
+    public ResponseEntity getUsers() {
         LOGGER.info("Fetching users...");
-        List<User> users = userService.getAllUsers();
+        List<User> users = null;
+        try {
+            users = userService.getAllUsers();
+        } catch (NoRecordsFoundException e) {
+            return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
+        }
         List<UserResponse> u = users.stream().map(user -> {
-           UserResponse r = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
-           return r;
+            UserResponse r = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
+            return r;
         }).collect(Collectors.toList());
-        return new ResponseEntity(users, HttpStatus.CREATED);
+        return new ResponseEntity(u, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
@@ -52,9 +61,30 @@ public class UserController {
 
     @PutMapping(value = "/update/{id}")
     public ResponseEntity updateById(@PathVariable(value = "id") Long id,
-                                     @RequestBody User update) throws Exception {
+                                     @RequestBody User updatedUser) throws Exception {
         LOGGER.info("Updating user: {}", id);
-        User user = userService.updateUserById(id, update);
+        User userToUpdate = new User();
+        User userInDb = userService.getUserById(id);
+
+        if (!updatedUser.getEmail().isEmpty()) {
+            userToUpdate.setEmail(updatedUser.getEmail());
+        } else {
+            userToUpdate.setEmail(userInDb.getEmail());
+        }
+
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            userToUpdate.setPassword(updatedUser.getPassword());
+        } else {
+            userToUpdate.setPassword(userInDb.getPassword());
+        }
+
+        if (!updatedUser.getRoles().isEmpty()) {
+            userToUpdate.setRoles(updatedUser.getRoles());
+        } else {
+            userToUpdate.setRoles(userInDb.getRoles());
+        }
+
+        User user = userService.updateUserById(id, userToUpdate);
         UserResponse u = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
         return new ResponseEntity(u, HttpStatus.OK);
     }

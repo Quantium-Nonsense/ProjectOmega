@@ -1,6 +1,7 @@
 package com.project.omega.service.implmentations;
 
 import com.project.omega.bean.dao.entity.OrderProduct;
+import com.project.omega.bean.dao.entity.Product;
 import com.project.omega.repository.OrderProductRepository;
 import com.project.omega.service.interfaces.OrderProductService;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ public class OrderProductServiceImpl implements OrderProductService {
 
     private OrderProductRepository orderProductRepository;
 
+
     public OrderProductServiceImpl(OrderProductRepository orderProductRepository) {
         this.orderProductRepository = orderProductRepository;
     }
@@ -21,4 +23,8 @@ public class OrderProductServiceImpl implements OrderProductService {
         return orderProductRepository.save(orderProduct);
     }
 
+    @Override
+    public void deleteByProductId(Product product) {
+        orderProductRepository.deleteByProductId(product);
+    }
 }
