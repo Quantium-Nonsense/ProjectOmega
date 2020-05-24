@@ -1,6 +1,42 @@
-import { by, element, ElementArrayFinder, ElementFinder } from 'protractor';
+import { Key, by, element, ElementArrayFinder, ElementFinder } from 'protractor';
 
 export class SuppliersPage {
+  findSuccessSnackBar(): ElementFinder {
+    return element(by.css('.successSnack'));
+  }
+
+  findDialogForm(): ElementFinder {
+    return this.findDialog().element(by.css('suppliersForm'));
+  }
+
+  findDialogEmail(): ElementFinder {
+    return this.findDialog().element(by.id('formEmailInput'));
+  }
+
+  findDialogCompanyName(): ElementFinder {
+    return this.findDialog().element(by.id('formCompanyName'));
+  }
+
+  findDialogContactNumber(): ElementFinder {
+    return this.findDialog().element(by.id('formCompany'));
+  }
+
+  findDialogDescription(): ElementFinder {
+    return this.findDialog().element(by.id('formDescription'));
+  }
+
+  findDialogFirstName(): ElementFinder {
+    return this.findDialog().element(by.id('formFirstName'));
+  }
+
+  findDialogLastName(): ElementFinder {
+    return this.findDialog().element(by.id('formLastName'));
+  }
+
+  findDialogNotes(): ElementFinder {
+    return this.findDialog().element(by.id('formNotes'));
+  }
+
   findDialogConfirmButton(): ElementFinder {
     return this.findDialog().element(by.partialButtonText('Confirm'));
   }
@@ -21,7 +57,15 @@ export class SuppliersPage {
     return element(by.id('filterTableInput'));
   }
 
+  async clearFilter(): Promise<void> {
+    const field = this.getFilter();
+    field.sendKeys(Key.chord(Key.CONTROL, 'a'));
+    field.sendKeys(Key.BACK_SPACE);
+    field.clear();
+  }
+
   async typeToFilter(text: string): Promise<void> {
+    await this.getFilter().clear();
     await this.getFilter().sendKeys(text);
   }
 
@@ -41,6 +85,10 @@ export class SuppliersPage {
 
   async clickAddNewSupplierButton(): Promise<void> {
     await element(by.css('button[aria-label="New Product"]')).click();
+  }
+
+  getDeleteButton(): ElementArrayFinder {
+    return this.getAllTableRows().all(by.css('.deleteSupplier'));
   }
 
   getAllEditButtons(): ElementArrayFinder {
