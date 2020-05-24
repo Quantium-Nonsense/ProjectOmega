@@ -61,6 +61,37 @@ describe('workspace-project App', () => {
       const isDialogPresent: boolean = await supplierPage.findDialog().isPresent();
       expect(isDialogPresent).toEqual(false);
   });
+
+  it('should check the change was committed', async () => {
+    supplierPage.clickOnFirstRowEdit();
+    browser.waitForAngular();
+    const dialog = await supplierPage.findDialog().isPresent();
+    expect(dialog).toEqual(true);
+    const text = 'I am the new cat!';
+    browser.waitForAngular();
+    const descText = await supplierPage.getFormDescription().getAttribute('value');
+    expect(descText).toEqual(text);
+  });
+
+  it('should revert it back', async () => {
+    const text = 'I am the old cat!';
+    await supplierPage.setFormDescriptionText(text);
+    browser.waitForAngular();
+    const newText = await supplierPage.getFormDescription().getAttribute('value');
+    expect(newText).toEqual(text);
+    supplierPage.findDialogConfirmButton().click();
+    browser.waitForAngular();
+    // Expect dialog to be hidden
+    const isDialogPresent: boolean = await supplierPage.findDialog().isPresent();
+    expect(isDialogPresent).toEqual(false);
+  });
+
+  it('should open new supplier dialog', async () => {
+    await supplierPage.clickAddNewSupplierButton();
+    browser.waitForAngular()
+    const isDialogPresent = await supplierPage.findDialog().isPresent();
+    expect(isDialogPresent).toEqual(true);
+  });
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);

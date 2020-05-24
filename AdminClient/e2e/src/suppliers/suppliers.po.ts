@@ -39,6 +39,10 @@ export class SuppliersPage {
     await desc.sendKeys(text);
   }
 
+  async clickAddNewSupplierButton(): Promise<void> {
+    await element(by.css('button[aria-label="New Product"]')).click();
+  }
+
   getAllEditButtons(): ElementArrayFinder {
     const rows: ElementArrayFinder = this.getAllTableRows().all(by.css('.mat-icon-button'));
     return rows;
