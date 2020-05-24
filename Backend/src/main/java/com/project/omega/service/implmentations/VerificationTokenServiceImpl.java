@@ -35,4 +35,9 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         LOGGER.debug("deleting expired token allocated to User: {}", token);
         tokenRepository.delete(token);
     }
+
+    @Override
+    public VerificationToken getByUser(User user) {
+        return tokenRepository.findByUser(user);
+    }
 }

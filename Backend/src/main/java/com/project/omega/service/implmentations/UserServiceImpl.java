@@ -1,6 +1,7 @@
 package com.project.omega.service.implmentations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.omega.bean.dao.auth.VerificationToken;
 import com.project.omega.bean.dao.entity.PasswordResetToken;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.exceptions.NoRecordsFoundException;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private VerificationTokenService tokenService;
 
     @Autowired
     private RoleService roleService;
@@ -88,6 +92,10 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent()) {
             throw new UserNotFoundException(messages.getMessage("message.userNotFound", null, null));
+        }
+        VerificationToken token = tokenService.getByUser(user.get());
+        if(token != null) {
+            tokenService.deleteToken(token);
         }
         userRepository.deleteById(id);
         return user.get();
