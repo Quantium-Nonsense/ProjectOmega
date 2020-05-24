@@ -13,17 +13,17 @@ import java.util.Set;
 @Entity
 @Table (name = "clients")
 @Builder
-public class Client implements Serializable{
+public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotBlank
-    private String first_name;
+    private String firstName;
 
     @NotBlank
-    private String last_name;
+    private String lastName;
 
     @NotBlank
     private String description;
@@ -45,8 +45,8 @@ public class Client implements Serializable{
 
     public Client(Long id, @NotBlank String first_name, @NotBlank String last_name, @NotBlank String description, @NotBlank String companyName, @NotBlank String email, @NotBlank String contactNumber, @NotBlank String notes) {
         this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = first_name;
+        this.lastName = last_name;
         this.description = description;
         this.companyName = companyName;
         this.email = email;
@@ -62,20 +62,20 @@ public class Client implements Serializable{
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getDescription() {
@@ -121,8 +121,8 @@ public class Client implements Serializable{
 
     public static class ClientBuilder {
         private Long id;
-        private String first_name;
-        private String last_name;
+        private String firstName;
+        private String lastName;
         private String description;
         private String companyName;
         private String email;
@@ -140,13 +140,13 @@ public class Client implements Serializable{
             return this;
         }
 
-        public ClientBuilder setFirst_name(String first_name) {
-            this.first_name = first_name;
+        public ClientBuilder setFirstName(String firstName) {
+            this.firstName = firstName;
             return this;
         }
 
-        public ClientBuilder setLast_name(String last_name) {
-            this.last_name = last_name;
+        public ClientBuilder setLast_name(String lastName) {
+            this.lastName = lastName;
             return this;
         }
 
@@ -176,7 +176,7 @@ public class Client implements Serializable{
         }
 
         public Client build() {
-            return new Client(id, first_name, last_name, description, companyName, email, contactNumber, notes);
+            return new Client(id, firstName, lastName, description, companyName, email, contactNumber, notes);
         }
     }
 

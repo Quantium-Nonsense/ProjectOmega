@@ -41,7 +41,7 @@ public class ClientTestService extends OmegaApplicationTests {
     public void createClientTest() throws NoRecordsFoundException {
         Client client = new Client.ClientBuilder()
                 .setId(1L)
-                .setFirst_name("John")
+                .setFirstName("John")
                 .setLast_name("Doe")
                 .setDescription("Buys lots of things")
                 .setCompanyName("Lloyds")
@@ -60,7 +60,7 @@ public class ClientTestService extends OmegaApplicationTests {
     public void getAllClientsTest_Positive() throws NoRecordsFoundException {
         Client client_one = new Client.ClientBuilder()
                 .setId(1L)
-                .setFirst_name("John")
+                .setFirstName("John")
                 .setLast_name("Doe")
                 .setDescription("Buys lots of things")
                 .setCompanyName("Lloyds")
@@ -70,7 +70,7 @@ public class ClientTestService extends OmegaApplicationTests {
                 .build();
         Client client_two = new Client.ClientBuilder()
                 .setId(2L)
-                .setFirst_name("Jane")
+                .setFirstName("Jane")
                 .setLast_name("Smith")
                 .setDescription("Doesn't buy much")
                 .setCompanyName("Sdyoll")
@@ -99,7 +99,7 @@ public class ClientTestService extends OmegaApplicationTests {
     public void getClientByIdTest_Positive() throws ClientNotFoundException {
         Client client_one = new Client.ClientBuilder()
                 .setId(1L)
-                .setFirst_name("John")
+                .setFirstName("John")
                 .setLast_name("Doe")
                 .setDescription("Buys lots of things")
                 .setCompanyName("Lloyds")
@@ -109,7 +109,7 @@ public class ClientTestService extends OmegaApplicationTests {
                 .build();
         Client client_two = new Client.ClientBuilder()
                 .setId(2L)
-                .setFirst_name("Jane")
+                .setFirstName("Jane")
                 .setLast_name("Smith")
                 .setDescription("Doesn't buy much")
                 .setCompanyName("Sdyoll")
@@ -118,7 +118,7 @@ public class ClientTestService extends OmegaApplicationTests {
                 .setNotes("that's another random phone number")
                 .build();
         Mockito.when(clientRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(client_one));
-        Assert.assertEquals(client_one.getFirst_name(), clientService.getClientById(1L).getFirst_name());
+        Assert.assertEquals(client_one.getFirstName(), clientService.getClientById(1L).getFirstName());
     }
 
     @Test
@@ -135,7 +135,7 @@ public class ClientTestService extends OmegaApplicationTests {
     public void updateClientByIdTest() throws ClientNotFoundException {
         Client client = new Client.ClientBuilder()
                 .setId(1L)
-                .setFirst_name("John")
+                .setFirstName("John")
                 .setLast_name("Doe")
                 .setDescription("Buys lots of things")
                 .setCompanyName("Lloyds")
@@ -145,7 +145,7 @@ public class ClientTestService extends OmegaApplicationTests {
                 .build();
         Client client_details = new Client.ClientBuilder()
                 .setId(1L)
-                .setFirst_name("John")
+                .setFirstName("John")
                 .setLast_name("Doe")
                 .setDescription("Buys a lot of things")
                 .setCompanyName("Sdyoll")
@@ -171,7 +171,7 @@ public class ClientTestService extends OmegaApplicationTests {
     public void deleteClientByIdTest() throws ClientNotFoundException {
         Client client = new Client.ClientBuilder()
                 .setId(1L)
-                .setFirst_name("John")
+                .setFirstName("John")
                 .setLast_name("Doe")
                 .setDescription("Buys lots of things")
                 .setCompanyName("Lloyds")
