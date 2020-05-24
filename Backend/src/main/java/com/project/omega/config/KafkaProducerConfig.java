@@ -1,9 +1,9 @@
 package com.project.omega.config;
 
+import com.project.omega.bean.dto.KafkaLogDto;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
-import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +19,7 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
     
-    @Value("${spring.kafka.producer.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapAddress;
     
     @Value("${spring.kafka.producer.properties.topics}")
@@ -41,7 +42,7 @@ public class KafkaProducerConfig {
     
     
     @Bean
-    public ProducerFactory<String, String> producerFactory() {
+    public ProducerFactory<String, KafkaLogDto> producerFactory() {
     
         String jaasTemplate = "%s required username=\"%s\" password=\"%s\";";
         String jaasCfg = String.format(jaasTemplate, this.loginModule, this.username, this.password);
@@ -55,7 +56,7 @@ public class KafkaProducerConfig {
                 StringSerializer.class);
         configProps.put(
                 ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
+                JsonSerializer.class);
         configProps.put(SaslConfigs.SASL_JAAS_CONFIG, jaasCfg);
         configProps.put(SaslConfigs.SASL_MECHANISM, this.saslMechanism);
         configProps.put(AdminClientConfig.SECURITY_PROTOCOL_CONFIG, securityProtocol);
@@ -65,7 +66,7 @@ public class KafkaProducerConfig {
     }
     
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
+    public KafkaTemplate<String, KafkaLogDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import ch.qos.logback.classic.Level;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.omega.enums.LogLevel;
 
 public class KafkaLogDto implements Serializable {
@@ -48,6 +49,7 @@ public class KafkaLogDto implements Serializable {
         this.threadName = threadName;
     }
     
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     public LocalDateTime getTimestamp() {
         return timestamp;
     }

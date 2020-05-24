@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable().cors().and()
                 .authorizeRequests()
                 .antMatchers("/api/authenticate", "/api/confirmRegistration").permitAll()
-                .antMatchers("/log").anonymous()
+                .antMatchers("/log/**").anonymous()
                 .antMatchers("/api/registration").hasAnyRole("SUPER_ADMIN", "ADMIN")
                 .antMatchers("/api/user/**",
                         "/api/role/**",

@@ -25,7 +25,7 @@ public class KafkaProducerServiceImpl implements KafkaProducerService {
     @Override
     public void sendMessage(KafkaLogDto message) {
         Logger logger = LoggerFactory.getLogger(KafkaProducerServiceImpl.class);
-        
+
         ListenableFuture<? extends SendResult<String, KafkaLogDto>> future
                 = kafkaTemplate.send(topic, message);
         
