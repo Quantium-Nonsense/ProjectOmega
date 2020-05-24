@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test --codeCoverage=true",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "e2e_headless": "ng e2e --protractor-config=e2e/protractor.travis.conf.js --webdriverUpdate=true"
   },
   "private": true,
   "dependencies": {
