@@ -24,6 +24,9 @@ public class ClientServiceImpl implements ClientService {
     private MessageSource messages;
 
     public Client createClient(Client client) {
+        if(client.getNotes().isEmpty() || client.getNotes() == null) {
+            client.setNotes("");
+        }
         clientRepository.save(client);
         return client;
     }
@@ -50,7 +53,7 @@ public class ClientServiceImpl implements ClientService {
         if (!clientRepository.findById(id).isPresent()) {
             throw new ClientNotFoundException(messages.getMessage("message.clientNotFound", null, null));
         }
-        if (newClient.getFirst_name() != null && newClient.getLast_name() != null) {
+        if (newClient.getFirstName() != null && newClient.getLastName() != null) {
             newClient.setId(id);
             clientRepository.save(newClient);
         } else {

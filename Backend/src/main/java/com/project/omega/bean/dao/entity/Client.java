@@ -2,13 +2,10 @@ package com.project.omega.bean.dao.entity;
 
 
 import lombok.Builder;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table (name = "clients")

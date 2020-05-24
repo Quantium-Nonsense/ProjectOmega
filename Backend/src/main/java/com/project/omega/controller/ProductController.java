@@ -25,15 +25,20 @@ public class ProductController {
     private ObjectMapper mapper = new ObjectMapper();
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity createProduct(@RequestBody ProductDTO product) throws SupplierNotFoundException {
+    public ResponseEntity createProduct(@RequestBody Product product) throws SupplierNotFoundException {
         Product newProduct = productService.createProduct(product);
         return new ResponseEntity(newProduct, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/get")
     public ResponseEntity getProducts() throws NoRecordsFoundException {
-        List<Product> products = productService.getAllProducts();
-        return new ResponseEntity(products, HttpStatus.OK);
+        try {
+            List<Product> products = productService.getAllProducts();
+            return new ResponseEntity(products, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity(new ArrayList<>(),HttpStatus.OK);
+        }
     }
 
     @GetMapping(value = "/{id}")

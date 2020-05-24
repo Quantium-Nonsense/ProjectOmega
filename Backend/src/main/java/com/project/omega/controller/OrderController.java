@@ -1,39 +1,25 @@
 package com.project.omega.controller;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import com.project.omega.bean.dao.entity.*;
+import com.project.omega.authentication.JwtTokenUtil;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.OrderProduct;
-import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.OrderProductDto;
 import com.project.omega.exceptions.*;
 import com.project.omega.service.interfaces.*;
-import com.project.omega.service.implmentations.*;
-import com.project.omega.service.interfaces.OrderProductService;
-import com.project.omega.service.interfaces.OrderService;
-import com.project.omega.service.interfaces.ClientService;
-import com.project.omega.service.interfaces.OrderService;
-import com.project.omega.service.interfaces.ProductService;
-import com.project.omega.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -49,56 +35,85 @@ public class OrderController {
     UserService userService;
     @Autowired
     ClientService clientService;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity<Order> create(@RequestBody OrderForm form) throws ProductNotFoundException,
-            ClientNotFoundException, NoRecordsFoundException, UserNotFoundException {
-        List<OrderProductDto> formDtos = form.getProductOrders();
+    public ResponseEntity create(@RequestBody Order newOrder, @RequestHeader("Authorization") String token) throws ProductNotFoundException,
+            ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
 
-        validateProductsExistence(formDtos);
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String username = ((UserDetails)principal).getUsername();
-            User user = userService.findUserByEmail(username);
-            Long userId = user.getId();
-
+        List<OrderProductDto> productsForOrder = new ArrayList<>();
         Order order = new Order();
 
-        order.setUserId(userId);
+        try {
+            newOrder.getOrderProducts().forEach(po -> {
+                OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());
+                productsForOrder.add(opDto);
+            });
 
-        order = orderService.createOrder(order);
+            validateProductsExistence(productsForOrder);
+
+            Long userId = jwtTokenUtil.getIdFromToken(token.substring(7));
+
+            if(newOrder.getUserId() == null) {
+                order.setUserId(userId);
+            } else {
+                order.setUserId(newOrder.getUserId());
+            }
+
+            order = orderService.createOrder(order);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getStackTrace().toString());
+        }
 
         List<OrderProduct> orderProducts = new ArrayList<>();
 
-
-        for (OrderProductDto dto : formDtos) {
-            orderProducts.add(orderProductService.create(new OrderProduct(
-                    order,
-                    productService.getProductById(dto.getProduct().getId()),
-                    dto.getQuantity(),
-                    clientService.getClientById(dto.getClient().getId()))));
+        for (OrderProductDto dto : productsForOrder) {
+            orderProducts.add(orderProductService.create(new OrderProduct(productService.getProductById(dto.getProduct().getId()),
+                    clientService.getClientById(dto.getClient().getId()),
+                    dto.getQuantity())));
         }
 
         order.setOrderProducts(orderProducts);
-        System.out.print(order);
 
-        this.orderService.updateOrder(order);
+        this.orderService.updateOrder(order.getId(), order);
 
-        System.out.print(order);
-        String uri = ServletUriComponentsBuilder
-                .fromCurrentServletMapping()
-                .path("/orders/{id}")
-                .buildAndExpand(order.getId())
-                .toString();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", uri);
-
-        return new ResponseEntity<>(order, headers, HttpStatus.CREATED);
+        return new ResponseEntity(order, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/get")
     public ResponseEntity fetchAllOrders() {
-        Iterable<Order> order = orderService.getAllOrders();
+        List<Order> order = orderService.getAllOrders();
+        return new ResponseEntity(order, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity updateOrderById (@PathVariable (value ="id") Long id, @RequestBody Order update) throws NoRecordsFoundException, OrderNotFoundException {
+        Order orderUpdate = new Order();
+        Order oldOrder = orderService.getOrderById(id);
+
+        if(update.getOrderProducts().isEmpty() || update.getOrderProducts() == null) {
+            orderUpdate.setOrderProducts(oldOrder.getOrderProducts());
+        } else {
+            orderUpdate.setOrderProducts(update.getOrderProducts());
+        }
+
+        if(update.getStatus() == null) {
+            orderUpdate.setStatus(oldOrder.getStatus());
+        } else {
+            orderUpdate.setStatus(update.getStatus());
+        }
+
+        if(update.getUserId() == null) {
+            orderUpdate.setUserId(oldOrder.getUserId());
+        } else {
+            orderUpdate.setUserId(update.getUserId());
+        }
+
+        orderUpdate.setDateCreated(oldOrder.getDateCreated());
+        orderUpdate.setId(oldOrder.getId());
+
+        Order order = orderService.updateOrder(id, orderUpdate);
         return new ResponseEntity(order, HttpStatus.OK);
     }
 
@@ -115,7 +130,7 @@ public class OrderController {
                 list.add(op);
             }
         }
-        if (!CollectionUtils.isEmpty(list)) {
+        if (list.isEmpty()) {
             new ProductNotFoundException("Product not found");
         }
     }

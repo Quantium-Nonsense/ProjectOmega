@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CustomerModel } from '../models/customers/customer.model';
 import * as fromApp from '../reducers/index';
 import * as ToolbarActions from '../toolbar/store/toolbar.actions';
+import { selectIsProgressBarVisible } from '../toolbar/store/toolbar.reducer';
 import * as CustomerActions from './store/customers.actions';
 import * as fromCustomers from './store/customers.reducer';
 
@@ -31,15 +32,8 @@ export class CustomersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store$.dispatch(ToolbarActions.beginProgressBar());
-    this.store$.dispatch(CustomerActions.beginLoadingCustomers());
+    this.store$.dispatch(CustomerActions.getAllCustomers());
 
-    this.subscription.add(
-        this.store$.select(fromCustomers.selectIsLoading).subscribe(isLoading => {
-          if (!isLoading) {
-            this.store$.dispatch(ToolbarActions.stopProgressBar());
-          }
-        })
-    );
     this.subscription.add(
         this.store$.select(fromCustomers.selectAllCustomers).subscribe(customers => {
           this.customers.data = customers;
@@ -49,25 +43,25 @@ export class CustomersComponent implements OnInit, OnDestroy {
   }
 
   deleteCustomer(customer: CustomerModel) {
-    this.store$.dispatch(CustomerActions.showDeleteCustomerDialog({customer}));
+    this.store$.dispatch(CustomerActions.showDeleteCustomerDialog({ customer }));
   }
 
   editCustomer(customer: CustomerModel) {
-    this.store$.dispatch(CustomerActions.showEditCustomerDialog({customer}));
+    this.store$.dispatch(CustomerActions.showEditCustomerDialog({ customer }));
   }
 
   filterActions(customer: CustomerModel, filterValue: string): boolean {
     return customer.companyName.toLowerCase().includes(filterValue)
-        || customer.contactNumber.includes(filterValue)
-        || customer.description.toLowerCase().includes(filterValue)
-        || customer.email.toLowerCase().includes(filterValue)
-        || customer.firstName.toLowerCase().includes(filterValue)
-        || customer.lastName.toLowerCase().includes(filterValue)
-        || customer.notes.toLowerCase().includes(filterValue);
+           || customer.contactNumber.includes(filterValue)
+           || customer.description.toLowerCase().includes(filterValue)
+           || customer.email.toLowerCase().includes(filterValue)
+           || customer.firstName.toLowerCase().includes(filterValue)
+           || customer.lastName.toLowerCase().includes(filterValue)
+           || customer.notes.toLowerCase().includes(filterValue);
   }
 
   handleCreate() {
-    alert('To be implemented');
+    this.store$.dispatch(CustomerActions.showEditCustomerDialog({ customer: null }));
   }
 
   ngOnDestroy(): void {

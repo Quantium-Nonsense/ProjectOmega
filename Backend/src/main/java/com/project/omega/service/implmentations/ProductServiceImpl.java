@@ -9,10 +9,13 @@ import com.project.omega.exceptions.ProductNotFoundException;
 import com.project.omega.exceptions.SupplierNotFoundException;
 import com.project.omega.repository.ProductRepository;
 import com.project.omega.repository.SupplierRepository;
+import com.project.omega.service.interfaces.OrderProductService;
 import com.project.omega.service.interfaces.ProductService;
 import com.project.omega.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,19 +30,19 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
 
     @Autowired
+    OrderProductService orderProductService;
+
+    @Autowired
     SupplierService supplierService;
 
     @Autowired
     MessageSource messages;
 
-    public Product createProduct(ProductDTO productDTO) throws SupplierNotFoundException {
-        Supplier supplier = supplierService.getSupplierById(productDTO.getSupplierId());
-        Product product = new Product.ProductBuilder()
-                .setName(productDTO.getName())
-                .setDescription(productDTO.getDescription())
-                .setPrice(productDTO.getPrice())
-                .setSupplier(supplier)
-                .build();
+    public Product createProduct(Product product) throws SupplierNotFoundException {
+        if (product.getSupplier() == null) {
+            throw new SupplierNotFoundException("Supplier cannot be empty");
+        }
+
         productRepository.save(product);
         return product;
     }
@@ -110,6 +113,7 @@ public class ProductServiceImpl implements ProductService {
         if (!product.isPresent()) {
             throw new ProductNotFoundException(messages.getMessage("message.productNotFound", null, null));
         }
+        orderProductService.deleteByProductId(product.get());
         productRepository.deleteById(id);
         return product.get();
     }

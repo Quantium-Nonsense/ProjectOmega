@@ -10,9 +10,9 @@ export class DashboardComponent implements OnInit {
 
   dashboardItems: DashboardLinkModel[] = [
     {
-      title: 'Companies',
+      title: 'Suppliers',
       content: 'Click here to see all companies',
-      url: '/companies'
+      url: '/suppliers'
     },
     {
       title: 'Users',

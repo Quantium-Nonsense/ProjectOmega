@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { State } from '../reducers';
 import * as ToolbarActions from './store/toolbar.actions';
 import * as fromToolbar from './store/toolbar.reducer';
@@ -15,15 +15,16 @@ export class ToolbarComponent implements OnInit {
   @Input() title: string;
   @Output() sideNavOpenChange = new EventEmitter();
 
-  private showProgressBar: Observable<boolean>;
+  private sub: Subscription;
+  private showProgressBar: boolean;
 
   private _sideNavOpen: boolean;
 
   constructor(
-    private router: Router,
-    private store: Store<State>,
+      private router: Router,
+      private store: Store<State>
   ) {
-    this.showProgressBar = new Observable<boolean>();
+    this.sub = new Subscription();
   }
 
   @Input()
@@ -39,7 +40,9 @@ export class ToolbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.showProgressBar = this.store.select(fromToolbar.selectShowProgressBar);
+    this.sub.add(this.store.pipe(select(fromToolbar.selectIsProgressBarVisible)).subscribe(
+        visible => this.showProgressBar = visible
+    ));
   }
 
   handleLogout(): void {

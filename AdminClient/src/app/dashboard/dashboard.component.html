@@ -10,7 +10,7 @@
       </mat-card-header>
       <mat-card-content class="mat-body-1">{{item.content}}</mat-card-content>
       <mat-card-actions>
-        <button [routerLink]="item.url" color="primary" fxFlexFill mat-raised-button>See all</button>
+        <button [id]="item.title.toLowerCase()" [routerLink]="item.url" color="primary" fxFlexFill mat-raised-button>See all</button>
       </mat-card-actions>
     </mat-card>
   </div>
