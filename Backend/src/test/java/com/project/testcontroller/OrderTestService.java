@@ -2,6 +2,7 @@ package com.project.testcontroller;
 
 import com.project.OmegaApplicationTests;
 import com.project.omega.bean.dao.entity.*;
+import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.OrderNotFoundException;
 import com.project.omega.helper.TestingConstant;
 import com.project.omega.repository.OrderProductRepository;
@@ -128,12 +129,66 @@ public class OrderTestService extends OmegaApplicationTests {
 
     @Test
     public void getAllOrdersTest_Positive() {
+        Product product = new Product.ProductBuilder()
+                .setId(1L)
+                .setName("Fockittol")
+                .setDescription("Effectively eliminates all the f*ucks given about anything.")
+                .setPrice(420)
+                .build();
+        Client client = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirstName("John")
+                .setLast_name("Doe")
+                .setDescription("Buys lots of things")
+                .setCompanyName("Lloyds")
+                .setEmail("a@a.com")
+                .setContactNumber("02088273729")
+                .setNotes("that's a random phone number")
+                .build();
+        LocalDate dateCreated = LocalDate.now();
 
+        OrderProduct orderProduct = new OrderProduct.OrderProductBuilder()
+                .setId(1L)
+                .setProduct(product)
+                .setClient(client)
+                .setQuantity(2)
+                .build();
+
+        List<OrderProduct> productList = new ArrayList<>();
+        productList.add(orderProduct);
+
+        User user = new User.UserBuilder()
+                .setId(TestingConstant.TEST_ID_1)
+                .setEmail(TestingConstant.TEST_EMAIL_1)
+                .setPassword(TestingConstant.TEST_PASSWORD)
+                .build();
+
+        Order order_one = new Order.OrderBuilder()
+                .setId(1L)
+                .setDateCreated(dateCreated)
+                .setOrderProducts(productList)
+                .setUserId(user.getId())
+                .setStatus("STATED")
+                .build();
+
+        Order order_two = new Order.OrderBuilder()
+                .setId(2L)
+                .setDateCreated(LocalDate.now())
+                .setOrderProducts(productList)
+                .setUserId(user.getId())
+                .setStatus("UNSTATED")
+                .build();
+
+        Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(order_one, order_two).collect(Collectors.toList()));
+        Assert.assertEquals(2, orderService.getAllOrders().size());
+        Assert.assertTrue(orderService.getAllOrders().contains(order_one));
+        Assert.assertTrue(orderService.getAllOrders().contains(order_two));
     }
 
     @Test
     public void getAllOrdersTest_Negative() {
-
+        Mockito.when(orderRepository.findAll()).thenReturn(new ArrayList<Order>());
+        Assert.assertTrue(orderService.getAllOrders().isEmpty());
     }
 
     @Test
