@@ -7,7 +7,6 @@ import * as fromProducts from '../products/store/products.reducer';
 import * as fromSuppliers from '../supplier/store/suppliers.reducer';
 import * as fromToolbar from '../toolbar/store/toolbar.reducer';
 import * as fromUser from '../user/store/user.reducer';
-import * as fromManagement from '../management/store/management.reducer'
 
 export interface State {
   auth: fromAuth.State;
@@ -17,7 +16,6 @@ export interface State {
   suppliers: fromSuppliers.State;
   products: fromProducts.State;
   orders: fromOrders.State;
-  management: fromManagement.State;
 }
 
 export const appReducer: ActionReducerMap<State> = {
@@ -28,7 +26,6 @@ export const appReducer: ActionReducerMap<State> = {
   suppliers: fromSuppliers.supplierReducer,
   products: fromProducts.productsReducer,
   orders: fromOrders.orderReducer,
-  management: fromManagement.managementReducer
 };
 
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
