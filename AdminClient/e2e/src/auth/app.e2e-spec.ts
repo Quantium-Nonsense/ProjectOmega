@@ -1,4 +1,4 @@
-import { browser, ExpectedConditions, logging } from 'protractor';
+import { browser, logging } from 'protractor';
 import { SuppliersPage } from '../suppliers/suppliers.po';
 import { AuthPage } from './app.po';
 
@@ -17,7 +17,6 @@ describe('workspace-project App', () => {
     await authPage.inputLoginPassword();
     await authPage.clickLoginButton();
 
-    const expectedConditions = ExpectedConditions;
 
     // Wait for http from angular
     browser.waitForAngular();
@@ -33,13 +32,35 @@ describe('workspace-project App', () => {
     expect(url.includes('suppliers')).toEqual(true);
   });
 
-  it('should then type in filter', () => {
-    supplierPage.typeToFilter('Meow');
+  it('should then type in filter', async () => {
+    await supplierPage.typeToFilter('Meow');
     browser.waitForAngular();
-
-    expect(supplierPage.getAllTableRows().count).toBe(1);
+    const text = await supplierPage.getAllTableRows().first().getText();
+    expect(text.toLowerCase().includes('meow')).toBe(true);
   });
 
+  it('should then open edit menu of company', async () => {
+    supplierPage.clickOnFirstRowEdit();
+    browser.waitForAngular();
+    const dialog = await supplierPage.findDialog().isPresent();
+    expect(dialog).toBe(true);
+  });
+
+  it('should then change the description', async () => {
+    const text = 'I am the new cat!';
+    await supplierPage.setFormDescriptionText(text);
+    browser.waitForAngular();
+    const newText = await supplierPage.getFormDescription().getAttribute('value');
+    expect(newText).toEqual(text);
+  });
+
+  it('should then comit the change', async () => {
+      supplierPage.findDialogConfirmButton().click();
+      browser.waitForAngular();
+      // Expect dialog to be hidden
+      const isDialogPresent: boolean = await supplierPage.findDialog().isPresent();
+      expect(isDialogPresent).toEqual(false);
+  });
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
