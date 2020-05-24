@@ -10,8 +10,10 @@ pr: none
 pool:
   vmImage: 'ubuntu-latest'
 
+steps:
+
   - task: Docker@2
-      inputs:
+    inputs:
         containerRegistry: 'omegacr'
         repository: 'client1-dev-frontend'
         command: 'buildAndPush'
