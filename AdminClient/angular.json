@@ -117,7 +117,8 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "project-omega-admin-client:serve"
+            "devServerTarget": "project-omega-admin-client:serve",
+            "port": 4201
           },
           "configurations": {
             "production": {

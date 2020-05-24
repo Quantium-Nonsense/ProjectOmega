@@ -1,6 +1,10 @@
 import { by, element, ElementArrayFinder, ElementFinder } from 'protractor';
 
 export class SuppliersPage {
+  findDialogConfirmButton(): ElementFinder {
+    return this.findDialog().element(by.partialButtonText('Confirm'));
+  }
+
   getSuppliersButton(): ElementFinder {
     return element(by.id('suppliers'));
   }
@@ -22,6 +26,38 @@ export class SuppliersPage {
   }
 
   getAllTableRows(): ElementArrayFinder {
-    return element.all(by.css('.mat-row'))
+    return element.all(by.css('.mat-row'));
+  }
+
+  getFormDescription() {
+    return element(by.id('formDescription'));
+  }
+
+  async setFormDescriptionText(text: string): Promise<void> {
+    const desc = this.getFormDescription();
+    await desc.clear();
+    await desc.sendKeys(text);
+  }
+
+  async clickAddNewSupplierButton(): Promise<void> {
+    await element(by.css('button[aria-label="New Product"]')).click();
+  }
+
+  getAllEditButtons(): ElementArrayFinder {
+    const rows: ElementArrayFinder = this.getAllTableRows().all(by.css('.mat-icon-button'));
+    return rows;
+  }
+
+  async getEmailInputText(): Promise<string> {
+    return element(by.id('formEmailInput')).getText();
+  }
+
+  findDialog(): ElementFinder {
+    return element(by.css('.mat-dialog-container'));
+  }
+
+  clickOnFirstRowEdit() {
+    const row = this.getAllTableRows().first();
+    row.all(by.css('.mat-icon-button')).first().click();
   }
 }
