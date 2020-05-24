@@ -1,11 +1,15 @@
 package com.project.omega.service.implmentations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.omega.bean.dao.auth.JwtRequest;
+import com.project.omega.bean.dao.auth.Token;
 import com.project.omega.bean.dao.entity.PasswordResetToken;
 import com.project.omega.bean.dao.entity.User;
+import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.helper.RoleBasedConstant;
+import com.project.omega.helper.TokenConstants;
 import com.project.omega.repository.UserRepository;
 import com.project.omega.service.interfaces.*;
 import org.slf4j.Logger;
@@ -40,6 +44,9 @@ public class UserServiceImpl implements UserService {
     private RoleService roleService;
 
     @Autowired
+    TokenService tokenService;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     @Autowired
@@ -63,10 +70,9 @@ public class UserServiceImpl implements UserService {
         }
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> authorities = currentUser.getAuthorities().stream().collect(Collectors.toList());
-        boolean isAdminOrRep = authorities.stream().anyMatch(a -> a.getAuthority().equals(RoleBasedConstant.ADMIN)
-                && a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER)
-                && a.getAuthority().equals(RoleBasedConstant.REP));
-        if(isAdminOrRep && !users.isEmpty()) {
+        boolean isAdmin = authorities.stream().anyMatch(a -> a.getAuthority().equals(RoleBasedConstant.ADMIN) &&
+                a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER));
+        if(isAdmin) {
             finalUsers = users.stream().filter(u ->
                     !u.getRoles().contains(roleService.findByName(RoleBasedConstant.SUPER_ADMIN))).collect(Collectors.toList());
             return finalUsers;
@@ -105,6 +111,56 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(u);
         return userDetails;
+    }
+
+    @Override
+    public void createVerificationTokenForUser(String jwt, User user) {
+        LOGGER.debug("Saving Verification Token for User: {}", user);
+        Token jwtToken = new Token(jwt, user);
+        tokenService.saveToken(jwtToken);
+    }
+
+    @Override
+    public String validateVerificationToken(String token) {
+        LOGGER.debug("Validate Token allocated to User: {}", token);
+        final Token verificationToken = tokenService.findByToken(token);
+        if (verificationToken == null) {
+            return TokenConstants.TOKEN_INVALID;
+        }
+        final User user = verificationToken.getUser();
+        final Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate()
+                .getTime()
+                - cal.getTime()
+                .getTime()) <= 0) {
+            tokenService.deleteToken(verificationToken);
+            return TokenConstants.TOKEN_EXPIRED;
+        }
+        userRepository.save(user);
+        return TokenConstants.TOKEN_VALID;
+    }
+
+    @Override
+    public User getUser(String verificationToken) {
+        LOGGER.debug("Get User Via Verification Token : {}", verificationToken);
+        final Token token = tokenService.findByToken(verificationToken);
+        if (token != null) {
+            return token.getUser();
+        }
+        return null;
+    }
+
+    @Override
+    public Token generateNewVerificationToken(String token) {
+        LOGGER.debug("Generate New Verification Token : {}", token);
+        Token verificationToken = tokenService.findByToken(token);
+        JwtRequest jwtRequest = new JwtRequest.JwtRequestBuilder()
+                .setEmail(verificationToken.getUser().getEmail())
+                .setPassword(verificationToken.getUser().getPassword())
+                .build();
+        String newVerification = authenticationService.createJWTToken(jwtRequest);
+        verificationToken.updateToken(newVerification);
+        return tokenService.saveToken(verificationToken);
     }
 
     @Override

@@ -111,4 +111,18 @@ export class ApiPathService {
   allOrdersEndPoint(): string {
     return `${this.endPoint}/order/get`;
   }
+
+  // Stat endpoints - returns different queries for graph/visualisation functions (chart component)
+
+  get statsTopProductsEndPoint(): string {
+    return `${this.endPoint}/statistics/top`;
+  }
+
+  get statsNumOrdersByStatusEndPoint(): string {
+    return `${this.endPoint}/statistics/orders/status`;
+  }
+
+  get statsNumOrdersByRepEndPoint(): string {
+    return `${this.endPoint}/statistics/orders/rep`;
+  }
 }

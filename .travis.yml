@@ -15,7 +15,7 @@ jobs:
     - name: Admin Client Frontend Tests
       language: node_js
       node_js:
-        - "12.16.3"
+        - "12.16"
       before_install: cd AdminClient/
       script:
 #        - npm run e2e_headless # Ignore this for now as it wont run
@@ -24,9 +24,9 @@ jobs:
     - name: Rep Client Frontend Tests
       language: node_js
       node_js:
-        - "12.16.3"
+        - "12.16"
       before_install: cd RepClient/
-      script: npm run test:travis
+      script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
       after_success: npx codecov
 #    - name: Backend Tests
 #      language: java

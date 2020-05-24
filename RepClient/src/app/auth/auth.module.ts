@@ -1,4 +1,3 @@
-import { Overlay } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -8,9 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { IonicModule, LoadingController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 
 import { AuthPageRoutingModule } from './auth-routing.module';
+
 import { AuthPage } from './auth.page';
 
 @NgModule({
@@ -26,11 +26,6 @@ import { AuthPage } from './auth.page';
     MatButtonModule,
     MatSnackBarModule,
     ReactiveFormsModule
-  ],
-  providers: [
-      LoadingController,
-      Overlay
   ]
 })
-export class AuthPageModule {
-}
+export class AuthPageModule {}

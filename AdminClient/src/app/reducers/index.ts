@@ -25,7 +25,7 @@ export const appReducer: ActionReducerMap<State> = {
   toolbar: fromToolbar.toolbarReducer,
   suppliers: fromSuppliers.supplierReducer,
   products: fromProducts.productsReducer,
-  orders: fromOrders.orderReducer
+  orders: fromOrders.orderReducer,
 };
 
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>

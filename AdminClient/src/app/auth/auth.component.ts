@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs';
 import { State } from '../reducers';
 import * as AuthActions from './store/auth.actions';
 import * as fromAuth from './store/auth.reducer';
-import * as ToolbarActions from './../toolbar/store/toolbar.actions';
 
 @Component({
   selector: 'app-auth',
@@ -19,7 +18,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   /**
    * The authentication form
    */
-  authForm: FormGroup;
+  protected authForm: FormGroup;
 
   /**
    * Holds all the subscriptions that will need to be cleaned up when a view swaps
@@ -32,10 +31,10 @@ export class AuthComponent implements OnInit, OnDestroy {
   private returnUrl: string;
 
   constructor(
-      private route: ActivatedRoute,
-      private router: Router,
-      private store: Store<State>,
-      private snackBar: MatSnackBar
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<State>,
+    private snackBar: MatSnackBar,
   ) {
 
   }
@@ -43,11 +42,11 @@ export class AuthComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authForm = this.formInitialization();
     this.subscriptions.add(
-        this.store.select('auth').subscribe((state: fromAuth.State) => {
-          if (state.errorMessage) {
-            this.showMessage(state.errorMessage);
-          }
-        })
+      this.store.select('auth').subscribe((state: fromAuth.State) => {
+        if (state.errorMessage) {
+          this.showMessage(state.errorMessage);
+        }
+      })
     );
   }
 
@@ -56,14 +55,14 @@ export class AuthComponent implements OnInit, OnDestroy {
    *
    * @returns The error message should the password have an error, empty string otherwise
    */
-  get passwordErrorMessage(): string {
+  protected get passwordErrorMessage(): string {
     const passwordCtrl = this.authForm.get('password');
 
     return passwordCtrl.hasError('required')
-           ? 'Password is required!'
-             : passwordCtrl.hasError('minlength')
-             ? 'Password should be at least 7 characters long!'
-             : '';
+      ? 'Password is required!'
+      : passwordCtrl.hasError('minlength')
+        ? 'Password should be at least 7 characters long!'
+        : '';
 
   }
 
@@ -87,8 +86,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   /**
    * Submit form
    */
-  onSubmit(): void {
-    this.store.dispatch(ToolbarActions.beginProgressBar());
+  protected onSubmit(): void {
     this.store.dispatch(AuthActions.loginAttempt({
       email: this.authForm.get('email').value as string,
       password: this.authForm.get('password').value as string
@@ -104,7 +102,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     return this.authForm.get('email').invalid;
   }
 
-  isFormValid(): boolean {
+  protected isFormValid(): boolean {
     return this.authForm.valid;
   }
 
@@ -115,10 +113,10 @@ export class AuthComponent implements OnInit, OnDestroy {
     const emailCtrl = this.authForm.get('email');
 
     return emailCtrl.hasError('required') // Check if email has been filled
-           ? 'Email is required!'
-           : emailCtrl.hasError('email') // If yes check if valid email
-             ? 'Not a valid email'
-             : '';
+      ? 'Email is required!'
+      : emailCtrl.hasError('email') // If yes check if valid email
+        ? 'Not a valid email'
+        : '';
   }
 
   /**
@@ -134,15 +132,14 @@ export class AuthComponent implements OnInit, OnDestroy {
    * Simply initializes the form to be used with default values and validators
    *
    * A big note for this class is that the Form state is not stored in the global store object state
-   * The reason behind this is that a form state that has not been submitted is a very localized state and should NOT
-   * be shared Between components thus does not belong in the global app store state, rather when a form is submitted
-   * then use the app store
+   * The reason behind this is that a form state that has not been submitted is a very localized state and should NOT be shared
+   * Between components thus does not belong in the global app store state, rather when a form is submitted then use the app store
    *
    * @returns the form with initialized fields
    */
   private formInitialization = (): FormGroup =>
-      new FormGroup({
-        email: new FormControl('', [Validators.email, Validators.required]),
-        password: new FormControl('', [Validators.required, Validators.minLength(7)])
-      });
+    new FormGroup({
+      email: new FormControl('', [Validators.email, Validators.required]),
+      password: new FormControl('', [Validators.required, Validators.minLength(7)])
+    });
 }

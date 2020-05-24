@@ -7,24 +7,20 @@
         <mat-icon class="mr-1">home</mat-icon>
         Dashboard
       </button>
-      <button [routerLink]="'/customers'" mat-list-item>
-        <mat-icon class="mr-1">local_shipping</mat-icon>
-        Customers
-      </button>
-      <button [routerLink]="'/orders'" mat-list-item>
+      <button [routerLink]="'/order'" mat-list-item>
         <mat-icon class="mr-1">shopping_cart</mat-icon>
         Orders
       </button>
-      <button [routerLink]="'/suppliers'" mat-list-item>
+      <button [routerLink]="'/company'" mat-list-item>
         <mat-icon class="mr-1">store</mat-icon>
-        Suppliers
+        Companies
       </button>
       <button [routerLink]="'/products'" mat-list-item>
         <mat-icon class="mr-1">list</mat-icon>
         Products
       </button>
-      <button [routerLink]="'/users'" mat-list-item>
-        <mat-icon class="mr-1">people</mat-icon>
+      <button [routerLink]="'/user'" mat-list-item>
+        <mat-icon class="mr-1">person</mat-icon>
         Users
       </button>
     </mat-action-list>
@@ -32,7 +28,7 @@
   <mat-sidenav-content>
     <!--Main Page toolbar-->
     <app-toolbar [(sideNavOpen)]="sideNavOpen" [title]="title"></app-toolbar>
-    <div class="container my-4">
+    <div>
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

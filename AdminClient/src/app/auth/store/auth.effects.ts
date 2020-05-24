@@ -1,71 +1,38 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Action, Store } from '@ngrx/store';
+import { of } from 'rxjs';
+import { delay, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { ApiPathService } from '../../services/api-path.service';
-import * as ToolbarActions from '../../toolbar/store/toolbar.actions';
 import * as AuthActions from '../store/auth.actions';
+import { State } from './auth.reducer';
 
 @Injectable()
 export class AuthEffects {
 
   loginRejected$ = createEffect(() => this.actions$.pipe(
-      ofType(AuthActions.loginRejected),
-      tap(() => this.router.navigateByUrl('/auth'))
-  ), { dispatch: false });
-
-  successfulAuthentication$ = createEffect(() => this.actions$.pipe(
-      ofType(AuthActions.loginSuccessful),
-      map(() => {
-        this.router.navigateByUrl('/dashboard');
-      })
-  ), { dispatch: false });
+    ofType(AuthActions.loginRejected),
+    tap(() => this.router.navigateByUrl('/auth'))
+  ), {dispatch: false});
 
   loginAttempt$ = createEffect(
-      () => this.actions$.pipe(
-          ofType(AuthActions.loginAttempt),
-          switchMap((action: Action & { email: string, password: string }) => {
-            return this.login(action.email, action.password).pipe(
-                switchMap((token: { token: string }) => {
-                  return [
-                    this.storeJwt(token),
-                    ToolbarActions.stopProgressBar(),
-                    AuthActions.loginSuccessful()
-                  ];
-                }),
-                catchError((error: HttpErrorResponse) => {
-                  if (error.status === 400 || error.status === 401) {
-                    return [
-                      AuthActions.hasError({ error: 'Wrong email or password please try again' }),
-                      ToolbarActions.stopProgressBar()
-                    ];
-                  }
-                  return [
-                    AuthActions.hasError({ error: `Something went wrong ${ error.message }` }),
-                    ToolbarActions.stopProgressBar()
-                  ];
-                })
-            );
-          })
-      ));
+    () => this.actions$.pipe(
+      ofType(AuthActions.loginAttempt),
+      withLatestFrom(this.store$),
+      switchMap(
+        ([action, storeState]) => of(this.storeJwt()).pipe(delay(2000), tap(
+          // @ts-ignore
+          () => this.redirectToPreviousUrl(storeState.auth.returnUrl)) // Strangely, it's storing the state under 'auth'
+        )
+      )
+    ));
 
   constructor(
-      private actions$: Actions,
-      private router: Router,
-      private apiPath: ApiPathService,
-      private http: HttpClient
+    private actions$: Actions,
+    private router: Router,
+    private store$: Store<State>,
   ) {
-  }
-
-  login(email: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(this.apiPath.loginEndPoint, {
-      email,
-      password
-    });
   }
 
   /**
@@ -73,9 +40,16 @@ export class AuthEffects {
    *
    * @returns an action saying login was successful
    */
-  private storeJwt = (token: { token: string }): Action => {
-    localStorage.setItem(environment.ACCESS_TOKEN, token.token);
+  private storeJwt = (): Action => {
+    localStorage.setItem(environment.ACCESS_TOKEN, 'I AM A JWT TOKEN FEAR ME MORTAL!');
+
+    // Use the below for testing failed authentication error message
+    // return AuthActions.loginSuccessful({errorMessage: 'I HAVE DENIED YOU ACCESS MORTAL FEAR ME!'});
 
     return AuthActions.loginSuccessful();
+  };
+
+  private redirectToPreviousUrl = (returnUrl: string) => {
+    this.router.navigateByUrl(returnUrl);
   };
 }

@@ -8,6 +8,7 @@ import { ItemModel } from '../shared/model/company-items/item.model';
 import { SupplierModel } from '../shared/model/home/supplier.model';
 import { OrderItemModel } from '../shared/model/order/order-item.model';
 import { SortOptionsEnum } from '../shared/model/sort-options.enum';
+import * as OrderActions from './../order/store/order.actions';
 import * as fromApp from './../reducers/index';
 
 @Component({
@@ -36,6 +37,7 @@ export class CompanyPage implements OnInit {
 
   private state$ = this.store.select('company');
   private subscription: Subscription = new Subscription();
+  private isBottomSheetVisible: boolean;
 
   constructor(
       public store: Store<fromApp.State>
