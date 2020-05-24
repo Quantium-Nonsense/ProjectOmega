@@ -1,21 +1,31 @@
 package com.project.testcontroller;
 
 import com.project.OmegaApplicationTests;
+import com.project.omega.bean.dao.entity.*;
 import com.project.omega.exceptions.OrderNotFoundException;
+import com.project.omega.helper.TestingConstant;
 import com.project.omega.repository.OrderProductRepository;
 import com.project.omega.repository.OrderRepository;
 import com.project.omega.service.implmentations.OrderProductServiceImpl;
 import com.project.omega.service.implmentations.OrderServiceImpl;
 import com.project.omega.service.interfaces.OrderProductService;
 import com.project.omega.service.interfaces.OrderService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,11 +47,82 @@ public class OrderTestService extends OmegaApplicationTests {
 
     @Test
     public void createOrderProductTest() {
+        Product product = new Product.ProductBuilder()
+                .setId(1L)
+                .setName("Fockittol")
+                .setDescription("Effectively eliminates all the f*ucks given about anything.")
+                .setPrice(420)
+                .build();
+        Client client = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirstName("John")
+                .setLast_name("Doe")
+                .setDescription("Buys lots of things")
+                .setCompanyName("Lloyds")
+                .setEmail("a@a.com")
+                .setContactNumber("02088273729")
+                .setNotes("that's a random phone number")
+                .build();
+
+        OrderProduct orderProduct = new OrderProduct.OrderProductBuilder()
+                .setId(1L)
+                .setProduct(product)
+                .setClient(client)
+                .setQuantity(2)
+                .build();
+
+        Mockito.when(orderProductRepository.save(Mockito.any(OrderProduct.class))).thenReturn(orderProduct);
+        Assert.assertEquals(orderProduct, orderProductService.create(orderProduct));
 
     }
 
     @Test
     public void createOrderTest() {
+        Product product = new Product.ProductBuilder()
+                .setId(1L)
+                .setName("Fockittol")
+                .setDescription("Effectively eliminates all the f*ucks given about anything.")
+                .setPrice(420)
+                .build();
+        Client client = new Client.ClientBuilder()
+                .setId(1L)
+                .setFirstName("John")
+                .setLast_name("Doe")
+                .setDescription("Buys lots of things")
+                .setCompanyName("Lloyds")
+                .setEmail("a@a.com")
+                .setContactNumber("02088273729")
+                .setNotes("that's a random phone number")
+                .build();
+        LocalDate dateCreated = LocalDate.now();
+
+        OrderProduct orderProduct = new OrderProduct.OrderProductBuilder()
+                .setId(1L)
+                .setProduct(product)
+                .setClient(client)
+                .setQuantity(2)
+                .build();
+
+        List<OrderProduct> productList = new ArrayList<>();
+        productList.add(orderProduct);
+
+        User user = new User.UserBuilder()
+                .setId(TestingConstant.TEST_ID_1)
+                .setEmail(TestingConstant.TEST_EMAIL_1)
+                .setPassword(TestingConstant.TEST_PASSWORD)
+                .build();
+
+        Order order = new Order.OrderBuilder()
+                .setId(1L)
+                .setDateCreated(dateCreated)
+                .setOrderProducts(productList)
+                .setUserId(user.getId())
+                .setStatus("STATED")
+                .build();
+
+        Mockito.when(orderRepository.save(Mockito.any(Order.class))).thenReturn(order);
+        Mockito.when(orderRepository.findAll()).thenReturn(Stream.of(order).collect(Collectors.toList()));
+        Assert.assertEquals(1, orderService.getAllOrders().size());
 
     }
 
