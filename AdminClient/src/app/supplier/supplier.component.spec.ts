@@ -10,12 +10,15 @@ import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
+import * as fromApp from '../reducers/index';
 import { ApiPathService } from '../services/api-path.service';
+import { emptyState } from '../shared/empty.state';
 import { SupplierModel } from '../shared/model/supplier/supplier.model';
 import * as ToolbarActions from '../toolbar/store/toolbar.actions';
-import * as fromToolbar from '../toolbar/store/toolbar.reducer';
+import { selectIsProgressBarVisible } from '../toolbar/store/toolbar.reducer';
 import * as SuppliersActions from './store/suppliers.actions';
 import { SuppliersEffects } from './store/suppliers.effects';
+import { selectAllSuppliers } from './store/suppliers.reducer';
 import { SupplierFormComponent } from './supplier-form/supplier-form.component';
 
 import { SupplierComponent } from './supplier.component';
@@ -36,14 +39,15 @@ const mockSuppliers = () => {
   }
   return mockList;
 };
-
 describe('SupplierComponent', () => {
   let component: SupplierFormComponent;
   let fixture: ComponentFixture<SupplierFormComponent>;
   let actions$: Observable<Action>;
   let effects: SuppliersEffects;
-  let mockStore$: MockStore;
 
+  let mockStore$: MockStore;
+  let mockSelectIsProgressBarVisible;
+  let mockSelectAllSuppliers;
   beforeEach(() => {
     TestBed.configureTestingModule({
              declarations: [SupplierFormComponent],
@@ -53,13 +57,8 @@ describe('SupplierComponent', () => {
                MatSnackBarModule
              ],
              providers: [
-               provideMockStore({
-                 initialState: {
-                   suppliers: {},
-                   toolbar: {
-                     progressBar: false
-                   } as fromToolbar.State
-                 }
+               provideMockStore<fromApp.State>({
+                 initialState: emptyState
                }),
                provideMockActions(() => actions$),
                SuppliersEffects,
@@ -86,6 +85,9 @@ describe('SupplierComponent', () => {
            .compileComponents();
 
     mockStore$ = TestBed.inject(MockStore);
+    mockSelectIsProgressBarVisible = mockStore$.overrideSelector(selectIsProgressBarVisible, false);
+    mockSelectAllSuppliers = mockStore$.overrideSelector(selectAllSuppliers, []);
+
     effects = TestBed.inject(SuppliersEffects);
 
   });

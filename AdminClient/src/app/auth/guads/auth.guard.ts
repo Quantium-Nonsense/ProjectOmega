@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import * as fromApp from '../../reducers';
+import { JwtToken } from '../../shared/model/jwt-token';
 import * as AuthActions from '../store/auth.actions';
 
 @Injectable({

@@ -2,17 +2,22 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarHarness } from '@angular/material/snack-bar/testing';
 import { MatTableHarness } from '@angular/material/table/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { cold, hot } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CustomerModel } from '../models/customers/customer.model';
 import * as fromApp from '../reducers';
+import { emptyState } from '../shared/empty.state';
 import { SharedModule } from '../shared/shared.module';
+import * as ToolbarActions from '../toolbar/store/toolbar.actions';
 
 import { CustomersComponent } from './customers.component';
 import * as CustomerActions from './store/customers.actions';
@@ -56,20 +61,14 @@ describe('CustomersComponent', () => {
     TestBed.configureTestingModule({
              declarations: [CustomersComponent],
              providers: [
-               MatDialogHarness,
-               provideMockStore({
-                 initialState: {
-                   customers: {
-                     selectedCustomer: null,
-                     loading: false,
-                     customers: null
-                   } as fromCustomers.State
-                 }
+               provideMockStore<fromApp.State>({
+                 initialState: emptyState
                }),
                provideMockActions(() => actions$),
                CustomersEffects
              ],
              imports: [
+               MatSnackBarModule,
                SharedModule,
                BrowserModule,
                NoopAnimationsModule
@@ -98,19 +97,9 @@ describe('CustomersComponent', () => {
     loader = TestbedHarnessEnvironment.loader(fixture);
     documentLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
 
-    isLoadingSelector = mockStore.overrideSelector(
-        fromCustomers.selectIsLoading,
-        false
-    );
-
     selectAllCustomersSelector = mockStore.overrideSelector(
         fromCustomers.selectAllCustomers,
         []
-    );
-
-    selectSelectedCustomerSelector = mockStore.overrideSelector(
-        fromCustomers.selectSelectedCustomer,
-        undefined
     );
 
     mockStore.refreshState();
@@ -133,13 +122,50 @@ describe('CustomersComponent', () => {
     expect(tableRows.length).toBe(10); // Due to paginator
   });
 
-  it('should load all customers when landing on dashboard', () => {
-    actions$ = of(CustomerActions.getAllCustomers());
-    const dummyCustomers = createDummyCustomers();
-    spyOn(effects, 'createDummyCustomers').and.callThrough().and.returnValue(dummyCustomers);
-    effects.loadAllCustomers$.subscribe(action => {
-      expect(action).toEqual(CustomerActions.customersLoaded({customers: dummyCustomers}));
+  it('should load all customers when landing on dashboard and dashboard loading', () => {
+    const customers = createDummyCustomers();
+    const httpSpy = spyOn(effects, 'httpGetAllCustomers').and.callThrough().and.returnValue(
+        cold('--a|', {
+          a: customers
+        })
+    );
+
+    actions$ = hot('--a-b', {
+      a: ToolbarActions.beginProgressBar(),
+      b: CustomerActions.getAllCustomers()
     });
+
+    const expected = hot('------(ab)', {
+      a: CustomerActions.customersLoaded({ customers }),
+      b: ToolbarActions.stopProgressBar()
+    });
+
+    expect(effects.loadAllCustomers$).toBeObservable(expected);
+  });
+
+  it('should present a toast error message if failed to get all customers', async () => {
+    const httpSpy = spyOn(effects, 'httpGetAllCustomers').and.callThrough().and.returnValue(
+        cold('--#|', null, new Error('error boes brrr'))
+    );
+
+    actions$ = hot('---a', {
+      a: CustomerActions.getAllCustomers()
+    });
+
+    const expected = hot('-----a', {
+      a: ToolbarActions.stopProgressBar()
+    });
+
+    effects.loadAllCustomers$.subscribe(); // Fixture wont detect changes without this
+    expect(effects.loadAllCustomers$).toBeObservable(expected);
+
+    const toast = await documentLoader.getHarness(MatSnackBarHarness);
+    expect(toast).toBeTruthy();
+
+    const host = await toast.host();
+    const text = await host.text();
+
+    expect(text).toEqual('error boes brrr');
   });
 
   it('should show delete customer dialog on showDeleteCustomerDialog dispatch', async () => {
@@ -159,7 +185,7 @@ describe('CustomersComponent', () => {
 
   it('should show edit customer dialog on showEditCustomerDialog dispatch', async () => {
     const selectedCustomer: CustomerModel = createDummyCustomers()[0];
-    actions$ = of(CustomerActions.showEditCustomerDialog({customer: selectedCustomer}));
+    actions$ = of(CustomerActions.showEditCustomerDialog({ customer: selectedCustomer }));
 
     effects.showEditCustomerDialog$.subscribe(); // no dispatch
 

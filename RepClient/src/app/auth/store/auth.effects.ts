@@ -1,48 +1,135 @@
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatSpinner } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { of, pipe } from 'rxjs';
-import { delay, map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { ApiEndpointCreatorService } from '../../services/api-endpoint-creator.service';
+import { UserModel } from '../../shared/model/auth/user.model';
+import { JwtToken } from '../../shared/model/dto/jwt-token';
 import * as AuthActions from '../store/auth.actions';
 
 @Injectable()
 export class AuthEffects {
+  spinnerRef: OverlayRef;
+
+  successfulLogin$ = createEffect(
+      () => this.actions$.pipe(
+          ofType(AuthActions.loginSuccessful),
+          tap(() => this.redirectToHome())
+      ), {dispatch: false}
+  );
+
+  hideSpinner$ = createEffect(() => this.actions$.pipe(
+      ofType(AuthActions.hideSpinner),
+      tap(() => this.hideSpinner())
+  ), {dispatch: false});
+
+  showSpinner$ = createEffect(() => this.actions$.pipe(
+      ofType(AuthActions.showSpinner),
+      tap(() => this.presentSpinner())
+  ), {dispatch: false});
+
   loginRejected$ = createEffect(() => this.actions$.pipe(
-    ofType(AuthActions.loginRejected),
-    tap(() => this.router.navigateByUrl('/auth'))
+      ofType(AuthActions.loginRejected),
+      tap(() => {
+        this.router.navigateByUrl('/auth');
+      })
   ), {dispatch: false});
 
   loginAttempt$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(AuthActions.loginAttempt),
-      switchMap(
-        action => of(this.storeJwt()).pipe(delay(2000), tap(() => this.redirectToHome()))
-      )
-    ));
+      () => this.actions$.pipe(
+          ofType(AuthActions.loginAttempt),
+          switchMap((action: Action & { email: string, password: string }) =>
+              this.attemptLogin(action.email, action.password).pipe(
+                  switchMap(httpResult =>
+                    [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()]),
+                  catchError((error: HttpErrorResponse) => {
+                    if (error.status === 404 || error.status === 500) {
+                      return [
+                        AuthActions.loginRejected({
+                          errorMessage: environment.common.FAILED_LOGIN_SERVER
+                        }),
+                        AuthActions.loadingComplete()
+                      ];
+                    }
+                    console.log(error);
+
+                    return [
+                      AuthActions.loginRejected({
+                        errorMessage: 'Wrong email or password, please try again'
+                      }),
+                      AuthActions.loadingComplete()
+                    ];
+                  })
+              ))
+      ));
 
   constructor(
-    private actions$: Actions,
-    private router: Router,
-    public loadingController: LoadingController
+      private overlay: Overlay,
+      private jwtHelper: JwtHelperService,
+      private http: HttpClient,
+      private apiEndPoints: ApiEndpointCreatorService,
+      private actions$: Actions,
+      private router: Router
   ) {
   }
 
-  /**
-   * Store the JWT token and return success action to the store
-   */
-  private storeJwt = (): Action => {
-    localStorage.setItem(environment.ACCESS_TOKEN, 'I AM A JWT TOKEN FEAR ME MORTAL!');
+  attemptLogin(email: string, password: string): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>(this.apiEndPoints.loginEndPoint, {
+      email,
+      password
+    });
+  }
 
-    // Use the below for testing failed authentication error message
-    // return AuthActions.loginSuccessful({errorMessage: 'I HAVE DENIED YOU ACCESS MORTAL FEAR ME!'});
+  handleTokenReturn(httpResult: { token: string }): Action {
+    console.log(`From handle token token is:  ${httpResult.token}`);
+    const user = this.decodeToken(httpResult.token);
 
-    return AuthActions.loginSuccessful();
-  };
+    return AuthActions.loginSuccessful({user});
+  }
+
+  decodeToken(token: string): UserModel {
+    const user = new UserModel();
+    const decodedToken: JwtToken = this.jwtHelper.decodeToken(JSON.stringify(token));
+    localStorage.setItem(environment.ACCESS_TOKEN, JSON.stringify(token));
+
+    user.id = decodedToken.id;
+    user.roles = decodedToken.roles;
+    user.email = decodedToken.email;
+
+    return user;
+  }
+
+  presentSpinner(): void {
+    this.spinnerRef = this.createSpinnerRef();
+    this.spinnerRef.attach(new ComponentPortal(MatSpinner));
+  }
 
   private redirectToHome = () => {
     this.router.navigateByUrl('/home');
   };
+
+  private createSpinnerRef(): OverlayRef {
+    return this.overlay.create({
+      hasBackdrop: true,
+      backdropClass: 'dark-backdrop',
+      positionStrategy: this.overlay.position()
+                            .global()
+                            .centerHorizontally()
+                            .centerVertically()
+    });
+  }
+
+  private hideSpinner(): void {
+    if (this.spinnerRef) {
+      this.spinnerRef.detach();
+    }
+  }
 }
