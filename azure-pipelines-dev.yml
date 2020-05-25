@@ -46,6 +46,9 @@ steps:
       command: 'apply'
       arguments: '-f ./Devops/k8s/backend/'
 
+
+      
+
   - task: Kubernetes@1
     inputs:
       connectionType: 'Kubernetes Service Connection'
@@ -53,6 +56,16 @@ steps:
       namespace: 'default'
       command: 'set'
       arguments: 'image deployment/backend-deployment2 backend2-api=omegacr.azurecr.io/dev-backend:$(Build.BuildId)'
+
+
+  - task: Kubernetes@1
+    inputs:
+      connectionType: 'Kubernetes Service Connection'
+      kubernetesServiceEndpoint: 'OmegaCluster-prod'
+      namespace: 'default'
+      command: 'apply'
+      arguments: '-f ./Devops/k8s/backend/'
+
 
   - task: Kubernetes@1
     inputs:
