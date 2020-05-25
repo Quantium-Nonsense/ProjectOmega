@@ -36,9 +36,9 @@ public enum LogLevel {
             case FATAL:
                 return "FATAL";
             case OFF:
+            default:
                 return "OFF";
+            
         }
-        
-        return "";
     }
 }
