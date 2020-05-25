@@ -74,6 +74,12 @@ spec:
                       secretKeyRef:
                         name: kafka
                         key: port
+                - name: SECRETS_EMAILPASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: devops2-db
+                      key: email.password
+
 
 
 
