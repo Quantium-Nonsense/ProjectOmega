@@ -1,16 +1,17 @@
 package com.project.omega.controller;
 
 import com.project.omega.bean.dao.entity.Product;
-import com.project.omega.bean.dto.ProductDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.ProductNotFoundException;
 import com.project.omega.exceptions.SupplierNotFoundException;
 import com.project.omega.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,9 @@ public class ProductController {
     @PostMapping(value = "/create", headers = "Accept=application/json")
     public ResponseEntity createProduct(@RequestBody Product product) throws SupplierNotFoundException {
         Product newProduct = productService.createProduct(product);
-        return new ResponseEntity(newProduct, HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/product/create"));
+        return new ResponseEntity(newProduct, headers, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/get")
@@ -34,7 +37,7 @@ public class ProductController {
             return new ResponseEntity(products, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return new ResponseEntity(new ArrayList<>(),HttpStatus.OK);
+            return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
         }
     }
 

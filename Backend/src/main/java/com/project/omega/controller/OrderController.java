@@ -1,10 +1,8 @@
 package com.project.omega.controller;
 
-
 import com.project.omega.authentication.JwtTokenUtil;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.OrderProduct;
-import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.OrderProductDto;
 import com.project.omega.exceptions.*;
 import com.project.omega.service.interfaces.*;
@@ -12,13 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,13 +35,12 @@ public class OrderController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
-
     public ResponseEntity create(@RequestBody Order newOrder, @RequestHeader("Authorization") String token) throws ProductNotFoundException,
             ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
 
         List<OrderProductDto> productsForOrder = new ArrayList<>();
         Order order = new Order();
-              
+
         try {
             newOrder.getOrderProducts().forEach(po -> {
                 OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());
@@ -57,30 +51,31 @@ public class OrderController {
 
             Long userId = jwtTokenUtil.getIdFromToken(token.substring(7));
 
-            if(newOrder.getUserId() == null) {
+            if (newOrder.getUserId() == null) {
                 order.setUserId(userId);
             } else {
                 order.setUserId(newOrder.getUserId());
             }
 
+            List<OrderProduct> orderProducts = new ArrayList<>();
+
+            for (OrderProductDto dto : productsForOrder) {
+                orderProducts.add(orderProductService.create(new OrderProduct(productService.getProductById(dto.getProduct().getId()),
+                        clientService.getClientById(dto.getClient().getId()),
+                        dto.getQuantity())));
+            }
+
+            order.setOrderProducts(orderProducts);
+
             order = orderService.createOrder(order);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getStackTrace().toString());
+            e.printStackTrace();
         }
 
-        List<OrderProduct> orderProducts = new ArrayList<>();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/order/create"));
 
-        for (OrderProductDto dto : productsForOrder) {
-            orderProducts.add(orderProductService.create(new OrderProduct(productService.getProductById(dto.getProduct().getId()),
-                    clientService.getClientById(dto.getClient().getId()),
-                    dto.getQuantity())));
-        }
-
-        order.setOrderProducts(orderProducts);
-
-        this.orderService.updateOrder(order.getId(), order);
-
-        return new ResponseEntity(order, HttpStatus.CREATED);
+        return new ResponseEntity(order, headers, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/get")
@@ -90,23 +85,23 @@ public class OrderController {
     }
 
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity updateOrderById (@PathVariable (value ="id") Long id, @RequestBody Order update) throws NoRecordsFoundException, OrderNotFoundException {
+    public ResponseEntity updateOrderById(@PathVariable(value = "id") Long id, @RequestBody Order update) throws NoRecordsFoundException, OrderNotFoundException {
         Order orderUpdate = new Order();
         Order oldOrder = orderService.getOrderById(id);
 
-        if(update.getOrderProducts().isEmpty() || update.getOrderProducts() == null) {
+        if (update.getOrderProducts() == null || update.getOrderProducts().isEmpty()) {
             orderUpdate.setOrderProducts(oldOrder.getOrderProducts());
         } else {
             orderUpdate.setOrderProducts(update.getOrderProducts());
         }
 
-        if(update.getStatus() == null) {
+        if (update.getStatus() == null) {
             orderUpdate.setStatus(oldOrder.getStatus());
         } else {
             orderUpdate.setStatus(update.getStatus());
         }
 
-        if(update.getUserId() == null) {
+        if (update.getUserId() == null) {
             orderUpdate.setUserId(oldOrder.getUserId());
         } else {
             orderUpdate.setUserId(update.getUserId());

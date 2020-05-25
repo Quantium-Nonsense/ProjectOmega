@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,10 +76,16 @@ public class UserController {
             userToUpdate.setPassword(userInDb.getPassword());
         }
 
-        if (!updatedUser.getRoles().isEmpty()) {
+        if (updatedUser.getRoles() != null && !updatedUser.getRoles().isEmpty()) {
             userToUpdate.setRoles(updatedUser.getRoles());
         } else {
             userToUpdate.setRoles(userInDb.getRoles());
+        }
+
+        if (updatedUser.getEnabled()) {
+            userToUpdate.setEnabled(updatedUser.getEnabled());
+        } else {
+            userToUpdate.setEnabled(userInDb.getEnabled());
         }
 
         User user = userService.updateUserById(id, userToUpdate);

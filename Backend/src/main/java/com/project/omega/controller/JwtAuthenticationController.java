@@ -5,7 +5,10 @@ import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.PasswordDTO;
 import com.project.omega.bean.dto.UserDTO;
 import com.project.omega.bean.dto.UserResponse;
-import com.project.omega.exceptions.*;
+import com.project.omega.exceptions.DuplicateUserException;
+import com.project.omega.exceptions.InvalidOldPasswordException;
+import com.project.omega.exceptions.UserDisabledException;
+import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.helper.*;
 import com.project.omega.service.JwtUserDetailsService;
 import com.project.omega.service.interfaces.AuthenticationService;
@@ -30,7 +33,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Properties;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -61,7 +67,9 @@ public class JwtAuthenticationController {
         LOGGER.debug("Authentication for JwtRequest: {}", authenticationRequest);
         User user = userService.findUserByEmail(authenticationRequest.getEmail());
         authenticate(authenticationRequest.getEmail(), authenticationRequest.getPassword());
-        return ResponseEntity.ok(new JwtResponse(authenticationService.createJWTToken(authenticationRequest)));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/authenticate"));
+        return new ResponseEntity(new JwtResponse(authenticationService.createJWTToken(authenticationRequest)), headers, HttpStatus.OK);
     }
 
     @PostMapping(value = "/api/registration", headers = "Accept=application/json")
@@ -84,23 +92,23 @@ public class JwtAuthenticationController {
 
         LOGGER.info("Sending Email (subject: {}, receiver: {})", EmailConstants.REG_CONFIRM, user.getEmail());
         EmailSender.send(user.getEmail(), EmailConstants.REG_CONFIRM, emailContent);
-
         UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
-
-        return new ResponseEntity(userMap, HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/registration"));
+        return new ResponseEntity(userMap, headers, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/api/confirmRegistration")
     public ResponseEntity registrationConfirm(@RequestParam("token") String token) throws Exception {
         VerificationToken verificationToken = tokenService.findByToken(token);
-        if(verificationToken == null) {
+        if (verificationToken == null) {
             LOGGER.warn("Token doesn't exist.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(TokenConstants.TOKEN_INACTIVE);
         }
 
         User user = verificationToken.getUser();
 
-        if(verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime() <= 0) {
+        if (verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime() <= 0) {
             LOGGER.warn("Token expired.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(TokenConstants.TOKEN_EXPIRED);
         }
@@ -117,7 +125,7 @@ public class JwtAuthenticationController {
 
         HttpHeaders headers = new HttpHeaders();
 
-        if(userRole.getName().equals(RoleBasedConstant.REP)) {
+        if (userRole.getName().equals(RoleBasedConstant.REP)) {
 //            headers.setLocation(URI.create(adminUrl));
 //            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
             return ResponseEntity.status(HttpStatus.OK).body(TokenConstants.TOKEN_REP_REDIRECT);

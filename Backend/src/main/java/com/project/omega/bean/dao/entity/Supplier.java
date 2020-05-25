@@ -56,6 +56,22 @@ public class Supplier {
         this.notes = notes;
     }
 
+
+    public Supplier(String firstName, String lastName, String companyName, String email, String address, String postcode, String town, String county, String country, String description, String contactNumber, String notes) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.companyName = companyName;
+        this.email = email;
+        this.address = address;
+        this.postcode = postcode;
+        this.town = town;
+        this.county = county;
+        this.country = country;
+        this.description = description;
+        this.contactNumber = contactNumber;
+        this.notes = notes;
+    }
+
     public Long getId() {
         return id;
     }
@@ -197,5 +213,21 @@ public class Supplier {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "Supplier{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", town='" + town + '\'' +
+                ", county='" + county + '\'' +
+                ", country='" + country + '\'' +
+                ", description='" + description + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
 }

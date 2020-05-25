@@ -6,10 +6,12 @@ import com.project.omega.exceptions.NoRecordsFoundException;
 import com.project.omega.exceptions.SupplierNotFoundException;
 import com.project.omega.service.interfaces.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,9 @@ public class SupplierController {
     @PostMapping(value = "/create")
     public ResponseEntity createSupplier(@RequestBody Supplier supplier) throws Exception {
         supplierService.addSupplier(supplier);
-        return new ResponseEntity(supplier, HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/supplier/create"));
+        return new ResponseEntity(supplier, headers, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/get")

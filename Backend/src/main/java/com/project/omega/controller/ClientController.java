@@ -5,18 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.entity.Client;
 import com.project.omega.exceptions.ClientNotFoundException;
 import com.project.omega.exceptions.NoRecordsFoundException;
-import com.project.omega.repository.ClientRepository;
 import com.project.omega.service.interfaces.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//import javax.lang.model.element.VariableElement;
-//import javax.xml.ws.Response;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @CrossOrigin
@@ -31,7 +31,9 @@ public class ClientController {
     @PostMapping(value = "/create", headers = "Accept=application/json")
     public ResponseEntity<Client> createClient(@RequestBody Client client) {
         Client newClient = clientService.createClient(client);
-        return new ResponseEntity(newClient, HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/client/create"));
+        return new ResponseEntity(newClient, headers, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/get")
