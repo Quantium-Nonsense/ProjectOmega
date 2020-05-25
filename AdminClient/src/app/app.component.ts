@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent {
 
   ngOnInit(): void {
     console.log(window['env']['company']);
-    console.log('trigger me pelase!');
+    environment.common.setApiRoot(window['env']['apiRoot']);
     if (window['env']['company'] === 'client1') {
       this.document.getElementById('theme').setAttribute('href', 'assets/css/indigo-pink.css');
     } else if (window['env']['company'] === 'client2') {
