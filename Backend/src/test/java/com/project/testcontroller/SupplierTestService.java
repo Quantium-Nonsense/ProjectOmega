@@ -101,6 +101,7 @@ public class SupplierTestService extends OmegaApplicationTests {
         Assert.assertEquals(supplier_two.getCompanyName(), supplierService.getSupplierByName(supplier_two.getCompanyName()).getCompanyName());
     }
 
+    @Test
     public void getSuppliers_Negative() throws Exception {
         List<Supplier> empty = new ArrayList<>();
 

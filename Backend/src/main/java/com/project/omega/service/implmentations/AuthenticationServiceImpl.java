@@ -3,6 +3,8 @@ package com.project.omega.service.implmentations;
 import com.project.omega.authentication.JwtTokenUtil;
 import com.project.omega.bean.dao.auth.JwtRequest;
 import com.project.omega.bean.dao.entity.User;
+import com.project.omega.exceptions.UserDisabledException;
+import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.service.JwtUserDetailsService;
 import com.project.omega.service.interfaces.AuthenticationService;
 import com.project.omega.service.interfaces.UserService;
@@ -23,7 +25,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     JwtTokenUtil jwtTokenUtil;
     
     @Override
-    public String createJWTToken(JwtRequest authenticationRequest) {
+    public String createJWTToken(JwtRequest authenticationRequest) throws UserDisabledException, UserNotFoundException {
         User userDetails = userService.findUserByEmail(authenticationRequest.getEmail());
         return jwtTokenUtil.generateToken(userDetails);
     }
