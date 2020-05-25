@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(window['env']['company']);
     if (window['env']['company'] === 'client1') {
       this.document.getElementById('theme').setAttribute('href', 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css');
     } else {
