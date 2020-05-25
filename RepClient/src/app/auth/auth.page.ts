@@ -63,7 +63,7 @@ export class AuthPage implements OnInit, OnDestroy {
     // Disable sideway scroll on log in page
     this.logger.info(`Session ID: ${getSessionID()} - Entering Auth Page`);
     const file: { apiPath: string } = await this.http.get<{ apiPath: string }>('assets/config/config.json').toPromise();
-    environment.common.apiRoot = file.apiPath;
+    window['env']['apiRoot'] = file.apiPath;
     this.logger.debug(`Session ID: ${getSessionID()} - Connecting to API: `, environment.common.apiRoot);
     this.logger.debug(`Session ID: ${getSessionID()} - File API path: `, file.apiPath);
     await this.menuController.enable(false);
