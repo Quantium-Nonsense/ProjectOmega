@@ -35,7 +35,7 @@ export class AuthPage implements OnInit, OnDestroy {
       private store: Store<fromApp.State>,
       private snackBar: MatSnackBar,
       private http: HttpClient,
-      private logger: NGXLogger,
+      private logger: NGXLogger
   ) {
     this.logger.info(`Session ID: ${getSessionID()} - Constructing Auth Page`);
   }

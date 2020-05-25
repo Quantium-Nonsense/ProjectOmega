@@ -41,7 +41,7 @@ export class CompanyPage implements OnInit {
 
   constructor(
     public store: Store<fromApp.State>,
-    private logger: NGXLogger,
+    private logger: NGXLogger
   ) {
     this.logger.info(`Session ID: ${getSessionID()} - Constructing Company Page`);
 
@@ -96,6 +96,7 @@ export class CompanyPage implements OnInit {
         item.description.toLocaleUpperCase().includes(value.toLocaleUpperCase()) ||
         item.name.toLocaleUpperCase().includes(value.toLocaleUpperCase())) {
         this.logger.info(`Session ID: ${getSessionID()} - Found item with filter`);
+
         return item;
       }
     })];
