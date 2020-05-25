@@ -1,9 +1,11 @@
 package com.project.omega.service.implmentations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.omega.bean.dao.auth.VerificationToken;
 import com.project.omega.bean.dao.entity.PasswordResetToken;
 import com.project.omega.bean.dao.entity.User;
 import com.project.omega.exceptions.NoRecordsFoundException;
+import com.project.omega.exceptions.UserDisabledException;
 import com.project.omega.exceptions.UserNotFoundException;
 import com.project.omega.helper.RoleBasedConstant;
 import com.project.omega.repository.UserRepository;
@@ -12,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +40,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private VerificationTokenService tokenService;
+
+    @Autowired
     private RoleService roleService;
 
     @Autowired
@@ -54,7 +60,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MessageSource messages;
 
-
     public List<User> getAllUsers() throws NoRecordsFoundException {
         List<User> users = (List) userRepository.findAll();
         List<User> finalUsers;
@@ -64,9 +69,11 @@ public class UserServiceImpl implements UserService {
         Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
         List<GrantedAuthority> authorities = currentUser.getAuthorities().stream().collect(Collectors.toList());
         boolean isAdminOrRep = authorities.stream().anyMatch(a -> a.getAuthority().equals(RoleBasedConstant.ADMIN)
-                && a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER)
-                && a.getAuthority().equals(RoleBasedConstant.REP));
+                || a.getAuthority().equals(RoleBasedConstant.DEFAULT_USER)
+                || a.getAuthority().equals(RoleBasedConstant.REP));
+      
         if(isAdminOrRep && !users.isEmpty()) {
+            LOGGER.warn("Not a super admin! Filtering output...");
             finalUsers = users.stream().filter(u ->
                     !u.getRoles().contains(roleService.findByName(RoleBasedConstant.SUPER_ADMIN))).collect(Collectors.toList());
             return finalUsers;
@@ -87,6 +94,10 @@ public class UserServiceImpl implements UserService {
         if (!user.isPresent()) {
             throw new UserNotFoundException(messages.getMessage("message.userNotFound", null, null));
         }
+        VerificationToken token = tokenService.getByUser(user.get());
+        if(token != null) {
+            tokenService.deleteToken(token);
+        }
         userRepository.deleteById(id);
         return user.get();
     }
@@ -101,6 +112,7 @@ public class UserServiceImpl implements UserService {
                 .setEmail(userDetails.getEmail())
                 .setPassword(userDetails.getPassword())
                 .setRoles(userDetails.getRoles())
+                .setEnabled(userDetails.getEnabled())
                 .build();
 
         userRepository.save(u);
@@ -108,9 +120,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByEmail(String email) {
+    public User findUserByEmail(String email) throws UserNotFoundException, UserDisabledException {
         LOGGER.debug("Get User By Email : {}", email);
-        return userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
+        if(user == null) {
+            throw new UserNotFoundException(messages.getMessage("message.userNotFound", null, null));
+        } else if(!user.getEnabled()) {
+            throw new UserDisabledException(messages.getMessage("auth.message.disabled", null, null));
+        }
+        return user;
     }
 
     @Override
