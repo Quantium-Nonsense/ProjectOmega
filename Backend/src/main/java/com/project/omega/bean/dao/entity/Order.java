@@ -2,7 +2,6 @@ package com.project.omega.bean.dao.entity;
 
 import com.fasterxml.jackson.annotation.*;
 
-import com.project.omega.enums.OrderStatus;
 import lombok.Builder;
 
 import javax.persistence.*;
@@ -60,6 +59,12 @@ public class Order implements Serializable {
 
     }
 
+    public Order(Long id, @Valid List<OrderProduct> orderProducts, @NotNull Long userId) {
+        this.id = id;
+        this.orderProducts = orderProducts;
+        this.userId = userId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -104,6 +109,8 @@ public class Order implements Serializable {
         private Long userId;
         private String status;
 
+        public OrderBuilder(){}
+
         public Order.OrderBuilder setId(Long id) {
             this.id = id;
             return this;
@@ -132,6 +139,17 @@ public class Order implements Serializable {
         public Order build() {
             return new Order(id, dateCreated, orderProducts, userId, status);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", dateCreated=" + dateCreated +
+                ", orderProducts=" + orderProducts +
+                ", userId=" + userId +
+                ", status='" + status + '\'' +
+                '}';
     }
 }
 

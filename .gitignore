@@ -112,3 +112,5 @@ Backend/.idea
 Backend/sprintone.iml
 Backend/target
 Backend/src/main/java/com/project/omega/authentication/SetupDataLoaderForRoleAndPrivilege.java
+
+*.iml
