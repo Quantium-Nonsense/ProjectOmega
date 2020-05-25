@@ -16,7 +16,7 @@ describe('OrderPage', () => {
       imports: [
         IonicModule.forRoot(),
         SharedModule,
-        LoggerTestingModule,
+        LoggerTestingModule
       ],
       providers: [
         provideMockStore()
