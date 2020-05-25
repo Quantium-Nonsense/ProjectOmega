@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="LOGS" value="./logs"/>
+
+    <appender name="logstashAppender" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <remoteHost>${LOGSTASH_HOST}</remoteHost>
+        <port>${LOGSTASH_PORT}</port>
+        <includeCallerData>false</includeCallerData>
+        <encoder class="com.project.omega.logger.KafkaEncoder"/>
+        <waitStrategyType>phasedBackoff{10,60,seconds,sleeping}</waitStrategyType>
+    </appender>
+
+    <appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}/omega-backend.log</file>
+        <encoder
+                class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>
+                ${LOGS}/omega-backend.%i.log
+            </fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>7</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>10MB</maxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <!-- LOG everything at INFO level -->
+    <root level="info">
+        <appender-ref ref="rollingFile"/>
+        <appender-ref ref="logstashAppender"/>
+    </root>
+
+    <logger name="com.project" level="debug">
+        <appender-ref ref="logstashAppender"/>
+    </logger>
+
+    <!-- LOG "com.baeldung*" at TRACE level -->
+    <logger name="com.baeldung" level="trace" additivity="false">
+        <appender-ref ref="rollingFile"/>
+    </logger>
+
+    <logger name="com.project.omega.service.implmentations.KafkaProducerServiceImpl" level="trace" additivity="false">
+        <appender-ref ref="rollingFile"/>
+    </logger>
+</configuration>

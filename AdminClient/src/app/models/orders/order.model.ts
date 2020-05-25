@@ -16,7 +16,7 @@ export class OrderModel {
       && this.status === order.status
       && this.totalOrderPrice === order.totalOrderPrice
       && this.orderProducts
-        .map((orderProudct, index) => orderProudct === order.orderProducts[index])
+        .map((orderProduct, index) => orderProduct === order.orderProducts[index])
         .reduce((x1, x2) => x1 && x2, true);
   }
 }

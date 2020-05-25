@@ -180,8 +180,12 @@ public class JwtAuthenticationController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
+            LOGGER.info("An authentication attempt was made on a disabled user: {}", username);
+            
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
+            LOGGER.info("{} tried to login with invalid credentials", username);
+        
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }

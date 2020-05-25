@@ -1,8 +1,11 @@
-import {commonEnvironment} from './enviroment.common';
+import { NgxLoggerLevel } from 'ngx-logger';
+import { commonEnvironment } from './enviroment.common';
 
 export const environment = {
   production: true,
-  common: commonEnvironment
+  common: commonEnvironment,
+  logLevel: NgxLoggerLevel.INFO,
+  serverLogLevel: NgxLoggerLevel.INFO
 };
 
 

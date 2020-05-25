@@ -1,6 +1,7 @@
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -12,7 +13,10 @@ describe('AppComponent', () => {
 		TestBed.configureTestingModule({
 			declarations: [
 				AppComponent
-			]
+			],
+      imports: [
+        LoggerTestingModule,
+      ]
 		}).compileComponents();
 
 		fixture = TestBed.createComponent(AppComponent);
