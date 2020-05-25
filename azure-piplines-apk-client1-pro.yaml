@@ -7,8 +7,10 @@
 trigger:
   branches:
     include:
-      - client1
-      - refs/tags/{c1*}
+      - refs/tags/c2*
+    exclude:
+      - refs/tags/c1*
+      - refs/tags/be*
 
 
 pool:
