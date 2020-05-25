@@ -34,7 +34,13 @@ steps:
         latest
         $(Build.BuildId)
 
-
+  - task: Kubernetes@1
+    inputs:
+      connectionType: 'Kubernetes Service Connection'
+      kubernetesServiceEndpoint: 'OmegaCluster-prod'
+      namespace: 'default'
+      command: 'apply'
+      arguments: '-f ./Devops/k8s/backend/'
 
 
 
@@ -44,7 +50,7 @@ steps:
       kubernetesServiceEndpoint: 'OmegaCluster-default'
       namespace: 'default'
       command: 'apply'
-      arguments: '-f ./Devops/k8s/backend'
+      arguments: '-f ./Devops/k8s/backend/'
 
   - task: Kubernetes@1
     inputs:

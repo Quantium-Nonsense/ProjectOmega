@@ -1,11 +1,10 @@
 trigger:
+  tags:
+    include:
+      - c1*
   branches:
     include:
       - client1
-      - refs/tags/c1*
-  paths:
-    include:
-      - AdminClient/*
 
 pool:
   vmImage: 'ubuntu-latest'

@@ -1,12 +1,10 @@
 trigger:
+  tags:
+    include:
+      - be*
   branches:
     include:
       - master
-      - refs/tags/*
-  paths:
-    include:
-      - Backend/*
-
 
 
 pool:
