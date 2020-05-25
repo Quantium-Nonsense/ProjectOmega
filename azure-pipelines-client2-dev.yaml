@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - client2
+      - client2/*
   paths:
     include:
       - AdminClient/*
