@@ -51,7 +51,7 @@ export const getToken = () => {
     IonicModule.forRoot(),
     LoggerModule.forRoot({
       serverLoggingUrl: environment.common.apiRoot() + '/log/admin',
-      level: environment.logLevel,
+      level: environment.logLevel
     }),
     AppRoutingModule,
     StoreModule.forRoot(appReducer, {

@@ -22,14 +22,13 @@ export const appReducer: ActionReducerMap<State> = {
   order: fromOrder.orderReducer
 };
 
-export const debug = (reducer: ActionReducer<any>): ActionReducer<any> => {
-  return (state, action) => {
+export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
+  (state, action) => {
 
     logger.info('Session ID: ' + getSessionID() + 'Current state: ', state);
     logger.info('Session ID: ' + getSessionID() + 'Action fired: ', action);
 
     return reducer(state, action);
   };
-};
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [debug] : [];
