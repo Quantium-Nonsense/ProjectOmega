@@ -1,6 +1,7 @@
 trigger:
   branches:
     include:
+      - master
       - refs/tags/be*
     exclude:
       - refs/tags/c1*
