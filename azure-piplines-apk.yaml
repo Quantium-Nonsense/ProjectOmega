@@ -20,7 +20,7 @@ pool:
 steps:
   - task: FileTransform@1
     inputs:
-      folderPath: '$(System.DefaultWorkingDirectory)/RepClient/assets/config'
+      folderPath: '$(System.DefaultWorkingDirectory)/RepClient/src/assets/config'
       fileType: 'json'
       targetFiles: 'config.json'
 
