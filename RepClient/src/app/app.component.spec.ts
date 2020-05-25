@@ -29,7 +29,7 @@ describe('AppComponent', () => {
       ],
       imports: [
         RouterTestingModule.withRoutes([]),
-        LoggerTestingModule,
+        LoggerTestingModule
       ]
     }).compileComponents();
   }));
