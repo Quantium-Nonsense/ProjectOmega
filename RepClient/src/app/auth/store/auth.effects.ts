@@ -51,7 +51,7 @@ export class AuthEffects {
                   switchMap(httpResult =>
                       [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()]),
                   catchError((error: Error) => {
-                    console.error(error.message)
+                    console.error(error.message);
                     if (error instanceof HttpErrorResponse) {
                       if (error.status === 404 || error.status === 500) {
                         return [

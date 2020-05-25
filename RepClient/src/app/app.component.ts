@@ -1,11 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { NGXLogger } from 'ngx-logger';
-import { environment } from '../environments/environment';
 import { initLogger } from './reducer-logger';
 
 @Component({
