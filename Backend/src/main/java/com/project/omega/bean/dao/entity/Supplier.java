@@ -197,5 +197,21 @@ public class Supplier {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "Supplier{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", town='" + town + '\'' +
+                ", county='" + county + '\'' +
+                ", country='" + country + '\'' +
+                ", description='" + description + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
 }

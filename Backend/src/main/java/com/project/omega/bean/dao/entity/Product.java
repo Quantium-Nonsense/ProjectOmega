@@ -120,5 +120,15 @@ public class Product implements Serializable {
             return new Product(id, name, description, price, supplier);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", supplier=" + supplier +
+                '}';
+    }
 }
 

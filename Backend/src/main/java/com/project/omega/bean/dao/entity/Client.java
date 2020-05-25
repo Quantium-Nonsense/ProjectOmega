@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Entity
-@Table (name = "clients")
+@Table(name = "clients")
 @Builder
 public class Client implements Serializable {
 
@@ -126,7 +126,8 @@ public class Client implements Serializable {
         private String contactNumber;
         private String notes;
 
-        public ClientBuilder() {}
+        public ClientBuilder() {
+        }
 
         public Long getId() {
             return id;
@@ -177,5 +178,16 @@ public class Client implements Serializable {
         }
     }
 
-
+    @Override
+    public String toString() {
+        return "Client{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", description='" + description + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", email='" + email + '\'' +
+                ", contactNumber='" + contactNumber + '\'' +
+                ", notes='" + notes + '\'' +
+                '}';
+    }
 }
