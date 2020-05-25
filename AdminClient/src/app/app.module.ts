@@ -63,7 +63,8 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
         tokenGetter: getToken,
         whitelistedDomains: [
           '40.65.236.154',
-          'localhost:8080'
+          'localhost:8080',
+          environment.common.apiPath
         ]
       }
     }),
