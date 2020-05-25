@@ -2,8 +2,10 @@ dist: trusty
 os: linux
 
 addons:
-  chrome: stable
-
+  chrome: beta
+  apt:
+    packages:
+      - chromium-chromedriver
 cache:
   directories:
     - "./node_modules"
@@ -17,7 +19,9 @@ jobs:
       node_js:
         - "12.16.3"
       before_install: cd AdminClient/
-      script: npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
+      script:
+#        - npm run e2e_headless # Ignore this for now as it wont run
+        - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
       after_success: npx codecov
     - name: Rep Client Frontend Tests
       language: node_js

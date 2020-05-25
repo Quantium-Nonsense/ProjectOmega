@@ -1,0 +1,43 @@
+trigger:
+  branches:
+    include:
+      - client2
+  paths:
+    include:
+      - AdminClient/*
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+    - task: Docker@2
+      inputs:
+          containerRegistry: 'omegacr'
+          repository: 'client2-dev-frontend'
+          command: 'buildAndPush'
+          Dockerfile: './AdminClient/Dockerfile'
+          buildContext: './AdminClient'
+          tags: |
+            latest
+            $(Build.BuildId)
+
+
+
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'OmegaCluster-prod'
+        namespace: 'default'
+        command: 'apply'
+        arguments: '-f ./Devops/k8s/frontend'
+
+
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'OmegaCluster-prod'
+        namespace: 'default'
+        command: 'set'
+        arguments: 'image deployment/frontend-deployment frontend-adminclient=omegacr.azurecr.io/client2-dev-frontend:$(Build.BuildId)'

@@ -16,7 +16,10 @@ export class HomeEffects {
       switchMap(
           (action: Action) => this.getAllCompanies().pipe(
               switchMap((companies: SupplierModel[]) =>
-                  [HomeActions.showCompanies({companies}), HomeActions.dashboardDoneLoading()]),
+                  [
+                      HomeActions.showCompanies({companies}),
+                      HomeActions.dashboardDoneLoading()
+                  ]),
               catchError((error: HttpErrorResponse) =>
                 [
                   HomeActions.dashboardDoneLoading(),

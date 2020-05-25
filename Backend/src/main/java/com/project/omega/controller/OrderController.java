@@ -1,5 +1,7 @@
 package com.project.omega.controller;
 
+
+import com.project.omega.authentication.JwtTokenUtil;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.OrderProduct;
 import com.project.omega.bean.dao.entity.User;
@@ -36,42 +38,44 @@ public class OrderController {
     UserService userService;
     @Autowired
     ClientService clientService;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
     
     private final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
     
     @PostMapping(value = "/create", headers = "Accept=application/json")
-    public ResponseEntity<Order> create(@RequestBody Order newOrder) throws ProductNotFoundException,
-                                                                                    ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
+    public ResponseEntity create(@RequestBody Order newOrder, @RequestHeader("Authorization") String token) throws ProductNotFoundException,
+            ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
         LOGGER.info("Request received: /api/order/create");
         List<OrderProductDto> productsForOrder = new ArrayList<>();
-        
-        newOrder.getOrderProducts().forEach(po -> {
-            OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());
-            productsForOrder.add(opDto);
-        });
-        
-        LOGGER.debug("Products added in List");
-        
-        validateProductsExistence(productsForOrder);
-        
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-        User user = userService.findUserByEmail(username);
-        Long userId = user.getId();
-        
         Order order = new Order();
         LOGGER.debug("Order object created");
         
-        if (newOrder.getUserId() == null) {
-            order.setUserId(userId);
-            LOGGER.debug("Using user id provided");
-        } else {
-            order.setUserId(newOrder.getUserId());
-            LOGGER.debug("No user id was provided. This will be inferred from the requester token");
+        try {
+            newOrder.getOrderProducts().forEach(po -> {
+                OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());
+                productsForOrder.add(opDto);
+            });
+            LOGGER.debug("Products added in List");
+            
+            validateProductsExistence(productsForOrder);
+
+            Long userId = jwtTokenUtil.getIdFromToken(token.substring(7));
+
+            if(newOrder.getUserId() == null) {
+                order.setUserId(userId);
+                LOGGER.debug("Using user id provided");
+            } else {
+                order.setUserId(newOrder.getUserId());
+                LOGGER.debug("No user id was provided. This will be inferred from the requester token");
+            }
+
+            order = orderService.createOrder(order);
+        } catch (Exception e) {
+            LOGGER.warn("Something went wrong when creating this order", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getStackTrace().toString());
         }
-        
-        order = orderService.createOrder(order);
-        
+
         List<OrderProduct> orderProducts = new ArrayList<>();
         
         for (OrderProductDto dto : productsForOrder) {
@@ -84,16 +88,8 @@ public class OrderController {
         
         this.orderService.updateOrder(order.getId(), order);
         
-        String uri = ServletUriComponentsBuilder
-                             .fromCurrentServletMapping()
-                             .path("/orders/{id}")
-                             .buildAndExpand(order.getId())
-                             .toString();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", uri);
-        
         LOGGER.info("New Order created and sent in response");
-        return new ResponseEntity<>(order, headers, HttpStatus.CREATED);
+        return new ResponseEntity(order, HttpStatus.CREATED);
     }
     
     @GetMapping(value = "/get")
@@ -161,7 +157,7 @@ public class OrderController {
                 list.add(op);
             }
         }
-        if (CollectionUtils.isEmpty(list)) {
+        if (list.isEmpty()) {
             LOGGER.warn("None of the products were found");
             new ProductNotFoundException("Product not found");
         }

@@ -1,6 +1,11 @@
 trigger:
-  - master
-
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - Backend/*
+pr: none
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -29,16 +34,7 @@ steps:
         latest
         $(Build.BuildId)
 
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'omegacr'
-      repository: 'dev-frontend'
-      command: 'buildAndPush'
-      Dockerfile: './AdminClient/Dockerfile'
-      buildContext: './AdminClient'
-      tags: |
-        latest
-        $(Build.BuildId)
+
 
 
 
@@ -48,7 +44,7 @@ steps:
       kubernetesServiceEndpoint: 'OmegaCluster-default'
       namespace: 'default'
       command: 'apply'
-      arguments: '-f ./Devops/k8s'
+      arguments: '-f ./Devops/k8s/backend'
 
   - task: Kubernetes@1
     inputs:
@@ -61,7 +57,7 @@ steps:
   - task: Kubernetes@1
     inputs:
       connectionType: 'Kubernetes Service Connection'
-      kubernetesServiceEndpoint: 'OmegaCluster-default'
+      kubernetesServiceEndpoint: 'OmegaCluster-prod'
       namespace: 'default'
       command: 'set'
-      arguments: 'image deployment/frontend-deployment frontend-adminclient=omegacr.azurecr.io/dev-frontend:$(Build.BuildId)'
+      arguments: 'image deployment/backend-deployment2 backend2-api=omegacr.azurecr.io/dev-backend:$(Build.BuildId)'
