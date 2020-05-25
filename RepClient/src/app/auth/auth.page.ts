@@ -55,6 +55,7 @@ export class AuthPage implements OnInit, OnDestroy {
 
   async ionViewWillEnter(): Promise<void> {
     // Disable sideway scroll on log in page
+    console.log('commit me snepai!');
     const file: { apiPath: string } = await this.http.get<{ apiPath: string }>('assets/config/config.json').toPromise();
     environment.common.apiRoot = file.apiPath;
     console.log(environment.common.apiRoot);

@@ -28,8 +28,8 @@ import { AuthPage } from './auth.page';
     ReactiveFormsModule
   ],
   providers: [
-      LoadingController,
-      Overlay
+    LoadingController,
+    Overlay
   ]
 })
 export class AuthPageModule {
