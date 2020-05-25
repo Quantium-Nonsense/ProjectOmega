@@ -24,5 +24,9 @@ export const mockEmptyState: fromApp.State = {
   order: {
     clients: undefined,
     items: undefined
+  },
+  addCustomer: {
+    errorMessage: undefined,
+    loading: undefined
   }
 };

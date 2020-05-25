@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -5,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { NGXLogger } from 'ngx-logger';
 import { initLogger } from './reducer-logger';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +39,7 @@ export class AppComponent {
     this.initializeApp();
   }
 
-  initializeApp(): void {
+  initializeApp():void {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();

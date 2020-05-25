@@ -1,9 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MenuController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { environment } from '../../environments/environment';
 import * as fromApp from './../reducers/index';
 import * as AuthActions from './store/auth.actions';
 import * as fromAuth from './store/auth.reducer';
@@ -29,7 +31,8 @@ export class AuthPage implements OnInit, OnDestroy {
   constructor(
       public menuController: MenuController,
       private store: Store<fromApp.State>,
-      private snackBar: MatSnackBar
+      private snackBar: MatSnackBar,
+      private http: HttpClient
   ) {
   }
 
@@ -52,6 +55,10 @@ export class AuthPage implements OnInit, OnDestroy {
 
   async ionViewWillEnter(): Promise<void> {
     // Disable sideway scroll on log in page
+    const file: { apiPath: string } = await this.http.get<{ apiPath: string }>('assets/config/config.json').toPromise();
+    environment.common.apiRoot = file.apiPath;
+    console.log(environment.common.apiRoot);
+    console.log(file.apiPath);
     await this.menuController.enable(false);
   }
 
