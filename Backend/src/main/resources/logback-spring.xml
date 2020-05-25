@@ -43,11 +43,11 @@
         <appender-ref ref="rollingFile"/>
     </root>
 
-    <root level="trace">
+    <root level="info">
         <appender-ref ref="consoleAppender"/>
     </root>
 
-    <logger name="com.project" level="debug">
+    <logger name="com.project" level="info">
         <appender-ref ref="logstashAppender"/>
     </logger>
 
