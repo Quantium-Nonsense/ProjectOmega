@@ -3,12 +3,9 @@ trigger:
     include:
       - client1
       - refs/tags/c1*
-  paths:
-    include:
-      - AdminClient/*
-  tags:
-    include:
-      - '*'
+    exclude:
+      - refs/tags/be*
+      - refs/tags/c2*
 
 pool:
   vmImage: 'ubuntu-latest'
