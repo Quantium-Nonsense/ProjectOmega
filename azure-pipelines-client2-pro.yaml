@@ -3,9 +3,14 @@ trigger:
     include:
       - client2
       - refs/tags/c2*
+    exclude:
+      - refs/tags/be*
+      - refs/tags/c1*
+
   paths:
     include:
       - AdminClient/*
+
 
 
 pool:
