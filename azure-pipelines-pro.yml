@@ -41,7 +41,7 @@ steps:
       kubernetesServiceEndpoint: 'OmegaCluster-default'
       namespace: 'production'
       command: 'apply'
-      arguments: '-f ./Devops/k8s/'
+      arguments: '-f ./Devops/k8s/backend/'
 
   - task: Kubernetes@1
     inputs:
@@ -57,7 +57,7 @@ steps:
         kubernetesServiceEndpoint: 'OmegaCluster-prod'
         namespace: 'production'
         command: 'apply'
-        arguments: '-f ./Devops/k8s/'
+        arguments: '-f ./Devops/k8s/backend/'
 
   - task: Kubernetes@1
     inputs:
