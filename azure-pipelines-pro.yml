@@ -48,7 +48,7 @@ steps:
       arguments: 'image deployment/backend-deployment2 backend2-api=omegacr.azurecr.io/prod-backend:$(Build.BuildId)'
 
   - task: Kubernetes@1
-      inputs:
+    inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'OmegaCluster-prod'
         namespace: 'production'
