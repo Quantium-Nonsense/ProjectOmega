@@ -4,8 +4,8 @@ import * as fromAuth from '../auth/store/auth.reducer';
 import * as fromCustomers from '../customers/store/customers.reducer';
 import * as fromOrders from '../orders/store/order.reducer';
 import * as fromProducts from '../products/store/products.reducer';
-import { logger } from '../reducerLogger';
-import { getSessionID } from '../sessionId';
+import { logger } from '../reducer-logger';
+import { getSessionID } from '../session-id';
 import * as fromSuppliers from '../supplier/store/suppliers.reducer';
 import * as fromToolbar from '../toolbar/store/toolbar.reducer';
 import * as fromUser from '../user/store/user.reducer';
@@ -33,8 +33,8 @@ export const appReducer: ActionReducerMap<State> = {
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> => {
   return (state, action) => {
 
-    logger.info('Session ID: ' + getSessionID() + 'Current state: ', state);
-    logger.info('Session ID: ' + getSessionID() + 'Action fired: ', action);
+    logger.info(`Session ID: ${getSessionID()}Current state: `, state);
+    logger.info(`Session ID: ${getSessionID()}Action fired: `, action);
 
     return reducer(state, action);
   };

@@ -4,7 +4,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
 import { NGXLogger } from 'ngx-logger';
-import { initLogger } from '../../../AdminClient/src/app/reducerLogger';
+import { initLogger } from './reducer-logger';
 
 @Component({
   selector: 'app-root',

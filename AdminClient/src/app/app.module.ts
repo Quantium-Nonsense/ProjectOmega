@@ -75,7 +75,7 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     MatIconModule,
     MatSidenavModule,
     LoggerModule.forRoot({
-      serverLoggingUrl: environment.common.apiRoot() + '/log/admin',
+      serverLoggingUrl: `${environment.common.apiRoot()}/log/admin`,
       level: environment.logLevel,
     }),
     StoreModule.forRoot(appReducer, {

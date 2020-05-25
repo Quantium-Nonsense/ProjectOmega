@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { Component } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { initLogger } from './reducerLogger';
 import { environment } from '../environments/environment';
+import { initLogger } from './reducer-logger';
 
 @Component({
   selector: 'app-root',
