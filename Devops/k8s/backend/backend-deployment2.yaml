@@ -53,7 +53,7 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       name: kafka
-                      key: spring.kafka.producer.bootstrap-servers
+                      key: spring.kafka.bootstrap-servers
                 - name: KAFKA_TOPIC
                   valueFrom:
                     secretKeyRef:
