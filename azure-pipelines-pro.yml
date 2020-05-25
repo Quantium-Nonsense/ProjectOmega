@@ -1,10 +1,11 @@
 trigger:
-  tags:
-    include:
-      - be*
   branches:
     include:
-      - master
+      - refs/tags/be*
+    exclude:
+      - refs/tags/c1*
+      - refs/tags/c2*
+
 
 pool:
   vmImage: 'ubuntu-latest'

@@ -3,6 +3,12 @@
 
     <property name="LOGS" value="./logs"/>
 
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+        </encoder>
+    </appender>
+
     <appender name="logstashAppender" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <remoteHost>${LOGSTASH_HOST}</remoteHost>
         <port>${LOGSTASH_PORT}</port>
@@ -33,11 +39,15 @@
 
     <!-- LOG everything at INFO level -->
     <root level="info">
-        <appender-ref ref="rollingFile"/>
         <appender-ref ref="logstashAppender"/>
+        <appender-ref ref="rollingFile"/>
     </root>
 
-    <logger name="com.project" level="debug">
+    <root level="info">
+        <appender-ref ref="consoleAppender"/>
+    </root>
+
+    <logger name="com.project" level="info">
         <appender-ref ref="logstashAppender"/>
     </logger>
 
@@ -48,5 +58,6 @@
 
     <logger name="com.project.omega.service.implmentations.KafkaProducerServiceImpl" level="trace" additivity="false">
         <appender-ref ref="rollingFile"/>
+        <appender-ref ref="consoleAppender"/>
     </logger>
 </configuration>
