@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
       url: '/orders'
     },
     {
-      title: 'Proudcts',
+      title: 'Products',
       content: 'Click here to see all products',
       url: '/products'
     },

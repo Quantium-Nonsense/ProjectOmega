@@ -2,6 +2,7 @@ package com.project.omega.helper;
 import com.sun.mail.smtp.SMTPTransport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -17,6 +18,12 @@ import java.util.Properties;
 
 public class EmailSender {
     private static final String SMTP_SERVER = "smtp.gmail.com";
+
+    private static String PASSWORD;
+
+    static {
+        PASSWORD = "myOmega!23";
+    }
 
     public static void send(String to, String subject, String content) {
         Properties prop = System.getProperties();
@@ -40,7 +47,7 @@ public class EmailSender {
 
             SMTPTransport t = (SMTPTransport) session.getTransport("smtp");
 
-            t.connect(SMTP_SERVER,  "omega.quantium@gmail.com", "myOmega!23");
+            t.connect(SMTP_SERVER,  "omega.quantium@gmail.com", PASSWORD);
 
             t.sendMessage(msg, msg.getAllRecipients());
 

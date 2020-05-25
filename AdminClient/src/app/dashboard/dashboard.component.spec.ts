@@ -1,7 +1,8 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {SharedModule} from '../shared/shared.module';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
+import { SharedModule } from '../shared/shared.module';
 
-import {DashboardComponent} from './dashboard.component';
+import { DashboardComponent } from './dashboard.component';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -11,7 +12,8 @@ describe('DashboardComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ DashboardComponent ],
       imports: [
-        SharedModule
+        SharedModule,
+        LoggerTestingModule,
       ]
     })
     .compileComponents();

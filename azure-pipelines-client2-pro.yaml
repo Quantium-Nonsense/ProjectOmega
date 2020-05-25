@@ -12,7 +12,6 @@ trigger:
       - be*
       - c1*
 
-
 pool:
   vmImage: 'ubuntu-latest'
 steps:
@@ -36,7 +35,7 @@ steps:
         kubernetesServiceEndpoint: 'OmegaCluster-prod'
         namespace: 'production'
         command: 'apply'
-        arguments: '-f ./Devops/k8s/frontend'
+        arguments: '-f ./Devops/k8s/frontend/'
 
 
     - task: Kubernetes@1

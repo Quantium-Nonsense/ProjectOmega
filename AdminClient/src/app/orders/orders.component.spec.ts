@@ -5,6 +5,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { selectAllCustomers } from '../customers/store/customers.reducer';
 import { selectAllProducts } from '../products/store/products.reducer';
 import * as fromApp from '../reducers/index';
@@ -40,7 +41,8 @@ describe('OrdersComponent', () => {
         MatSortModule,
         MatTableModule,
         TestModule,
-        MatDialogModule
+        MatDialogModule,
+        LoggerTestingModule,
       ]
     }).compileComponents();
   }));

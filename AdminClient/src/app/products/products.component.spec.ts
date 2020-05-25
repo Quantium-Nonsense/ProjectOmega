@@ -5,6 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { Observable } from 'rxjs';
 import * as fromApp from '../reducers/index';
 import { emptyState } from '../shared/empty.state';
@@ -35,7 +36,8 @@ describe('ProductsComponent', () => {
         MatSnackBarModule,
         SharedModule,
         BrowserModule,
-        NoopAnimationsModule
+        NoopAnimationsModule,
+        LoggerTestingModule,
       ]
     }).compileComponents();
   }));

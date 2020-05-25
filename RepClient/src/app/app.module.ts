@@ -11,6 +11,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { LoggerModule } from 'ngx-logger';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -48,6 +49,10 @@ export const getToken = () => {
       }
     }),
     IonicModule.forRoot(),
+    LoggerModule.forRoot({
+      serverLoggingUrl: `${environment.common.apiRoot}/log/rep`,
+      level: environment.logLevel
+    }),
     AppRoutingModule,
     StoreModule.forRoot(appReducer, {
       metaReducers,

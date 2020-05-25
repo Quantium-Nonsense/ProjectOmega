@@ -20,7 +20,7 @@ jobs:
         - "12.16.3"
       before_install: cd AdminClient/
       script:
-#        - npm run e2e_headless # Ignore this for now as it wont run
+        # - npm run e2e_headless # Ignore this for now as it wont run
         - npm run test -- --no-watch --no-progress --code-coverage=true --browsers=ChromeHeadlessCI
       after_success: npx codecov
     - name: Rep Client Frontend Tests
@@ -30,10 +30,13 @@ jobs:
       before_install: cd RepClient/
       script: npm run test:travis
       after_success: npx codecov
-#    - name: Backend Tests
-#      language: java
-#      jdk:
-#        - openjdk8
-#      before_install: cd Backend/
+    - name: Backend Tests
+      language: java
+      jdk:
+        - openjdk8
+      before_install:
+        - cd Backend/
+        - chmod +x mvnw
+
 
 

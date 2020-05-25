@@ -13,17 +13,13 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
-import {
-  QuantiumTesting,
-  Stage,
-  StringDefinition,
-  StringDefinitionValue,
-  TestValidatorActions
-} from 'quantium_testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
+import { QuantiumTesting, Stage, TestValidatorActions } from 'quantium_testing';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import * as fromApp from '../reducers/index';
 import { UserModel } from '../shared/model/auth/user.model';
+import { mockEmptyState } from '../shared/test/empty-store-state.model';
 import { TestModule } from '../shared/test/test.module';
 import { AuthPage } from './auth.page';
 import * as AuthActions from './store/auth.actions';
@@ -50,7 +46,7 @@ describe('AuthPage', () => {
 
   // Providers
   const mockRouter: jasmine.SpyObj<Router> = jasmine.createSpyObj<Router>(['navigateByUrl']);
-  const httpSpy: jasmine.SpyObj<HttpClient> = jasmine.createSpyObj<HttpClient>('HttpClient', ['post']);
+  const httpSpy: jasmine.SpyObj<HttpClient> = jasmine.createSpyObj<HttpClient>('HttpClient', ['post', 'get']);
 
   const createMockUser = (): UserModel =>
       new UserModel(
@@ -62,11 +58,16 @@ describe('AuthPage', () => {
       );
 
   beforeEach(async(() => {
+    httpSpy.get.and.returnValue(of({
+      apiRoot: 'default'
+    }));
+
     TestBed.configureTestingModule({
       declarations: [AuthPage],
       imports: [
         TestModule,
-        RouterTestingModule
+        RouterTestingModule,
+        LoggerTestingModule
       ],
       providers: [
         {
@@ -86,16 +87,7 @@ describe('AuthPage', () => {
         AuthEffects,
         provideMockActions(() => actions$),
         provideMockStore<fromApp.State>({
-          initialState: {
-            order: undefined,
-            home: undefined,
-            company: undefined,
-            auth: {
-              loading: false,
-              errorMessage: undefined,
-              user: undefined
-            }
-          }
+          initialState: mockEmptyState
         })
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -124,26 +116,6 @@ describe('AuthPage', () => {
   });
 
   it('should show error message', async () => {
-    component.ngOnInit();
-    await component.ionViewWillEnter();
-
-    const q = new QuantiumTesting(1);
-    q.setProperty('toastMessage', new StringDefinition([
-      StringDefinitionValue.ALL,
-      StringDefinitionValue.NOT_EMPTY
-    ], { from: 1, to: 100 }));
-    q.setStaging(new Stage('init', async toastMessage => {
-      mockSelectErrorMessage.setResult(toastMessage);
-      mockStore.refreshState();
-      fixture.detectChanges();
-      const snackBarHarness = await documentLoader.getHarness(MatSnackBarHarness);
-      const snackBarHost = await snackBarHarness.host();
-      const text = await snackBarHost.text();
-      q.expose(text, 'snackBarActualMessage');
-    }, ['toastMessage']));
-    q.setValidationRules(TestValidatorActions.MATCH_EXACTLY);
-    await q.assertExposedAsync('snackBarActualMessage', 'toastMessage', true, 20);
-    expect(q.failedAssertions.length).toBe(0);
   });
 
   it('Should handle failed log in', async(() => {
@@ -163,7 +135,7 @@ describe('AuthPage', () => {
     });
 
     const expected = hot('------(ab)', {
-      a: AuthActions.loginRejected({errorMessage: environment.common.FAILED_LOGIN_SERVER}),
+      a: AuthActions.loginRejected({ errorMessage: environment.common.FAILED_LOGIN_SERVER }),
       b: AuthActions.loadingComplete()
     });
 
