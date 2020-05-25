@@ -9,7 +9,7 @@ export class ApiEndpointCreatorService {
   private readonly endPoint: string;
 
   constructor() {
-    this.endPoint = environment.common.apiRoot();
+    this.endPoint = environment.common.apiRoot;
   }
 
   getUpdateOrderEndPoint(id): string {

@@ -26,5 +26,5 @@ export const emptyState: fromApp.State = {
   },
   toolbar: {
     progressBar: false
-  }
+  },
 };
