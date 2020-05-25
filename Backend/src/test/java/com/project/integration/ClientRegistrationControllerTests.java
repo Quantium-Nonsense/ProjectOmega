@@ -20,14 +20,22 @@ import java.util.Random;
 @SpringBootTest
 public class ClientRegistrationControllerTests {
 
-    private int port = 5000;
+    //private int port = 5000;
+
+    private String remoteBaseUrl = "http://40.65.236.154";
 
     TestRestTemplate restTemplate = new TestRestTemplate();
 
     HttpHeaders headers = new HttpHeaders();
 
-    private String createURLWithPort(String uri) {
-        return "http://localhost:" + port + uri;
+//    private String createURLWithPort(String uri) {
+//
+//        return "http://localhost:" + port + uri;
+//    }
+
+    public String createURLWithPort(String uri) {
+
+        return remoteBaseUrl + uri;
     }
 
     @Test
