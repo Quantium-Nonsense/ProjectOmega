@@ -34,12 +34,15 @@ public class UserController {
         try {
             users = userService.getAllUsers();
         } catch (NoRecordsFoundException e) {
+            LOGGER.warn("No users were found", e);
             return new ResponseEntity(new ArrayList<>(), HttpStatus.OK);
         }
         List<UserResponse> u = users.stream().map(user -> {
-            UserResponse r = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
-            return r;
+            UserResponse response = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
+            return response;
         }).collect(Collectors.toList());
+        
+        LOGGER.info("Users found and sent in response");
         return new ResponseEntity(u, HttpStatus.OK);
     }
 
@@ -47,8 +50,9 @@ public class UserController {
     public ResponseEntity getById(@PathVariable(value = "id") Long id) throws UserNotFoundException {
         LOGGER.info("Fetching user: {}", id);
         User user = userService.getUserById(id);
-        UserResponse u = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
-        return new ResponseEntity(u, HttpStatus.OK);
+        UserResponse userResponse = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
+        LOGGER.info("User {} found and sent in response", id);
+        return new ResponseEntity(userResponse, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/delete/{id}")
@@ -67,25 +71,33 @@ public class UserController {
         User userInDb = userService.getUserById(id);
 
         if (!updatedUser.getEmail().isEmpty()) {
+            LOGGER.info("No email supplied - will skip");
             userToUpdate.setEmail(updatedUser.getEmail());
         } else {
+            LOGGER.info("Updating email");
             userToUpdate.setEmail(userInDb.getEmail());
         }
 
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            LOGGER.info("No new password supplied - will skip");
             userToUpdate.setPassword(updatedUser.getPassword());
         } else {
+            LOGGER.info("Updating password");
             userToUpdate.setPassword(userInDb.getPassword());
         }
 
         if (!updatedUser.getRoles().isEmpty()) {
+            LOGGER.info("No new roles supplied - will skip");
             userToUpdate.setRoles(updatedUser.getRoles());
         } else {
+            LOGGER.info("Updating roles");
             userToUpdate.setRoles(userInDb.getRoles());
         }
 
         User user = userService.updateUserById(id, userToUpdate);
         UserResponse u = new UserResponse(user.getId(), user.getEmail(), user.getRoles());
+        
+        LOGGER.info("User updated successfully");
         return new ResponseEntity(u, HttpStatus.OK);
     }
 }
