@@ -1,10 +1,11 @@
 trigger:
-  tags:
-    include:
-      - c1*
   branches:
     include:
       - client2
+      - refs/tags/c2*
+    exclude:
+      - refs/tags/be*
+      - refs/tags/c1*
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -26,16 +27,16 @@ steps:
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'OmegaCluster-production'
+        kubernetesServiceEndpoint: 'OmegaCluster-prod'
         namespace: 'production'
         command: 'apply'
-        arguments: '-f ./Devops/k8s/frontend'
+        arguments: '-f ./Devops/k8s/frontend/'
 
 
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'OmegaCluster-production'
+        kubernetesServiceEndpoint: 'OmegaCluster-prod'
         namespace: 'production'
         command: 'set'
         arguments: 'image deployment/frontend-deployment frontend-adminclient=omegacr.azurecr.io/client2-pro-frontend:$(Build.BuildId)'

@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { provideMockStore } from '@ngrx/store/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { SharedModule } from '../shared/shared.module';
 
 import { OrderPage } from './order.page';
@@ -14,7 +15,8 @@ describe('OrderPage', () => {
       declarations: [OrderPage],
       imports: [
         IonicModule.forRoot(),
-        SharedModule
+        SharedModule,
+        LoggerTestingModule
       ],
       providers: [
         provideMockStore()

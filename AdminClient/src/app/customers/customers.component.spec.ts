@@ -11,6 +11,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CustomerModel } from '../models/customers/customer.model';
@@ -71,7 +72,8 @@ describe('CustomersComponent', () => {
                MatSnackBarModule,
                SharedModule,
                BrowserModule,
-               NoopAnimationsModule
+               NoopAnimationsModule,
+               LoggerTestingModule,
              ]
            })
            .compileComponents();

@@ -6,6 +6,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { Observable } from 'rxjs';
 import { SupplierModel } from '../shared/model/home/supplier.model';
 import { SharedModule } from '../shared/shared.module';
@@ -48,7 +49,8 @@ describe('HomePage', () => {
       declarations: [HomePage],
       imports: [
         SharedModule,
-        IonicModule.forRoot()
+        IonicModule.forRoot(),
+        LoggerTestingModule
       ],
       providers: [
         HomeEffects,

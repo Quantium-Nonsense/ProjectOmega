@@ -5,7 +5,6 @@ import * as fromAuth from '../auth/store/auth.reducer';
 import * as fromCompany from '../company/store/company.reducer';
 import * as fromHome from '../home/store/home.reducer';
 import * as fromOrder from '../order/store/order.reducer';
-import { logger } from '../reducer-logger';
 import { getSessionID } from '../session-id';
 
 export interface State {
@@ -28,8 +27,8 @@ export const appReducer: ActionReducerMap<State> = {
 export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
   (state, action) => {
 
-    logger.info(`Session ID: ${getSessionID()}Current state: `, state);
-    logger.info(`Session ID: ${getSessionID()}Action fired: `, action);
+    console.log(`Session ID: ${getSessionID()}Current state: `, state);
+    console.log(`Session ID: ${getSessionID()}Action fired: `, action);
 
     return reducer(state, action);
   };

@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export const getSessionID = () => {
-  if (!sessionStorage.get('sessionId')) {
+  if (!sessionStorage.getItem('sessionId')) {
     sessionStorage.setItem('sessionId', uuidv4());
   }
 
-  return sessionStorage.get('sessionId');
+  return sessionStorage.getItem('sessionId');
 };
