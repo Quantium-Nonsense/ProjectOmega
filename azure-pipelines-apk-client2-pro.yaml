@@ -3,12 +3,14 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-
 trigger:
   branches:
     include:
-      - client1
-      - refs/tags/{c2*}
+      - refs/tags/c2*
+    exclude:
+      - refs/tags/c1*
+      - refs/tags/be*
+
 
 pool:
   vmImage: 'ubuntu-latest'
