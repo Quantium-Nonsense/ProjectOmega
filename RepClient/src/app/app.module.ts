@@ -50,7 +50,7 @@ export const getToken = () => {
     }),
     IonicModule.forRoot(),
     LoggerModule.forRoot({
-      serverLoggingUrl: `${environment.common.apiRoot}/log/rep`,
+      serverLoggingUrl: `${environment.common.logApiRoot}/rep`,
       level: environment.logLevel
     }),
     AppRoutingModule,
