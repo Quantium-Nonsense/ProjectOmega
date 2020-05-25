@@ -24,7 +24,7 @@ spec:
                   name: frontend
                   key: window.env.company
             - name: API_ROOT
-                valueFrom:
+              valueFrom:
                   secretKeyRef:
                     name: frontend
                     key: window.env.apiRoot
