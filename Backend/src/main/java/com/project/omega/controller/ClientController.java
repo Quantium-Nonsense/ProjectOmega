@@ -61,14 +61,11 @@ public class ClientController {
     }
     
     @GetMapping(value = "/{id}")
-    public ResponseEntity getClient(@PathVariable(value = "id") Long id) throws ClientNotFoundException, NoRecordsFoundException {
+    public ResponseEntity getClient(@PathVariable(value = "id") Long id) throws ClientNotFoundException {
         logger.info("Request received: /api/client/{}", id);
         Client client = null;
         try {
             client = clientService.getClientById(id);
-        } catch (NoRecordsFoundException e) {
-            logger.warn("No records to search");
-            throw e;
         } catch (ClientNotFoundException e) {
             logger.warn("Client with id {} was not found", id);
             throw e;
