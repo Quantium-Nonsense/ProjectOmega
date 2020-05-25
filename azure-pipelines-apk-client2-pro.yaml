@@ -8,7 +8,7 @@ trigger:
   branches:
     include:
       - client1
-      - refs/tags/{c1*}
+      - refs/tags/{c2*}
 
 pool:
   vmImage: 'ubuntu-latest'
