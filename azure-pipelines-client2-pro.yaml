@@ -2,7 +2,7 @@ trigger:
   branches:
     include:
       - client2
-      - refs/tags/*
+      - refs/tags/c2*
   paths:
     include:
       - AdminClient/*
@@ -28,7 +28,7 @@ steps:
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'OmegaCluster-production'
+        kubernetesServiceEndpoint: 'OmegaCluster-prod'
         namespace: 'production'
         command: 'apply'
         arguments: '-f ./Devops/k8s/frontend'
@@ -37,7 +37,7 @@ steps:
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'OmegaCluster-production'
+        kubernetesServiceEndpoint: 'OmegaCluster-prod'
         namespace: 'production'
         command: 'set'
         arguments: 'image deployment/frontend-deployment frontend-adminclient=omegacr.azurecr.io/client2-pro-frontend:$(Build.BuildId)'
