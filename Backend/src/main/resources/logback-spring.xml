@@ -4,7 +4,9 @@
     <property name="LOGS" value="./logs"/>
 
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+        </encoder>
     </appender>
 
     <appender name="logstashAppender" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
