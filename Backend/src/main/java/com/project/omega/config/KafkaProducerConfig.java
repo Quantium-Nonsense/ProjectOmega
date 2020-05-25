@@ -1,6 +1,6 @@
 package com.project.omega.config;
 
-import com.project.omega.bean.dto.KafkaLogDto;
+import com.project.omega.bean.dto.KafkaLogFrontendDto;
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
@@ -40,9 +40,8 @@ public class KafkaProducerConfig {
     @Value("${spring.kafka.jaas.options.security.protocol}")
     private String securityProtocol;
     
-    
     @Bean
-    public ProducerFactory<String, KafkaLogDto> producerFactory() {
+    public ProducerFactory<String, KafkaLogFrontendDto> producerFactory() {
     
         String jaasTemplate = "%s required username=\"%s\" password=\"%s\";";
         String jaasCfg = String.format(jaasTemplate, this.loginModule, this.username, this.password);
@@ -66,7 +65,7 @@ public class KafkaProducerConfig {
     }
     
     @Bean
-    public KafkaTemplate<String, KafkaLogDto> kafkaTemplate() {
+    public KafkaTemplate<String, KafkaLogFrontendDto> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

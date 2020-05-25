@@ -1,7 +1,7 @@
 package com.project.omega.service.interfaces;
 
-import com.project.omega.bean.dto.KafkaLogDto;
+import com.project.omega.bean.dto.KafkaLogFrontendDto;
 
 public interface KafkaProducerService {
-    public void sendMessage(KafkaLogDto message);
+    public void sendMessage(KafkaLogFrontendDto message);
 }

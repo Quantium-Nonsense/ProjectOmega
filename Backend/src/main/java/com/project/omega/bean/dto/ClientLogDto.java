@@ -6,15 +6,15 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class ClientLogDto implements Serializable {
-    private LogLevel logLevel;
+    private LogLevel level;
     private LocalDateTime timestamp;
     private String filename;
     private String lineNumber;
     private String message;
     private Serializable[] additional;
     
-    public void setLogLevel(LogLevel logLevel) {
-        this.logLevel = logLevel;
+    public void setLevel(LogLevel level) {
+        this.level = level;
     }
     
     public void setTimestamp(LocalDateTime timestamp) {
@@ -37,8 +37,8 @@ public class ClientLogDto implements Serializable {
         this.additional = additional;
     }
     
-    public LogLevel getLogLevel() {
-        return logLevel;
+    public LogLevel getLevel() {
+        return level;
     }
     
     public LocalDateTime getTimestamp() {

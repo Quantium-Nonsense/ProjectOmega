@@ -1,16 +1,14 @@
 package com.project.omega.bean.dto;
 
+import ch.qos.logback.classic.Level;
+import com.project.omega.enums.LogLevel;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import ch.qos.logback.classic.Level;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.project.omega.enums.LogLevel;
-
-public class KafkaLogDto implements Serializable {
+public abstract class KafkaLogDto implements Serializable {
     private LogLevel logLevel;
     private String threadName;
-    private LocalDateTime timestamp;
     private String filename;
     private String lineNumber;
     private String message;
@@ -49,14 +47,7 @@ public class KafkaLogDto implements Serializable {
         this.threadName = threadName;
     }
     
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-    
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
+    public abstract void setTimestamp(LocalDateTime timestamp);
     
     public String getFilename() {
         return filename;
