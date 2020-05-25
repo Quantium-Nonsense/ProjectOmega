@@ -24,7 +24,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
-
+    
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     
@@ -49,7 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 LOGGER.warn("JWT Token has expired", e);
             }
         } else {
-            logger.warn("JWT Token does not begin with Bearer String");
+            LOGGER.warn("JWT Token does not begin with Bearer String");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
