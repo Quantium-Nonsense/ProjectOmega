@@ -3,6 +3,9 @@ trigger:
     include:
       - master
       - refs/tags/*
+  paths:
+    include:
+      - Backend/*
 
 
 

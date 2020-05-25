@@ -5,6 +5,7 @@ export const commonEnvironment = {
   CANCELLATION_TEXT: 'Cancel',
   DELETE_CUSTOMER_CONFIRM_TEXT: 'Are you sure you want to delete this customer?',
   DELETE_CUSTOMER_TITLE: 'Delete Customer',
-  apiRoot: () => 'http://40.65.236.154/api',
+  apiPath: '40.65.236.154',
+  apiRoot: () => `http://${ window['env']['apiRoot'] }/api`,
   gitCompany: window['env']['company']
 };
