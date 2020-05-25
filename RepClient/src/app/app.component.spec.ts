@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { AppComponent } from './app.component';
 
@@ -26,7 +27,10 @@ describe('AppComponent', () => {
         {provide: SplashScreen, useValue: splashScreenSpy},
         {provide: Platform, useValue: platformSpy}
       ],
-      imports: [RouterTestingModule.withRoutes([])]
+      imports: [
+        RouterTestingModule.withRoutes([]),
+        LoggerTestingModule,
+      ]
     }).compileComponents();
   }));
 

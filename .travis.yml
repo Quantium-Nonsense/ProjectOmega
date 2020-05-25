@@ -34,6 +34,9 @@ jobs:
       language: java
       jdk:
         - openjdk8
-      before_install: cd Backend/
+      before_install:
+        - cd Backend/
+        - chmod +x mvnw
+
 
 
