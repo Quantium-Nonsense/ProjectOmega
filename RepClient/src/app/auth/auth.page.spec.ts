@@ -13,13 +13,8 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
-import {
-  QuantiumTesting,
-  Stage,
-  StringDefinition,
-  StringDefinitionValue,
-  TestValidatorActions
-} from 'quantium_testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
+import { QuantiumTesting, Stage, TestValidatorActions } from 'quantium_testing';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../environments/environment';
 import * as fromApp from '../reducers/index';
@@ -71,7 +66,8 @@ describe('AuthPage', () => {
       declarations: [AuthPage],
       imports: [
         TestModule,
-        RouterTestingModule
+        RouterTestingModule,
+        LoggerTestingModule,
       ],
       providers: [
         {

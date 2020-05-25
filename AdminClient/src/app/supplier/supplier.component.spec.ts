@@ -9,6 +9,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { Observable } from 'rxjs';
 import * as fromApp from '../reducers/index';
 import { ApiPathService } from '../services/api-path.service';
@@ -54,7 +55,8 @@ describe('SupplierComponent', () => {
              imports: [
                NoopAnimationsModule,
                MatDialogModule,
-               MatSnackBarModule
+               MatSnackBarModule,
+               LoggerTestingModule,
              ],
              providers: [
                provideMockStore<fromApp.State>({
