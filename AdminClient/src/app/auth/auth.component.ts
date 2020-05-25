@@ -3,8 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { State } from '../reducers';
+import { getSessionID } from '../session-id';
 import * as AuthActions from './store/auth.actions';
 import * as fromAuth from './store/auth.reducer';
 import * as ToolbarActions from './../toolbar/store/toolbar.actions';
@@ -35,12 +37,14 @@ export class AuthComponent implements OnInit, OnDestroy {
       private route: ActivatedRoute,
       private router: Router,
       private store: Store<State>,
-      private snackBar: MatSnackBar
+      private snackBar: MatSnackBar,
+      private logger: NGXLogger,
   ) {
-
+    this.logger.info(`Session ID: ${getSessionID()} - Constructing auth screen`);
   }
 
   ngOnInit(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Initializing auth screen`);
     this.authForm = this.formInitialization();
     this.subscriptions.add(
         this.store.select('auth').subscribe((state: fromAuth.State) => {
@@ -82,12 +86,14 @@ export class AuthComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // Clean up all subs to avoid memory leak
     this.subscriptions.unsubscribe();
+    this.logger.info(`Session ID: ${getSessionID()} - Destroying auth screen`);
   }
 
   /**
    * Submit form
    */
   onSubmit(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Login attempt`);
     this.store.dispatch(ToolbarActions.beginProgressBar());
     this.store.dispatch(AuthActions.loginAttempt({
       email: this.authForm.get('email').value as string,
