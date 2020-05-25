@@ -3,4 +3,5 @@
 	
 	// Enviroment variables
 	window.env.company = "default";
+	window.env.apiRoot = "default";
 })(this)
