@@ -96,5 +96,42 @@ public class Order implements Serializable {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
+    public static class OrderBuilder {
+        private Long id;
+        private LocalDate dateCreated;
+        private List<OrderProduct> orderProducts;
+        private Long userId;
+        private String status;
+
+        public Order.OrderBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Order.OrderBuilder setDateCreated(LocalDate dateCreated) {
+            this.dateCreated = dateCreated;
+            return this;
+        }
+
+        public Order.OrderBuilder setOrderProducts(List<OrderProduct> orderProducts) {
+            this.orderProducts = orderProducts;
+            return this;
+        }
+
+        public Order.OrderBuilder setUserId(Long userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Order.OrderBuilder setStatus(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public Order build() {
+            return new Order(id, dateCreated, orderProducts, userId, status);
+        }
+    }
 }
 
