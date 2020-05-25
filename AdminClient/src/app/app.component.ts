@@ -17,6 +17,8 @@ export class AppComponent implements OnInit {
     console.log(window['env']['company']);
     if (window['env']['company'] === 'client1') {
       this.document.getElementById('theme').setAttribute('href', 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css');
+    } else if (window['env']['company'] === 'client2') {
+      this.document.getElementById('theme').setAttribute('href', 'node_modules/@angular/material/prebuilt-themes/purple-green.css');
     } else {
       this.document.getElementById('theme').setAttribute('href', 'node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css');
     }
