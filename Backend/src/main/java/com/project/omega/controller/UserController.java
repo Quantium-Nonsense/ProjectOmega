@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,27 +69,35 @@ public class UserController {
         User userInDb = userService.getUserById(id);
 
         if (!updatedUser.getEmail().isEmpty()) {
-            LOGGER.info("No email supplied - will skip");
+            LOGGER.info("Updating email");
             userToUpdate.setEmail(updatedUser.getEmail());
         } else {
-            LOGGER.info("Updating email");
+            LOGGER.info("No email supplied - will skip");
             userToUpdate.setEmail(userInDb.getEmail());
         }
 
         if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-            LOGGER.info("No new password supplied - will skip");
+            LOGGER.info("Updating password");
             userToUpdate.setPassword(updatedUser.getPassword());
         } else {
-            LOGGER.info("Updating password");
+            LOGGER.info("No new password supplied - will skip");
             userToUpdate.setPassword(userInDb.getPassword());
         }
 
-        if (!updatedUser.getRoles().isEmpty()) {
-            LOGGER.info("No new roles supplied - will skip");
+        if (updatedUser.getRoles() != null && !updatedUser.getRoles().isEmpty()) {
+            LOGGER.info("Updating roles");
             userToUpdate.setRoles(updatedUser.getRoles());
         } else {
-            LOGGER.info("Updating roles");
+            LOGGER.info("No new roles supplied - will skip");
             userToUpdate.setRoles(userInDb.getRoles());
+        }
+
+        if (updatedUser.getEnabled()) {
+            LOGGER.info("Updating user's enabled state");
+            userToUpdate.setEnabled(updatedUser.getEnabled());
+        } else {
+            LOGGER.info("No new enabled state supplied - will skip");
+            userToUpdate.setEnabled(userInDb.getEnabled());
         }
 
         User user = userService.updateUserById(id, userToUpdate);

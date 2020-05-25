@@ -5,20 +5,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.entity.Client;
 import com.project.omega.exceptions.ClientNotFoundException;
 import com.project.omega.exceptions.NoRecordsFoundException;
-import com.project.omega.repository.ClientRepository;
 import com.project.omega.service.interfaces.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-//import javax.lang.model.element.VariableElement;
-//import javax.xml.ws.Response;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @CrossOrigin
@@ -38,10 +38,13 @@ public class ClientController {
         logger.debug("Request body object: {}", client);
         
         Client newClient = clientService.createClient(client);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/client/create"));
+
         logger.debug("newClient id: {}", newClient.getId());
         logger.info("/create with hash {} is complete", client.hashCode());
-        
-        return new ResponseEntity(newClient, HttpStatus.CREATED);
+        return new ResponseEntity(newClient, headers, HttpStatus.CREATED);
     }
     
     @GetMapping(value = "/get")

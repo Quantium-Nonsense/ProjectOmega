@@ -4,7 +4,6 @@ package com.project.omega.controller;
 import com.project.omega.authentication.JwtTokenUtil;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.OrderProduct;
-import com.project.omega.bean.dao.entity.User;
 import com.project.omega.bean.dto.OrderProductDto;
 import com.project.omega.exceptions.*;
 import com.project.omega.service.interfaces.*;
@@ -14,13 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +58,7 @@ public class OrderController {
 
             Long userId = jwtTokenUtil.getIdFromToken(token.substring(7));
 
-            if(newOrder.getUserId() == null) {
+            if (newOrder.getUserId() == null) {
                 order.setUserId(userId);
                 LOGGER.debug("Using user id provided");
             } else {
@@ -70,28 +66,29 @@ public class OrderController {
                 LOGGER.debug("No user id was provided. This will be inferred from the requester token");
             }
 
+            List<OrderProduct> orderProducts = new ArrayList<>();
+
+            for (OrderProductDto dto : productsForOrder) {
+                orderProducts.add(orderProductService.create(new OrderProduct(productService.getProductById(dto.getProduct().getId()),
+                        clientService.getClientById(dto.getClient().getId()),
+                        dto.getQuantity())));
+            }
+
+            order.setOrderProducts(orderProducts);
+
             order = orderService.createOrder(order);
         } catch (Exception e) {
             LOGGER.warn("Something went wrong when creating this order", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getStackTrace().toString());
         }
 
-        List<OrderProduct> orderProducts = new ArrayList<>();
-        
-        for (OrderProductDto dto : productsForOrder) {
-            orderProducts.add(orderProductService.create(new OrderProduct(productService.getProductById(dto.getProduct().getId()),
-                    clientService.getClientById(dto.getClient().getId()),
-                    dto.getQuantity())));
-        }
-        
-        order.setOrderProducts(orderProducts);
-        
-        this.orderService.updateOrder(order.getId(), order);
-        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/order/create"));
+
         LOGGER.info("New Order created and sent in response");
-        return new ResponseEntity(order, HttpStatus.CREATED);
+        return new ResponseEntity(order, headers, HttpStatus.CREATED);
     }
-    
+
     @GetMapping(value = "/get")
     public ResponseEntity fetchAllOrders() {
         LOGGER.info("Request received: /api/order/get");
@@ -106,8 +103,8 @@ public class OrderController {
         
         Order orderUpdate = new Order();
         Order oldOrder = orderService.getOrderById(id);
-        
-        if (update.getOrderProducts().isEmpty() || update.getOrderProducts() == null) {
+
+        if (update.getOrderProducts() == null || update.getOrderProducts().isEmpty()) {
             LOGGER.debug("Order Products is empty or null - will skip");
             orderUpdate.setOrderProducts(oldOrder.getOrderProducts());
         } else {
@@ -122,7 +119,7 @@ public class OrderController {
             LOGGER.debug("Updating order status");
             orderUpdate.setStatus(update.getStatus());
         }
-        
+
         if (update.getUserId() == null) {
             LOGGER.debug("Order user id is null - will skip");
             orderUpdate.setUserId(oldOrder.getUserId());
@@ -130,16 +127,16 @@ public class OrderController {
             LOGGER.debug("Updating user id");
             orderUpdate.setUserId(update.getUserId());
         }
-        
+
         orderUpdate.setDateCreated(oldOrder.getDateCreated());
         orderUpdate.setId(oldOrder.getId());
-        
+
         Order order = orderService.updateOrder(id, orderUpdate);
         
         LOGGER.info("Order successfully updated and returned in response");
         return new ResponseEntity(order, HttpStatus.OK);
     }
-    
+
     @GetMapping(value = "/{id}")
     public ResponseEntity fetchOrderById(@PathVariable(value = "id") Long id) throws OrderNotFoundException {
         LOGGER.info("Request received: /api/order/{}", id);
@@ -147,7 +144,7 @@ public class OrderController {
         LOGGER.info("Order found and returned in response");
         return new ResponseEntity(order, HttpStatus.OK);
     }
-    
+
     private void validateProductsExistence(List<OrderProductDto> orderProducts) throws ProductNotFoundException {
         LOGGER.info("Validating whether the products exist");
         List<OrderProductDto> list = new ArrayList<>();
@@ -162,15 +159,15 @@ public class OrderController {
             new ProductNotFoundException("Product not found");
         }
     }
-    
+
     public static class OrderForm implements Serializable {
-        
+
         private List<OrderProductDto> productOrders;
-        
+
         public List<OrderProductDto> getProductOrders() {
             return productOrders;
         }
-        
+
         public void setProductOrders(List<OrderProductDto> productOrders) {
             this.productOrders = productOrders;
         }
