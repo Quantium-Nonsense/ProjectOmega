@@ -1,7 +1,7 @@
 package com.project.omega.controller;
 
 import com.project.omega.bean.dto.ClientLogDto;
-import com.project.omega.bean.dto.KafkaLogDto;
+import com.project.omega.bean.dto.KafkaLogFrontendDto;
 import com.project.omega.service.interfaces.KafkaProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,10 +20,10 @@ public class LogController {
     }
     
     private ResponseEntity<HttpStatus> sendLog(ClientLogDto log, String source){
-        KafkaLogDto kafkaLog = new KafkaLogDto();
+        KafkaLogFrontendDto kafkaLog = new KafkaLogFrontendDto();
     
         kafkaLog.setFilename(log.getFilename());
-        kafkaLog.setLogLevel(log.getLogLevel());
+        kafkaLog.setLogLevel(log.getLevel());
         kafkaLog.setTimestamp(log.getTimestamp());
         kafkaLog.setFilename(log.getFilename());
         kafkaLog.setLineNumber(log.getLineNumber());
