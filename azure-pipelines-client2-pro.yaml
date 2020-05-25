@@ -2,15 +2,15 @@ trigger:
   branches:
     include:
       - client2
-      - refs/tags/c2*
     exclude:
-      - refs/tags/be*
-      - refs/tags/c1*
-
-  paths:
+      - client1
+      - master
+  tags:
     include:
-      - AdminClient/*
-
+      - c2*
+    exclude:
+      - be*
+      - c1*
 
 
 pool:
