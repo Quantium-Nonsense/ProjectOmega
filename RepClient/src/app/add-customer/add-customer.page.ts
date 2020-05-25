@@ -3,7 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoadingController, MenuController } from '@ionic/angular';
 import { Store } from '@ngrx/store';
+import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
+import { getSessionID } from '../session-id';
 import * as fromApp from './../reducers/index';
 import * as AddCustomerActions from './store/add-customer.actions';
 import { AddCustomerState } from './store/add-customer.reducer';
@@ -24,12 +26,14 @@ export class AddCustomerPage implements OnInit {
       public menuController: MenuController,
       public loadingController: LoadingController,
       private store: Store<fromApp.State>,
-      private snackBar: MatSnackBar
+      private snackBar: MatSnackBar,
+      private logger: NGXLogger,
   ) {
 
   }
 
   ionViewWillEnter(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Entering Add Customers Screen`);
     this.menuController.enable(false);
     this.subscriptions.add(
         this.store.select('addCustomer').subscribe((state: AddCustomerState) => {
@@ -42,12 +46,14 @@ export class AddCustomerPage implements OnInit {
   }
 
   ionViewWillLeave(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Leaving Add Customers Screen`);
     this.subscriptions.unsubscribe();
     this.pageLoader.dismiss();
   }
 
   // Submit form button
   protected onSave(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Saving new customer`);
     this.store.dispatch(AddCustomerActions.addAttempt({
       title: this.addCustomerForm.get('title').value as string,
       firstName: this.addCustomerForm.get('firstName').value as string,
@@ -61,6 +67,7 @@ export class AddCustomerPage implements OnInit {
   }
 
   ngOnInit(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Initializing Add Customers Screen`);
     this.addCustomerForm = this.formInitialization();
   }
 
