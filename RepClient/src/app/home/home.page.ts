@@ -21,7 +21,7 @@ export class HomePage {
 
   constructor(
     private store: Store<State>,
-    private logger: NGXLogger,
+    private logger: NGXLogger
   ) {
     this.companies = [];
     this.subscriptions = new Subscription();

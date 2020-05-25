@@ -29,7 +29,7 @@ export class OrderPage implements OnInit {
 
   constructor(
     private store: Store<fromApp.State>,
-    private logger: NGXLogger,
+    private logger: NGXLogger
   ) {
     this.subscription = new Subscription();
     this.logger.info(`Session ID: ${getSessionID()} - Constructing Order page`);

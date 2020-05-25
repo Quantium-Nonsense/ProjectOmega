@@ -27,7 +27,7 @@ export class AddCustomerPage implements OnInit {
       public loadingController: LoadingController,
       private store: Store<fromApp.State>,
       private snackBar: MatSnackBar,
-      private logger: NGXLogger,
+      private logger: NGXLogger
   ) {
 
   }
