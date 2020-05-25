@@ -2,10 +2,10 @@ trigger:
   branches:
     include:
       - client1
-      - refs/tags/c1*
+      - refs/tags/{c1*}
     exclude:
-      - refs/tags/be*
-      - refs/tags/c2*
+      - refs/tags/{be*}
+      - refs/tags/{c2*}
 
 pool:
   vmImage: 'ubuntu-latest'
