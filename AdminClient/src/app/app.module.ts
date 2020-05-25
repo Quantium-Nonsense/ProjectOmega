@@ -15,6 +15,8 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { LoggerModule } from 'ngx-logger';
+
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 // Components imported
@@ -72,6 +74,10 @@ export const getToken = () => localStorage.getItem(environment.ACCESS_TOKEN);
     MatGridListModule,
     MatIconModule,
     MatSidenavModule,
+    LoggerModule.forRoot({
+      serverLoggingUrl: environment.common.apiRoot() + '/log/admin',
+      level: environment.logLevel,
+    }),
     StoreModule.forRoot(appReducer, {
       metaReducers,
       runtimeChecks: {

@@ -4,6 +4,8 @@ import * as fromAuth from '../auth/store/auth.reducer';
 import * as fromCompany from '../company/store/company.reducer';
 import * as fromHome from '../home/store/home.reducer';
 import * as fromOrder from '../order/store/order.reducer';
+import { logger } from '../reducerLogger';
+import { getSessionID } from '../sessionId';
 
 export interface State {
 
@@ -20,12 +22,14 @@ export const appReducer: ActionReducerMap<State> = {
   order: fromOrder.orderReducer
 };
 
-export const debug = (reducer: ActionReducer<any>): ActionReducer<any> =>
-  (state, action) => {
-    console.log('state', state);
-    console.log('action', action);
+export const debug = (reducer: ActionReducer<any>): ActionReducer<any> => {
+  return (state, action) => {
+
+    logger.info('Session ID: ' + getSessionID() + 'Current state: ', state);
+    logger.info('Session ID: ' + getSessionID() + 'Action fired: ', action);
 
     return reducer(state, action);
   };
+};
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [debug] : [];

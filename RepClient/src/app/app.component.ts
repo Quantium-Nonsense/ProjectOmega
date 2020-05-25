@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Platform } from '@ionic/angular';
+import { NGXLogger } from 'ngx-logger';
+import { initLogger } from '../../../AdminClient/src/app/reducerLogger';
 
 @Component({
   selector: 'app-root',
@@ -27,8 +29,11 @@ export class AppComponent {
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private logger: NGXLogger
   ) {
+    logger.info('Initializing logger for ngrx');
+    initLogger(logger);
     this.initializeApp();
   }
 
