@@ -59,8 +59,7 @@ export class AuthEffects {
                         AuthActions.loadingComplete()
                       ];
                     }
-                    console.log(error);
-
+                    console.error(error);
                     return [
                       AuthActions.loginRejected({
                         errorMessage: 'Wrong email or password, please try again'
