@@ -2,6 +2,11 @@ trigger:
   branches:
     include:
       - client2/*
+  paths: 
+    include:
+      - AdminClient/*
+    exclude:
+      - RepClient/*
 
 
 pool:
