@@ -44,11 +44,7 @@ spec:
                       secretKeyRef:
                         name: devops2-db
                         key: sendGrid.key
-                - name: SECRETS_EMIALPASS
-                  valueFrom:
-                      secretKeyRef:
-                         name: devops2-db
-                         key: email.password
+
 
 
 
