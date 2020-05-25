@@ -59,6 +59,12 @@ public class Order implements Serializable {
 
     }
 
+    public Order(Long id, @Valid List<OrderProduct> orderProducts, @NotNull Long userId) {
+        this.id = id;
+        this.orderProducts = orderProducts;
+        this.userId = userId;
+    }
+
     public Long getId() {
         return id;
     }
