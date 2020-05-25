@@ -2,7 +2,7 @@ trigger:
   branches:
     include:
       - client2
-      - refs/tags/*
+      - refs/tags/c1*
   paths:
     include:
       - AdminClient/*
