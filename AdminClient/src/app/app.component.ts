@@ -17,11 +17,11 @@ export class AppComponent implements OnInit {
     console.log(window['env']['company']);
     console.log('trigger me pelase!');
     if (window['env']['company'] === 'client1') {
-      this.document.getElementById('theme').setAttribute('href', 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css');
+      this.document.getElementById('theme').setAttribute('href', 'assets/css/indigo-pink.css');
     } else if (window['env']['company'] === 'client2') {
-      this.document.getElementById('theme').setAttribute('href', 'node_modules/@angular/material/prebuilt-themes/purple-green.css');
+      this.document.getElementById('theme').setAttribute('href', 'assets/css/purple-green.css');
     } else {
-      this.document.getElementById('theme').setAttribute('href', 'node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css');
+      this.document.getElementById('theme').setAttribute('href', 'assets/css/deeppurple-amber.css');
     }
   }
 }
