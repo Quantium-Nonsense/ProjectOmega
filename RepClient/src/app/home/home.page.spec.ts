@@ -50,7 +50,7 @@ describe('HomePage', () => {
       imports: [
         SharedModule,
         IonicModule.forRoot(),
-        LoggerTestingModule,
+        LoggerTestingModule
       ],
       providers: [
         HomeEffects,

@@ -67,7 +67,7 @@ describe('AuthPage', () => {
       imports: [
         TestModule,
         RouterTestingModule,
-        LoggerTestingModule,
+        LoggerTestingModule
       ],
       providers: [
         {

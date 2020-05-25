@@ -82,7 +82,7 @@ describe('CompanyPage', () => {
         SharedModule,
         NoopAnimationsModule,
         IonicModule.forRoot(),
-        LoggerTestingModule,
+        LoggerTestingModule
       ],
       providers: [
         { provide: Router, useValue: navSpy },
