@@ -5,11 +5,12 @@ import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { routes } from '../app-routing.module';
+import * as fromApp from '../reducers/index';
 import { emptyState } from '../shared/empty.state';
 import { TestModule } from '../shared/test/test.module';
 import { AuthComponent } from './auth.component';
-import * as fromApp from '../reducers/index';
 
 describe('AuthPage', () => {
   let component: AuthComponent;
@@ -26,7 +27,11 @@ describe('AuthPage', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [AuthComponent],
-      imports: [TestModule, RouterTestingModule.withRoutes(routes)],
+      imports: [
+        TestModule,
+        RouterTestingModule.withRoutes(routes),
+        LoggerTestingModule,
+      ],
       providers: [
         AuthComponent,
         provideMockStore<fromApp.State>({

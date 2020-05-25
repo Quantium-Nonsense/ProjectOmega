@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
+import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import * as CompanyActions from '../company/store/company.actions';
 import * as fromCompany from '../company/store/company.reducer';
+import { getSessionID } from '../session-id';
 import { ItemModel } from '../shared/model/company-items/item.model';
 import { SupplierModel } from '../shared/model/home/supplier.model';
 import { OrderItemModel } from '../shared/model/order/order-item.model';
@@ -38,8 +40,10 @@ export class CompanyPage implements OnInit {
   private subscription: Subscription = new Subscription();
 
   constructor(
-      public store: Store<fromApp.State>
+    public store: Store<fromApp.State>,
+    private logger: NGXLogger
   ) {
+    this.logger.info(`Session ID: ${getSessionID()} - Constructing Company Page`);
 
   }
 
@@ -48,13 +52,17 @@ export class CompanyPage implements OnInit {
   }
 
   ionViewWillEnter(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Entering Company Page`);
     this.subscription.add(
-        this.store.select('order').subscribe(orderState => {
-          this.order = orderState.items;
-        })
+      this.store.select('order').subscribe(orderState => {
+        this.order = orderState.items;
+      })
     );
 
-    this.subscription.add(this.store.pipe(select(fromCompany.selectAllItems)).subscribe(prods => this.items = prods));
+    this.subscription.add(this.store.pipe(select(fromCompany.selectAllItems)).subscribe(prods => {
+      this.items = prods;
+      this.logger.info(`Session ID: ${getSessionID()} - Products loaded`);
+    }));
   }
 
   ionViewWillLeave(): void {
@@ -67,7 +75,8 @@ export class CompanyPage implements OnInit {
    * @param sortBy How to sort the list
    */
   sortBy(sortBy: SortOptionsEnum): void {
-    this.store.dispatch(CompanyActions.sortItems({ by: sortBy, items: this.items }));
+    this.logger.info(`Session ID: ${getSessionID()} - Sorting products by `, sortBy);
+    this.store.dispatch(CompanyActions.sortItems({by: sortBy, items: this.items}));
   }
 
   /**
@@ -84,8 +93,10 @@ export class CompanyPage implements OnInit {
     }
     this.items = [...this.items.filter(item => {
       if (
-          item.description.toLocaleUpperCase().includes(value.toLocaleUpperCase()) ||
-          item.name.toLocaleUpperCase().includes(value.toLocaleUpperCase())) {
+        item.description.toLocaleUpperCase().includes(value.toLocaleUpperCase()) ||
+        item.name.toLocaleUpperCase().includes(value.toLocaleUpperCase())) {
+        this.logger.info(`Session ID: ${getSessionID()} - Found item with filter`);
+
         return item;
       }
     })];
@@ -102,13 +113,13 @@ export class CompanyPage implements OnInit {
   quickShowAllCompanies(): void {
     this.store.select('home').pipe(take(1)).subscribe(lastState => {
       this.store.dispatch(CompanyActions.showCompaniesBottomSheet({
-            data: {
-              action: (selectedCompany: SupplierModel) => {
-                this.store.dispatch(CompanyActions.loadItemsOfCompany({ company: selectedCompany }));
-              },
-              companies: lastState.companies
-            }
+          data: {
+            action: (selectedCompany: SupplierModel) => {
+              this.store.dispatch(CompanyActions.loadItemsOfCompany({company: selectedCompany}));
+            },
+            companies: lastState.companies
           }
+        }
       ));
     });
   }

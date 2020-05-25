@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action, MemoizedSelector } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { Observable } from 'rxjs';
 import { routes } from '../app-routing.module';
 import * as fromApp from '../reducers';
@@ -41,7 +42,8 @@ describe('ToolbarComponent', () => {
              ],
              imports: [
                TestModule,
-               RouterTestingModule.withRoutes(routes)
+               RouterTestingModule.withRoutes(routes),
+               LoggerTestingModule,
              ]
            })
            .compileComponents();

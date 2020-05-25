@@ -9,6 +9,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { cold, hot } from 'jasmine-marbles';
+import { LoggerTestingModule } from 'ngx-logger/testing';
 import { Observable, of } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { TestScheduler } from 'rxjs/testing';
@@ -80,7 +81,8 @@ describe('CompanyPage', () => {
       imports: [
         SharedModule,
         NoopAnimationsModule,
-        IonicModule.forRoot()
+        IonicModule.forRoot(),
+        LoggerTestingModule
       ],
       providers: [
         { provide: Router, useValue: navSpy },

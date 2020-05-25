@@ -4,8 +4,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MenuController } from '@ionic/angular';
 import { select, Store } from '@ngrx/store';
+import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { getSessionID } from '../session-id';
 import * as fromApp from './../reducers/index';
 import * as AuthActions from './store/auth.actions';
 import * as fromAuth from './store/auth.reducer';
@@ -32,11 +34,14 @@ export class AuthPage implements OnInit, OnDestroy {
       public menuController: MenuController,
       private store: Store<fromApp.State>,
       private snackBar: MatSnackBar,
-      private http: HttpClient
+      private http: HttpClient,
+      private logger: NGXLogger
   ) {
+    this.logger.info(`Session ID: ${getSessionID()} - Constructing Auth Page`);
   }
 
   ngOnInit(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Initializing Auth Page`);
     // Subscribe to observables
     this.subscriptions.add(this.store.pipe(select((fromAuth.selectIsLoading))).subscribe(loading => {
       if (loading) {
@@ -47,6 +52,7 @@ export class AuthPage implements OnInit, OnDestroy {
     }));
     this.subscriptions.add(this.store.pipe(select(fromAuth.selectErrorMessage)).subscribe(error => {
       if (error) {
+        this.logger.error(`Session ID: ${getSessionID()} - Error initializing this page: `, error);
         this.showMessage(error);
       }
     }));
@@ -55,25 +61,29 @@ export class AuthPage implements OnInit, OnDestroy {
 
   async ionViewWillEnter(): Promise<void> {
     // Disable sideway scroll on log in page
+    this.logger.info(`Session ID: ${getSessionID()} - Entering Auth Page`);
     const file: { apiPath: string } = await this.http.get<{ apiPath: string }>('assets/config/config.json').toPromise();
     environment.common.apiRoot = file.apiPath;
-    console.log(environment.common.apiRoot);
-    console.log(file.apiPath);
+    this.logger.debug(`Session ID: ${getSessionID()} - Connecting to API: `, environment.common.apiRoot);
+    this.logger.debug(`Session ID: ${getSessionID()} - File API path: `, file.apiPath);
     await this.menuController.enable(false);
   }
 
   ionViewWillLeave(): void {
     // Clean up all subs to avoid memory leak
+    this.logger.info(`Session ID: ${getSessionID()} - Leaving Auth Page`);
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    this.logger.info(`Session ID: ${getSessionID()} - Destroying Auth Page`);
   }
 
   /**
    * Submit form
    */
   protected onSubmit(): void {
+    this.logger.info(`Session ID: ${getSessionID()} - Attempting log in`);
     this.store.dispatch(AuthActions.isLoading());
     this.store.dispatch(AuthActions.loginAttempt({
       email: this.authForm.get('email').value as string,
