@@ -3,6 +3,7 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+
 trigger:
   branches:
     include:
@@ -15,7 +16,16 @@ pr: none
 pool:
   vmImage: 'ubuntu-latest'
 
+
 steps:
+  - task: FileTransform@1
+    inputs:
+      folderPath: '$(System.DefaultWorkingDirectory)/RepClient/assets/config'
+      fileType: 'json'
+      targetFiles: 'config.json'
+
+
+  
   - task: NodeTool@0
     inputs:
       versionSpec: '10.x'
