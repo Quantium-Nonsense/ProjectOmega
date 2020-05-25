@@ -44,6 +44,39 @@ spec:
                       secretKeyRef:
                         name: devops2-db
                         key: sendGrid.key
+                - name: KAFKA_USER
+                    valueFrom:
+                      secretKeyRef:
+                        name: kefka
+                        key: spring.kafka.jaas.options.username
+                - name: KAFKA_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: kefka
+                        key: spring.kafka.jaas.options.password
+                - name: KAFKA_BOOTSTRAP_SERVERS
+                    valueFrom:
+                      secretKeyRef:
+                        name: kefka
+                        key: spring.kafka.producer.bootstrap-servers
+                - name: KAFKA_TOPIC
+                    valueFrom:
+                      secretKeyRef:
+                        name: kefka
+                        key: spring.kafka.producer.properties.topics
+                - name: LOGSTASH_HOST
+                    valueFrom:
+                      secretKeyRef:
+                        name: kafka
+                        key: remoteHost
+                - name: LOGSTASH_PORT
+                    valueFrom:
+                      secretKeyRef:
+                        name: kafka
+                        key: port
+
+
+
 
 
 
