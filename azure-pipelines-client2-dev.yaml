@@ -2,9 +2,7 @@ trigger:
   branches:
     include:
       - client2/*
-  paths:
-    include:
-      - AdminClient/*
+
 
 pool:
   vmImage: 'ubuntu-latest'
