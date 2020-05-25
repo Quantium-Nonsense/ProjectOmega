@@ -59,7 +59,7 @@ public class ClientController {
     
     @GetMapping(value = "/{id}")
     public ResponseEntity getClient(@PathVariable(value = "id") Long id) throws ClientNotFoundException, NoRecordsFoundException {
-        logger.info("Request received: /api/client/get/{}", id);
+        logger.info("Request received: /api/client/{}", id);
         Client client = null;
         try {
             client = clientService.getClientById(id);
@@ -76,7 +76,7 @@ public class ClientController {
     
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity deleteClient(@PathVariable(value = "id") Long id) throws ClientNotFoundException {
-        logger.info("Request received: /api/client/get/{}", id);
+        logger.info("Request received: /api/client/delete/{}", id);
         Optional<Client> client = null;
         try {
             client = clientService.deleteClientById(id);
