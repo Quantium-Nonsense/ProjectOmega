@@ -1,7 +1,6 @@
 trigger:
   branches:
     include:
-      - client1
       - refs/tags/{c1*}
     exclude:
       - refs/tags/{be*}
