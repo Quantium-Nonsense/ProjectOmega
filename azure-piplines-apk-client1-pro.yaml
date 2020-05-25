@@ -1,0 +1,53 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+
+trigger:
+  branches:
+    include:
+      - client1
+  tags:
+    include:
+      -c1*
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+
+steps:
+  - task: FileTransform@1
+    inputs:
+      folderPath: '$(System.DefaultWorkingDirectory)/RepClient/src/assets/config'
+      fileType: 'json'
+      targetFiles: 'config.json'
+
+
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm install -g @angular/cli
+      npm install -g @ionic/cli
+      npm install --save @capacitor/core @capacitor/cli
+      npm install
+      ionic build
+      npx cap add android
+    workingDirectory: ./RepClient
+    displayName: 'npm install and ionic build'
+
+  - task: CmdLine@2
+    inputs:
+      workingDirectory: ./RepClient/android
+      script: './gradlew assembleDebug'
+    displayName: 'Gradle AssembleDebug '
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: $(System.DefaultWorkingDirectory)/RepClient/android/app/build/outputs/apk/debug/app-debug.apk
+      artifactName: 'client1-pro-repClient-APK-$(Build.BuildId)'

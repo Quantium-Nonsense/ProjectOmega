@@ -1,0 +1,135 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Add Customer
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<form 
+    class="max-height"
+    [formGroup]="addCustomerForm" >
+    <ion-grid class="max-height">
+        <ion-row class="set-height-1"></ion-row>
+        <ion-row class="ion-justify-content-center ion-align-items-center">
+            <ion-col size="12">
+                <mat-form-field class="max-width" appearance="outline">
+                    <mat-label>Title</mat-label>
+                    <input
+                        id="title"
+                        autocomplete="title"
+                        matInput
+                        placeholder="Title"
+                        formControlName="title"
+                    />
+                    <mat-error *ngIf="titleHasError">{{titleErrorMessage}}</mat-error>
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="12">
+                <mat-form-field class="max-width" appearance="outline">
+                    <mat-label>First Name</mat-label>
+                    <input
+                        id="firstName"
+                        autocomplete="firstName"
+                        matInput
+                        placeholder="First Name"
+                        formControlName="firstName"
+                    />
+                    <mat-error *ngIf="firstNameHasError">{{firstNameErrorMessage}}</mat-error>
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="12">
+                <mat-form-field class="max-width" appearance="outline">
+                    <mat-label>Last Name</mat-label>
+                    <input
+                        id="lastName"
+                        autocomplete="lastName"
+                        matInput
+                        placeholder="Last Name"
+                        formControlName="lastName"
+                    />
+                    <mat-error *ngIf="lastNameHasError">{{lastNameErrorMessage}}</mat-error>
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="12">
+                <mat-form-field class="max-width" appearance="outline">
+                    <mat-label>Company Name</mat-label>
+                    <input
+                        id="companyName"
+                        autocomplete="companyName"
+                        matInput
+                        placeholder="Company Name"
+                        formControlName="companyName"
+                    />
+                    <mat-error *ngIf="companyNameHasError">{{companyNameErrorMessage}}</mat-error>
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="12">
+                <mat-form-field class="max-width" appearance="outline">
+                    <mat-label>Company Role</mat-label>
+                    <input
+                        id="companyRole"
+                        autocomplete="companyRole"
+                        matInput
+                        placeholder="Company Role"
+                        formControlName="companyRole"
+                    />
+                    <mat-error *ngIf="companyRoleHasError">{{companyRoleErrorMessage}}</mat-error>
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="12">
+                <mat-form-field class="max-width" appearance="outline">
+                    <mat-label>Company Address</mat-label>
+                    <input
+                        id="companyAddress"
+                        autocomplete="companyAddress"
+                        matInput
+                        placeholder="Company Address"
+                        formControlName="companyAddress"
+                    />
+                    <mat-error *ngIf="companyAddressHasError">{{companyAddressErrorMessage}}</mat-error>
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="12">
+                <mat-form-field class="max-width" appearance="outline">
+                    <mat-label>Email Address</mat-label>
+                    <input
+                        id="emailAddress"
+                        autocomplete="emailAddress"
+                        matInput
+                        placeholder="Email Address"
+                        formControlName="emailAddress"
+                    />
+                    <mat-error *ngIf="emailAddressHasError">{{emailAddressErrorMessage}}</mat-error>
+                </mat-form-field>
+            </ion-col>
+            <ion-col size="12">
+                <mat-form-field class="max-width" appearance="outline">
+                    <mat-label>Mobile Number</mat-label>
+                    <input
+                        id="mobileNumber"
+                        autocomplete="mobileNumber"
+                        matInput
+                        placeholder="Mobile Number"
+                        formControlName="mobileNumber"
+                    />
+                    <mat-error *ngIf="mobileNumberHasError">{{mobileNumberErrorMessage}}</mat-error>
+                </mat-form-field>
+            </ion-col>
+            <ion-row class="ion-justify-content-center ion-align-items-center">
+				<ion-col size="6">
+
+                    <ion-buttons>
+                        <ion-button (click)="onSave()" [disabled]="!formValid()" mat-raised-button> Save </ion-button>
+                        <ion-back-button defaultHref="/home" text="Exit" icon=none mat-raised-button> </ion-back-button>
+                    </ion-buttons>
+
+                </ion-col>
+			</ion-row>
+        </ion-row>
+    </ion-grid>
+</form>
+
+

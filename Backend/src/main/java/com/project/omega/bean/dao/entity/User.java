@@ -123,12 +123,13 @@ public class User implements Serializable {
         }
     }
 
-        @Override
-        public String toString() {
-           String result = String.format(
-                "Order[id=%d]%n",
-                id);
-          return result;
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                ", enabled=" + enabled +
+                '}';
     }
 }

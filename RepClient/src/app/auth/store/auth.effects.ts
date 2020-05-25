@@ -23,25 +23,25 @@ export class AuthEffects {
       () => this.actions$.pipe(
           ofType(AuthActions.loginSuccessful),
           tap(() => this.redirectToHome())
-      ), {dispatch: false}
+      ), { dispatch: false }
   );
 
   hideSpinner$ = createEffect(() => this.actions$.pipe(
       ofType(AuthActions.hideSpinner),
       tap(() => this.hideSpinner())
-  ), {dispatch: false});
+  ), { dispatch: false });
 
   showSpinner$ = createEffect(() => this.actions$.pipe(
       ofType(AuthActions.showSpinner),
       tap(() => this.presentSpinner())
-  ), {dispatch: false});
+  ), { dispatch: false });
 
   loginRejected$ = createEffect(() => this.actions$.pipe(
       ofType(AuthActions.loginRejected),
       tap(() => {
         this.router.navigateByUrl('/auth');
       })
-  ), {dispatch: false});
+  ), { dispatch: false });
 
   loginAttempt$ = createEffect(
       () => this.actions$.pipe(
@@ -49,18 +49,20 @@ export class AuthEffects {
           switchMap((action: Action & { email: string, password: string }) =>
               this.attemptLogin(action.email, action.password).pipe(
                   switchMap(httpResult =>
-                    [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()]),
-                  catchError((error: HttpErrorResponse) => {
-                    if (error.status === 404 || error.status === 500) {
-                      return [
-                        AuthActions.loginRejected({
-                          errorMessage: environment.common.FAILED_LOGIN_SERVER
-                        }),
-                        AuthActions.loadingComplete()
-                      ];
+                      [this.handleTokenReturn(httpResult), AuthActions.loadingComplete()]),
+                  catchError((error: Error) => {
+                    console.error(error.message);
+                    if (error instanceof HttpErrorResponse) {
+                      if (error.status === 404 || error.status === 500) {
+                        return [
+                          AuthActions.loginRejected({
+                            errorMessage: environment.common.FAILED_LOGIN_SERVER
+                          }),
+                          AuthActions.loadingComplete()
+                        ];
+                      }
                     }
-                    console.log(error);
-
+                    console.error(error.message);
                     return [
                       AuthActions.loginRejected({
                         errorMessage: 'Wrong email or password, please try again'
@@ -89,10 +91,10 @@ export class AuthEffects {
   }
 
   handleTokenReturn(httpResult: { token: string }): Action {
-    console.log(`From handle token token is:  ${httpResult.token}`);
+    console.log(`From handle token token is:  ${ httpResult.token }`);
     const user = this.decodeToken(httpResult.token);
 
-    return AuthActions.loginSuccessful({user});
+    return AuthActions.loginSuccessful({ user });
   }
 
   decodeToken(token: string): UserModel {

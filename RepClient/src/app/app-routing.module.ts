@@ -20,9 +20,13 @@ const routes: Routes = [
   {
     loadChildren: () => import('./company/company.module').then(m => m.CompanyPageModule),
     path: 'company'
-  },  {
+  },
+  {
     path: 'order',
     loadChildren: () => import('./order/order.module').then(m => m.OrderPageModule)
+  }, {
+    path: 'customer',
+    loadChildren: () => import('./add-customer/add-customer.module').then(m => m.AddCustomerPageModule)
   }
 
 ];
@@ -30,7 +34,7 @@ const routes: Routes = [
 @NgModule({
   exports: [RouterModule],
   imports: [
-    RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ]
 })
 export class AppRoutingModule {

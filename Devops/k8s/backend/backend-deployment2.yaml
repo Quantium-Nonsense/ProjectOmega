@@ -31,19 +31,53 @@ spec:
                       key: spring.datasource.password
                 - name: SECRETS_DB_URL
                   valueFrom:
-                      secretKeyRef:
-                       name: devops2-db
-                       key: spring.datasource.url
+                    secretKeyRef:
+                     name: devops2-db
+                     key: spring.datasource.url
                 - name: SECRETS_JWT
                   valueFrom:
-                      secretKeyRef:
-                        name: devops2-db
-                        key: jwt.secret
-                - name: SECRETS_SENDGRID
+                    secretKeyRef:
+                      name: devops2-db
+                      key: jwt.secret
+                - name: KAFKA_USER
                   valueFrom:
-                      secretKeyRef:
-                        name: devops2-db
-                        key: sendGrid.key
+                    secretKeyRef:
+                      name: kafka
+                      key: spring.kafka.jaas.options.username
+                - name: KAFKA_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: kafka
+                      key: spring.kafka.jaas.options.password
+                - name: KAFKA_BOOTSTRAP_SERVERS
+                  valueFrom:
+                    secretKeyRef:
+                      name: kafka
+                      key: spring.kafka.bootstrap-servers
+                - name: KAFKA_TOPIC
+                  valueFrom:
+                    secretKeyRef:
+                      name: kafka
+                      key: spring.kafka.producer.properties.topics
+                - name: LOGSTASH_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: kafka
+                      key: remoteHost
+                - name: LOGSTASH_PORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: kafka
+                      key: port
+                - name: SECRETS_EMAILPASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: devops2-db
+                      key: email.password
+
+
+
+
 
 
 
