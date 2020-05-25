@@ -11,6 +11,8 @@ trigger:
   paths:
     include:
       - RepClient/*
+    exclude:
+      - AdminClient/*
 pr: none
 
 pool:
