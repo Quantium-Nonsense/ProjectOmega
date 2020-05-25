@@ -15,7 +15,6 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    environment.common.setApiRoot(window['env']['apiRoot']);
     if (environment.common.gitCompany === 'client1') {
       console.log('i am client 1');
       this.document.getElementById('theme').setAttribute('href', 'assets/css/indigo-pink.css');

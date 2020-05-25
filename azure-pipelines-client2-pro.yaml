@@ -1,20 +1,19 @@
 trigger:
   branches:
     include:
-      - client1
+      - client2
+      - refs/tags/*
   paths:
     include:
       - AdminClient/*
-  tags:
-    include:
-      - '*'
-pr: none
+
 
 pool:
   vmImage: 'ubuntu-latest'
+steps:
 
     - task: Docker@2
-        inputs:
+      inputs:
           containerRegistry: 'omegacr'
           repository: 'client2-pro-frontend'
           command: 'buildAndPush'
