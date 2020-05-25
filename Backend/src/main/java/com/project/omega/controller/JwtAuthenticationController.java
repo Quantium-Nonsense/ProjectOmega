@@ -92,10 +92,10 @@ public class JwtAuthenticationController {
 
         LOGGER.info("Sending Email (subject: {}, receiver: {})", EmailConstants.REG_CONFIRM, user.getEmail());
         EmailSender.send(user.getEmail(), EmailConstants.REG_CONFIRM, emailContent);
-
         UserResponse userMap = new UserResponse(newUser.getId(), newUser.getEmail(), newUser.getRoles());
-
-        return new ResponseEntity(userMap, HttpStatus.CREATED);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/api/registration"));
+        return new ResponseEntity(userMap, headers, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/api/confirmRegistration")

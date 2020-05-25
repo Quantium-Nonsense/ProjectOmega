@@ -24,20 +24,30 @@ import java.util.Random;
 @SpringBootTest
 public class ProductOrderControllerTests {
 
-    private int port = 5000;
+    //private int port = 5000;
+
+    private String remoteBaseUrl = "http://40.65.236.154";
 
     TestRestTemplate restTemplate = new TestRestTemplate();
 
     HttpHeaders headers = new HttpHeaders();
 
-    private String createURLWithPort(String uri) {
-        return "http://localhost:" + port + uri;
+//    private String createURLWithPort(String uri) {
+//
+//        return "http://localhost:" + port + uri;
+//    }
+
+    public String createURLWithPort(String uri) {
+
+        return remoteBaseUrl + uri;
     }
+
+
 
     @Test
     public void addProductOrderForClient() {
         /*Login as Representative*/
-        JwtRequest req = new JwtRequest("kaylesh@gamil.com", "password@123");
+        JwtRequest req = new JwtRequest("kaylesh@gmail.com", "password@123");
         HttpEntity<JwtRequest> httpReq = new HttpEntity<>(req, headers);
         ResponseEntity<String> adminLoginResp = restTemplate.exchange(
                 createURLWithPort("/api/authenticate"),
