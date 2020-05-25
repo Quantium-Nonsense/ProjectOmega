@@ -1,11 +1,11 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   sideNavOpen = false;
@@ -15,13 +15,15 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    console.log(window['env']['company']);
     environment.common.setApiRoot(window['env']['apiRoot']);
-    if (window['env']['company'] === 'client1') {
+    if (environment.common.gitCompany === 'client1') {
+      console.log('i am client 1');
       this.document.getElementById('theme').setAttribute('href', 'assets/css/indigo-pink.css');
-    } else if (window['env']['company'] === 'client2') {
+    } else if (environment.common.gitCompany === 'client2') {
+      console.log('i am client 2');
       this.document.getElementById('theme').setAttribute('href', 'assets/css/purple-green.css');
     } else {
+      console.log('i am default client');
       this.document.getElementById('theme').setAttribute('href', 'assets/css/deeppurple-amber.css');
     }
   }
