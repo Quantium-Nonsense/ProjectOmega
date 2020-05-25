@@ -39,11 +39,6 @@ spec:
                     secretKeyRef:
                       name: devops2-db
                       key: jwt.secret
-                - name: SECRETS_SENDGRID
-                  valueFrom:
-                    secretKeyRef:
-                      name: devops2-db
-                      key: sendGrid.key
                 - name: KAFKA_USER
                   valueFrom:
                     secretKeyRef:
