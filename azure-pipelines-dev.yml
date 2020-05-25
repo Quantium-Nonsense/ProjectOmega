@@ -44,7 +44,7 @@ steps:
       kubernetesServiceEndpoint: 'OmegaCluster-default'
       namespace: 'default'
       command: 'apply'
-      arguments: '-f ./Devops/k8s/backend'
+      arguments: '-f ./Devops/k8s/backend/'
 
   - task: Kubernetes@1
     inputs:
