@@ -1,5 +1,6 @@
 package com.project.omega.controller;
 
+
 import com.project.omega.authentication.JwtTokenUtil;
 import com.project.omega.bean.dao.entity.Order;
 import com.project.omega.bean.dao.entity.OrderProduct;
@@ -39,12 +40,13 @@ public class OrderController {
     private JwtTokenUtil jwtTokenUtil;
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
+
     public ResponseEntity create(@RequestBody Order newOrder, @RequestHeader("Authorization") String token) throws ProductNotFoundException,
             ClientNotFoundException, NoRecordsFoundException, UserNotFoundException, OrderNotFoundException {
 
         List<OrderProductDto> productsForOrder = new ArrayList<>();
         Order order = new Order();
-
+              
         try {
             newOrder.getOrderProducts().forEach(po -> {
                 OrderProductDto opDto = new OrderProductDto(po.getProduct(), po.getQuantity(), po.getClient());

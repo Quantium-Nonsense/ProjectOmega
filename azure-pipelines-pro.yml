@@ -29,39 +29,36 @@ steps:
         latest
         $(Build.BuildId)
 
-  - task: Docker@2
-    inputs:
-      containerRegistry: 'omegacr'
-      repository: 'prod-frontend'
-      command: 'buildAndPush'
-      Dockerfile: './AdminClient/Dockerfile'
-      buildContext: './AdminClient'
-      tags: |
-        latest
-        $(Build.BuildId)
-
 
 
   - task: Kubernetes@1
     inputs:
       connectionType: 'Kubernetes Service Connection'
-      kubernetesServiceEndpoint: 'OmegaCluster-prod'
-      namespace: 'default'
+      kubernetesServiceEndpoint: 'OmegaCluster-default'
+      namespace: 'production'
       command: 'apply'
       arguments: '-f ./Devops/k8s'
 
   - task: Kubernetes@1
     inputs:
       connectionType: 'Kubernetes Service Connection'
-      kubernetesServiceEndpoint: 'OmegaCluster-prod'
-      namespace: 'default'
+      kubernetesServiceEndpoint: 'OmegaCluster-default'
+      namespace: 'production'
       command: 'set'
       arguments: 'image deployment/backend-deployment2 backend2-api=omegacr.azurecr.io/prod-backend:$(Build.BuildId)'
 
   - task: Kubernetes@1
     inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'OmegaCluster-prod'
+        namespace: 'production'
+        command: 'apply'
+        arguments: '-f ./Devops/k8s'
+
+  - task: Kubernetes@1
+    inputs:
       connectionType: 'Kubernetes Service Connection'
       kubernetesServiceEndpoint: 'OmegaCluster-prod'
-      namespace: 'default'
+      namespace: 'production'
       command: 'set'
-      arguments: 'image deployment/frontend-deployment frontend-adminclient=omegacr.azurecr.io/prod-frontend:$(Build.BuildId)'
+      arguments: 'image deployment/backend-deployment2 backend2-api=omegacr.azurecr.io/prod-backend:$(Build.BuildId)'

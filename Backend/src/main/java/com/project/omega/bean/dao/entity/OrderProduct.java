@@ -34,6 +34,13 @@ public class OrderProduct implements Serializable {
         this.quantity = quantity;
     }
 
+    public OrderProduct(Long id, Product product, Client client, Integer quantity) {
+        this.id = id;
+        this.product = product;
+        this.client = client;
+        this.quantity = quantity;
+    }
+
     public Long getId() {
         return id;
     }
@@ -80,6 +87,46 @@ public class OrderProduct implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, product, client, quantity);
+    }
+
+    public static class OrderProductBuilder {
+
+        private Long id;
+
+        private Product product;
+
+        private Client client;
+
+        private int quantity;
+
+        public OrderProductBuilder() {
+
+        }
+
+        public OrderProduct.OrderProductBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public OrderProduct.OrderProductBuilder setProduct(Product product) {
+            this.product = product;
+            return this;
+        }
+
+        public OrderProduct.OrderProductBuilder setClient(Client client) {
+            this.client = client;
+            return this;
+        }
+
+        public OrderProduct.OrderProductBuilder setQuantity(int quantity) {
+            this.quantity = quantity;
+            return this;
+        }
+
+        public OrderProduct build() {
+            return new OrderProduct(id, product, client, quantity);
+        }
+
     }
 }
 
