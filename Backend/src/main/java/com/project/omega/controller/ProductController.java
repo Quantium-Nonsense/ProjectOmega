@@ -1,6 +1,5 @@
 package com.project.omega.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.omega.bean.dao.entity.Product;
 import com.project.omega.bean.dto.ProductDTO;
 import com.project.omega.exceptions.NoRecordsFoundException;
@@ -21,8 +20,6 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
-
-    private ObjectMapper mapper = new ObjectMapper();
 
     @PostMapping(value = "/create", headers = "Accept=application/json")
     public ResponseEntity createProduct(@RequestBody Product product) throws SupplierNotFoundException {
