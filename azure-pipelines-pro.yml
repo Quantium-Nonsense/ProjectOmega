@@ -2,9 +2,6 @@ trigger:
   tags:
     include:
     - be*
-  branches:
-    include:
-      - master
 
 
 
