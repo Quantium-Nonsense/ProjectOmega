@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -7,7 +7,7 @@ import { environment } from '../environments/environment';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   sideNavOpen = false;
   title = 'OmegaSys';
 
@@ -15,14 +15,16 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(window['env']['company']);
     environment.common.setApiRoot(window['env']['apiRoot']);
-    if (window['env']['company'] === 'client1') {
-      this.document.getElementById('theme').setAttribute('href', 'assets/css/aaand clientindigo-pink.css');
-    } else if (window['env']['company'] === 'client2') {
+    if (environment.common.gitCompany === 'client1') {
+      console.log('i am client 1');
+      this.document.getElementById('theme').setAttribute('href', 'assets/css/indigo-pink.css');
+    } else if (environment.common.gitCompany === 'client2') {
+      console.log('i am client 2');
       this.document.getElementById('theme').setAttribute('href', 'assets/css/purple-green.css');
     } else {
-      this.document.getElementById('theme').setAttribute('href', 'nassets/css/deeppurple-amber.css');
+      console.log('i am default client');
+      this.document.getElementById('theme').setAttribute('href', 'assets/css/deeppurple-amber.css');
     }
   }
 }
