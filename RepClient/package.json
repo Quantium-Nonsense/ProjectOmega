@@ -37,6 +37,7 @@
     "@ngrx/effects": "^9.1.2",
     "@ngrx/store": "^9.1.2",
     "cordova-android": "^8.1.0",
+    "cordova-plugin-cleartext": "^1.0.0",
     "core-js": "^3.6.5",
     "jasmine-marbles": "^0.6.0",
     "lodash": "^4.17.15",

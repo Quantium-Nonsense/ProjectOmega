@@ -59,7 +59,6 @@ export class SupplierComponent implements OnInit, OnDestroy {
 
 
   filterActions(data: SupplierModel, filterValue: string): boolean {
-    this.logger.info(`Session ID: ${getSessionID()} - Filtering suppliers with value: `, filterValue);
     return data.email.toLowerCase().includes(filterValue)
            || data.notes.toLowerCase().includes(filterValue)
            || data.lastName.toLowerCase().includes(filterValue)

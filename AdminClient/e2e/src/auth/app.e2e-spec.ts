@@ -34,10 +34,10 @@ describe('workspace-project App', () => {
   });
 
   it('should then type in filter', async () => {
-    await supplierPage.typeToFilter('Meow');
+    await supplierPage.typeToFilter('test');
     browser.waitForAngular();
     const text = await supplierPage.getAllTableRows().first().getText();
-    expect(text.toLowerCase().includes('meow')).toBe(true);
+    expect(text.toLowerCase().includes('test')).toBe(true);
   });
 
   it('should then open edit menu of company', async () => {
