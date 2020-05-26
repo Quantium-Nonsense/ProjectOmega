@@ -7,7 +7,7 @@ trigger:
       - refs/tags/c2*
   paths:
     include:
-    - /Backend/*
+    - Backend/*
 
 
 pool:
